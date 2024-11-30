@@ -1,0 +1,142 @@
+/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+:root {
+  /*Colors*/
+  --mainButtonColor: #010423;
+  --inputBoxStroke: #557dc3;
+
+  --mainColor: white;
+  --lightGrayColor: rgba(255, 255, 255, 0.502);
+  --normalGrayColor: #908f8f;
+
+  --firstStandardBlueColor: #212754;
+  --secondStandardBlueColor: #161d3e;
+  --thirdStandardBlueColor: #091730;
+  --brightBlueColor: rgba(36, 89, 255, 0.988);
+  --lightBlueColor: #b8c4f1;
+  --turquoiseColor: #0eeade;
+
+  --normalPurple: #8051b1;
+  --lightLavenderColor: #c3b4ff;
+  --veryLightLavenderColor: #bfc5fc;
+  --brightPurpleColor: #b926e7;
+  --lightPinkColor: #e39ff4;
+
+  --importantPinkColor: #cc1646;
+  --lightRedColor: #ff5154;
+
+  --brightGreenColor: #0bc118;
+  /*----------------------------------------------------------------------------------------*/
+  /*Gradients*/
+
+  --mainBackgroundGradient: radial-gradient(
+    97.81% 96.5% at 2.19% 3.5%,
+    #000000 0%,
+    #102a56 100%
+  );
+
+  /*Chart Gradients*/
+
+  --blueChartBackgroundGradient: linear-gradient(
+    131deg,
+    #292f65 8%,
+    rgba(0, 0, 0, 0) 100%
+  );
+
+  --seaBlueGradient: radial-gradient(circle at 37% 56%, #09f0de, #4e83ed 26%);
+
+  --skyBlueGradient: linear-gradient(to bottom, #71a5ff, #1347a3);
+
+  --purpleGradient: radial-gradient(circle at 50% 50%, #c120e6, #5b6eef 71%);
+
+  --lightPinkGradient: radial-gradient(circle at 34% 19%, #db83f1, #eabef6 14%);
+
+  --strokeGradient: linear-gradient(
+    129deg,
+    #3a4962 1%,
+    #ff90e8 43%,
+    #74caff 70%,
+    #292f65 91%
+  );
+
+  /*Side Bar Gradients*/
+  --sideBarBackgroundGradient: radial-gradient(
+      circle at 100% 100%,
+      #4a314c 1%,
+      #21264f 58%
+    ),
+    linear-gradient(172deg, #3a4962 2%, #ff90e8 45%, #74caff 72%, #292f65 92%);
+
+  /*Modal Gradients*/
+  --modalGradient: radial-gradient(circle at 2% 99%, #4a314c, #141a4b 67%);
+
+  /*search Gradients*/
+  --searchBlueGradient: linear-gradient(
+    to right,
+    #1c214d 63%,
+    rgba(65, 76, 179, 0.2)
+  );
+
+  /*Cards Gradients*/
+  --cardBottomLeftGradient: radial-gradient(
+      circle at 100% 100%,
+      #4a314c 7%,
+      #21264f 54%
+    ),
+    linear-gradient(129deg, #3a4962 1%, #ff90e8 43%, #74caff 70%, #292f65 91%);
+
+  --cardBottomRightGradient: radial-gradient(
+      circle at 7% 100%,
+      #4a314c 1%,
+      #21264f 44%
+    ),
+    linear-gradient(123deg, #3a4962 1%, #ff90e8 43%, #74caff 70%, #292f65 91%);
+
+  --cardTopLeftGradient: radial-gradient(
+    circle at 95% 0%,
+    #4a314c 1%,
+    #21264f 65%
+  );
+
+  --cardTopRightGradient: radial-gradient(
+    circle at 0% 0%,
+    #4a314c,
+    #21264f 39%
+  );
+
+  /*Buttons Gradients*/
+  --allPinkButtonGradient: radial-gradient(
+      circle at 42% 50%,
+      #eabef6,
+      #db83f1 65%
+    ),
+    linear-gradient(100deg, #3a4962 0%, #ff90e8 42%, #74caff 70%, #292f65 90%);
+
+  /*glass Effect Gradients*/
+  --glassGradient: linear-gradient(
+    144.86deg,
+    rgba(58, 73, 98, 0.18) 6.8%,
+    rgba(41, 47, 101, 0.1425) 29.3%,
+    rgba(116, 202, 255, 0.105) 51.79%,
+    rgba(255, 144, 232, 0.03) 96.78%
+  );
+  --glassfilter: blur(25px);
+
+  /*----------------------------------------------------------------------------------------*/
+  /*Fonts,shadows,filters,transitions,transformations,actions and more*/
+
+  --standardShadow: 8px 8px 12px 0 rgba(0, 0, 0, 0.25);
+  --lighterShadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+
+  --regularFontFamily: "Inter", serif;
+  --headerFontFamily: "Poppins", serif;
+
+  --regularFontSize: 1rem;
+  --middleFontSize: 1.125rem;
+  --headerFontSize: 2.1875rem;
+
+  --normalFontWeight: 400;
+  --middleFontWeight: 500;
+  --hardFontWeight: 700;
+}
