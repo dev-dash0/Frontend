@@ -1,0 +1,53 @@
+.bg {
+  background: var(--mainBackgroundGradient);
+}
+.mat-toolbar {
+  position: relative;
+  background: var(--sideBarBackgroundGradient);
+  box-shadow: var(--lighterShadow);
+
+  backdrop-filter: var(--glassfilter);
+  -webkit-backdrop-filter: var(--glassfilter);
+
+  border-radius: 16px;
+  overflow: hidden;
+  z-index: 0;
+
+  color: var(--mainColor);
+  font-family: var(--headerFontFamily) !important;
+}
+
+.mat-toolbar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--strokeGradient);
+  mask-composite: exclude;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+}
+
+.mat-toolbar h1 {
+  font-family: var(--headerFontFamily) !important;
+}
+.mat-toolbar span {
+  font-size: var(--regularFontSize);
+}
+
+.body-text h2 {
+  font-weight: var(--middleFontWeight);
+  font-family: var(--headerFontFamily);
+}
+.body-text p {
+  color: var(--lightGrayColor);
+  font-size: var(--middleFontSize);
+}
+.body-text button {
+  background: var(--sideBarBackgroundGradient);
+}
