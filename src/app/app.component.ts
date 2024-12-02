@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { Chart } from 'chart.js/auto';
+import { SignupComponent } from "./Components/signup/signup.component";
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -14,6 +15,7 @@ import { Chart } from 'chart.js/auto';
     MatButtonModule,
     MatDividerModule,
     MatIconModule,
+    SignupComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

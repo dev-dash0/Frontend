@@ -1,0 +1,8 @@
+button {
+    background-color: var(--thirdStandardBlueColor);
+    color: #a9bfeb;
+}
+
+.btn:hover {
+    background-color: var(--secondStandardBlueColor);
+}
