@@ -75,7 +75,7 @@ button {
 
 .Group1 {
     position: absolute;
-    top: 50%;
+    top: 25%;
     right: 22%;
     mix-blend-mode: color-dodge;
 }
@@ -90,7 +90,7 @@ button {
 .Group3 {
     position: absolute;
     bottom: 8%;
-    left: 25%;
+    left: 26%;
     mix-blend-mode: color-burn;
 }
 
