@@ -1,0 +1,9 @@
+button {
+    background-color: var(--thirdStandardBlueColor);
+    color: #a9bfeb;
+    font-size: 0.8rem;
+}
+
+.btn:hover {
+    background-color: var(--secondStandardBlueColor);
+}
