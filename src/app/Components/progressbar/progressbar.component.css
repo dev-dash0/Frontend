@@ -1,0 +1,28 @@
+
+.progress-container {
+  position: relative;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color:  var( --importantPinkColor);
+  color: #fff;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.step-line {
+  width: 50px;
+  height: 4px;
+  background-color:var(--importantPinkColor);
+  margin: 0 ;
+  align-self: center;
+}
+
+.step-circle:not(.active),
+.step-line:not(.active) {
+  background-color: #ccc;
+}
