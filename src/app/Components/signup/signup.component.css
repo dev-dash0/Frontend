@@ -8,8 +8,8 @@
 
 #signup {
     position: relative;
+  background: var(--mainBackgroundGradient);
 }
-
 .signup-container {
     background: var(--glassGradient);
     backdrop-filter: var(100px);
@@ -24,8 +24,18 @@
     padding: 40px;
     gap: 10px;
     color: #DCDFFF;
+  background-image: var(--glassGradient);
+  border-radius: 40px;
+  position: relative;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  gap: 10px;
+  color: #dcdfff;
 }
-
 .signup-container::before {
     content: "";
     position: absolute;
@@ -42,35 +52,48 @@
     -webkit-mask-composite: destination-out;
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask-composite: subtract;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--strokeGradient);
+  mask-composite: exclude;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
 }
 
 .signup-container h1 {
-    font-family: var(--headerFontFamily) !important;
-    /* font-size: var(--headerFontSize); */
-    font-size: 1.8rem;
+  font-family: var(--headerFontFamily) !important;
+  /* font-size: var(--headerFontSize); */
+  font-size: 1.8rem;
 }
 
 .signup-container label,
 .signup-container span,
 button {
-    /* font-size: var(--regularFontSize); */
-    font-size: 0.8rem;
+  /* font-size: var(--regularFontSize); */
+  font-size: 0.8rem;
 }
 
 .mat-toolbar {
-    background: transparent;
-    border-radius: 16px;
-    overflow: hidden;
-    color: var(--mainColor);
-    font-family: var(--headerFontFamily) !important;
+  background: transparent;
+  border-radius: 16px;
+  overflow: hidden;
+  color: var(--mainColor);
+  font-family: var(--headerFontFamily) !important;
 }
 
 .mat-toolbar h1 {
-    font-family: var(--headerFontFamily) !important;
+  font-family: var(--headerFontFamily) !important;
 }
 
 .mat-toolbar span {
-    font-size: var(--regularFontSize);
+  font-size: var(--regularFontSize);
 }
 
 .Group1 {
