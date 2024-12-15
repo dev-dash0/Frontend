@@ -6,14 +6,12 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { Chart } from 'chart.js/auto';
 import { SignupComponent } from "./Components/signup/signup.component";
-<<<<<<< HEAD
-import { SigninComponent } from './Components/signin/signin.component';
-=======
 import { ForgetpasswordComponent } from "./Components/forgetpassword/forgetpassword.component";
 import { Forgetpassword2Component } from "./Components/forgetpassword2/forgetpassword2.component";
 import { Forgetpassword3Component } from "./Components/forgetpassword3/forgetpassword3.component";
 import { Forgetpassword4Component } from "./Components/forgetpassword4/forgetpassword4.component";
->>>>>>> forgetpassword
+import { SigninComponent } from './Components/signin/signin.component';
+import { ForgetPasswordComponent } from "./forget-password/forget-password.component";
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -24,16 +22,11 @@ import { Forgetpassword4Component } from "./Components/forgetpassword4/forgetpas
     MatDividerModule,
     MatIconModule,
     SignupComponent,
-<<<<<<< HEAD
-    SigninComponent
-  ],
-=======
+    SigninComponent,
     ForgetpasswordComponent,
     Forgetpassword2Component,
-    Forgetpassword3Component,
-    Forgetpassword4Component
+    ForgetPasswordComponent
 ],
->>>>>>> forgetpassword
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
