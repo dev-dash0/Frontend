@@ -1,0 +1,26 @@
+.BG{
+    background: var(--mainBackgroundGradient);
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.cards{
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    text-align: center;
+    flex-wrap: wrap;
+    width: 85%;
+
+}
+.card{
+    color: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px auto;
+    width: 45%;
+    min-height: 300px;
+    text-align: left;
+}

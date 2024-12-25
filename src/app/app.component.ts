@@ -4,14 +4,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
-import { Chart } from 'chart.js/auto';
 import { SignupComponent } from "./Components/signup/signup.component";
-import { ForgetpasswordComponent } from "./Components/forgetpassword/forgetpassword.component";
-import { Forgetpassword2Component } from "./Components/forgetpassword2/forgetpassword2.component";
-import { Forgetpassword3Component } from "./Components/forgetpassword3/forgetpassword3.component";
-import { Forgetpassword4Component } from "./Components/forgetpassword4/forgetpassword4.component";
 import { SigninComponent } from './Components/signin/signin.component';
 import { ForgetPasswordComponent } from "./forget-password/forget-password.component";
+import { DashboardTestComponent } from "./Components/dashboard-test/dashboard-test.component";
+import { CalendarComponent } from "./Components/calendar/calendar.component";
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -23,8 +20,8 @@ import { ForgetPasswordComponent } from "./forget-password/forget-password.compo
     MatIconModule,
     SignupComponent,
     SigninComponent,
-    ForgetpasswordComponent,
-    Forgetpassword2Component,
+    DashboardTestComponent,
+    CalendarComponent,
     ForgetPasswordComponent
 ],
   templateUrl: './app.component.html',

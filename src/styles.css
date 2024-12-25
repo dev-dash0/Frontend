@@ -123,3 +123,16 @@
   padding: 0;
   margin: 0;
 }
+
+.cardTopLeft{
+    background: var(--cardTopLeftGradient);
+}
+.cardTopRight{
+    background: var(--cardTopRightGradient);
+}
+.cardBottomLeft{
+    background: var(--cardBottomLeftGradient);
+}
+.cardBottomRight{
+    background: var(--cardBottomRightGradient);
+}
