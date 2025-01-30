@@ -1,0 +1,52 @@
+.dropzone {
+    text-align: center;
+    background:  #010423;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+}
+.bold-blue {
+    font-weight: bold;
+    color: #ff90e8;
+}
+.allowed-types {
+    color: #aaa;
+    font-size: 14px;
+    position: absolute;
+    top: 40px;
+}
+.error-alert {
+    color: red;
+}
+input {
+    opacity: 0;
+    padding-bottom: 45px !important;
+}
+label{
+    font-size: 14px;
+    position: absolute;
+    top: 20px;
+}
+.uploadedFiles{
+    position: absolute;
+    top: 60px;
+    padding-bottom: 40px !important;
+    color: #aaa;
+    font-size: 14px;
+}  
+
+@media screen and (max-width:466px)  {
+    .allowed-types{
+    top: 60px;
+    }
+    .uploadedFiles{
+        top: 80px;
+    }
+    input {
+    opacity: 0;
+    padding-bottom: 65px !important;
+}
+}

@@ -54,10 +54,12 @@
       #292f65 91%);
 
   /*Side Bar Gradients*/
-  --sideBarBackgroundGradient: radial-gradient(circle at 100% 100%,
-      #4a314c 1%,
-      #21264f 58%),
-    linear-gradient(172deg, #3a4962 2%, #ff90e8 45%, #74caff 72%, #292f65 92%);
+  --sideBarBackgroundGradient: radial-gradient(
+      circle at 100% 95%,
+      #4a314c 2%,
+      #161d3e 35%
+    ),
+    linear-gradient(172deg, #3a4962 2%, #ff90e8 45%, #74caff 72%, #292f65 92%);
 
   /*Modal Gradients*/
   --modalGradient: radial-gradient(circle at 2% 99%, #4a314c, #141a4b 67%);

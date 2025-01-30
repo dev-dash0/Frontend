@@ -1,0 +1,113 @@
+<div class="modal-overlay p-5">
+    <div class="modal-container" [class.close-modal-container]="close">
+        <div class="modal-header d-flex justify-content-between align-items-start">
+            <div class="header w-100 d-flex justify-content-between align-items-center gap-3">
+                <img src="assets/images/Featured icon.png" alt="Company icon" width="10%"> 
+                <div class="headerContent w-100 p-0 m-0">
+                    <h2>Add your company</h2>
+                    <p>Create your company profile for free in less than 5 minutes.</p>
+                </div>
+            </div>
+            <button class="close-btn" (click)="closeModal()">&#x2715;</button>
+        </div>
+        <hr>
+        <form >
+            <div class="form-group">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-3">
+                        <label for="companyName">Company name*</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input
+                        id="companyName"
+                        type="text"
+                        placeholder="e.g. Linear"
+                        required
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-3">
+                        <label for="websiteURL">Website URL*</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input
+                        id="websiteURL"
+                        type="url"
+                        placeholder="www.example.com"
+                        required
+                        />
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="form-group">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-3">
+                        <label>Profile image</label>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="ProfileImg row d-flex justify-content-between align-items-center gap-4">
+                            <div class="col-2">
+                                <label for="profileImage">
+                                <div class="AddImgOverlay">
+                                    <img src="assets/images/image-plus.svg" alt="Add image" />
+                                </div>
+                            </label>
+                            <input
+                            id="profileImage"
+                            type="file"
+                            placeholder="Click to upload"
+                            />
+                            </div>
+                            <div class="col-9">
+                                <div class="dropndrop w-100 ms-auto">
+                                    <app-dragn-drop></app-dragn-drop>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="form-group">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-3">
+                        <label for="keywords">Keywords</label>
+                    </div>
+                    <div class="col-md-9">
+                        <input
+                        id="keywords"
+                        type="text"
+                        placeholder="Add 1-10 keywords that help users find your company"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-3">
+                        <label for="description">Description</label>
+                    </div>
+                    <div class="col-md-9">
+                        <textarea
+                        id="description"
+                        rows="2"
+                        placeholder="Write a few sentences about the company..."
+                        ></textarea>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="modal-footer">
+                <div class="buttons w-100 d-flex justify-content-center align-items-center gap-3">
+                    <button type="button" class="cancel-btn w-50 fw-semibold" (click)="closeModal()">Cancel</button>
+                    <button type="submit" class="confirm-btn w-50 fw-semibold">Confirm</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

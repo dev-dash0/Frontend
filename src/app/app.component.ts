@@ -9,6 +9,7 @@ import { SigninComponent } from './Components/signin/signin.component';
 import { ForgetPasswordComponent } from "./forget-password/forget-password.component";
 import { DashboardTestComponent } from "./Components/dashboard-test/dashboard-test.component";
 import { CalendarComponent } from "./Components/calendar/calendar.component";
+import { AddCompanyModalComponent } from "./Components/company-modal/company-modal.component";
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -22,7 +23,8 @@ import { CalendarComponent } from "./Components/calendar/calendar.component";
     SigninComponent,
     DashboardTestComponent,
     CalendarComponent,
-    ForgetPasswordComponent
+    ForgetPasswordComponent,
+    AddCompanyModalComponent
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
