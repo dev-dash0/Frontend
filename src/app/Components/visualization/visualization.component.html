@@ -1,0 +1,26 @@
+<section id="visualization" class="d-flex flex-column justify-content-center align-items-center">
+
+
+
+    <mat-tab-group dynamicHeight mat-stretch-tabs="false" class="mat-tab-body-content " [color]="''">
+        <div class="cont">
+            <mat-tab [label]="'All Projects'" labelClass="mat-tab-label">
+                <div class="visualize_content visualize_allProject  p-4 ">
+                    <app-all-projects-dashboard></app-all-projects-dashboard>
+                </div>
+
+            </mat-tab>
+
+            @for (tab of lotsOfTabs; track tab) {
+
+            <mat-tab [label]="tab" labelClass="mat-tab-label">
+                <div class="visualize_content p-4">
+                    content
+                </div>
+            </mat-tab>
+            }
+        </div>
+    </mat-tab-group>
+
+
+</section>

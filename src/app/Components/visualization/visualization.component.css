@@ -1,0 +1,62 @@
+#visualization {
+
+    font-family: 'Inter';
+    background: radial-gradient(97.81% 96.5% at 2.19% 3.5%, #000000 0%, #102A56 100%);
+    min-height: 100vh;
+    /* padding: 50px; */
+}
+
+.visualize_content {
+    width: 100%;
+    background-color: #0D1123;
+    border-radius: 5px;
+    /* min-height: 595px; */
+    /* min-width: 859px; */
+}
+
+.visualize_allProject {
+    border-radius: 0 5px 5px 5px;
+}
+
+::ng-deep .mat-tab-body-content {
+    padding: 20px 35px 35px 35px;
+    border-radius: 10px;
+    background: linear-gradient(115.07deg, rgba(41, 47, 101, 0.792157) 9.68%, rgba(0, 0, 0, 0.279) 88.82%);
+
+}
+
+/* Customize Tab Header */
+
+::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+    color: #8aa0f2 !important;
+}
+
+::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+    color: #DD8AF2 !important;
+}
+
+::ng-deep .mdc-tab {
+    border-radius: 10px 10px 0px 0 !important;
+}
+
+::ng-deep.mat-mdc-tab-ripple {
+    border-radius: 10px 10px 0 0;
+}
+
+::ng-deep .mdc-tab__ripple:before {
+    border-radius: 10px 10px 0 0 !important;
+
+}
+
+::ng-deep .mdc-tab-indicator {
+    width: 0 !important;
+    height: 0 !important;
+}
+
+::ng-deep .mdc-tab-indicator--active {
+    background-color: #0D1123 !important;
+}
+
+::ng-deep .mdc-tab-indicator--active:hover {
+    background-color: #0D1123 !important;
+}

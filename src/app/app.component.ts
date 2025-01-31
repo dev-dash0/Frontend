@@ -6,7 +6,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { SignupComponent } from "./Components/signup/signup.component";
 import { SigninComponent } from './Components/signin/signin.component';
-import { ForgetPasswordComponent } from "./forget-password/forget-password.component";
+import { VisualizationComponent } from "./Components/visualization/visualization.component";
+import { ForgetPasswordComponent } from './Components/forget-password/forget-password.component';
 import { DashboardTestComponent } from "./Components/dashboard-test/dashboard-test.component";
 import { CalendarComponent } from "./Components/calendar/calendar.component";
 import { AddCompanyModalComponent } from "./Components/company-modal/company-modal.component";
@@ -25,7 +26,7 @@ import { AddCompanyModalComponent } from "./Components/company-modal/company-mod
     CalendarComponent,
     ForgetPasswordComponent,
     AddCompanyModalComponent
-],
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
