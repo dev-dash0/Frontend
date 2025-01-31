@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { MainDarkBtnComponent } from '../Shared/main-dark-btn/main-dark-btn.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { NgClass } from '@angular/common';
+import { MainDarkBtnComponent } from '../../Shared/main-dark-btn/main-dark-btn.component';
 
 @Component({
   selector: 'app-forget-password',
@@ -17,7 +17,7 @@ import { NgClass } from '@angular/common';
     MatIconModule,
     NgClass,
     MainDarkBtnComponent
-],
+  ],
   templateUrl: './forget-password.component.html',
   styleUrl: './forget-password.component.css',
 })

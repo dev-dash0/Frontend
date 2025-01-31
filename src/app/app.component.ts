@@ -11,7 +11,8 @@ import { Forgetpassword2Component } from "./Components/forgetpassword2/forgetpas
 import { Forgetpassword3Component } from "./Components/forgetpassword3/forgetpassword3.component";
 import { Forgetpassword4Component } from "./Components/forgetpassword4/forgetpassword4.component";
 import { SigninComponent } from './Components/signin/signin.component';
-import { ForgetPasswordComponent } from "./forget-password/forget-password.component";
+import { VisualizationComponent } from "./Components/visualization/visualization.component";
+import { ForgetPasswordComponent } from './Components/forget-password/forget-password.component';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -25,8 +26,9 @@ import { ForgetPasswordComponent } from "./forget-password/forget-password.compo
     SigninComponent,
     ForgetpasswordComponent,
     Forgetpassword2Component,
-    ForgetPasswordComponent
-],
+    ForgetPasswordComponent,
+    VisualizationComponent
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
