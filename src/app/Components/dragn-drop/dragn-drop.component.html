@@ -1,0 +1,27 @@
+<div class="dropzone">
+    <input 
+        type="file"
+        class="px-5 py-3"
+        accept="allowedTypes"
+        multiple="allowMultipleFiles"
+        (drop)="onFiledrop($event)"
+        (change)="onFileSelected($event)"
+        #fileDropRef />
+<label 
+        *ngIf="!label; else customLabel"
+        for="fileDropRef">
+        <b class="bold-blue">Click to upload</b>
+        or drag and drop
+    </label>
+<ng-template #customLabel for="fileDropRef">{{ label }}</ng-template>
+    
+    <div class="allowed-types">
+        Allowed file types: {{ allowedList }}
+    </div>
+    
+    <div class="uploadedFiles" *ngIf="!!files">
+        <div *ngFor="let file of files">Uploaded: {{ file.name }}</div>
+    </div>
+
+    <div *ngIf="incorrectInput" class="error-alert">{{ errorMessage }}</div>
+</div>

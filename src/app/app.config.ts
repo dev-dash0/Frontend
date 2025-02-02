@@ -3,11 +3,9 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import {
-  BrowserModule,
   provideClientHydration,
 } from '@angular/platform-browser';
 import {
-  BrowserAnimationsModule,
   provideAnimations,
 } from '@angular/platform-browser/animations';
 

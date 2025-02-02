@@ -1,0 +1,89 @@
+.calendar-container {
+  color: white;
+  border-radius: 10px;
+  width: 80%;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.month-title {
+  text-align: center;
+}
+
+.month-title h2 {
+  margin: 0;
+}
+
+.calendar-days {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.calendar-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.day {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.day.active {
+  /* background: #775ada; */
+  /* background:  */
+  /* linear-gradient( */
+      /* #5c3c64, */
+      /* #6551a7; */
+      /* ); */
+    background:  #774f7e;
+  font-weight: bold;
+}
+
+.issues-list {
+  background: var(--glassGradient);
+    width: 100%;
+  border-radius: 10px;
+}
+
+.issue-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.issue-card h3 {
+  margin: 0;
+}
+
+.issue-card p {
+  margin: 5px 0;
+  font-size: 14px;
+}

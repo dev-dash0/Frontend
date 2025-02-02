@@ -76,6 +76,7 @@
       #4a314c 2%,
       #161d3e 35%
     ),
+
     linear-gradient(172deg, #3a4962 2%, #ff90e8 45%, #74caff 72%, #292f65 92%);
 
   /*Modal Gradients*/
@@ -170,6 +171,21 @@
   margin: 0;
 }
 
+
 .bg {
   background: var(--mainBackgroundGradient);
 }
+=======
+.cardTopLeft{
+    background: var(--cardTopLeftGradient);
+}
+.cardTopRight{
+    background: var(--cardTopRightGradient);
+}
+.cardBottomLeft{
+    background: var(--cardBottomLeftGradient);
+}
+.cardBottomRight{
+    background: var(--cardBottomRightGradient);
+}
+
