@@ -1,61 +1,76 @@
-<section id="signup" class="bg py-2 d-flex flex-column justify-content-center align-items-center vh-100">
-    <mat-toolbar class="w-75 mx-auto d-flex justify-content-between fixed-top">
-        <h1>Dev Dash</h1>
-        <div class="log d-flex gap-3">
-            <span>Sign In</span>
-            <span>Sign Up</span>
+<section
+  id="signup"
+  class="bg py-2 d-flex flex-column justify-content-center align-items-center min-vh-100"
+>
+  <app-signin-signup-navbar></app-signin-signup-navbar>
+  <div class="signup-container mt-2">
+    <form class="d-flex flex-column" (submit)="onSubmit($event)">
+      <h1 class="mb-3">Create a New Account</h1>
+      <label for="fName" class="mt-1">First Name</label>
+      <input type="text" class="form-control my-2" id="fName" />
+      <label for="lName" class="mt-1">Last Name</label>
+      <input type="text" class="form-control my-2" id="lName" />
+      <label for="uName" class="mt-1">User Name</label>
+      <input type="text" class="form-control my-2" id="uName" />
+      <label for="email" class="mt-1">Email</label>
+      <input type="email" class="form-control my-2" id="email" />
+      <label for="Password" class="mt-1">Password</label>
+      <input type="password" class="form-control my-2" id="Password" />
+
+      <div
+        class="forget_pass d-flex justify-content-between align-items-center mt-1 mb-4"
+      >
+        <div class="form-check remember_me">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="flexCheckDefault"
+          />
+          <label class="form-check-label" for="flexCheckDefault">
+            Remember Me
+          </label>
         </div>
-    </mat-toolbar>
-    <div class="signup-container mt-2">
-
-        <form class="d-flex flex-column ">
-            <h1 class="mb-3 ">Create a New Account</h1>
-            <label for="fName" class="mt-1">First Name</label>
-            <input type="text" class="form-control my-2" id="fName">
-            <label for="lName" class="mt-1">Last Name</label>
-            <input type="text" class="form-control my-2" id="lName">
-            <label for="uName" class="mt-1">User Name</label>
-            <input type="text" class="form-control my-2" id="uName">
-            <label for="email" class="mt-1">Email</label>
-            <input type="email" class="form-control my-2" id="email">
-            <label for="Password" class="mt-1">Password</label>
-            <input type="password" class="form-control my-2" id="Password">
-
-            <div class="forget_pass d-flex justify-content-between align-items-center mt-1 mb-4">
-                <div class="form-check remember_me">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Remember Me
-                    </label>
-                </div>
-            </div>
-            <app-main-dark-btn>Sign up</app-main-dark-btn>
-            <app-main-dark-btn>Sign in with Google
-                <svg width="21" height="20" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M14.4344 1.31556C10.4378 2.70202 6.99112 5.33358 4.60064 8.82369C2.21016 12.3138 1.00189 16.4785 1.1533 20.7061C1.30471 24.9336 2.80782 29.0012 5.44185 32.3114C8.07587 35.6216 11.702 37.9998 15.7875 39.0968C19.0998 39.9515 22.5701 39.989 25.9 39.2062C28.9167 38.5286 31.7056 37.0792 33.9938 34.9999C36.3753 32.7698 38.1039 29.9327 38.9938 26.7937C39.961 23.3801 40.1332 19.7903 39.4969 16.2999H20.8969V24.0156H31.6688C31.4535 25.2461 30.9922 26.4207 30.3124 27.4688C29.6326 28.5169 28.7484 29.4171 27.7125 30.1156C26.3972 30.9857 24.9144 31.5711 23.3594 31.8343C21.7999 32.1243 20.2002 32.1243 18.6407 31.8343C17.06 31.5075 15.5647 30.8551 14.25 29.9187C12.138 28.4236 10.5522 26.2997 9.71879 23.8499C8.87134 21.3543 8.87134 18.6487 9.71879 16.1531C10.312 14.4037 11.2926 12.811 12.5875 11.4937C14.0694 9.95852 15.9455 8.86117 18.0099 8.32205C20.0744 7.78292 22.2474 7.82284 24.2907 8.43743C25.8868 8.92741 27.3464 9.78349 28.5532 10.9374C29.7678 9.7291 30.9803 8.51764 32.1907 7.30306C32.8157 6.64993 33.4969 6.02806 34.1125 5.35931C32.2706 3.64517 30.1084 2.31136 27.75 1.43431C23.4554 -0.125099 18.7562 -0.167006 14.4344 1.31556Z"
-                        fill="white" />
-                    <path
-                        d="M14.4342 1.3161C18.7556 -0.167472 23.4548 -0.126667 27.7498 1.43173C30.1086 2.31474 32.2698 3.65497 34.1092 5.37548C33.4842 6.04423 32.8248 6.66923 32.1873 7.31923C30.9748 8.52964 29.7633 9.73589 28.5529 10.938C27.3462 9.78403 25.8866 8.92795 24.2904 8.43797C22.2479 7.82123 20.0749 7.779 18.0099 8.31592C15.9449 8.85284 14.0677 9.94817 12.5842 11.4817C11.2893 12.799 10.3086 14.3918 9.71543 16.1411L3.2373 11.1255C5.55608 6.52723 9.5709 3.00993 14.4342 1.3161Z"
-                        fill="#E33629" />
-                    <path
-                        d="M1.51884 16.0938C1.86703 14.3681 2.4451 12.697 3.23759 11.125L9.71571 16.1531C8.86826 18.6488 8.86826 21.3544 9.71571 23.85C7.55738 25.5167 5.39801 27.1917 3.23759 28.875C1.25368 24.926 0.648628 20.4266 1.51884 16.0938Z"
-                        fill="#F8BD00" />
-                    <path
-                        d="M20.8969 16.2969H39.4969C40.1331 19.7873 39.961 23.3771 38.9938 26.7906C38.1039 29.9296 36.3753 32.7667 33.9938 34.9969C31.9031 33.3656 29.8031 31.7469 27.7125 30.1156C28.749 29.4165 29.6337 28.5153 30.3135 27.466C30.9933 26.4168 31.4543 25.2411 31.6688 24.0094H20.8969C20.8938 21.4406 20.8969 18.8687 20.8969 16.2969Z"
-                        fill="#587DBD" />
-                    <path
-                        d="M3.23438 28.8746C5.39479 27.2079 7.55417 25.5329 9.7125 23.8496C10.5475 26.3002 12.1356 28.4243 14.25 29.9184C15.5688 30.8504 17.0673 31.4975 18.65 31.8184C20.2096 32.1083 21.8092 32.1083 23.3687 31.8184C24.9237 31.5551 26.4065 30.9697 27.7219 30.0996C29.8125 31.7309 31.9125 33.3496 34.0031 34.9809C31.7153 37.0613 28.9263 38.5117 25.9094 39.1902C22.5794 39.9731 19.1091 39.9355 15.7969 39.0809C13.1772 38.3814 10.7302 37.1483 8.60938 35.459C6.36457 33.6768 4.53111 31.4308 3.23438 28.8746Z"
-                        fill="#319F43" />
-                </svg>
-            </app-main-dark-btn>
-        </form>
-    </div>
-    <img src="assets/images/Group.svg" class="Group1" width="304" alt="">
-    <img src="assets/images/Group2.svg" class="Group2" width="204" alt="">
-    <img src="assets/images/Group3.svg" class="Group3" width="204" alt="">
-    <img src="assets/images/Group4.svg" class="Group4" width="134" alt="">
-    <img src="assets/images/Group5.svg" class="Group5" width="104" alt="">
-    <img src="assets/images/Group6.svg" class="Group6" width="104" alt="">
-
+      </div>
+      <app-main-dark-btn>Sign up</app-main-dark-btn>
+      <app-main-dark-btn
+        >Sign in with Google
+        <svg
+          width="21"
+          height="20"
+          viewBox="0 0 41 40"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          class="ps-1"
+        >
+          <path
+            d="M14.4344 1.31556C10.4378 2.70202 6.99112 5.33358 4.60064 8.82369C2.21016 12.3138 1.00189 16.4785 1.1533 20.7061C1.30471 24.9336 2.80782 29.0012 5.44185 32.3114C8.07587 35.6216 11.702 37.9998 15.7875 39.0968C19.0998 39.9515 22.5701 39.989 25.9 39.2062C28.9167 38.5286 31.7056 37.0792 33.9938 34.9999C36.3753 32.7698 38.1039 29.9327 38.9938 26.7937C39.961 23.3801 40.1332 19.7903 39.4969 16.2999H20.8969V24.0156H31.6688C31.4535 25.2461 30.9922 26.4207 30.3124 27.4688C29.6326 28.5169 28.7484 29.4171 27.7125 30.1156C26.3972 30.9857 24.9144 31.5711 23.3594 31.8343C21.7999 32.1243 20.2002 32.1243 18.6407 31.8343C17.06 31.5075 15.5647 30.8551 14.25 29.9187C12.138 28.4236 10.5522 26.2997 9.71879 23.8499C8.87134 21.3543 8.87134 18.6487 9.71879 16.1531C10.312 14.4037 11.2926 12.811 12.5875 11.4937C14.0694 9.95852 15.9455 8.86117 18.0099 8.32205C20.0744 7.78292 22.2474 7.82284 24.2907 8.43743C25.8868 8.92741 27.3464 9.78349 28.5532 10.9374C29.7678 9.7291 30.9803 8.51764 32.1907 7.30306C32.8157 6.64993 33.4969 6.02806 34.1125 5.35931C32.2706 3.64517 30.1084 2.31136 27.75 1.43431C23.4554 -0.125099 18.7562 -0.167006 14.4344 1.31556Z"
+            fill="white"
+          />
+          <path
+            d="M14.4342 1.3161C18.7556 -0.167472 23.4548 -0.126667 27.7498 1.43173C30.1086 2.31474 32.2698 3.65497 34.1092 5.37548C33.4842 6.04423 32.8248 6.66923 32.1873 7.31923C30.9748 8.52964 29.7633 9.73589 28.5529 10.938C27.3462 9.78403 25.8866 8.92795 24.2904 8.43797C22.2479 7.82123 20.0749 7.779 18.0099 8.31592C15.9449 8.85284 14.0677 9.94817 12.5842 11.4817C11.2893 12.799 10.3086 14.3918 9.71543 16.1411L3.2373 11.1255C5.55608 6.52723 9.5709 3.00993 14.4342 1.3161Z"
+            fill="#E33629"
+          />
+          <path
+            d="M1.51884 16.0938C1.86703 14.3681 2.4451 12.697 3.23759 11.125L9.71571 16.1531C8.86826 18.6488 8.86826 21.3544 9.71571 23.85C7.55738 25.5167 5.39801 27.1917 3.23759 28.875C1.25368 24.926 0.648628 20.4266 1.51884 16.0938Z"
+            fill="#F8BD00"
+          />
+          <path
+            d="M20.8969 16.2969H39.4969C40.1331 19.7873 39.961 23.3771 38.9938 26.7906C38.1039 29.9296 36.3753 32.7667 33.9938 34.9969C31.9031 33.3656 29.8031 31.7469 27.7125 30.1156C28.749 29.4165 29.6337 28.5153 30.3135 27.466C30.9933 26.4168 31.4543 25.2411 31.6688 24.0094H20.8969C20.8938 21.4406 20.8969 18.8687 20.8969 16.2969Z"
+            fill="#587DBD"
+          />
+          <path
+            d="M3.23438 28.8746C5.39479 27.2079 7.55417 25.5329 9.7125 23.8496C10.5475 26.3002 12.1356 28.4243 14.25 29.9184C15.5688 30.8504 17.0673 31.4975 18.65 31.8184C20.2096 32.1083 21.8092 32.1083 23.3687 31.8184C24.9237 31.5551 26.4065 30.9697 27.7219 30.0996C29.8125 31.7309 31.9125 33.3496 34.0031 34.9809C31.7153 37.0613 28.9263 38.5117 25.9094 39.1902C22.5794 39.9731 19.1091 39.9355 15.7969 39.0809C13.1772 38.3814 10.7302 37.1483 8.60938 35.459C6.36457 33.6768 4.53111 31.4308 3.23438 28.8746Z"
+            fill="#319F43"
+          />
+        </svg>
+      </app-main-dark-btn>
+    </form>
+  </div>
+  <img src="assets/images/Group.svg" class="Group1" width="304" alt="" />
+  <img src="assets/images/Group2.svg" class="Group2" width="204" alt="" />
+  <img src="assets/images/Group3.svg" class="Group3" width="204" alt="" />
+  <img src="assets/images/Group4.svg" class="Group4" width="134" alt="" />
+  <img src="assets/images/Group5.svg" class="Group5" width="104" alt="" />
+  <img src="assets/images/Group6.svg" class="Group6" width="104" alt="" />
 </section>
