@@ -1,0 +1,16 @@
+/* mat-sidenav {
+  background: var(--newStrokeGradient);
+  padding: 0.5px;
+  outline: none;
+  border: none;
+}
+mat-sidenav-container {
+  top: 0;
+  bottom: 0;
+}
+
+@media (max-width: 992px) {
+  mat-sidenav-container {
+    top: 80px;
+  }
+} */

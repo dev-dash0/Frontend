@@ -1,0 +1,329 @@
+<mat-sidenav-container class="bg-transparent my-3 rounded-3 position-fixed">
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    opened
+    [style.width.px]="collapsed ? 70 : 220"
+  >
+    <div
+      class="side-menu-bg h-100 rounded-3 px-2 py-3"
+      [style.overflow-y]="collapsed ? 'hidden' : 'auto'"
+      [class.overflow-x-hidden]="!collapsed"
+      [class.overflow-y-auto]="!collapsed"
+    >
+      <div class="container">
+        <div class="row g-3">
+          <div class="col-md-12">
+            <div
+              class="d-flex align-items-center side-logo"
+              [ngClass]="{
+                'justify-content-between': !collapsed,
+                'justify-content-center': collapsed
+              }"
+              (click)="toggleCollapse()"
+            >
+              <h3 class="m-0 p-0" *ngIf="!collapsed">Dev Dash</h3>
+              @if(collapsed==true) {
+              <span><i class="fa-solid fa-angles-right"></i></span>
+              } @else {
+              <span><i class="fa-solid fa-angles-left"></i></span>
+              }
+            </div>
+          </div>
+
+          <div class="col-md-12" *ngIf="!collapsed">
+            <div class="side-menu-wrapper h-100">
+              <div class="d-flex align-items-center gap-2">
+                <span><i class="fa-solid fa-chart-column pe-1"></i></span>
+                <p class="m-0 p-0">Dashboard</p>
+              </div>
+              <div class="d-flex align-items-center gap-2 mt-2">
+                <span
+                  ><i
+                    class="fa-solid fa-thumbtack fa-rotate-by pe-1"
+                    style="--fa-rotate-angle: -45deg"
+                  ></i
+                ></span>
+                <p class="m-0 p-0">Pinned</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12" *ngIf="!collapsed">
+            <div class="side-menu-wrapper h-100">
+              <div class="d-flex align-items-center gap-2">
+                <span><i class="fa-regular fa-building pe-1"></i></span>
+                <p class="m-0 pe-1">Companies</p>
+                <span
+                  ><i class="fa-regular fa-pen-to-square fa-xs ps-3"></i
+                ></span>
+              </div>
+              <div class="drop-menus mt-2">
+                <div
+                  class="company first-company d-flex justify-content-between flex-column"
+                >
+                  <div
+                    class="drop-button d-flex justify-content-between"
+                    (click)="toggleCollapseDropDown('collapseExample')"
+                    data-bs-toggle="collapse"
+                    [attr.data-bs-target]="'#collapseExample'"
+                    aria-expanded="false"
+                    [attr.aria-controls]="'collapseExample'"
+                  >
+                    <p>Google</p>
+                    @if(!dropdownStates['collapseExample']) {
+                    <span>
+                      <i class="fa-solid fa-chevron-down fa-xs"></i>
+                    </span>
+                    } @else {
+                    <span>
+                      <i class="fa-solid fa-chevron-up fa-xs"></i>
+                    </span>
+                    }
+                  </div>
+                  <div class="collapse" id="collapseExample">
+                    <div class="projects ps-3">
+                      <div
+                        class="drop-button project d-flex justify-content-between"
+                        (click)="toggleCollapseDropDown('collapseExample2')"
+                        data-bs-toggle="collapse"
+                        [attr.data-bs-target]="'#collapseExample2'"
+                        aria-expanded="false"
+                        [attr.aria-controls]="'collapseExample2'"
+                      >
+                        <p>Project 1</p>
+                        @if(!dropdownStates['collapseExample2']) {
+                        <span>
+                          <i class="fa-solid fa-chevron-down fa-xs"></i>
+                        </span>
+                        } @else {
+                        <span>
+                          <i class="fa-solid fa-chevron-up fa-xs"></i>
+                        </span>
+                        }
+                      </div>
+                      <div
+                        class="collapse ps-3 collapse-teams"
+                        id="collapseExample2"
+                      >
+                        <div
+                          class="team d-flex align-items-center justify-content-start"
+                        >
+                          <span
+                            ><i class="fa-regular fa-circle fa-2xs"></i
+                          ></span>
+                          <p class="ps-2 m-0">Team 1</p>
+                        </div>
+                        <div
+                          class="team d-flex align-items-center justify-content-start"
+                        >
+                          <span
+                            ><i class="fa-regular fa-circle fa-2xs"></i
+                          ></span>
+                          <p class="ps-2 m-0">Team 2</p>
+                        </div>
+                        <div
+                          class="team add-team d-flex align-items-center justify-content-start"
+                        >
+                          <span><i class="fa-solid fa-plus fa-xs"></i></span>
+                          <p class="ps-2 m-0">Create Team</p>
+                        </div>
+                      </div>
+                      <div class="drop-button add-project d-flex">
+                        <span>
+                          <i class="fa-solid fa-plus fa-xs"></i>
+                        </span>
+                        <p class="ps-2">Add Project</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="company second-company d-flex justify-content-between flex-column"
+                >
+                  <div
+                    class="drop-button d-flex justify-content-between"
+                    (click)="toggleCollapseDropDown('collapseExample3')"
+                    data-bs-toggle="collapse"
+                    [attr.data-bs-target]="'#collapseExample3'"
+                    aria-expanded="false"
+                    [attr.aria-controls]="'collapseExample3'"
+                  >
+                    <p>Microsoft</p>
+                    @if(!dropdownStates['collapseExample3']) {
+                    <span>
+                      <i class="fa-solid fa-chevron-down fa-xs"></i>
+                    </span>
+                    } @else {
+                    <span>
+                      <i class="fa-solid fa-chevron-up fa-xs"></i>
+                    </span>
+                    }
+                  </div>
+                  <div class="collapse" id="collapseExample3">
+                    <div class="projects ps-3">
+                      <div
+                        class="drop-button project d-flex justify-content-between"
+                        (click)="toggleCollapseDropDown('collapseExample4')"
+                        data-bs-toggle="collapse"
+                        [attr.data-bs-target]="'#collapseExample4'"
+                        aria-expanded="false"
+                        [attr.aria-controls]="'collapseExample4'"
+                      >
+                        <p>Project 1</p>
+                        @if(!dropdownStates['collapseExample4']) {
+                        <span>
+                          <i class="fa-solid fa-chevron-down fa-xs"></i>
+                        </span>
+                        } @else {
+                        <span>
+                          <i class="fa-solid fa-chevron-up fa-xs"></i>
+                        </span>
+                        }
+                      </div>
+                      <div
+                        class="collapse ps-3 collapse-teams"
+                        id="collapseExample4"
+                      >
+                        <div
+                          class="team d-flex align-items-center justify-content-start"
+                        >
+                          <span
+                            ><i class="fa-regular fa-circle fa-2xs"></i
+                          ></span>
+                          <p class="ps-2 m-0">Team 1</p>
+                        </div>
+                        <div
+                          class="team d-flex align-items-center justify-content-start"
+                        >
+                          <span
+                            ><i class="fa-regular fa-circle fa-2xs"></i
+                          ></span>
+                          <p class="ps-2 m-0">Team 2</p>
+                        </div>
+                        <div
+                          class="team add-team d-flex align-items-center justify-content-start"
+                        >
+                          <span><i class="fa-solid fa-plus fa-xs"></i></span>
+                          <p class="ps-2 m-0">Create team</p>
+                        </div>
+                      </div>
+                      <div class="drop-button add-project d-flex">
+                        <span>
+                          <i class="fa-solid fa-plus fa-xs"></i>
+                        </span>
+                        <p class="ps-2">Add Project</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12" *ngIf="!collapsed">
+            <div class="side-menu-wrapper h-100 work-space">
+              <div class="d-flex align-items-center gap-2">
+                <span><i class="fa-regular fa-lightbulb pe-1"></i></span>
+                <p class="m-0 p-0">My Workspace</p>
+              </div>
+              <div class="projects ps-3 mt-2">
+                <div
+                  class="drop-button project d-flex justify-content-between"
+                  (click)="toggleCollapseDropDown('collapseExample5')"
+                  data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#collapseExample5'"
+                  aria-expanded="false"
+                  [attr.aria-controls]="'collapseExample5'"
+                >
+                  <p>Project 1</p>
+                  @if(!dropdownStates['collapseExample5']) {
+                  <span>
+                    <i class="fa-solid fa-chevron-down fa-xs"></i>
+                  </span>
+                  } @else {
+                  <span>
+                    <i class="fa-solid fa-chevron-up fa-xs"></i>
+                  </span>
+                  }
+                </div>
+                <div class="collapse ps-3 collapse-teams" id="collapseExample5">
+                  <div
+                    class="team d-flex align-items-center justify-content-start"
+                  >
+                    <span><i class="fa-regular fa-circle fa-2xs"></i></span>
+                    <p class="ps-2 m-0">Issue 1</p>
+                  </div>
+                  <div
+                    class="team d-flex align-items-center justify-content-start"
+                  >
+                    <span><i class="fa-regular fa-circle fa-2xs"></i></span>
+                    <p class="ps-2 m-0">Issue 2</p>
+                  </div>
+                  <div
+                    class="team add-team d-flex align-items-center justify-content-start"
+                  >
+                    <span><i class="fa-solid fa-plus fa-xs"></i></span>
+                    <p class="ps-2 m-0">Add Issue</p>
+                  </div>
+                </div>
+                <div class="drop-button add-project d-flex">
+                  <span>
+                    <i class="fa-solid fa-plus fa-xs"></i>
+                  </span>
+                  <p class="ps-2">Add Project</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12" *ngIf="!collapsed">
+            <div class="side-menu-wrapper h-100">
+              <div class="d-flex align-items-center gap-2">
+                <span><i class="fa-solid fa-circle-plus pe-1"></i></span>
+                <p class="m-0 p-0">Integrations</p>
+              </div>
+              <div class="d-flex align-items-center gap-2 mt-2">
+                <span><i class="fa-solid fa-file-export pe-1"></i></span>
+                <p class="m-0 p-0">Export</p>
+              </div>
+              <div class="d-flex align-items-center gap-2 mt-2">
+                <span><i class="fa-solid fa-link pe-1"></i></span>
+                <p class="m-0 p-0">Invite</p>
+              </div>
+              <div class="d-flex align-items-center gap-2 mt-2">
+                <span><i class="fa-solid fa-users pe-1"></i></span>
+                <p class="m-0 p-0">Community</p>
+              </div>
+              <div class="d-flex align-items-center gap-2 mt-2">
+                <span><i class="fa-regular fa-circle-question pe-1"></i></span>
+                <p class="m-0 p-0">Help</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12" *ngIf="collapsed">
+            <div
+              class="d-flex flex-column align-items-center gap-3 mt-2 collapsed-icons"
+            >
+              <span><i class="fa-solid fa-chart-column"></i></span>
+              <span
+                ><i
+                  class="fa-solid fa-thumbtack fa-rotate-by"
+                  style="--fa-rotate-angle: -45deg"
+                ></i
+              ></span>
+              <span><i class="fa-regular fa-building"></i></span>
+              <span><i class="fa-regular fa-lightbulb"></i></span>
+              <span><i class="fa-solid fa-circle-plus"></i></span>
+              <span><i class="fa-solid fa-file-export"></i></span>
+              <span><i class="fa-solid fa-link"></i></span>
+              <span><i class="fa-solid fa-users"></i></span>
+              <span><i class="fa-regular fa-circle-question"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-sidenav>
+</mat-sidenav-container>

@@ -1,0 +1,135 @@
+::placeholder {
+  color: var(--mainLightBlueColor);
+  font-size: var(--smallFontSize);
+}
+
+* {
+  border-radius: var(--standardRoundness);
+}
+
+*::before {
+  position: absolute;
+  border-radius: var(--standardRoundness);
+  background: var(--newStrokeGradient);
+  inset: 0;
+  z-index: -1;
+  padding: 0.5px;
+  -webkit-mask: linear-gradient(black, black) content-box,
+    linear-gradient(black, black);
+  -webkit-mask-composite: destination-in;
+  mask-composite: exclude;
+  outline: 0;
+}
+
+button {
+  outline: none;
+  border: none;
+}
+
+span {
+  color: var(--lightBlueColor);
+  cursor: pointer;
+}
+
+.custom-toolbar {
+  position: relative;
+  height: 4rem;
+  background: var(--searchBlueGradient);
+  z-index: 3;
+}
+
+.custom-toolbar::before {
+  content: "";
+}
+
+.search-container {
+  position: relative;
+  width: 100%;
+}
+
+input {
+  background-color: rgba(33, 39, 84, 0.873);
+  outline: none;
+  border: none;
+  width: 100%;
+  color: var(--mainLightBlueColor) !important;
+}
+
+input:focus {
+  box-shadow: none;
+  background-color: rgba(33, 39, 84, 0.873);
+}
+
+.search-btn {
+  position: absolute;
+  border-radius: 50%;
+  top: 50%;
+  right: 2px;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--searchButtonGradient);
+  padding: var(--standardPadding);
+}
+
+.search-btn span {
+  color: var(--mainColor);
+}
+
+.toggle-menu button {
+  border-radius: 50%;
+  font-size: var(--smallFontSize);
+  padding: 11px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0b0444;
+  color: var(--mainLightBlueColor);
+}
+
+.badge {
+  position: absolute;
+  top: 0;
+  border-radius: 50%;
+  font-size: 13px;
+  transform: translate(-60%, -30%) !important;
+  background-color: var(--lightPinkColor) !important;
+  color: var(--secondStandardBlueColor) !important;
+}
+
+.btn-mode {
+  position: relative;
+  background: var(--searchBlueGradient);
+  z-index: 2;
+  width: 60px;
+  padding: 20px;
+}
+
+.btn-mode:focus {
+  background-color: transparent;
+}
+
+.btn-mode::before {
+  content: "";
+}
+
+.dropdown-item {
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .col-10 {
+    flex: 0 0 auto;
+    width: 83%;
+  }
+}
+
+/* @media (min-width: 992px) {
+  .row {
+    margin-left: 218.5px !important;
+  }
+} */
