@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="row pt-3 justify-content-center">
+    <div class="col-10 col-md-8 col-lg-6">
+      <mat-toolbar class="custom-toolbar gap-3">
+        <div class="d-flex align-items-center search-container">
+          <input class="form-control" type="text" placeholder="Search" />
+          <button class="btn search-btn">
+            <span><i class="fa-solid fa-magnifying-glass"></i></span>
+          </button>
+        </div>
+
+        <span class="position-relative">
+          <i class="fa-regular fa-comment-dots fa-lg"></i>
+        </span>
+
+        <span class="position-relative">
+          <i class="fa-regular fa-bell fa-lg"></i>
+          <span class="badge">1</span>
+        </span>
+
+        <div class="profile">
+          <div class="dropdown">
+            <div
+              class="toggle-menu d-flex align-items-center gap-2"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <button class="btn" type="button">RE</button>
+              <span><i class="fa-solid fa-chevron-down fa-xs"></i></span>
+            </div>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item">Action</a></li>
+              <li><a class="dropdown-item">Another action</a></li>
+              <li><a class="dropdown-item">Something else here</a></li>
+            </ul>
+          </div>
+        </div>
+      </mat-toolbar>
+    </div>
+
+    <div class="col-auto ps-0">
+      <button
+        class="btn btn-mode p-3"
+        style="height: 4rem"
+        (click)="toggleMode()"
+      >
+        @if(toggle==true) {
+        <span><i class="fa-regular fa-sun fa-xl"></i></span>
+
+        } @else {<span><i class="fa-solid fa-moon fa-xl"></i></span>}
+      </button>
+    </div>
+  </div>
+</div>

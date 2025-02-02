@@ -1,0 +1,16 @@
+.mat-toolbar {
+  background: transparent;
+  border-radius: 16px;
+  overflow: hidden;
+  color: var(--mainColor);
+  font-family: var(--headerFontFamily) !important;
+}
+
+.mat-toolbar h1 {
+  font-family: var(--headerFontFamily) !important;
+}
+
+.mat-toolbar span {
+  font-size: var(--regularFontSize);
+  cursor: pointer;
+}
