@@ -22,7 +22,10 @@
               }"
               (click)="toggleCollapse()"
             >
-              <h3 class="m-0 p-0" *ngIf="!collapsed">Dev Dash</h3>
+              <h5 class="m-0 p-0" *ngIf="!collapsed">
+                <img src="../../../assets/images/logo.png" class="Logo me-2" alt="">
+                Dev Dash
+              </h5>
               @if(collapsed==true) {
               <span><i class="fa-solid fa-angles-right"></i></span>
               } @else {

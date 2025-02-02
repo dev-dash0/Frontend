@@ -16,6 +16,7 @@ import { ForgetPasswordComponent } from './Components/forget-password/forget-pas
 import { DashboardTestComponent } from "./Components/dashboard-test/dashboard-test.component";
 import { CalendarComponent } from "./Components/calendar/calendar.component";
 import { AddCompanyModalComponent } from "./Components/company-modal/company-modal.component";
+import { AllProjectsDashboardComponent } from "./Components/all-projects-dashboard/all-projects-dashboard.component";
 
 @Component({
   selector: 'app-root',
@@ -28,14 +29,14 @@ import { AddCompanyModalComponent } from "./Components/company-modal/company-mod
     MatIconModule,
     SigninSignupNavbarComponent,
     MyDashboardComponent,
-
     SignupComponent,
     SigninComponent,
     DashboardTestComponent,
     CalendarComponent,
     ForgetPasswordComponent,
-    AddCompanyModalComponent
-  ],
+    AddCompanyModalComponent,
+    AllProjectsDashboardComponent
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

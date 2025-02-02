@@ -35,6 +35,10 @@ mat-sidenav-container {
   cursor: pointer;
 }
 
+.Logo{
+  width: 27%;
+}
+
 .side-logo h4 {
   font-family: var(--headerFontFamily);
   font-weight: var(--middleFontWeight);
