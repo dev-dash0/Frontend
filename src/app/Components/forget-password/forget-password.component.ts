@@ -4,7 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { NgClass } from '@angular/common';
-import { MainDarkBtnComponent } from '../../Shared/main-dark-btn/main-dark-btn.component';
 
 @Component({
   selector: 'app-forget-password',
@@ -16,13 +15,12 @@ import { MainDarkBtnComponent } from '../../Shared/main-dark-btn/main-dark-btn.c
     MatDividerModule,
     MatIconModule,
     NgClass,
-    MainDarkBtnComponent
   ],
   templateUrl: './forget-password.component.html',
   styleUrl: './forget-password.component.css',
 })
 export class ForgetPasswordComponent {
-  steps: number = 1;
+  steps: number = 4;
 
   navigateForgot = () => {
     this.steps = 1;
@@ -30,7 +28,7 @@ export class ForgetPasswordComponent {
 
   navigateVerify = () => {
     this.steps = 2;
-    localStorage.setItem('currentStep', this.steps.toString());        //! this step will be added when we add form to submit in the res
+    localStorage.setItem('currentStep', this.steps.toString()); //! this step will be added when we add form to submit in the res
     // if (parseInt(localStorage.getItem('currentStep') || '1') > this.steps) {  // !and this will be replaced  with the pervious line
     //   this.steps = 2;
     // }
@@ -42,8 +40,16 @@ export class ForgetPasswordComponent {
     //   this.steps = 3;
     // }
   };
+  DonePass = () => {
+    this.steps = 4;
+    localStorage.setItem('currentStep', this.steps.toString());
+    // if (parseInt(localStorage.getItem('currentStep') || '1') > this.steps) {
+    //   this.steps = 3;
+    // }
+  };
 
   ngOnInit(): void {
+    this.steps = 4;
     this.steps = parseInt(localStorage.getItem('currentStep') || '1');
     // this.resetPassword
     //   .get('email')
