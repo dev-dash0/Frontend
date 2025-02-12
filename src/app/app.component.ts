@@ -4,19 +4,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
-
-import { Chart } from 'chart.js/auto';
-import { SigninSignupNavbarComponent } from './Shared/signin-signup-navbar/signin-signup-navbar.component';
-import { MyDashboardComponent } from './Components/my-dashboard/my-dashboard.component';
-
-import { SignupComponent } from "./Components/signup/signup.component";
-import { SigninComponent } from './Components/signin/signin.component';
-import { VisualizationComponent } from "./Components/visualization/visualization.component";
-import { ForgetPasswordComponent } from './Components/forget-password/forget-password.component';
-import { DashboardTestComponent } from "./Components/dashboard-test/dashboard-test.component";
-import { CalendarComponent } from "./Components/calendar/calendar.component";
-import { AddCompanyModalComponent } from "./Components/company-modal/company-modal.component";
-import { AllProjectsDashboardComponent } from "./Components/all-projects-dashboard/all-projects-dashboard.component";
+import { IssueModalComponent } from './issue-modal/issue-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-root',
@@ -27,19 +16,20 @@ import { AllProjectsDashboardComponent } from "./Components/all-projects-dashboa
     MatButtonModule,
     MatDividerModule,
     MatIconModule,
-    SigninSignupNavbarComponent,
-    MyDashboardComponent,
-    SignupComponent,
-    SigninComponent,
-    DashboardTestComponent,
-    CalendarComponent,
-    ForgetPasswordComponent,
-    AddCompanyModalComponent,
-    AllProjectsDashboardComponent
-],
+
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'Dev-Dash';
+
+  constructor(private dialog: MatDialog) { }
+
+  openDialog() {
+    this.dialog.open(IssueModalComponent, {
+      width: '400px',
+      data: { message: 'Hello from modal!' } // ✅ Pass data to modal
+    });
+  }
 }
