@@ -66,16 +66,16 @@ export class IssueModalComponent {
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   readonly labels = signal<Label[]>([]);
   readonly announcer = inject(LiveAnnouncer);
-
+  MAX_LABEL_LENGTH = 100;
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-
-    // Add label
-    if (value) {
+    // Check if the value is within the allowed length
+    if (value && value.length <= this.MAX_LABEL_LENGTH) {
       this.labels.update(labels => [...labels, { name: value }]);
+    } else if (value.length > this.MAX_LABEL_LENGTH) {
+      console.warn(`Label exceeds the maximum length of ${this.MAX_LABEL_LENGTH} characters.`);
+      event.chipInput!.clear();
     }
-
-    // Clear the input value
     event.chipInput!.clear();
   }
 
@@ -94,13 +94,17 @@ export class IssueModalComponent {
 
   edit(label: Label, event: MatChipEditedEvent) {
     const value = event.value.trim();
-
     // Remove label if it no longer has a name
     if (!value) {
       this.remove(label);
       return;
     }
 
+    if (value.length > this.MAX_LABEL_LENGTH) {
+      console.warn(`Edited label exceeds ${this.MAX_LABEL_LENGTH} characters.`);
+      value.substring(0, this.MAX_LABEL_LENGTH);
+      return;
+    }
     // Edit existing label
     this.labels.update(labels => {
       const index = labels.indexOf(label);
@@ -111,6 +115,15 @@ export class IssueModalComponent {
       return labels;
     });
   }
+
+  limitLabelLength(event: KeyboardEvent, label: Label) {
+    const target = event.target as HTMLElement;
+
+    if (target.innerText.length >= this.MAX_LABEL_LENGTH && event.key !== 'Backspace' && event.key !== 'Delete') {
+      event.preventDefault(); // Prevent extra characters from being typed
+    }
+  }
+
   // ///////////////////////////////////////////////
   // status
   selectedStatus = 'backlog'; // Default selected status

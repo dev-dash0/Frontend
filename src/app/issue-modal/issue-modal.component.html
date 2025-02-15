@@ -42,16 +42,19 @@
                         <mat-chip-grid #chipGrid aria-label="Enter Label">
                             @for (label of labels(); track label) {
                             <mat-chip-row (removed)="remove(label)" [editable]="true" (edited)="edit(label, $event)"
+                                (keydown)="limitLabelLength($event, label)"
                                 [aria-description]="'press enter to edit ' + label.name">
-                                {{label.name}}
+                                {{ label.name }}
                                 <button matChipRemove [attr.aria-label]="'remove ' + label.name">
                                     <mat-icon>&#x2715;</mat-icon>
                                 </button>
                             </mat-chip-row>
+
+
                             }
                             <input placeholder="New Label..." [matChipInputFor]="chipGrid"
                                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                                (matChipInputTokenEnd)="add($event)" />
+                                (matChipInputTokenEnd)="add($event)" maxlength="100" />
                         </mat-chip-grid>
                     </mat-form-field>
                 </div>
