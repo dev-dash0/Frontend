@@ -5,6 +5,7 @@ mat-sidenav {
   border: none;
   transition: width 0.3s ease;
 }
+
 mat-sidenav-container {
   top: 0;
   bottom: 0;
@@ -35,7 +36,7 @@ mat-sidenav-container {
   cursor: pointer;
 }
 
-.Logo{
+.Logo {
   width: 27%;
 }
 
@@ -98,6 +99,7 @@ mat-sidenav-container {
 .collapsed-icons {
   cursor: pointer;
 }
+
 @media (max-width: 992px) {
   mat-sidenav-container {
     top: 80px;

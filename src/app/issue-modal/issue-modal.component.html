@@ -3,87 +3,111 @@
 <!-- <button (click)="close()">Close</button> -->
 
 <div class="modal-container">
+    <!-- Header -->
     <div class="modal-header d-flex justify-content-between align-items-start">
-        <div class="header w-100 d-flex justify-content-between align-items-center gap-3">
-            <div class="headerContent p-0 m-0">
-                <h2>Create Issue</h2>
-            </div>
-            <button class="close-btn" (click)="close()">&#x2715;</button>
-        </div>
+        <h2>Create Issue</h2>
+        <button class="close-btn" (click)="close()">&#x2715;</button>
     </div>
+
     <div class="divider"></div>
-    <form>
+    <!-- Form -->
+    <form [formGroup]="issueForm">
         <div class="form-group">
-            <div class="row justify-content-center align-items-center">
-                <div class="col-md-3">
-                    <label for="companyName">Issue Title*</label>
+            <!-- Issue Title -->
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <label for="issueTitle">Issue Title*</label>
                 </div>
-                <div class="col-md-9">
-                    <input id="companyName" type="text" placeholder="e.g. Linear" required />
+                <div class="col-md-10">
+                    <input id="issueTitle" type="text" formControlName="title" placeholder="e.g. Linear" required />
                 </div>
             </div>
-            <div class="row justify-content-center align-items-center">
-                <div class="col-md-3">
+            <!-- Description -->
+            <div class="row  align-items-center">
+                <div class="col-md-2">
                     <label for="description">Description</label>
                 </div>
-                <div class="col-md-9">
-                    <textarea id="description" rows="2"
+                <div class="col-md-10">
+                    <textarea id="description" rows="2" formControlName="description"
                         placeholder="Write a few sentences about the Issue..."></textarea>
                 </div>
             </div>
+            <!-- Labels -->
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <label for="labels">Label</label>
+                </div>
+                <div class="col-md-10">
+                    <mat-form-field class="label-chip-list" appearance="outline">
+                        <mat-chip-grid #chipGrid aria-label="Enter Label">
+                            @for (label of labels(); track label) {
+                            <mat-chip-row (removed)="remove(label)" [editable]="true" (edited)="edit(label, $event)"
+                                [aria-description]="'press enter to edit ' + label.name">
+                                {{label.name}}
+                                <button matChipRemove [attr.aria-label]="'remove ' + label.name">
+                                    <mat-icon>&#x2715;</mat-icon>
+                                </button>
+                            </mat-chip-row>
+                            }
+                            <input placeholder="New Label..." [matChipInputFor]="chipGrid"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                                (matChipInputTokenEnd)="add($event)" />
+                        </mat-chip-grid>
+                    </mat-form-field>
+                </div>
+            </div>
             <div class="divider"></div>
+            <!-- Dates -->
             <div class="date-container">
                 <div class="row justify-content-center align-items-center">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="startDate">Start Date</label>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-10">
                         <mat-form-field appearance="outline" class="custom-date-picker">
                             <mat-icon matPrefix class="custom-calendar-icon" (click)="picker1.open()"><img
-                                    src="../../assets/images/uil_calender.svg" alt=""></mat-icon>
+                                    src="assets/images/uil_calender.svg" alt=""></mat-icon>
                             <input matInput [matDatepicker]="picker1" placeholder="Select Date">
-                            <!-- <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle> -->
                             <mat-datepicker #picker1></mat-datepicker>
                         </mat-form-field>
                     </div>
                 </div>
 
                 <div class="row justify-content-center align-items-center">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="DueDate">Due Date</label>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-10">
                         <mat-form-field appearance="outline" class="custom-date-picker">
                             <mat-icon matPrefix class="custom-calendar-icon" (click)="picker2.open()"><img
-                                    src="../../assets/images/uil_calender.svg" alt=""></mat-icon>
+                                    src="assets/images/uil_calender.svg" alt=""></mat-icon>
                             <input matInput [matDatepicker]="picker2" placeholder="Select Date">
-                            <!-- <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle> -->
                             <mat-datepicker #picker2></mat-datepicker>
                         </mat-form-field>
                     </div>
                 </div>
 
                 <div class="row justify-content-center align-items-center">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="DueDate">Delivered Date</label>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-10">
                         <mat-form-field appearance="outline" class="custom-date-picker">
                             <mat-icon matPrefix class="custom-calendar-icon" (click)="picker3.open()"><img
-                                    src="../../assets/images/uil_calender.svg" alt=""></mat-icon>
+                                    src="assets/images/uil_calender.svg" alt=""></mat-icon>
                             <input matInput [matDatepicker]="picker3" placeholder="Select Date">
-                            <!-- <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle> -->
                             <mat-datepicker #picker3></mat-datepicker>
                         </mat-form-field>
                     </div>
                 </div>
             </div>
             <div class="divider"></div>
-            <div class="row justify-content-center align-items-center">
-                <div class="col-md-3">
+            <!-- Issue Type -->
+            <div class="row align-items-center">
+                <div class="col-md-2">
                     <label for="issue-type">Type</label>
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-10">
                     <mat-form-field appearance="outline" class="custom-dropdown">
                         <mat-select [(value)]="selectedType" multiple="false" panelClass="custom-select-panel">
                             <mat-option value="" disabled hidden>Select Issue Type</mat-option>
@@ -94,12 +118,43 @@
                     </mat-form-field>
                 </div>
             </div>
+            <!-- Status -->
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <label for="issue-type">Status*</label>
+                </div>
+                <div class="col-md-10">
+                    <mat-button-toggle-group [(ngModel)]="selectedStatus" aria-label="Issue Status" class="w-100">
+                        <mat-button-toggle *ngFor="let status of statuses" [value]="status.value">
+                            <img [src]="status.icon" alt="{{ status.label }} Icon" class="status-icon" />
+                            {{ status.label }}
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+            <!-- Priority -->
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <label for="issue-type">Priority*</label>
+                </div>
+                <div class="col-md-10">
+                    <mat-button-toggle-group [(ngModel)]="selectedPriority" aria-label="Issue Priority">
+                        <mat-button-toggle *ngFor="let priority of Priorities" [value]="priority.value"
+                            [class]="priority.value">
+                            <img [src]="priority.icon" alt="{{ priority.label }} Icon" class="priority-icon" />
+                            {{ priority.label }}
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
             <div class="divider"></div>
         </div>
+        <!-- Footer Buttons -->
         <div class="modal-footer">
             <div class="buttons w-100 d-flex justify-content-center align-items-center gap-3">
-                <button type="button" class="cancel-btn w-50 fw-semibold" (click)="close()">Cancel</button>
-                <button type="submit" class="confirm-btn w-50 fw-semibold">Confirm</button>
+                <button mat-button type="button" class="cancel-btn w-50 fw-semibold" (click)="close()">Cancel</button>
+                <button mat-flat-button type="submit" [disabled]="issueForm.invalid"
+                    class="confirm-btn w-50 fw-semibold">Confirm</button>
             </div>
         </div>
     </form>

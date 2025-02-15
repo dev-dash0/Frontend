@@ -1,42 +1,32 @@
+/*********************** Global Modal************************** */
 .modal-container {
     color: #fff;
-    width: 100%;
+    min-width: 100% !important;
+    width: fit-content;
     border-radius: 8px;
-    padding: 30px;
+    padding: 25px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     background-image: linear-gradient(134deg, #292f65 8%, #0b1a34 54%);
 }
 
 ::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
     background-color: transparent !important;
-    /* min-width: 700px !important; */
-    /* width: fit-content !important; */
-    /* width: 70% !important; */
-    /* top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important; */
+}
+
+.row {
+    margin-block: 10px;
 }
 
 .divider {
     height: 1px;
     width: 100%;
-    margin-block: 8px;
+    margin-block: 10px;
     background: linear-gradient(144.98deg, rgba(58, 73, 98, 0.5) 1.37%, rgba(255, 144, 232, 0.5) 43.67%, rgba(116, 202, 255, 0.5) 70.8%, rgba(41, 47, 101, 0.5) 91.44%);
 
 }
 
-.modal-header h2 {
-    margin: 0;
-    font-size: 1.5rem;
-}
-
-.modal-header p {
-    font-size: 0.875rem;
-    color: #b5b5b5;
-    margin: 0;
-
-}
-
+/* ======================================================================== */
+/*********************** Modal Header**************************** */
 .close-btn {
     background: none;
     border: none;
@@ -45,15 +35,13 @@
     cursor: pointer;
 }
 
-
-.close-modal-container {
-    display: none;
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
 }
 
-.form-group {
-    margin-bottom: 15px;
-}
-
+/* =========================================================================== */
+/*********************** Global Modal Content Styling************************** */
 label {
     font-size: 0.8rem;
     margin-bottom: 5px;
@@ -66,15 +54,13 @@ textarea::placeholder {
 
 input,
 textarea {
-    /* min-width: 500px; */
     width: 100%;
     padding: 10px;
     border: 1px solid transparent;
     border-radius: 5px;
     background-color: #010423;
     color: #91A0C0;
-    font-size: 0.775rem !important;
-    margin-block: 8px;
+    font-size: 0.7rem !important;
     transition: background-color 9999s ease-in-out 0s, color 9999s ease-in-out 0s !important;
 
 }
@@ -88,37 +74,11 @@ textarea:focus {
 
 textarea {
     resize: none;
-    overflow-y: scroll;
 }
 
-/**********Handling textarea Scroll bar ************/
-textarea::-webkit-scrollbar {
-    width: 5px;
-    height: 10px;
-}
+/* ============================================================================================== */
 
-
-textarea::-webkit-scrollbar-thumb {
-    background: #dcdfffae;
-    border-radius: var(--standardRoundness);
-}
-
-textarea::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px red;
-    border-radius: var(--standardRoundness);
-    margin: 65px;
-}
-
-textarea::-webkit-scrollbar-thumb:hover {
-    background: #9177ce;
-}
-
-/* **************************************************** */
-
-/* Date */
-.date-container .row {
-    margin-bottom: 14px;
-}
+/* *********************Date Piker **************************/
 
 .date-container input {
     margin: 0px;
@@ -212,8 +172,8 @@ mat-form-field input:focus {
 }
 
 
-/* *********************************** */
-/* Drop dawn of Type options  */
+/* ======================================================================= */
+/************************ Drop dawn of Type options*********************  */
 
 .custom-dropdown {
     min-width: 150px;
@@ -226,7 +186,7 @@ mat-form-field input:focus {
 
 ::ng-deep .mat-mdc-select-value {
     color: #91A0C0 !important;
-    font-size: 0.775rem;
+    font-size: 0.7rem;
 }
 
 ::ng-deep .mat-mdc-select-arrow {
@@ -271,7 +231,7 @@ mat-form-field input:focus {
     pointer-events: none;
 }
 
-/* -------------------------------------- */
+/*============================================================================ */
 /* Customizing the mat-select dropdown panel */
 ::ng-deep .mat-mdc-select-panel {
     background-color: #010423 !important;
@@ -296,12 +256,13 @@ mat-form-field input:focus {
     color: #FFFFFF !important;
 }
 
-/* *********************************** */
+/* =============================================================================== */
+/*************************** Customizing the Modal Footer**********************/
 .modal-footer {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
 }
 
 .cancel-btn {
@@ -334,9 +295,98 @@ mat-form-field input:focus {
     background-color: #ea76d3;
 }
 
+/* ********************************************** */
+/* Labels */
+.label-chip-list {
+    min-width: 100%;
+    width: fit-content;
+}
 
 
+::ng-deep .mat-mdc-chip {
+    border: 2px solid #191b36 !important;
+    background-color: transparent !important;
+}
 
+::ng-deep .mat-mdc-chip .mdc-evolution-chip__text-label {
+    color: #7b86e8 !important;
+}
+
+::ng-deep .mat-mdc-chip-remove {
+    color: #ff99eb !important;
+}
+
+::ng-deep .mat-mdc-chip:hover {
+    background-color: #252748 !important;
+}
+
+::ng-deep .mat-mdc-chip-remove mat-icon {
+    color: #d77fd4 !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+::ng-deep .label-chip-list .mat-mdc-text-field-wrapper {
+    padding: 10px !important;
+}
+
+::ng-deep .mat-mdc-chip-input {
+    margin: 0 !important;
+    padding: 0 10px !important;
+    color: #91A0C0 !important;
+}
+
+/* //////////////////////////////////////////// */
+/* Status */
+::ng-deep .mat-button-toggle-group {
+    border: none !important;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+::ng-deep .mat-button-toggle {
+    background-color: transparent !important;
+    color: #91A0C0 !important;
+    border-radius: 5px;
+    border: 0 !important;
+    padding: 0 8px;
+    font-size: 0.7rem;
+}
+
+::ng-deep .mat-button-toggle-label-content {
+    padding: 0 !important;
+    height: 30px !important;
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+}
+
+::ng-deep .mat-button-toggle-checked {
+    background-color: #252748 !important;
+    color: #96a0f7 !important;
+}
+
+/* ?************************ */
+/* Priority */
+.low {
+    color: #908F8F !important;
+}
+
+.normal {
+    color: #4854F1 !important;
+}
+
+.high {
+    color: #D07805 !important;
+}
+
+.urgent {
+    color: #D02705 !important;
+}
 
 
 

@@ -28,8 +28,14 @@ export class AppComponent {
 
   openDialog() {
     this.dialog.open(IssueModalComponent, {
-      width: '400px',
-      data: { message: 'Hello from modal!' } // ✅ Pass data to modal
+      width: 'auto',
+      minWidth: '60vw',
+      maxWidth: '80vw', // Limits width to 90% of viewport
+      minHeight: '70vh',
+      maxHeight: '90vh', // Prevents excessive height
+      panelClass: 'custom-dialog-container', // Custom class for styling
+      disableClose: true,
+      data: { message: 'Hello from modal!' }, // ✅ Pass data to modal
     });
   }
 }
