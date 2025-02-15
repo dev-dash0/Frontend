@@ -172,25 +172,6 @@
 }
 
 
-
-/* ============================================= */
-/**********Handling Modal ************/
-
-::ng-deep .custom-dialog-container .mat-mdc-dialog-container {
-  max-width: 80vw !important;
-  /* Make width responsive */
-  width: auto !important;
-  /* Allow auto-resizing */
-  max-height: 90vh !important;
-  /* Limit height */
-  overflow: auto !important;
-  /* Enable scrolling */
-  background-color: #010423 !important;
-  /* Dark theme */
-  /* border-radius: 10px; */
-  /* Rounded corners */
-}
-
 /* =============================================================================== */
 /**********Handling Scroll bar ************/
 ::-webkit-scrollbar {
