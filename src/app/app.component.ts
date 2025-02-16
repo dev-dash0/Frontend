@@ -4,8 +4,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
-import { IssueModalComponent } from './issue-modal/issue-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { IssueModalComponent } from './Components/issue-modal/issue-modal.component';
+import { ProjectModalComponent } from './Components/project-modal/project-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,6 @@ import { MatDialog } from '@angular/material/dialog';
     MatButtonModule,
     MatDividerModule,
     MatIconModule,
-
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -24,12 +24,27 @@ import { MatDialog } from '@angular/material/dialog';
 export class AppComponent {
   title = 'Dev-Dash';
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog) {}
 
+  // ! Issue Modal  //////////////////////////////////////////////////////////////////
   openDialog() {
     this.dialog.open(IssueModalComponent, {
       width: 'auto',
       minWidth: '60vw',
+      maxWidth: '80vw', // Limits width to 90% of viewport
+      minHeight: '70vh',
+      maxHeight: '90vh', // Prevents excessive height
+      panelClass: 'custom-dialog-container', // Custom class for styling
+      disableClose: true,
+      data: { message: 'Hello from modal!' }, // ✅ Pass data to modal
+    });
+  }
+
+  // ! Project Modal //////////////////////////////////////////////////////////////////
+  openProj() {
+    this.dialog.open(ProjectModalComponent, {
+      width: 'auto',
+      minWidth: '50vw',
       maxWidth: '80vw', // Limits width to 90% of viewport
       minHeight: '70vh',
       maxHeight: '90vh', // Prevents excessive height
