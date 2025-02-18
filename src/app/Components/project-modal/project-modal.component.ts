@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -16,7 +16,7 @@ import {
 import { MatSelectModule } from '@angular/material/select';
 import { NgFor } from '@angular/common';
 import { MatOptionModule } from '@angular/material/core';
-import {MatChipsModule,} from '@angular/material/chips';
+import { MatChipsModule, } from '@angular/material/chips';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 export interface Label {
   name: string;
@@ -44,14 +44,16 @@ export interface Label {
 })
 export class ProjectModalComponent {
 
-constructor(
+  constructor(
     private dialogRef: MatDialogRef<ProjectModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder
-  ) {
+  ) { }
+
+  ngOnInit() {
+    console.log(this.data); // ✅ Access the passed data
   }
 
-    ProjectForm = new FormGroup({
+  ProjectForm = new FormGroup({
     title: new FormControl(null, Validators.required),
     description: new FormControl(null,),
     status: new FormControl(null, Validators.required),
