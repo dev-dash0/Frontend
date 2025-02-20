@@ -9,6 +9,9 @@ import { IssueModalComponent } from './Components/issue-modal/issue-modal.compon
 import { ProjectModalComponent } from './Components/project-modal/project-modal.component';
 import { SprintModalComponent } from './Components/sprint-modal/sprint-modal.component';
 import { AddCompanyModalComponent } from "./Components/company-modal/company-modal.component";
+import { MyDashboardComponent } from "./Components/my-dashboard/my-dashboard.component";
+import { DashboardTestComponent } from "./Components/dashboard-test/dashboard-test.component";
+import { DashboardComponent } from "./Components/dashboard/dashboard.component";
 
 @Component({
   selector: 'app-root',
@@ -19,7 +22,10 @@ import { AddCompanyModalComponent } from "./Components/company-modal/company-mod
     MatButtonModule,
     MatDividerModule,
     MatIconModule,
-    AddCompanyModalComponent
+    AddCompanyModalComponent,
+    MyDashboardComponent,
+    DashboardTestComponent,
+    DashboardComponent
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

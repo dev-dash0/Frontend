@@ -1,7 +1,7 @@
 #visualization {
 
     font-family: 'Inter';
-    background: radial-gradient(97.81% 96.5% at 2.19% 3.5%, #000000 0%, #102A56 100%);
+    /* background: radial-gradient(97.81% 96.5% at 2.19% 3.5%, #000000 0%, #102A56 100%); */
     min-height: 100vh;
     /* padding: 50px; */
 }

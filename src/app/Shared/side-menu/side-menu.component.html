@@ -132,7 +132,7 @@
                           <p class="ps-2 m-0">Create Team</p>
                         </div>
                       </div>
-                      <div class="drop-button add-project d-flex">
+                      <div (click)="openProj()" class="drop-button add-project d-flex">
                         <span>
                           <i class="fa-solid fa-plus fa-xs"></i>
                         </span>
@@ -211,7 +211,7 @@
                           <p class="ps-2 m-0">Create team</p>
                         </div>
                       </div>
-                      <div class="drop-button add-project d-flex">
+                      <div (click)="openProj()" class="drop-button add-project d-flex">
                         <span>
                           <i class="fa-solid fa-plus fa-xs"></i>
                         </span>
@@ -264,13 +264,14 @@
                     <p class="ps-2 m-0">Issue 2</p>
                   </div>
                   <div
+                  (click)="openDialog()"
                     class="team add-team d-flex align-items-center justify-content-start"
                   >
                     <span><i class="fa-solid fa-plus fa-xs"></i></span>
                     <p class="ps-2 m-0">Add Issue</p>
                   </div>
                 </div>
-                <div class="drop-button add-project d-flex">
+                <div (click)="openProj()" class="drop-button add-project d-flex">
                   <span>
                     <i class="fa-solid fa-plus fa-xs"></i>
                   </span>
