@@ -33,47 +33,33 @@ import { DashboardComponent } from "./Components/dashboard/dashboard.component";
 export class AppComponent {
   title = 'Dev-Dash';
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog) { }
 
-  // ! Issue Modal  //////////////////////////////////////////////////////////////////
-  openDialog() {
-    this.dialog.open(IssueModalComponent, {
+  openDialog(component: any, data: any = null) {
+    this.dialog.open(component, {
       width: 'auto',
       minWidth: '60vw',
-      maxWidth: '80vw', // Limits width to 90% of viewport
-      minHeight: '70vh',
-      maxHeight: '90vh', // Prevents excessive height
-      panelClass: 'custom-dialog-container', // Custom class for styling
+      maxWidth: '70vw',// Limits width to 80% of viewport
+      minHeight: '60vh',
+      maxHeight: '90vh',
+      panelClass: 'custom-dialog-container',// Custom class for styling
       disableClose: true,
-      data: { message: 'Hello from modal!' }, // ✅ Pass data to modal
+      data: data // ✅ Pass dynamic data
     });
+  }
+
+  // ! Issue Modal  //////////////////////////////////////////////////////////////////
+  openIssueModal() {
+    this.openDialog(IssueModalComponent, { message: 'Hello from Issue Modal!' });
   }
 
   // ! Project Modal //////////////////////////////////////////////////////////////////
-  openProj() {
-    this.dialog.open(ProjectModalComponent, {
-      width: 'auto',
-      minWidth: '50vw',
-      maxWidth: '80vw', // Limits width to 90% of viewport
-      minHeight: '70vh',
-      maxHeight: '90vh', // Prevents excessive height
-      panelClass: 'custom-dialog-container', // Custom class for styling
-      disableClose: true,
-      data: { message: 'Hello from modal!' }, // ✅ Pass data to modal
-    });
+  openProjModal() {
+    this.openDialog(ProjectModalComponent, { message: 'Hello from Project Modal!' });
   }
 
   // ! Sprint Modal //////////////////////////////////////////////////////////////////
-  openSprint() {
-    this.dialog.open(SprintModalComponent, {
-      width: 'auto',
-      minWidth: '50vw',
-      maxWidth: '80vw', // Limits width to 90% of viewport
-      minHeight: '70vh',
-      maxHeight: '90vh', // Prevents excessive height
-      panelClass: 'custom-dialog-container', // Custom class for styling
-      disableClose: true,
-      data: { message: 'Hello from modal!' }, // ✅ Pass data to modal
-    });
+  openSprintModal() {
+    this.openDialog(SprintModalComponent, { message: 'Hello from Sprint Modal!' });
   }
 }

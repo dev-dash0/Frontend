@@ -41,9 +41,13 @@ export class IssueModalComponent {
   constructor(
     private dialogRef: MatDialogRef<IssueModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder
-  ) {
+  ) { }
+
+
+  ngOnInit() {
+    console.log(this.data); // ✅ Access the passed data from modal
   }
+
 
   issueForm = new FormGroup({
     title: new FormControl(null, Validators.required),

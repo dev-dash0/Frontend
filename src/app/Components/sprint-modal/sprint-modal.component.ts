@@ -46,8 +46,11 @@ export class SprintModalComponent {
   constructor(
     private dialogRef: MatDialogRef<SprintModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder
-  ) {}
+  ) { }
+
+  ngOnInit() {
+    console.log(this.data); // ✅ Access the passed data
+  }
 
   SprintForm = new FormGroup({
     title: new FormControl(null, Validators.required),
@@ -83,7 +86,7 @@ export class SprintModalComponent {
     },
   ];
 
-  
+
   // Submit Form
   submitForm() {
     if (this.SprintForm.valid) {
