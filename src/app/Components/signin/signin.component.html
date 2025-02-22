@@ -2,14 +2,15 @@
   id="signin"
   class="bg py-2 vh-100 d-flex flex-column justify-content-center align-items-center"
 >
+<!-- (submit)="onSubmit($event)" -->
   <app-signin-signup-navbar></app-signin-signup-navbar>
   <div class="signup-container mt-2">
-    <form class="d-flex flex-column" (submit)="onSubmit($event)">
+    <form class="d-flex flex-column"  [formGroup]="loginForm" (ngSubmit)="sendData()">
       <h1 class="mb-3">Welcome Back, user !</h1>
       <label for="email" class="mt-1">Email</label>
-      <input type="email" class="form-control my-2" id="email" />
+      <input formControlName="email" type="email" class="form-control my-2" id="email" />
       <label for="Password" class="mt-1">Password</label>
-      <input type="password" class="form-control my-2" id="Password" />
+      <input formControlName="password" type="password" class="form-control my-2" id="Password" />
 
       <div
         class="forget_pass d-flex justify-content-between align-items-center mt-1 mb-4"
@@ -25,9 +26,9 @@
             Remember Me
           </label>
         </div>
-        <span class="text-decoration-underline">Forgert Password?</span>
+        <span class="text-decoration-underline cursor-pointer" routerLink="/forgetPassword">Forgert Password?</span>
       </div>
-      <app-main-dark-btn routerLink="/MyDashboard">Sign in</app-main-dark-btn>
+      <app-main-dark-btn>Sign in</app-main-dark-btn>
       <app-main-dark-btn
         >Sign in with Google
         <svg
@@ -60,6 +61,14 @@
           />
         </svg>
       </app-main-dark-btn>
+       <!-- <button
+      [disabled]="login.invalid || isBtnSubmit"
+      class="btn bg-main text-white px-4 py-2"
+    >
+      @if (!isBtnSubmit) { Login }@else {
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      }
+    </button> -->
     </form>
   </div>
   <img src="assets/images/Group.svg" class="Group1" width="304" alt="" />

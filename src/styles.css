@@ -150,6 +150,10 @@
   margin: 0;
 }
 
+.cursor-pointer{
+  cursor: pointer;
+}
+
 
 .bg {
   background: var(--mainBackgroundGradient);

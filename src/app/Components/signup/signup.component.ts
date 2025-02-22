@@ -1,10 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MainDarkBtnComponent } from '../../Shared/main-dark-btn/main-dark-btn.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { SigninSignupNavbarComponent } from '../../Shared/signin-signup-navbar/signin-signup-navbar.component';
+import { AuthService } from '../../Core/Services/Auth.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { signupValidators } from '../../Shared/validators/validators.component';
+import { NgClass } from '@angular/common';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-signup',
@@ -16,12 +22,64 @@ import { SigninSignupNavbarComponent } from '../../Shared/signin-signup-navbar/s
     MatDividerModule,
     MatIconModule,
     SigninSignupNavbarComponent,
+    RouterLink,
+    ReactiveFormsModule, 
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css',
 })
 export class SignupComponent {
-  onSubmit(event: Event): void {
-    event.preventDefault();
+  isBtnSubmit: boolean = false;
+  errorMessage: string = '';
+
+  private readonly _AuthService = inject(AuthService);
+  private readonly _FormBuilder = inject(FormBuilder);
+  private readonly _Router = inject(Router);
+
+  registerForm: FormGroup = this._FormBuilder.group(
+    {
+      firstName: [null, signupValidators.name],
+      lastName: [null, signupValidators.name],
+      username: [null, signupValidators.name],
+      email: [null, signupValidators.email],
+      password: [null, signupValidators.password],
+      rePassword: [null],
+    }
+    // { validators: [confirmPassword] }
+  );
+
+  sendData() {
+    this.isBtnSubmit = true;
+    if (this.registerForm.valid) {
+      // console.log(this.register);
+      // console.log(this.register.value);   دي كدا ال هبعتهل للباك اند
+      this._AuthService.Register(this.registerForm.value).subscribe({
+        next: (res) => {
+          console.log(res);
+          console.log('TMAAAAAAAAM');
+          // console.log(this.isBtnSubmit);
+          // if (res.message == 'success') {
+          this._Router.navigate(['/signin']);
+          this.isBtnSubmit = false;
+          // }
+        },
+        error: (err) => {
+          console.log('ERRRRRRRRR');
+
+          console.log(err.error.message);
+          this.errorMessage = err.error.message;
+          this.isBtnSubmit = false;
+          // console.log(this.isBtnSubmit);
+        },
+      });
+    } else {
+      // this.register.get('rePassword')?.setValue("")
+      // this.register.markAllAsTouched()
+      // ^^^^ when u cant use disabled and whnt when click the submit btn all the alerts appears
+    }
   }
+
+  // onSubmit(event: Event): void {
+  //   event.preventDefault();
+  // }
 }

@@ -12,6 +12,8 @@ import { AddCompanyModalComponent } from "./Components/company-modal/company-mod
 import { MyDashboardComponent } from "./Components/my-dashboard/my-dashboard.component";
 import { DashboardTestComponent } from "./Components/dashboard-test/dashboard-test.component";
 import { DashboardComponent } from "./Components/dashboard/dashboard.component";
+import { SigninComponent } from "./Components/signin/signin.component";
+import { SignupComponent } from "./Components/signup/signup.component";
 
 @Component({
   selector: 'app-root',
@@ -25,7 +27,9 @@ import { DashboardComponent } from "./Components/dashboard/dashboard.component";
     AddCompanyModalComponent,
     MyDashboardComponent,
     DashboardTestComponent,
-    DashboardComponent
+    DashboardComponent,
+    SigninComponent,
+    SignupComponent
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MainDarkBtnComponent } from '../../Shared/main-dark-btn/main-dark-btn.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { SigninSignupNavbarComponent } from '../../Shared/signin-signup-navbar/signin-signup-navbar.component';
-import { RouterEvent, RouterLink } from '@angular/router';
+import { Router, RouterEvent, RouterLink } from '@angular/router';
+import { AuthService } from '../../Core/Services/Auth.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { signupValidators } from '../../Shared/validators/validators.component';
 
 @Component({
   selector: 'app-signin',
@@ -18,11 +21,45 @@ import { RouterEvent, RouterLink } from '@angular/router';
     MatIconModule,
     SigninSignupNavbarComponent,
     RouterLink,
+    ReactiveFormsModule,
   ],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.css',
 })
 export class SigninComponent {
+  isBtnSubmit: boolean = false;
+  errorMessage: string = '';
+  private readonly _AuthService = inject(AuthService);
+  private readonly _FormBuilder = inject(FormBuilder);
+  private readonly _Router = inject(Router);
+
+  loginForm: FormGroup = this._FormBuilder.group({
+    email: [null, signupValidators.email],
+    password: [null, signupValidators.password],
+  });
+
+  sendData() {
+    this.isBtnSubmit = true;
+    if (this.loginForm.valid) {
+      this._AuthService.Login(this.loginForm.value).subscribe({
+        next: (res) => {
+          // if (res.message == 'success') {
+          console.log("Tmaaaam")
+          this._Router.navigate(['/MyDashboard']);
+          this.isBtnSubmit = false;
+          localStorage.setItem('token', res.token);
+          // this._AuthService.saveUserData();
+          // }
+        },
+        error: (err) => {
+          console.log("ERRRRRRRRR");
+          this.errorMessage = err.error.message;
+          this.isBtnSubmit = false;
+        },
+      });
+    }
+  }
+
   onSubmit(event: Event): void {
     event.preventDefault();
   }
