@@ -1,17 +1,13 @@
 #visualization {
 
     font-family: 'Inter';
-    /* background: radial-gradient(97.81% 96.5% at 2.19% 3.5%, #000000 0%, #102A56 100%); */
-    min-height: 100vh;
-    /* padding: 50px; */
+    width: 100% !important;
 }
 
 .visualize_content {
-    width: 100%;
+    width: 100% !important;
     background-color: #0D1123;
     border-radius: 5px;
-    /* min-height: 595px; */
-    /* min-width: 859px; */
 }
 
 .visualize_allProject {
@@ -19,6 +15,7 @@
 }
 
 ::ng-deep .mat-tab-body-content {
+    width: 100% !important;
     padding: 20px 35px 35px 35px;
     border-radius: 10px;
     background: linear-gradient(115.07deg, rgba(41, 47, 101, 0.792157) 9.68%, rgba(0, 0, 0, 0.279) 88.82%);

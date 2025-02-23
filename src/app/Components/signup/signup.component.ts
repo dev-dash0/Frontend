@@ -23,7 +23,7 @@ import { Console } from 'console';
     MatIconModule,
     SigninSignupNavbarComponent,
     RouterLink,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css',
@@ -43,7 +43,8 @@ export class SignupComponent {
       username: [null, signupValidators.name],
       email: [null, signupValidators.email],
       password: [null, signupValidators.password],
-      rePassword: [null],
+      phoneNumber: [null],
+      birthday: [null],
     }
     // { validators: [confirmPassword] }
   );
