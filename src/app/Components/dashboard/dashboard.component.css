@@ -9,48 +9,47 @@
 /* flex-direction: column; */
 /* } */
 
-.cards {
+/* .cards {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   flex-wrap: wrap;
-  /* width: 85%; */
+  /* width: 85%;
+} */
 
-}
-
-.card {
+/* .card {
   color: #fff;
   border-radius: 15px;
   padding: 20px;
   margin: 20px auto;
-  /* width: 45%; */
+  /* width: 45%;
   min-height: 300px;
   text-align: left;
 
   box-shadow: 5px 5px 12px 5px rgba(0, 0, 0, 0.25);
   border-style: 1px solid;
   border-radius: 15px;
-  border-image-source: linear-gradient(123deg, #3a4962 1%, #ff90e97c 43%, #74caff76 70%, #292f65 91%);
+  border-image-source: linear-gradient(
+    123deg,
+    #3a4962 1%,
+    #ff90e97c 43%,
+    #74caff76 70%,
+    #292f65 91%
+  );
   border-image-slice: 1;
-}
-
-
-
+} */
 
 /* Sidebar Default (Closed) */
-.side-bar {
+/* .side-bar {
   width: 60px;
   transition: width 0.3s ease-in-out;
 }
 
-/* Sidebar Expanded */
+/* Sidebar Expanded 
 .side-bar.open {
   max-width: 200px;
-}
-
-
-
+} */
 
 /* Cards Default */
 /* .BG {
@@ -62,27 +61,35 @@
   width: calc(100% - 200px);
 } */
 
-
-
-.BG {
-  transition: all 0.3s ease-in-out;
-  width: calc(100% - 200px);
-  /* Default width when sidebar is open */
-  margin-left: 200px;
-  /* Shift to the right when sidebar is open */
-}
+/* .BG { */
+/* transition: all 0.3s ease-in-out;
+  margin-left: 0px; */
+/* Default width when sidebar is open */
+/* margin-left: 200px; */
+/* Shift to the right when sidebar is open */
+/* } */
 
 /* Shrink Cards and Move to Right when Sidebar is Collapsed */
-.BG.shrink {
-  width: calc(100% - 60px);
-  /* Sidebar collapsed width */
-  margin-left: 60px;
-  /* Shift less when sidebar is collapsed */
+/* .BG.shrink { */
+/* margin-left: 60px;
+  width: calc(100% + 60px); */
+/* width: calc(100% + 60px); */
+/* Sidebar collapsed width */
+/* margin-right: 60px; */
+/* Shift less when sidebar is collapsed */
+/* } */
+
+.BG {
+  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+  transform: translateX(0px);
 }
 
-
-
-
+/* When Sidebar Collapses, Content Expands Left */
+.BG.expand {
+  transform: translateX(-30px);
+  width: calc(100% + 100px);
+  margin-left: -100px;
+}
 /* Sidebar Toggle Button */
 /* .toggle-btn {
   position: absolute;
@@ -131,19 +138,42 @@
   grid-area: dashboard;
 } */
 
-.container-fluid {
+/* .container-fluid {
   display: flex;
-  /* height: 100vh; */
+  /* min-height: 100vh;
+} */
+
+/* .container-fluid {
+  overflow-x: hidden;
+} */
+.headTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.side-bar {
+.headTitle h3 {
+  font-family: var(--headerFontFamily);
+}
+
+ul {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  margin-bottom: 10px;
+}
+
+/* .side-bar {
   width: 60px;
   transition: width 0.3s ease-in-out;
-}
-
-.side-bar {
-  width: 250px;
-}
+    width: 250px;
+} */
 
 .main-container {
   flex: 1;

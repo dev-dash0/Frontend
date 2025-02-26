@@ -6,6 +6,10 @@ import { RouterOutlet } from '@angular/router';
 import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { ProjectViewComponent } from '../project-view/project-view.component';
+import { DashboardComponent } from '../dashboard/dashboard.component';
+import { AllProjectsDashboardComponent } from '../all-projects-dashboard/all-projects-dashboard.component';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-my-dashboard',
   standalone: true,
@@ -13,10 +17,14 @@ import { MatButtonModule } from '@angular/material/button';
     SearchBarComponent,
     SideMenuComponent,
     MatSidenavModule,
-    RouterOutlet,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
+    ProjectViewComponent,
+    DashboardComponent,
+    RouterOutlet,
+    AllProjectsDashboardComponent,
+    CommonModule,
   ],
   templateUrl: './my-dashboard.component.html',
   styleUrl: './my-dashboard.component.css',

@@ -15,6 +15,5 @@ export class SearchBarComponent {
   toggle = false;
   toggleMode() {
     this.toggle = !this.toggle;
-    console.log(`collapse state : ${this.toggle}`);
   }
 }
