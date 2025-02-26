@@ -1,0 +1,192 @@
+<div class="my-4 d-flex justify-content-center align-items-center">
+  <div class="BG" [ngClass]="{ expand: isSidebarCollapsed }">
+    <div class="container">
+      <div class="row ps-lg-1 g-3">
+        <div class="col-md-6">
+          <div class="card p-2 cardBottomRight h-100">
+            <div class="card-body">
+              <div class="header text-center">
+                <h2>Project Name</h2>
+              </div>
+              <hr />
+              <div class="content">
+                <div class="profile d-flex align-items-center gap-2">
+                  <img
+                    src="assets/images/scrum master profile photo.svg"
+                    alt="scrum master profile icon"
+                  />
+                  <div class="scrum-master-headar">
+                    <h3 class="mb-0">John Smith</h3>
+                    <p class="m-0 p-0">Scrum Master</p>
+                  </div>
+                </div>
+                <div class="contact mt-2">
+                  <h4>Contact Info</h4>
+                  <div class="email d-flex align-items-center gap-1 mb-2">
+                    <img src="assets/images/Email.svg" alt="" />
+                    <p class="m-0 p-0">
+                      Email: John<span>&#64;</span>company.com
+                    </p>
+                  </div>
+                  <div class="linkedIn d-flex align-items-center gap-1 mb-2">
+                    <img src="assets/images/LinkedIn.svg" alt="" />
+                    <p class="m-0 p-0">LinkedIn: Profile</p>
+                    <img src="assets/images/External Link.svg" alt="" />
+                  </div>
+                  <div class="whatsapp d-flex align-items-center gap-1 mb-2">
+                    <img src="assets/images/WhatsApp.svg" alt="" />
+                    <p class="m-0 p-0">WhatsApp: 01036411895</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card p-2 cardBottomLeft h-100 project-members">
+            <div class="card-body">
+              <div class="header text-center">
+                <h2>Project Members</h2>
+              </div>
+              <hr />
+              <div class="members d-flex justify-content-center flex-column">
+                <div class="d-flex align-items-center gap-2">
+                  <img src="./assets/images/Test Account.svg" alt="" />
+                  <p class="m-0 p-0">First Person</p>
+                </div>
+                <hr />
+                <div class="d-flex align-items-center gap-2">
+                  <img src="./assets/images/Test Account.svg" alt="" />
+                  <p class="m-0 p-0">Second Person</p>
+                </div>
+                <hr />
+                <div class="d-flex align-items-center gap-2">
+                  <img src="./assets/images/Test Account.svg" alt="" />
+                  <p class="m-0 p-0">Third Person</p>
+                </div>
+                <hr />
+                <div class="add-members d-flex align-items-center gap-2">
+                  <img src="./assets/images/Plus.svg" alt="" />
+                  <p class="m-0 p-0">Add Memebers</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card p-2 cardTopRight h-100">
+            <div class="card-body">
+              <div class="header text-center">
+                <h2>Sprints</h2>
+              </div>
+              <hr />
+              <div class="sprints d-flex justify-content-center flex-column">
+                <h3>Sprint 1</h3>
+                <div class="sprint-details d-flex justify-content-between">
+                  <div class="dates">
+                    <p class="p-0 m-0">Start At 11/5/2024</p>
+                    <p class="p-0 m-0">Due At 20/8/2024</p>
+                  </div>
+                  <p>10 Issues</p>
+                </div>
+                <hr />
+              </div>
+              <div class="sprints d-flex justify-content-center flex-column">
+                <h3>Sprint 2</h3>
+                <div class="sprint-details d-flex justify-content-between">
+                  <div class="dates">
+                    <p class="p-0 m-0">Start At 22/8/2024</p>
+                    <p class="p-0 m-0">Due At 20/10/2024</p>
+                  </div>
+                  <p>10 Issues</p>
+                </div>
+                <hr />
+              </div>
+              <div
+                class="create-sprint d-flex align-items-center gap-2"
+                (click)="openSprint()"
+              >
+                <img src="./assets/images/Plus.svg" alt="" />
+                <p class="m-0 p-0">Create Sprint</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card p-2 cardTopLeft">
+            <div class="card-body">
+              <div class="header text-center">
+                <h2>Project Issues</h2>
+              </div>
+              <hr />
+              <div class="issues d-flex justify-content-center flex-column">
+                <div class="issue-name-status d-flex justify-content-between">
+                  <h3>Issue 1</h3>
+                  <p class="m-0 p-0">Status</p>
+                </div>
+                <div class="issue-details d-flex justify-content-between">
+                  <p class="m-0 p-0">Description ...</p>
+                </div>
+                <hr />
+              </div>
+              <div class="issues d-flex justify-content-center flex-column">
+                <div class="issue-name-status d-flex justify-content-between">
+                  <h3>Issue 2</h3>
+                  <p class="m-0 p-0">Status</p>
+                </div>
+                <div class="issue-details d-flex justify-content-between">
+                  <p class="m-0 p-0">Description ...</p>
+                </div>
+                <hr />
+              </div>
+              <div
+                class="create-issue d-flex align-items-center gap-2"
+                (click)="openDialog()"
+              >
+                <img src="./assets/images/Plus.svg" alt="" />
+                <p class="m-0 p-0">Create Issue</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="card p-2 cardBottomLeft">
+            <div class="card-body">
+              <div class="header text-center">
+                <h2>Project Backlog</h2>
+              </div>
+              <hr />
+              <div class="issues d-flex justify-content-center flex-column">
+                <div
+                  class="issues d-flex align-items-start justify-content-between"
+                >
+                  <div class="d-flex flex-column issue-name-status">
+                    <div class="d-flex align-items-center gap-2">
+                      <h3>Issue 2</h3>
+                      <p class="m-0 p-0">Status</p>
+                    </div>
+                    <p class="m-0 p-0">Description ...</p>
+                  </div>
+                  <button class="btn">Remove From Backlog</button>
+                </div>
+                <hr />
+              </div>
+              <div
+                class="issues d-flex align-items-start justify-content-between"
+              >
+                <div class="d-flex flex-column issue-name-status">
+                  <div class="d-flex align-items-center gap-2">
+                    <h3>Issue 2</h3>
+                    <p class="m-0 p-0">Status</p>
+                  </div>
+                  <p class="m-0 p-0">Description ...</p>
+                </div>
+                <button class="btn">Remove From Backlog</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

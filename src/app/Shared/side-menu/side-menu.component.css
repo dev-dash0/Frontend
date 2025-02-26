@@ -86,7 +86,8 @@ mat-sidenav-container {
   margin-bottom: 10px;
 }
 
-.work-space p {
+.work-space p,
+.add-company p {
   font-size: var(--smallFontSize);
 }
 

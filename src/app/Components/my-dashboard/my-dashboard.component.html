@@ -1,20 +1,15 @@
-<div class="bg min-vh-100 position-relative">
+<div class="bg">
   <div class="container-fluid">
-    <div class="row">
+    <div class="row gx-0">
       <div class="col-md-2">
         <app-side-menu></app-side-menu>
       </div>
       <div class="col-md-10">
         <app-search-bar></app-search-bar>
+        <div class="outlet">
+          <router-outlet></router-outlet>
+        </div>
       </div>
     </div>
   </div>
-  <!-- <mat-sidenav-container class="bg-transparent m-3 rounded-3 position-fixed">
-    <mat-sidenav #sidenav mode="side" opened [style.width]="'215px'">
-      <app-side-menu></app-side-menu>
-    </mat-sidenav>
-    <mat-sidenav-content>
-      <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container> -->
 </div>

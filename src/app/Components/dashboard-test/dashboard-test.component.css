@@ -1,32 +1,37 @@
-.BG{
-    background: var(--mainBackgroundGradient);
-    min-height: 100vh;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.BG {
+  background: var(--mainBackgroundGradient);
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.cards{
-    display: flex;
-    justify-content: center;
-    align-items: start;
-    text-align: center;
-    flex-wrap: wrap;
-    width: 85%;
 
+.cards {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  text-align: center;
+  flex-wrap: wrap;
+  width: 85%;
 }
-.card{
-    color: #fff;
-    border-radius: 15px;
-    padding: 20px;
-    margin: 20px auto;
-    width: 45%;
-    min-height: 300px;
-    text-align: left;
-
-    box-shadow: 5px 5px 12px 5px rgba(0, 0, 0, 0.25);
-    border-style: solid;
-    border-width: 1px;
-    border-image-source: linear-gradient(123deg, #3a4962 1%, #ff90e97c 43%, #74caff76 70%, #292f65 91%);
-    border-image-slice: 1;
+.card {
+  color: #fff;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px auto;
+  width: 45%;
+  min-height: 300px;
+  text-align: left;
+  box-shadow: 5px 5px 12px 5px rgba(0, 0, 0, 0.25);
+  border-style: solid;
+  border-width: 1px;
+  border-image-source: linear-gradient(
+    123deg,
+    #3a4962 1%,
+    #ff90e97c 43%,
+    #74caff76 70%,
+    #292f65 91%
+  );
+  border-image-slice: 1;
 }

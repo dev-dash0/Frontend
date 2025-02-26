@@ -45,6 +45,7 @@ span {
 .search-container {
   position: relative;
   width: 100%;
+  flex-grow: 1;
 }
 
 input {
@@ -83,7 +84,9 @@ input:focus {
 .toggle-menu button {
   border-radius: 50%;
   font-size: var(--smallFontSize);
-  padding: 11px;
+  width: 40px;
+  height: 40px;
+  padding: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -107,6 +110,9 @@ input:focus {
   z-index: 2;
   width: 60px;
   padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn-mode:focus {
@@ -121,15 +127,14 @@ input:focus {
   cursor: pointer;
 }
 
+.search-container,
+.custom-toolbar {
+  display: flex;
+  align-items: center;
+}
 @media (max-width: 768px) {
   .col-10 {
     flex: 0 0 auto;
     width: 83%;
   }
 }
-
-/* @media (min-width: 992px) {
-  .row {
-    margin-left: 218.5px !important;
-  }
-} */

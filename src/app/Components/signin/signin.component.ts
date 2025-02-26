@@ -32,19 +32,17 @@ export class SigninComponent {
   private readonly _AuthService = inject(AuthService);
   private readonly _FormBuilder = inject(FormBuilder);
   private readonly _Router = inject(Router);
-
   loginForm: FormGroup = this._FormBuilder.group({
     email: [null, signupValidators.email],
     password: [null, signupValidators.password],
   });
-
   sendData() {
     this.isBtnSubmit = true;
     if (this.loginForm.valid) {
       this._AuthService.Login(this.loginForm.value).subscribe({
         next: (res) => {
           // if (res.message == 'success') {
-          console.log("Tmaaaam")
+          console.log('Tmaaaam');
           this._Router.navigate(['/MyDashboard']);
           this.isBtnSubmit = false;
           localStorage.setItem('token', res.accessToken);
@@ -52,14 +50,13 @@ export class SigninComponent {
           // }
         },
         error: (err) => {
-          console.log("ERRRRRRRRR");
+          console.log('ERRRRRRRRR');
           // this.errorMessage = err.error.message;
           this.isBtnSubmit = false;
         },
       });
     }
   }
-
   onSubmit(event: Event): void {
     event.preventDefault();
   }
