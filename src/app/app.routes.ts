@@ -5,6 +5,7 @@ import { MyDashboardComponent } from './Components/my-dashboard/my-dashboard.com
 import { ForgetPasswordComponent } from './Components/forget-password/forget-password.component';
 import { DashboardComponent } from './Components/dashboard/dashboard.component';
 import { authGuardGuard } from './Core/guards/auth-guard.guard';
+import { SettingComponent } from './Components/setting/setting.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'signin', pathMatch: 'full' },
@@ -19,6 +20,12 @@ export const routes: Routes = [
     path: 'MyDashboard',
     component: DashboardComponent,
     title: 'My Dashboard',
+    // canActivate: [authGuardGuard],
+  },
+  {
+    path: 'Setting',
+    component: SettingComponent,
+    title: 'Settings',
     // canActivate: [authGuardGuard],
   },
 ];

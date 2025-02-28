@@ -15,7 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -33,6 +33,7 @@ export const appConfig: ApplicationConfig = {
       MatChipsModule,),
 
       provideHttpClient(
+        withFetch(),
           withInterceptors([
             // headersInterceptor,
             // catchErrorInterceptor,

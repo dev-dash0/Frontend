@@ -14,6 +14,7 @@ import { DashboardTestComponent } from "./Components/dashboard-test/dashboard-te
 import { DashboardComponent } from "./Components/dashboard/dashboard.component";
 import { SigninComponent } from "./Components/signin/signin.component";
 import { SignupComponent } from "./Components/signup/signup.component";
+import { UpdateInfoComponent } from './Components/update-info/update-info.component';
 
 @Component({
   selector: 'app-root',
@@ -29,41 +30,54 @@ import { SignupComponent } from "./Components/signup/signup.component";
     DashboardTestComponent,
     DashboardComponent,
     SigninComponent,
-    SignupComponent
-],
+    SignupComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'Dev-Dash';
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog) {}
 
   openDialog(component: any, data: any = null) {
     this.dialog.open(component, {
       width: 'auto',
       minWidth: '60vw',
-      maxWidth: '70vw',// Limits width to 80% of viewport
+      maxWidth: '70vw', // Limits width to 80% of viewport
       minHeight: '60vh',
       maxHeight: '90vh',
-      panelClass: 'custom-dialog-container',// Custom class for styling
+      panelClass: 'custom-dialog-container', // Custom class for styling
       disableClose: true,
-      data: data // ✅ Pass dynamic data
+      data: data, // ✅ Pass dynamic data
     });
   }
 
   // ! Issue Modal  //////////////////////////////////////////////////////////////////
   openIssueModal() {
-    this.openDialog(IssueModalComponent, { message: 'Hello from Issue Modal!' });
+    this.openDialog(IssueModalComponent, {
+      message: 'Hello from Issue Modal!',
+    });
   }
 
   // ! Project Modal //////////////////////////////////////////////////////////////////
   openProjModal() {
-    this.openDialog(ProjectModalComponent, { message: 'Hello from Project Modal!' });
+    this.openDialog(ProjectModalComponent, {
+      message: 'Hello from Project Modal!',
+    });
   }
 
   // ! Sprint Modal //////////////////////////////////////////////////////////////////
   openSprintModal() {
-    this.openDialog(SprintModalComponent, { message: 'Hello from Sprint Modal!' });
+    this.openDialog(SprintModalComponent, {
+      message: 'Hello from Sprint Modal!',
+    });
+  }
+
+  // ! Update Info Modal //////////////////////////////////////////////////////////////////
+  openUpdateInfoModal() {
+    this.openDialog(UpdateInfoComponent, {
+      message: 'Hello from Update Info Modal!',
+    });
   }
 }
