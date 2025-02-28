@@ -1,5 +1,5 @@
-import { RouterOutlet } from '@angular/router';
-import { Component, HostListener } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { Component, EventEmitter, HostListener, Output } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
 import { SidebarService } from '../../Core/Services/sidebar.service';
@@ -10,27 +10,23 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ProjectModalComponent } from '../../Components/project-modal/project-modal.component';
 import { IssueModalComponent } from '../../Components/issue-modal/issue-modal.component';
+import { AddCompanyModalComponent } from '../../Components/company-modal/company-modal.component';
 
 @Component({
   selector: 'app-side-menu',
   standalone: true,
-  imports: [MatSidenavModule, RouterOutlet, CommonModule],
+  imports: [MatSidenavModule, CommonModule, RouterLink],
   templateUrl: './side-menu.component.html',
   styleUrls: ['./side-menu.component.css'],
 })
 export class SideMenuComponent {
-  // collapsed = false;
   dropdownStates: { [key: string]: boolean } = {};
 
-  // @HostListener('window:resize', ['$event'])
-  // onResize(event: Event): void {
-  //   const width = window.innerWidth;
-  //   this.collapsed = width <= 768;
-  // }
-
-  // toggleCollapse(): void {
-  //   this.collapsed = !this.collapsed;
-  // }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    const width = window.innerWidth;
+    this.collapsed = width <= 992;
+  }
   toggleCollapseDropDown(id: string) {
     this.dropdownStates[id] = !this.dropdownStates[id];
   }
@@ -66,6 +62,21 @@ export class SideMenuComponent {
 
   openDialog() {
     this.dialog.open(IssueModalComponent, {
+      width: 'auto',
+      minWidth: '60vw',
+      maxWidth: '80vw', // Limits width to 90% of viewport
+      minHeight: '70vh',
+      maxHeight: '90vh', // Prevents excessive height
+      panelClass: 'custom-dialog-container', // Custom class for styling
+      disableClose: true,
+      data: { message: 'Hello from modal!' }, // ✅ Pass data to modal
+    });
+  }
+
+  // ! <------- Company Modal ------->
+
+  openCompany() {
+    this.dialog.open(AddCompanyModalComponent, {
       width: 'auto',
       minWidth: '60vw',
       maxWidth: '80vw', // Limits width to 90% of viewport

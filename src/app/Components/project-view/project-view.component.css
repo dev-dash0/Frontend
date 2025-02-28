@@ -1,0 +1,34 @@
+h2 {
+  font-family: var(--headerFontFamily);
+}
+.cardBottomRight p,
+.sprints p,
+.issue-details p,
+.issue-name-status p {
+  color: var(--lightGrayColor);
+  font-weight: var(--middleFontWeight);
+}
+hr {
+  margin: 0.75rem 0 !important;
+  color: var(--lightGrayColor);
+}
+.project-members {
+  font-size: var(--middleFontSize);
+  font-weight: var(--middleFontWeight);
+}
+.add-members p,
+.create-sprint p,
+.create-issue p {
+  font-size: 1.3rem;
+  font-weight: var(--middleFontWeight);
+}
+
+button {
+  background-color: var(--importantPinkColor);
+  color: var(--mainColor);
+  border: none;
+}
+button:hover {
+  background-color: #750b27;
+  outline: none;
+}

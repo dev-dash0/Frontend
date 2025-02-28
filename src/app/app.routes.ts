@@ -6,6 +6,8 @@ import { ForgetPasswordComponent } from './Components/forget-password/forget-pas
 import { DashboardComponent } from './Components/dashboard/dashboard.component';
 import { authGuardGuard } from './Core/guards/auth-guard.guard';
 import { SettingComponent } from './Components/setting/setting.component';
+import { ProjectModalComponent } from './Components/project-modal/project-modal.component';
+import { ProjectViewComponent } from './Components/project-view/project-view.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'signin', pathMatch: 'full' },
@@ -18,7 +20,7 @@ export const routes: Routes = [
   },
   {
     path: 'MyDashboard',
-    component: DashboardComponent,
+    component: MyDashboardComponent,
     title: 'My Dashboard',
     // canActivate: [authGuardGuard],
   },

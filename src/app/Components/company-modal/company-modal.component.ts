@@ -1,6 +1,12 @@
-import { Component, } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
-import { FiledropComponent } from "../dragn-drop/dragn-drop.component";
+import { Component, Inject } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  Validators,
+} from '@angular/forms';
+import { FiledropComponent } from '../dragn-drop/dragn-drop.component';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-company-modal',
@@ -13,7 +19,23 @@ export class AddCompanyModalComponent {
   close: boolean = false;
   companyForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  // constructor(private fb: FormBuilder) {
+  //   this.companyForm = this.fb.group({
+  //     companyName: ['', Validators.required],
+  //     websiteURL: [
+  //       '',
+  //       [Validators.required, Validators.pattern('https?://.+')],
+  //     ],
+  //     profileImage: [''],
+  //     keywords: ['', Validators.required],
+  //     description: ['', Validators.required],
+  //   });
+  // }
+  constructor(
+    private dialogRef: MatDialogRef<AddCompanyModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private fb: FormBuilder
+  ) {
     this.companyForm = this.fb.group({
       companyName: ['', Validators.required],
       websiteURL: [
@@ -38,16 +60,6 @@ export class AddCompanyModalComponent {
     console.log('Close modal');
     this.close = true;
   }
-
-
-
-
-
-
-
-  
-
-
 
   // isDragging = false;
   // uploadedFiles: File[] = [];
