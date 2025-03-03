@@ -14,10 +14,11 @@
                 <div class="col-md-2">
                     <label class="fw-semibold" for="imageUrl">Image Url</label>
                 </div>
-                <div class="col-md-10">
+                <!-- <div class="col-md-10">
                     <textarea id="imageUrl" rows="2" formControlName="imageUrl"
-                        placeholder="e.g. John_Doe"></textarea>
-                </div>
+                        placeholder="Put your Pictur Url here..."></textarea>   
+                </div> -->
+                <app-dragn-drop formControlName="imageUrl"></app-dragn-drop>
             </div>
             <div class="divider"></div>
             <!-- firstName -->
@@ -26,7 +27,7 @@
                     <label class="fw-semibold" for="firstName">First Name</label>
                 </div>
                 <div class="col-md-10">
-                    <input id="firstName" type="text" formControlName="firstName" placeholder="e.g. John" required />
+                    <input id="firstName" type="text" formControlName="firstName" placeholder="e.g. John" />
                 </div>
             </div>
             <!-- lastName -->

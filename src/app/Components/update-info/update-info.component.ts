@@ -1,27 +1,20 @@
 import { Component, inject, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { CommonModule } from '@angular/common';
-import { SidebarService } from '../../Core/Services/sidebar.service';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import {
   FormGroup,
   ReactiveFormsModule,
-  Validators,
   FormControl,
   FormBuilder,
 } from '@angular/forms';
 import { UpdateService } from '../../Core/Services/update.service';
 import { Router } from '@angular/router';
+import { FiledropComponent } from "../dragn-drop/dragn-drop.component";
 
 @Component({
   selector: 'app-update-info',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FiledropComponent],
   templateUrl: './update-info.component.html',
   styleUrl: './update-info.component.css',
 })
@@ -44,6 +37,7 @@ export class UpdateInfoComponent {
     firstName: new FormControl(null),
     lastName: new FormControl(null),
     userName: new FormControl(null),
+    imageUrl: new FormControl(null),
     phoneNumber: new FormControl(null),
     birthday: new FormControl(null),
   });
@@ -54,9 +48,7 @@ export class UpdateInfoComponent {
         next: (res) => {
           // if (res.message == 'success') {
           console.log('Tmaaaam');
-          // this._Router.navigate(['/MyDashboard']);
-          // this._UpdateService.saveUserData();
-          // }
+          // this.close();
         },
         error: (err) => {
           console.log('ERRRRRRRRR');

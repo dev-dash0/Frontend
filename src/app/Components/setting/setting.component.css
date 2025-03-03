@@ -1,4 +1,4 @@
-.BG { 
+/* .BG { 
 background: var(--mainBackgroundGradient);
 min-height: 100vh;
 overflow: hidden;
@@ -7,20 +7,16 @@ flex-wrap: wrap;
 justify-content: center;
 align-items: center;
 flex-direction: column;
-}
+} */
 
 .card{
-    border-radius: var(--standardRoundness);
-    padding: 20px;
+    /* border-radius: var(--standardRoundness); */
+    padding: 30px 20px; 
     /* margin: 20px auto; */
     /* width: 45%; */
-    min-height: 200px;
-    text-align: left;
+    /* min-height: 200px; */
+    /* text-align: left; */
     color: #fff;
-}
-
-.TimeDateCard , .Preferences{
-    width: 47% !important;
 }
 
 .Profile-Pic{
@@ -68,7 +64,14 @@ flex-direction: column;
     width: 100%;
     margin-block: 10px;
     background: linear-gradient(144.98deg, rgba(58, 73, 98, 0.5) 1.37%, rgba(255, 144, 232, 0.5) 43.67%, rgba(116, 202, 255, 0.5) 70.8%, rgba(41, 47, 101, 0.5) 91.44%);
-
+}
+.divider2 {
+    height: 200px;
+    width: 1px;
+    /* margin-inline: 10px; */
+    /* border-radius: 75%; */
+    /* background: linear-gradient(144.98deg, rgba(58, 73, 98, 0.5) 1.37%, rgba(255, 144, 232, 0.5) 43.67%, rgba(116, 202, 255, 0.5) 70.8%, rgba(41, 47, 101, 0.5) 91.44%); */
+    background-color: #d076be;
 }
 
 .confirm-btn:hover {

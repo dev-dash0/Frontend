@@ -24,4 +24,15 @@ export class UpdateService {
         headers,
       })
   };
+
+  UpdatePass = (NewPass: any ): Observable<any> => {
+      const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+    return this._HttpClient.post(baseUrl + '/api/Account/ChangePassword', NewPass ,
+      {
+        headers,
+      })
+  };
 }

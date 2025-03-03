@@ -22,12 +22,22 @@ export const routes: Routes = [
     path: 'MyDashboard',
     component: MyDashboardComponent,
     title: 'My Dashboard',
-    // canActivate: [authGuardGuard],
-  },
-  {
-    path: 'Setting',
-    component: SettingComponent,
-    title: 'Settings',
+    children: [
+      {
+        path: '',
+        component: DashboardComponent,
+        pathMatch: 'full',
+        title: 'Dashboard',
+      },
+      { path: 'Dashboard', component: DashboardComponent, title: 'Dashboard' },
+      { path: 'Project', component: ProjectViewComponent, title: 'Project' },
+      {
+        path: 'Setting',
+        component: SettingComponent,
+        title: 'Settings',
+        // canActivate: [authGuardGuard],
+      },
+    ],
     // canActivate: [authGuardGuard],
   },
 ];

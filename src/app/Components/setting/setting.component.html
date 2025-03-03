@@ -1,4 +1,4 @@
-<div class="BG">
+<div class="BG" [ngClass]="{ expand: isSidebarCollapsed }">
     <div class="container">
         <div class="Header text-white d-flex gap-3 my-4">
             <img src="assets/images/Settings.svg" alt="Settings">
@@ -12,42 +12,82 @@
                         <h2>Profile</h2>
                     </div>
                     <div class="ProfileContent row align-items-center w-75 pe-5">
-                        <div class="col-md-4 Profile Picture mt-3">     
+                        <div class="col-md-3 Profile Picture mt-3">     
                             <div class="col-md-12 justify-content-start row">
-                                <!-- <p>Profile Picture:</p> -->
+                                <!-- Profile Picture: -->
                                 <img src="assets/images/Profile Pic.svg" class="Profile-Pic" alt="Profile Picture">
                             </div>
                         </div>
-                        <div class="col-md-8 Profile-Info">
-                            <div class="row">
+                        <div class="col-md-6 Profile-Info">
+                            <!-- First Name -->
+                            <div class="col-md-12 row align-items-center">
+                                <div class="col-md-4">
+                                    <p class="w-auto" >First name:</p>
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="w-auto text-white-50">{{ProfileData?.firstName}}</p>
+                                </div>
                             </div>
-                            <div class="col-md-12 row justify-content-between align-items-center">
-                                <p class="w-auto" >First name:</p>
-                                <p class="w-auto text-white-50">Rana</p>
+                            <!-- Last Name -->
+                            <div class="col-md-12 row align-items-center">
+                                <div class="col-md-4">
+                                    <p class="w-auto" >Last name:</p>
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="w-auto text-white-50">{{ProfileData?.lastName}}</p>
+                                </div>
                             </div>
-                            <div class="col-md-12 row justify-content-between align-items-center">
-                                <p class="w-auto" >Last name:</p>
-                                <p class="w-auto text-white-50">Elfetyany</p>
+                            <!-- User Name -->
+                            <div class="col-md-12 row align-items-center">
+                                <div class="col-md-4">
+                                    <p class="w-auto" >User Name:</p>
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="w-auto text-white-50">{{ProfileData?.userName}}</p>
+                                </div>
                             </div>
-                            <div class="col-md-12 row justify-content-between align-items-center">
-                                <p class="w-auto" >User Name:</p>
-                                <p class="w-auto text-white-50">Rana Elfetyany</p>
+                            <!--Email -->
+                            <div class="col-md-12 row align-items-center">
+                                <div class="col-md-4">
+                                    <p class="w-auto" >Email:</p>
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="w-auto text-white-50">{{ProfileData?.email}}</p>
+                                </div>
                             </div>
-                            <div class="col-md-12 row justify-content-between align-items-center">
+                            <!-- Phone Number -->
+                            <!-- <div class="col-md-12 row justify-content-between align-items-center">
                                 <p class="w-auto" >Phone Number:</p>
-                                <p class="w-auto text-white-50">+1234567810</p>
-                            </div>
-                            <div class="col-md-12 row justify-content-between align-items-center">
+                                <p class="w-auto text-white-50">{{ProfileData.}}</p>
+                            </div> -->
+                            <!-- Birthday Date -->
+                            <!-- <div class="col-md-12 row justify-content-between align-items-center">
                                 <p class="w-auto" >Birthday Date:</p>
-                                <p class="w-auto text-white-50">2002-01-16</p>
+                                <p class="w-auto text-white-50">{{ProfileData.}}</p>
+                            </div> -->
+                            
+                        </div>
+                        <!-- <div class="divider2"></div> -->
+                        <div class="col-md-3">
+                            <div class="update-buttons d-flex flex-column gap-3 justify-content-end">
+                                <button (click)="openUpdatePassModal()" class="confirm-btn">Change password</button>
+                                <button (click)="openUpdateInfoModal()" class="cancel-btn">Update Info</button>
                             </div>
                         </div>
                     </div>
-                    <div class="divider"></div>
-                    <div class="update-buttons my-3 px-5 d-flex gap-3 justify-content-end">
-                        <button class="confirm-btn">Change password</button>
+                    <!-- <div class="divider"></div> -->
+                    <!-- <div class="update-buttons my-3 px-5 d-flex gap-3 justify-content-end">
+                        <button (click)="openUpdatePassModal()" class="confirm-btn">Change password</button>
                         <button (click)="openUpdateInfoModal()" class="cancel-btn">Update Info</button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="col-md-12">
@@ -161,27 +201,11 @@
                     <div class="divider my-5"></div>
                     <p class=" mx-4 fs-5">To Delete this Account Completely</p>
                     <div class="update-buttons my-3 px-5 d-flex gap-3 justify-content-end">
-                        <button class="delete-btn">Delete Account</button>
+                        <button (click)="openConfirmModal()" class="delete-btn">Delete Account</button>
+                        <!-- <button (click)="RemoveAccount()" class="delete-btn">Delete Account</button> -->
                     </div>
                 </div> 
             </div>
         </div>
     </div>
 </div>
-
-
-<!-- <div class="dropdown">
-            <div
-                class="toggle-menu d-flex align-items-center gap-2"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-            >
-                <button class="btn" type="button">RE</button>
-                <span><i class="fa-solid fa-chevron-down fa-xs"></i></span>
-            </div>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item">Action</a></li>
-                <li><a class="dropdown-item">Another action</a></li>
-                <li><a class="dropdown-item">Something else here</a></li>
-            </ul>
-</div> -->
