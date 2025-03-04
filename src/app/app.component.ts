@@ -15,6 +15,7 @@ import { DashboardComponent } from "./Components/dashboard/dashboard.component";
 import { SigninComponent } from "./Components/signin/signin.component";
 import { SignupComponent } from "./Components/signup/signup.component";
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -29,8 +30,9 @@ import { SignupComponent } from "./Components/signup/signup.component";
     DashboardTestComponent,
     DashboardComponent,
     SigninComponent,
-    SignupComponent
-],
+    SignupComponent,
+
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

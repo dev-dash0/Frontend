@@ -6,12 +6,13 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { SigninSignupNavbarComponent } from '../../Shared/signin-signup-navbar/signin-signup-navbar.component';
 import { AuthService } from '../../Core/Services/Auth.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { signupValidators } from '../../Shared/validators/validators.component';
-import { NgClass } from '@angular/common';
-import { Console } from 'console';
-
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -24,6 +25,10 @@ import { Console } from 'console';
     SigninSignupNavbarComponent,
     RouterLink,
     ReactiveFormsModule,
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css',
@@ -43,7 +48,7 @@ export class SignupComponent {
       username: [null, signupValidators.name],
       email: [null, signupValidators.email],
       password: [null, signupValidators.password],
-      phoneNumber: [null],
+      phoneNumber: [null,],
       birthday: [null],
     }
     // { validators: [confirmPassword] }
@@ -57,16 +62,13 @@ export class SignupComponent {
       this._AuthService.Register(this.registerForm.value).subscribe({
         next: (res) => {
           console.log(res);
-          console.log('TMAAAAAAAAM');
-          // console.log(this.isBtnSubmit);
-          // if (res.message == 'success') {
-          this._Router.navigate(['/signin']);
-          this.isBtnSubmit = false;
-          // }
+          if (res.message == 'Registration successful') {
+            this._Router.navigate(['/signin']);
+            this.isBtnSubmit = false;
+          }
         },
         error: (err) => {
-          console.log('ERRRRRRRRR');
-
+          console.log(err);
           console.log(err.error.message);
           this.errorMessage = err.error.message;
           this.isBtnSubmit = false;
@@ -74,6 +76,7 @@ export class SignupComponent {
         },
       });
     } else {
+      console.log(this.registerForm.errors);
       // this.register.get('rePassword')?.setValue("")
       // this.register.markAllAsTouched()
       // ^^^^ when u cant use disabled and whnt when click the submit btn all the alerts appears
@@ -81,6 +84,6 @@ export class SignupComponent {
   }
 
   // onSubmit(event: Event): void {
-  //   event.preventDefault();
+  // event.preventDefault();
   // }
 }

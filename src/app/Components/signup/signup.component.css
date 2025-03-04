@@ -1,118 +1,93 @@
-/* .bg {
-    background: var(--mainBackgroundGradient);
-    background-image: url(assets/images/Sign\ In.png);
-    background-size: contain;
-    background-position: center;
+/* *********************Date Piker **************************/
 
-} */
-
-#signup {
-  position: relative;
+mat-form-field {
+    width: 200px !important;
+    display: block;
 }
 
-.signup-container {
-  background-image: var(--glassGradient);
-  border-radius: 40px;
-  position: relative;
-  z-index: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 40px;
-  gap: 10px;
-  color: var(--mainLightBlueColor);
+mat-form-field input:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
 }
 
-.signup-container::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-  border-radius: inherit;
-  padding: 1.1px;
-  background: var(--strokeGradient);
-  mask-composite: exclude;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: destination-out;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: subtract;
+.custom-date-picker {
+    background-color: #010423;
+    border-radius: 5px !important;
+    border: 0 !important;
+
 }
 
-.signup-container h1 {
-  font-family: var(--headerFontFamily) !important;
-  /* font-size: var(--headerFontSize); */
-  font-size: 1.8rem;
+::ng-deep .mat-mdc-form-field {
+    --mdc-outlined-text-field-outline-width: 0px;
 }
 
-.signup-container label,
-.signup-container span,
-button {
-  /* font-size: var(--regularFontSize); */
-  font-size: 0.9rem;
+::ng-deep .mat-mdc-form-field.mat-focused {
+    box-shadow: 0px 0px 5px 0px #d076be7a;
 }
 
-.mat-toolbar {
-  background: transparent;
-  border-radius: 16px;
-  overflow: hidden;
-  color: var(--mainColor);
-  font-family: var(--headerFontFamily) !important;
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch {
+    border-width: 1px !important;
+    border-color: #d076be7a !important;
 }
 
-.mat-toolbar h1 {
-  font-family: var(--headerFontFamily) !important;
+
+::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+    padding: 0 !important;
 }
 
-.mat-toolbar span {
-  font-size: var(--regularFontSize);
+::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
 }
 
-.Group1 {
-  position: absolute;
-  top: 25%;
-  right: 22%;
-  mix-blend-mode: color-dodge;
+::ng-deep .mat-mdc-form-field-icon-prefix>.mat-icon {
+    padding: 0 0 0 10px !important;
 }
 
-.Group2 {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  mix-blend-mode: color-dodge;
+::ng-deep .mat-mdc-form-field-infix {
+    min-height: fit-content !important;
+    width: fit-content !important;
 }
 
-.Group3 {
-  position: absolute;
-  bottom: 8%;
-  left: 26%;
-  mix-blend-mode: color-burn;
+/* Dark calender */
+::ng-deep .mat-datepicker-content {
+    background-color: #010423 !important;
+    border-radius: 5px !important;
 }
 
-.Group4 {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  mix-blend-mode: color-burn;
+
+::ng-deep .mat-calendar-table td,
+::ng-deep .mat-calendar-table-header th {
+    color: #e28ed3 !important;
+    /* Days and weekdays */
 }
 
-.Group5 {
-  position: absolute;
-  bottom: 20%;
-  right: 12%;
-  mix-blend-mode: overlay;
+::ng-deep .mat-calendar-body-cell-content {
+    color: #91A0C0 !important;
 }
 
-.Group6 {
-  position: absolute;
-  bottom: 16%;
-  right: 10%;
-  mix-blend-mode: soft-light;
-  position: absolute;
-  bottom: 16%;
-  right: 10%;
-  mix-blend-mode: soft-light;
+::ng-deep .mat-mdc-button,
+::ng-deep .mat-mdc-calendar-header {
+    color: #04122f !important;
+    /* Header text (Month/Year) */
 }
+
+::ng-deep .mat-calendar-header {
+    background-color: #d77fd4 !important;
+    border-radius: 5px 5px 0 0;
+}
+
+::ng-deep .mat-calendar-body-selected {
+    background-color: #91A0C0 !important;
+    color: #4461a8 !important;
+}
+
+::ng-deep .mat-calendar-body-today {
+    border: 1px solid #91A0C0 !important;
+    color: #91A0C0 !important;
+}
+
+
+/* ======================================================================= */

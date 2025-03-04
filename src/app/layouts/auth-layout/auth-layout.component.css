@@ -1,0 +1,45 @@
+.Group1 {
+    position: absolute;
+    top: 25%;
+    right: 22%;
+    mix-blend-mode: color-dodge;
+}
+
+.Group2 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    mix-blend-mode: color-dodge;
+}
+
+.Group3 {
+    position: absolute;
+    bottom: 8%;
+    left: 26%;
+    mix-blend-mode: color-burn;
+}
+
+.Group4 {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    mix-blend-mode: color-burn;
+}
+
+.Group5 {
+    position: absolute;
+    bottom: 20%;
+    right: 12%;
+    mix-blend-mode: overlay;
+}
+
+.Group6 {
+    position: absolute;
+    bottom: 16%;
+    right: 10%;
+    mix-blend-mode: soft-light;
+    position: absolute;
+    bottom: 16%;
+    right: 10%;
+    mix-blend-mode: soft-light;
+}

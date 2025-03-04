@@ -32,36 +32,28 @@
   /*----------------------------------------------------------------------------------------*/
   /*Gradients*/
 
-  --mainBackgroundGradient: radial-gradient(
-    97.81% 96.5% at 2.19% 3.5%,
-    #000000 0%,
-    #102a56 100%
-  );
+  --mainBackgroundGradient: radial-gradient(97.81% 96.5% at 2.19% 3.5%,
+      #000000 0%,
+      #102a56 100%);
 
-  --strokeGradient: linear-gradient(
-    129deg,
-    #3a4962 1%,
-    #ff90e8 43%,
-    #74caff 70%,
-    #292f65 91%
-  );
+  --strokeGradient: linear-gradient(129deg,
+      #3a4962 1%,
+      #ff90e8 43%,
+      #74caff 70%,
+      #292f65 91%);
 
   /* added a new stroke try it out !*/
-  --newStrokeGradient: linear-gradient(
-    129deg,
-    #3a4962 0%,
-    #ff90e8 20%,
-    #74caff 70%,
-    #292f65 120%
-  );
+  --newStrokeGradient: linear-gradient(129deg,
+      #3a4962 0%,
+      #ff90e8 20%,
+      #74caff 70%,
+      #292f65 120%);
 
   /*Chart Gradients*/
 
-  --blueChartBackgroundGradient: linear-gradient(
-    131deg,
-    #292f65 8%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  --blueChartBackgroundGradient: linear-gradient(131deg,
+      #292f65 8%,
+      rgba(0, 0, 0, 0) 100%);
 
   --seaBlueGradient: radial-gradient(circle at 37% 56%, #09f0de, #4e83ed 26%);
 
@@ -72,65 +64,51 @@
   --lightPinkGradient: radial-gradient(circle at 34% 19%, #db83f1, #eabef6 14%);
 
   /*Side Bar Gradients*/
-  --sideBarBackgroundGradient: radial-gradient(
-      circle at 100% 95%,
+  --sideBarBackgroundGradient: radial-gradient(circle at 100% 95%,
       #4a314c 2%,
-      #161d3e 35%
-    ),
+      #161d3e 35%),
     linear-gradient(172deg, #3a4962 2%, #ff90e8 45%, #74caff 72%, #292f65 92%);
 
   /*Modal Gradients*/
   --modalGradient: radial-gradient(circle at 2% 99%, #4a314c, #141a4b 67%);
 
   /*search Gradients*/
-  --searchBlueGradient: linear-gradient(
-    to right,
-    #161d3e 63%,
-    rgba(65, 76, 179, 0.2)
-  );
+  --searchBlueGradient: linear-gradient(to right,
+      #161d3e 63%,
+      rgba(65, 76, 179, 0.2));
 
   --searchButtonGradient: linear-gradient(122deg, #c120e6 19%, #5b6eef 77%);
 
   /*Cards Gradients*/
-  --cardBottomRightGradient: radial-gradient(
-      circle at 100% 100%,
+  --cardBottomRightGradient: radial-gradient(circle at 100% 100%,
       #4a314c 7%,
-      #21264f 54%
-    ),
+      #21264f 54%),
     linear-gradient(129deg, #3a4962 1%, #ff90e8 43%, #74caff 70%, #292f65 91%);
 
-  --cardBottomLeftGradient: radial-gradient(
-      circle at 7% 100%,
+  --cardBottomLeftGradient: radial-gradient(circle at 7% 100%,
       #4a314c 1%,
-      #21264f 44%
-    ),
+      #21264f 44%),
     linear-gradient(123deg, #3a4962 1%, #ff90e8 43%, #74caff 70%, #292f65 91%);
 
-  --cardTopRightGradient: radial-gradient(
-    circle at 95% 0%,
-    #4a314c 1%,
-    #21264f 65%
-  );
+  --cardTopRightGradient: radial-gradient(circle at 95% 0%,
+      #4a314c 1%,
+      #21264f 65%);
 
   --cardTopLeftGradient: radial-gradient(circle at 0% 0%, #4a314c, #21264f 39%);
 
   /*Buttons Gradients*/
-  --allPinkButtonGradient: radial-gradient(
-      circle at 42% 50%,
+  --allPinkButtonGradient: radial-gradient(circle at 42% 50%,
       #eabef6,
-      #db83f1 65%
-    ),
+      #db83f1 65%),
     linear-gradient(100deg, #3a4962 0%, #ff90e8 42%, #74caff 70%, #292f65 90%);
 
   /*glass Effect Gradients*/
-  --glassGradient: linear-gradient(
-    144.86deg,
-    rgba(58, 73, 98, 0.18) 6.8%,
-    rgba(41, 47, 101, 0.1425) 29.3%,
-    rgba(116, 202, 255, 0.105) 51.79%,
-    rgba(255, 144, 232, 0.03) 96.78%
-  );
-  --glassfilter: blur(25px);
+  --glassGradient: linear-gradient(144.86deg,
+      rgba(58, 73, 98, 0.18) 6.8%,
+      rgba(93, 104, 201, 0.143) 29.3%,
+      rgba(91, 177, 230, 0.105) 51.79%,
+      rgba(255, 144, 232, 0.03) 96.78%);
+  --glassfilter: blur(30px);
 
   /*----------------------------------------------------------------------------------------*/
   /*Fonts,shadows,filters,transitions,transformations,actions and more*/
@@ -236,6 +214,7 @@
 .card span {
   color: var(--mainLightBlueColor);
 }
+
 /* =============================================================================== */
 /**********Handling Scroll bar ************/
 ::-webkit-scrollbar {
@@ -261,4 +240,75 @@ textarea::-webkit-scrollbar,
 .side-menu-bg ::-webkit-scrollbar-track {
   margin: 65px;
 }
+
 /* =============================================================================== */
+/* ******************Auth Style********************************* */
+.auth-form-container {
+  background-image: var(--glassGradient);
+  /* background-color: var(--mainDarkBlueColor); */
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-radius: 40px;
+  position: relative;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  gap: 10px;
+  color: var(--mainLightBlueColor);
+}
+
+.auth-form-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1.1px;
+  background: var(--strokeGradient);
+  mask-composite: exclude;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: subtract;
+}
+
+/* .auth-form-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -2;
+  border-radius: inherit;
+  background-image: var(--glassGradient);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+
+} */
+
+.auth-form-container h1 {
+  font-family: var(--headerFontFamily) !important;
+  /* font-size: var(--headerFontSize); */
+  font-size: 1.8rem;
+}
+
+.auth-form-container label,
+.auth-form-container span,
+button {
+  /* font-size: var(--regularFontSize); */
+  font-size: 0.9rem;
+}
+
+.auth-form-container input {
+  border: none;
+  color: #91A0C0 !important;
+}
+
+/* ====================================================================== */

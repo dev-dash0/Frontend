@@ -5,6 +5,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { MainDarkBtnComponent } from "../../Shared/main-dark-btn/main-dark-btn.component";
 
 @Component({
   selector: 'app-forget-password',
@@ -16,6 +17,7 @@ import { RouterLink } from '@angular/router';
     MatDividerModule,
     MatIconModule,
     NgClass,
+    MainDarkBtnComponent
   ],
   templateUrl: './forget-password.component.html',
   styleUrl: './forget-password.component.css',

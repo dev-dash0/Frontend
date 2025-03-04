@@ -3,7 +3,7 @@ import { Validators } from '@angular/forms';
 export const signupValidators = {
   name: [
     Validators.required,
-    Validators.minLength(2),
+    Validators.minLength(3),
     Validators.maxLength(20),
   ],
   email: [Validators.required, Validators.email],
@@ -12,6 +12,7 @@ export const signupValidators = {
     Validators.pattern(
       /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/
       // /^(?=.[a-z])(?=.[A-Z])(?=.*\d).+$/
+      // /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]+$/
     ),
   ],
 };

@@ -41,8 +41,7 @@ export class SigninComponent {
     if (this.loginForm.valid) {
       this._AuthService.Login(this.loginForm.value).subscribe({
         next: (res) => {
-          // if (res.message == 'success') {
-          console.log('Tmaaaam');
+          console.log(res);
           this._Router.navigate(['/MyDashboard']);
           this.isBtnSubmit = false;
           localStorage.setItem('token', res.accessToken);
@@ -50,9 +49,8 @@ export class SigninComponent {
           // }
         },
         error: (err) => {
-          console.log('ERRRRRRRRR');
-          // this.errorMessage = err.error.message;
-          this.isBtnSubmit = false;
+          this.errorMessage = err.error.message;
+          console.log(this.errorMessage);
         },
       });
     }
