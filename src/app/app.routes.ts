@@ -5,6 +5,7 @@ import { MyDashboardComponent } from './Components/my-dashboard/my-dashboard.com
 import { ForgetPasswordComponent } from './Components/forget-password/forget-password.component';
 import { DashboardComponent } from './Components/dashboard/dashboard.component';
 import { authGuardGuard } from './Core/guards/auth-guard.guard';
+import { SettingComponent } from './Components/setting/setting.component';
 import { ProjectModalComponent } from './Components/project-modal/project-modal.component';
 import { ProjectViewComponent } from './Components/project-view/project-view.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
@@ -35,6 +36,7 @@ export const routes: Routes = [
               { path: '', component: DashboardComponent, pathMatch: 'full', title: 'Dashboard' },
               { path: 'Dashboard', component: DashboardComponent, title: 'Dashboard' },
               { path: 'Project', component: ProjectViewComponent, title: 'Project' },
+              { path: 'Setting', component: SettingComponent, title: 'Settings' },
             ],
         },
       ]

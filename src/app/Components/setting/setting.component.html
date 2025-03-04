@@ -1,0 +1,211 @@
+<div class="BG" [ngClass]="{ expand: isSidebarCollapsed }">
+    <div class="container">
+        <div class="Header text-white d-flex gap-3 my-4">
+            <img src="assets/images/Settings.svg" alt="Settings">
+            <h1>My Settings</h1>
+        </div>
+        <div class="row gy-4">
+            <div class="col-md-12 card cardBottomLeft">
+                <div class="row justify-content-center ">
+                    <div class="Title d-flex">
+                        <img src="assets/images/Male User.svg" alt="User profile">
+                        <h2>Profile</h2>
+                    </div>
+                    <div class="ProfileContent row align-items-center w-75 pe-5">
+                        <div class="col-md-3 Profile Picture mt-3">     
+                            <div class="col-md-12 justify-content-start row">
+                                <!-- Profile Picture: -->
+                                <img src="assets/images/Profile Pic.svg" class="Profile-Pic" alt="Profile Picture">
+                            </div>
+                        </div>
+                        <div class="col-md-6 Profile-Info">
+                            <!-- First Name -->
+                            <div class="col-md-12 row align-items-center">
+                                <div class="col-md-4">
+                                    <p class="w-auto" >First name:</p>
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="w-auto text-white-50">{{ProfileData?.firstName}}</p>
+                                </div>
+                            </div>
+                            <!-- Last Name -->
+                            <div class="col-md-12 row align-items-center">
+                                <div class="col-md-4">
+                                    <p class="w-auto" >Last name:</p>
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="w-auto text-white-50">{{ProfileData?.lastName}}</p>
+                                </div>
+                            </div>
+                            <!-- User Name -->
+                            <div class="col-md-12 row align-items-center">
+                                <div class="col-md-4">
+                                    <p class="w-auto" >User Name:</p>
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="w-auto text-white-50">{{ProfileData?.userName}}</p>
+                                </div>
+                            </div>
+                            <!--Email -->
+                            <div class="col-md-12 row align-items-center">
+                                <div class="col-md-4">
+                                    <p class="w-auto" >Email:</p>
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="w-auto text-white-50">{{ProfileData?.email}}</p>
+                                </div>
+                            </div>
+                            <!-- Phone Number -->
+                            <!-- <div class="col-md-12 row justify-content-between align-items-center">
+                                <p class="w-auto" >Phone Number:</p>
+                                <p class="w-auto text-white-50">{{ProfileData.}}</p>
+                            </div> -->
+                            <!-- Birthday Date -->
+                            <!-- <div class="col-md-12 row justify-content-between align-items-center">
+                                <p class="w-auto" >Birthday Date:</p>
+                                <p class="w-auto text-white-50">{{ProfileData.}}</p>
+                            </div> -->
+                            
+                        </div>
+                        <!-- <div class="divider2"></div> -->
+                        <div class="col-md-3">
+                            <div class="update-buttons d-flex flex-column gap-3 justify-content-end">
+                                <button (click)="openUpdatePassModal()" class="confirm-btn">Change password</button>
+                                <button (click)="openUpdateInfoModal()" class="cancel-btn">Update Info</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="divider"></div> -->
+                    <!-- <div class="update-buttons my-3 px-5 d-flex gap-3 justify-content-end">
+                        <button (click)="openUpdatePassModal()" class="confirm-btn">Change password</button>
+                        <button (click)="openUpdateInfoModal()" class="cancel-btn">Update Info</button>
+                    </div> -->
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row justify-content-between ">
+                    <div class="col-md-6 card Time&DateCard cardBottomLeft ">
+                        <div class="Title d-flex gap-3">
+                            <img src="assets/images/Delivery Time.svg" alt="User profile">
+                            <h2>Time & Date</h2>
+                        </div>
+                        <div class="content px-5 pt-5">
+                            <div class="Time row ms-4">
+                                <div class="col-md-6">
+                                    <h4>Time Format</h4>
+                                </div>
+                                <div class="col-md-6 row align-items-center">
+                                    <div class="col-md-12 mb-3">
+                                        <input type="radio" id="24T" name="timeFormat">
+                                        <label class="ms-4" for="24T">24 Hour</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="radio" id="12T" name="timeFormat" [defaultChecked]="true">
+                                        <label class="ms-4" for="12T">12 Hour</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="Date row ms-4 mt-5">
+                                <div class="col-md-6">
+                                    <h4>Date Format</h4>
+                                </div>
+                                <div class="col-md-6 row align-items-center">
+                                    <div class="col-md-12 mb-3">
+                                        <input type="radio" id="Date1" name="dateFormat" [defaultChecked]="true">
+                                        <label class="ms-4" for="Date1">yyyy/mm/dd</label>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <input type="radio" id="Date2" name="dateFormat">
+                                        <label class="ms-4" for="Date2">dd/mm/yyyy</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <input type="radio" id="Date3" name="dateFormat">
+                                        <label class="ms-4" for="Date3">mm/dd/yyyy</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 card Preferences cardBottomRight">
+                        <div class="Title d-flex gap-3">
+                            <img src="assets/images/Slider.svg" alt="User profile">
+                            <h2>Preferences</h2>
+                        </div>
+                        <div class="content px-5 pt-5">
+                            <div class="DarkMode row ms-4">
+                                <div class="col-md-6">
+                                    <h4>Dark Mode</h4>
+                                </div>
+                                <div class="col-md-6 row align-items-center">
+                                    <!-- <Button>Click</Button> -->
+                                    <app-toggle-button [on]="true" (toggled)="showMessage($event)"></app-toggle-button>
+                                </div>
+                            </div>
+                            <div class="FocusMode row justify-content-between ms-4 my-5 ">
+                                <div class="col-md-6">
+                                    <h4>Focus Mode</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- <button>Click</button> -->
+                                    <app-toggle-button [on]="true" (toggled)="showMessage($event)"></app-toggle-button>
+                                </div>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="Language row w-100 ms-4 my-5 ">
+                                <div class="Language toggle-menu d-flex align-items-center gap-2" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                    <div class="row justify-content-between w-100">
+                                        <!-- <div class="col-6"> -->
+                                            <h4 class="w-auto">Language</h4>
+                                        <!-- </div> -->
+                                        <!-- <div class="col-6"> -->
+                                            <span class="w-auto"><i class="fa-solid fa-chevron-down fa-xs"></i></span>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item">Arabic</a></li>
+                                                <li><a class="dropdown-item">English</a></li>
+                                                <li><a class="dropdown-item">French</a></li>
+                                                <li><a class="dropdown-item">Turkish</a></li>
+                                            </ul>
+                                        <!-- </div> -->
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-6">
+                                    <h4>Language</h4>
+                                </div>
+                                <div class="col-md-6 row align-items-center">
+                                    <button>Click</button>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 card cardBottomRight">
+                <div class="Title d-flex gap-4">
+                    <img src="assets/images/High Risk.svg" alt="User profile">
+                    <h2>Danger Zone</h2>
+                </div>
+                <div class="content px-5 pt-5">
+                    <p class=" mx-4 fs-5">Log out all sessions including any session on mobile, iPad, and other browsers</p>
+                    <div class="update-buttons my-3 px-5 d-flex gap-3 justify-content-end">
+                        <button class="confirm-btn">Log Out of all sessions</button>
+                    </div>
+                    <div class="divider my-5"></div>
+                    <p class=" mx-4 fs-5">To Delete this Account Completely</p>
+                    <div class="update-buttons my-3 px-5 d-flex gap-3 justify-content-end">
+                        <button (click)="openConfirmModal()" class="delete-btn">Delete Account</button>
+                        <!-- <button (click)="RemoveAccount()" class="delete-btn">Delete Account</button> -->
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>

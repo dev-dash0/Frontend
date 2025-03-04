@@ -15,7 +15,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { provideToastr } from 'ngx-toastr';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,14 +31,19 @@ export const appConfig: ApplicationConfig = {
       MatInputModule,
       MatFormFieldModule,
       MatSelectModule,
-      MatChipsModule,),
+      MatChipsModule
+    ),
+    
+    provideAnimations(), // required animations providers
+    provideToastr(),
 
-      provideHttpClient(
-          withInterceptors([
-            // headersInterceptor,
-            // catchErrorInterceptor,
-            // loadingInterceptor,
-          ])
-        ),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([
+        // headersInterceptor,
+        // catchErrorInterceptor,
+        // loadingInterceptor,
+      ])
+    ),
   ],
 };

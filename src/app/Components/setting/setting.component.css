@@ -1,0 +1,95 @@
+/* .BG { 
+background: var(--mainBackgroundGradient);
+min-height: 100vh;
+overflow: hidden;
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+} */
+
+.card{
+    /* border-radius: var(--standardRoundness); */
+    padding: 30px 20px; 
+    /* margin: 20px auto; */
+    /* width: 45%; */
+    /* min-height: 200px; */
+    /* text-align: left; */
+    color: #fff;
+}
+
+.Profile-Pic{
+    width: 200px;
+    height: 200px;
+}
+
+.cancel-btn {
+    background: none;
+    border: none;
+    color: #b5b5b5;
+    font-size: 0.875rem;
+    cursor: pointer;
+    border: 1px solid #b5b5b5;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: all 0.1s;
+}
+.delete-btn {
+    background: #d13232;
+    border: none;
+    color: #fff;
+    font-size: 0.875rem;
+    cursor: pointer;
+    /* border: 1px solid #b5b5b5; */
+    padding: 10px 40px;
+    border-radius: 5px;
+    transition: all 0.1s;
+}
+
+.confirm-btn {
+    /* background: linear-gradient(90deg, #a445ff, #634bff); */
+    background-color: #ff90e9d8;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.divider {
+    height: 1px;
+    width: 100%;
+    margin-block: 10px;
+    background: linear-gradient(144.98deg, rgba(58, 73, 98, 0.5) 1.37%, rgba(255, 144, 232, 0.5) 43.67%, rgba(116, 202, 255, 0.5) 70.8%, rgba(41, 47, 101, 0.5) 91.44%);
+}
+.divider2 {
+    height: 200px;
+    width: 1px;
+    /* margin-inline: 10px; */
+    /* border-radius: 75%; */
+    /* background: linear-gradient(144.98deg, rgba(58, 73, 98, 0.5) 1.37%, rgba(255, 144, 232, 0.5) 43.67%, rgba(116, 202, 255, 0.5) 70.8%, rgba(41, 47, 101, 0.5) 91.44%); */
+    background-color: #d076be;
+}
+
+.confirm-btn:hover {
+    /* background: linear-gradient(90deg, #7a35d4, #5034cc); */
+        background-color: #d076be;
+
+}
+.cancel-btn:hover {
+        background-color: #acaaaa6e;
+        color: #fff;
+}
+.delete-btn:hover {
+    background: #e84242;
+}
+
+.dropdown-menu{
+    width: 75% ;
+}
+
+
+

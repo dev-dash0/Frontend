@@ -1,0 +1,84 @@
+<div class="modal-container">
+    <!-- Header -->
+    <div class="modal-header d-flex justify-content-between align-items-start">
+        <h2>Update Your Data</h2>
+        <button class="close-btn" (click)="close()">&#x2715;</button>
+    </div>
+
+    <div class="divider"></div>
+    <!-- Form -->
+    <form [formGroup]="UpdateInfoForm" (ngSubmit)="sendData()">
+        <div class="form-group">
+            <!-- imageUrl -->
+            <div class="row  align-items-center">
+                <div class="col-md-2">
+                    <label class="fw-semibold" for="imageUrl">Image Url</label>
+                </div>
+                <!-- <div class="col-md-10">
+                    <textarea id="imageUrl" rows="2" formControlName="imageUrl"
+                        placeholder="Put your Pictur Url here..."></textarea>   
+                </div> -->
+                <app-dragn-drop formControlName="imageUrl"></app-dragn-drop>
+            </div>
+            <div class="divider"></div>
+            <!-- firstName -->
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <label class="fw-semibold" for="firstName">First Name</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="firstName" type="text" formControlName="firstName" placeholder="e.g. John" />
+                </div>
+            </div>
+            <!-- lastName -->
+            <div class="row  align-items-center">
+                <div class="col-md-2">
+                    <label class="fw-semibold" for="lastName">Last Name</label>
+                </div>
+                <div class="col-md-10">
+                    <textarea id="lastName" rows="2" formControlName="lastName"
+                        placeholder="e.g. Doe"></textarea>
+                </div>
+            </div>
+            <!-- userName -->
+            <div class="row  align-items-center">
+                <div class="col-md-2">
+                    <label class="fw-semibold" for="userName">User Name</label>
+                </div>
+                <div class="col-md-10">
+                    <textarea id="userName" rows="2" formControlName="userName"
+                        placeholder="e.g. John_Doe"></textarea>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <!-- Phone Number -->
+            <div class="row  align-items-center">
+                <div class="col-md-2">
+                    <label class="fw-semibold" for="phoneNumber">Phone Number</label>
+                </div>
+                <div class="col-md-10">
+                    <textarea id="phoneNumber" rows="2" formControlName="phoneNumber"
+                        placeholder="e.g. +12345678910"></textarea>
+                </div>
+            </div>
+            <!-- Birthday -->
+            <div class="row  align-items-center">
+                <div class="col-md-2">
+                    <label class="fw-semibold" for="birthday">Birthday Date</label>
+                </div>
+                <div class="col-md-10">
+                    <textarea id="birthday" rows="2" formControlName="birthday"
+                        placeholder="1995-5-15"></textarea>
+                </div>
+            </div>
+        </div>
+        <!-- Footer Buttons -->
+        <div class="modal-footer">
+            <div class="buttons w-100 d-flex justify-content-center align-items-center gap-3">
+                <button mat-button type="button" class="cancel-btn w-50 fw-semibold" (click)="close()">Cancel</button>
+                <button mat-flat-button type="submit" [disabled]="UpdateInfoForm.invalid"
+                    class="confirm-btn w-50 fw-semibold">Confirm</button>
+            </div>
+        </div>
+    </form>
+</div>
