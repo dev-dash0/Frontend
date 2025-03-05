@@ -18,11 +18,7 @@
 
         <div routerLink="/MyDashboard/Setting" class="profile">
           <div class="dropdown">
-            <div
-              class="toggle-menu d-flex align-items-center gap-2"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+            <div class="toggle-menu d-flex align-items-center gap-2" data-bs-toggle="dropdown" aria-expanded="false">
               <button class="btn" type="button">RE</button>
               <span><i class="fa-solid fa-chevron-down fa-xs"></i></span>
             </div>
@@ -37,16 +33,12 @@
     </div>
 
     <div class="col-auto ps-0">
-      <button
-        class="btn btn-mode p-3"
-        style="height: 4rem"
-        (click)="toggleMode()"
-      >
+      <button class="btn btn-mode p-3" style="height: 4rem" (click)="toggleMode()">
         @if(toggle==true) {
-        <img src="../../../assets/images/Sun.svg" alt="" />
+        <img src="assets/images/Sun.svg" alt="" />
 
         } @else {
-        <img src="../../../assets/images/tdesign_mode-dark.svg" alt="" /> }
+        <img src=".assets/images/tdesign_mode-dark.svg" alt="" /> }
       </button>
     </div>
   </div>

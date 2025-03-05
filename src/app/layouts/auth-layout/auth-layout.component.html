@@ -1,11 +1,13 @@
-<app-signin-signup-navbar></app-signin-signup-navbar>
-<section class="bg py-2 d-flex flex-column justify-content-center align-items-center min-vh-100">
-    <router-outlet></router-outlet>
+<section class=" bg py-2 d-flex flex-column justify-content-center align-items-center min-vh-100 position-relative">
+    <app-signin-signup-navbar class="z-3"></app-signin-signup-navbar>
+    <router-outlet class="position-absolute z-3"></router-outlet>
+    <div class="container-3d position-absolute">
 
-    <img src="assets/images/Group.svg" class="Group1" width="304" alt="" draggable="false" />
-    <img src="assets/images/Group2.svg" class="Group2" width="204" alt="" draggable="false" />
-    <img src="assets/images/Group3.svg" class="Group3" width="204" alt="" draggable="false" />
-    <img src="assets/images/Group4.svg" class="Group4" width="134" alt="" draggable="false" />
-    <img src="assets/images/Group5.svg" class="Group5" width="104" alt="" draggable="false" />
-    <img src="assets/images/Group6.svg" class="Group6" width="104" alt="" draggable="false" />
+        <img src="assets/images/Group.svg" class="Group1" width="304" alt="" draggable="false" />
+        <img src="assets/images/Group2.svg" class="Group2" width="204" alt="" draggable="false" />
+        <img src="assets/images/Group3.svg" class="Group3" width="204" alt="" draggable="false" />
+        <img src="assets/images/Group4.svg" class="Group4" width="134" alt="" draggable="false" />
+        <img src="assets/images/Group5.svg" class="Group5" width="104" alt="" draggable="false" />
+        <img src="assets/images/Group6.svg" class="Group6" width="104" alt="" draggable="false" />
+    </div>
 </section>

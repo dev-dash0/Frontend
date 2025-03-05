@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -40,6 +41,7 @@ export class SignupComponent {
   private readonly _AuthService = inject(AuthService);
   private readonly _FormBuilder = inject(FormBuilder);
   private readonly _Router = inject(Router);
+  private readonly toastr = inject(ToastrService);
 
   registerForm: FormGroup = this._FormBuilder.group(
     {
@@ -57,8 +59,7 @@ export class SignupComponent {
   sendData() {
     this.isBtnSubmit = true;
     if (this.registerForm.valid) {
-      // console.log(this.register);
-      // console.log(this.register.value);   دي كدا ال هبعتهل للباك اند
+
       this._AuthService.Register(this.registerForm.value).subscribe({
         next: (res) => {
           console.log(res);
@@ -69,21 +70,58 @@ export class SignupComponent {
         },
         error: (err) => {
           console.log(err);
+          console.log(this.registerForm.value);
           console.log(err.error.message);
           this.errorMessage = err.error.message;
-          this.isBtnSubmit = false;
-          // console.log(this.isBtnSubmit);
+          this.showError(this.errorMessage);
+
         },
       });
-    } else {
-      console.log(this.registerForm.errors);
+    }
+    else if (this.registerForm.get('password')?.invalid && this.registerForm.get('email')?.valid) {
+      this.showError('Invalid Password');
+
+    }
+    else if (this.registerForm.get('password')?.valid && this.registerForm.get('email')?.invalid) {
+      this.showError('Invalid email');
+
+    }
+    else if (this.registerForm.get('birthday')?.invalid) {
+      this.showError('Invalid birthday');
+    }
+    else {
+      // console.log(this.registerForm.errors);
+      // console.log(this.registerForm.value);
+      this.showError('Please fill all the fields');
       // this.register.get('rePassword')?.setValue("")
-      // this.register.markAllAsTouched()
-      // ^^^^ when u cant use disabled and whnt when click the submit btn all the alerts appears
+      this.registerForm.markAllAsTouched()
     }
   }
 
-  // onSubmit(event: Event): void {
-  // event.preventDefault();
-  // }
+  onSubmit(event: Event): void {
+    event.preventDefault();
+  }
+
+  showError(err: string) {
+    this.toastr.error(
+      err,
+      'Error Message',
+      {
+        toastClass: 'toast-pink',
+        timeOut: 5000,
+        closeButton: true,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+      }
+    );
+  }
+
+  onDateChange(event: any) {
+    if (event.value) {
+      const date = new Date(event.value);
+      const formattedDate = date.toISOString().split('T')[0]; // Converts to YYYY-MM-DD
+      this.registerForm.patchValue({ birthday: formattedDate });
+    }
+  }
+
 }

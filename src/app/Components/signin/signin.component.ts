@@ -9,6 +9,7 @@ import { Router, RouterEvent, RouterLink } from '@angular/router';
 import { AuthService } from '../../Core/Services/Auth.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { signupValidators } from '../../Shared/validators/validators.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-signin',
@@ -32,10 +33,14 @@ export class SigninComponent {
   private readonly _AuthService = inject(AuthService);
   private readonly _FormBuilder = inject(FormBuilder);
   private readonly _Router = inject(Router);
+  private readonly toastr = inject(ToastrService);
+
   loginForm: FormGroup = this._FormBuilder.group({
     email: [null, signupValidators.email],
     password: [null, signupValidators.password],
   });
+
+
   sendData() {
     this.isBtnSubmit = true;
     if (this.loginForm.valid) {
@@ -43,19 +48,43 @@ export class SigninComponent {
         next: (res) => {
           console.log(res);
           this._Router.navigate(['/MyDashboard']);
-          this.isBtnSubmit = false;
           localStorage.setItem('token', res.accessToken);
-          // this._AuthService.saveUserData();
-          // }
+
         },
         error: (err) => {
           this.errorMessage = err.error.message;
           console.log(this.errorMessage);
+          this.showError(this.errorMessage + " (Email or Password is incorrect)");
         },
       });
+    }
+    else if (this.loginForm.get('password')?.invalid && this.loginForm.get('email')?.valid) {
+      this.showError('Invalid Password');
+
+    }
+    else if (this.loginForm.get('password')?.valid && this.loginForm.get('email')?.invalid) {
+      this.showError('Invalid email');
+
+    }
+    else {
+      this.showError('Please fill all the fields');
     }
   }
   onSubmit(event: Event): void {
     event.preventDefault();
+  }
+
+  showError(err: string) {
+    this.toastr.error(
+      err,
+      'Error Message',
+      {
+        toastClass: 'toast-pink',
+        timeOut: 5000,
+        closeButton: true,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+      }
+    );
   }
 }
