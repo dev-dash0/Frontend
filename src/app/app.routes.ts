@@ -12,8 +12,11 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { isLoggedInGuardGuard } from './Core/guards/is-logged-in-guard.guard';
 import { SprintViewComponent } from './Components/sprint-view/sprint-view.component';
+import { WelcomePageComponent } from './Components/welcome-page/welcome-page.component';
 
 export const routes: Routes = [
+  { path: 'welcome', component: WelcomePageComponent, title: 'Welcome' },
+  { path: '', redirectTo: 'welcome', pathMatch: 'full' },
   {
     path: '',
     component: AuthLayoutComponent,

@@ -15,6 +15,7 @@ import { DashboardComponent } from "./Components/dashboard/dashboard.component";
 import { SigninComponent } from "./Components/signin/signin.component";
 import { SignupComponent } from "./Components/signup/signup.component";
 import { UpdateInfoComponent } from './Components/update-info/update-info.component';
+import { WelcomePageComponent } from "./Components/welcome-page/welcome-page.component";
 
 @Component({
   selector: 'app-root',
@@ -30,8 +31,9 @@ import { UpdateInfoComponent } from './Components/update-info/update-info.compon
     DashboardTestComponent,
     DashboardComponent,
     SigninComponent,
-    SignupComponent
-  ],
+    SignupComponent,
+    WelcomePageComponent
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
