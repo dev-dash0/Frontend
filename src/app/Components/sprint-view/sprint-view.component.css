@@ -1,0 +1,193 @@
+hr {
+  margin: 0.75rem 0 !important;
+  color: var(--lightGrayColor);
+}
+
+button {
+  background: var(--lightPinkGradient);
+  color: var(--mainLightBlueColor);
+  font-weight: var(--middleFontWeight);
+  border: none;
+}
+
+button:hover,
+button:focus {
+  color: var(--mainLightBlueColor) !important;
+}
+
+h2 {
+  font-family: var(--headerFontFamily);
+}
+
+h5 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.sprint-data {
+  display: flex;
+  align-items: center;
+}
+
+h5 span {
+  margin-left: 7px;
+}
+
+h5 p {
+  font-size: var(--smallFontSize);
+  color: var(--lightGrayColor);
+  font-weight: var(--middleFontWeight);
+}
+
+.profile p,
+.contact p {
+  color: var(--lightGrayColor);
+  font-weight: var(--middleFontWeight);
+}
+
+.profile,
+.email,
+.linkedIn,
+.whatsapp,
+.issue-header,
+.issue-header h2,
+.issue-header button,
+.tag-name,
+.issue-name-date,
+.options-imgs {
+  display: flex;
+  align-items: center;
+}
+
+.issue-header,
+.issue-name-date,
+.button-options {
+  justify-content: space-between;
+}
+
+.tag-name,
+.options-imgs {
+  justify-content: center;
+}
+
+.backlog-wrapper {
+  border: 2px #ffc107 solid;
+}
+
+.todo-wrapper {
+  border: 2px var(--brightBlueColor) solid;
+}
+
+.completed-wrapper {
+  border: 2px var(--brightGreenColor) solid;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 0 var(--standardRoundness) var(--standardRoundness)
+    var(--standardRoundness);
+  padding: var(--standardPadding);
+  position: relative;
+}
+
+.tag-box {
+  position: relative;
+  width: 180px;
+  height: 50px;
+  padding: 0.7rem;
+  border-bottom: 0px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--standardRoundness) var(--standardRoundness) 0 0;
+}
+
+.tag-box p {
+  width: 100%;
+  margin: 0 0 0 5px;
+  padding: 0;
+  font-weight: var(--middleFontWeight);
+  font-size: var(--middleFontSize);
+}
+
+.tag-box span {
+  padding: 0.1rem 0.5rem;
+  border-radius: 0.2rem;
+  color: var(--secondStandardBlueColor);
+  font-weight: var(--middleFontWeight);
+}
+
+.backlog-span {
+  background-color: #ffc107;
+}
+
+.backlog-tag {
+  border: 2px #ffc107 solid;
+}
+
+.todo-tag {
+  border: 2px var(--brightBlueColor) solid;
+}
+
+.todo-span {
+  background-color: var(--brightBlueColor);
+}
+
+.completed-tag {
+  border: 2px var(--brightGreenColor) solid;
+}
+
+.completed-span {
+  background-color: var(--brightGreenColor);
+}
+
+.wrapper .card {
+  background: var(--issueGradient);
+  border: none;
+}
+
+.wrapper .card::before {
+  background: none;
+  border: none;
+}
+
+.field-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  padding: var(--standardPadding) var(--standardPadding / 2);
+  background-color: var(--importantPinkColor);
+  border-radius: 0.3rem;
+}
+
+.field-tag p {
+  font-weight: var(--middleFontWeight);
+  font-size: var(--middleFontSize);
+}
+
+.tag-name p {
+  padding: 0px 6px !important;
+}
+
+.issue-name-date p,
+.issue-description p {
+  color: var(--lightGrayColor);
+}
+
+.options-imgs {
+  margin-bottom: 7px;
+}
+
+.header {
+  text-align: center;
+}

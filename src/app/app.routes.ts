@@ -11,35 +11,62 @@ import { ProjectViewComponent } from './Components/project-view/project-view.com
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { isLoggedInGuardGuard } from './Core/guards/is-logged-in-guard.guard';
+import { SprintViewComponent } from './Components/sprint-view/sprint-view.component';
 
 export const routes: Routes = [
   {
-    path: '', component: AuthLayoutComponent,
+    path: '',
+    component: AuthLayoutComponent,
     canActivate: [isLoggedInGuardGuard],
-    children:
-      [
-        { path: '', redirectTo: 'signin', pathMatch: 'full' },
-        { path: 'signin', component: SigninComponent, title: 'Sign in to Dev Dash' },
-        { path: 'signup', component: SignupComponent, title: 'Sign up to Dev Dash' },
-        { path: 'forgetPassword', component: ForgetPasswordComponent, title: 'Forget Password' }
-      ]
+    children: [
+      { path: '', redirectTo: 'signin', pathMatch: 'full' },
+      {
+        path: 'signin',
+        component: SigninComponent,
+        title: 'Sign in to Dev Dash',
+      },
+      {
+        path: 'signup',
+        component: SignupComponent,
+        title: 'Sign up to Dev Dash',
+      },
+      {
+        path: 'forgetPassword',
+        component: ForgetPasswordComponent,
+        title: 'Forget Password',
+      },
+    ],
   },
   {
-    path: '', component: MainLayoutComponent,
+    path: '',
+    component: MainLayoutComponent,
     canActivate: [authGuardGuard],
-    children:
-      [
-        {
-          path: 'MyDashboard', component: MyDashboardComponent, title: 'My Dashboard',
-          children:
-            [
-              { path: '', component: DashboardComponent, pathMatch: 'full', title: 'Dashboard' },
-              { path: 'Dashboard', component: DashboardComponent, title: 'Dashboard' },
-              { path: 'Project', component: ProjectViewComponent, title: 'Project' },
-              { path: 'Setting', component: SettingComponent, title: 'Settings' },
-            ],
-        },
-      ]
-  }
-
+    children: [
+      {
+        path: 'MyDashboard',
+        component: MyDashboardComponent,
+        title: 'My Dashboard',
+        children: [
+          {
+            path: '',
+            component: DashboardComponent,
+            pathMatch: 'full',
+            title: 'Dashboard',
+          },
+          {
+            path: 'Dashboard',
+            component: DashboardComponent,
+            title: 'Dashboard',
+          },
+          {
+            path: 'Project',
+            component: ProjectViewComponent,
+            title: 'Project',
+          },
+          { path: 'Setting', component: SettingComponent, title: 'Settings' },
+          { path: 'Sprint', component: SprintViewComponent, title: 'Sprint' },
+        ],
+      },
+    ],
+  },
 ];
