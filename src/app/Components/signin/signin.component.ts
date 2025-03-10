@@ -20,7 +20,6 @@ import { ToastrService } from 'ngx-toastr';
     MatButtonModule,
     MatDividerModule,
     MatIconModule,
-    SigninSignupNavbarComponent,
     RouterLink,
     ReactiveFormsModule,
   ],
@@ -40,7 +39,6 @@ export class SigninComponent {
     password: [null, signupValidators.password],
   });
 
-
   sendData() {
     this.isBtnSubmit = true;
     if (this.loginForm.valid) {
@@ -49,24 +47,27 @@ export class SigninComponent {
           console.log(res);
           this._Router.navigate(['/MyDashboard']);
           localStorage.setItem('token', res.accessToken);
-
+          localStorage.setItem('refreshToken', res.refreshToken);
         },
         error: (err) => {
           this.errorMessage = err.error.message;
           console.log(this.errorMessage);
-          this.showError(this.errorMessage + " (Email or Password is incorrect)");
+          this.showError(
+            this.errorMessage + ' (Email or Password is incorrect)'
+          );
         },
       });
-    }
-    else if (this.loginForm.get('password')?.invalid && this.loginForm.get('email')?.valid) {
+    } else if (
+      this.loginForm.get('password')?.invalid &&
+      this.loginForm.get('email')?.valid
+    ) {
       this.showError('Invalid Password');
-
-    }
-    else if (this.loginForm.get('password')?.valid && this.loginForm.get('email')?.invalid) {
+    } else if (
+      this.loginForm.get('password')?.valid &&
+      this.loginForm.get('email')?.invalid
+    ) {
       this.showError('Invalid email');
-
-    }
-    else {
+    } else {
       this.showError('Please fill all the fields');
     }
   }
@@ -75,16 +76,12 @@ export class SigninComponent {
   }
 
   showError(err: string) {
-    this.toastr.error(
-      err,
-      'Error Message',
-      {
-        toastClass: 'toast-pink',
-        timeOut: 5000,
-        closeButton: true,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-      }
-    );
+    this.toastr.error(err, 'Error Message', {
+      toastClass: 'toast-pink',
+      timeOut: 5000,
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+    });
   }
 }
