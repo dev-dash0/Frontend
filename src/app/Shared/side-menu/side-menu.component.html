@@ -115,7 +115,9 @@
                           <span
                             ><i class="fa-regular fa-circle fa-2xs"></i
                           ></span>
-                          <p class="ps-2 m-0">Team 1</p>
+                          <p class="ps-2 m-0" routerLink="/MyDashboard/Sprint">
+                            Sprint 1
+                          </p>
                         </div>
                         <div
                           class="team d-flex align-items-center justify-content-start"
@@ -123,13 +125,17 @@
                           <span
                             ><i class="fa-regular fa-circle fa-2xs"></i
                           ></span>
-                          <p class="ps-2 m-0">Team 2</p>
+                          <p class="ps-2 m-0" routerLink="/MyDashboard/Sprint">
+                            Sprint 2
+                          </p>
                         </div>
                         <div
-                          class="team add-team d-flex align-items-center justify-content-start"
+                          class="sprint add-sprint d-flex align-items-center justify-content-start"
                         >
                           <span><i class="fa-solid fa-plus fa-xs"></i></span>
-                          <p class="ps-2 m-0">Create Team</p>
+                          <p class="ps-2 m-0" (click)="openSprint()">
+                            Create Sprint
+                          </p>
                         </div>
                       </div>
                       <div
@@ -197,7 +203,9 @@
                           <span
                             ><i class="fa-regular fa-circle fa-2xs"></i
                           ></span>
-                          <p class="ps-2 m-0">Team 1</p>
+                          <p class="ps-2 m-0" routerLink="/MyDashboard/Sprint">
+                            Sprint 1
+                          </p>
                         </div>
                         <div
                           class="team d-flex align-items-center justify-content-start"
@@ -205,13 +213,17 @@
                           <span
                             ><i class="fa-regular fa-circle fa-2xs"></i
                           ></span>
-                          <p class="ps-2 m-0">Team 2</p>
+                          <p class="ps-2 m-0" routerLink="/MyDashboard/Sprint">
+                            Sprint 2
+                          </p>
                         </div>
                         <div
-                          class="team add-team d-flex align-items-center justify-content-start"
+                          class="sprint add-sprint d-flex align-items-center justify-content-start"
                         >
                           <span><i class="fa-solid fa-plus fa-xs"></i></span>
-                          <p class="ps-2 m-0">Create team</p>
+                          <p class="ps-2 m-0" (click)="openSprint()">
+                            Create Sprint
+                          </p>
                         </div>
                       </div>
                       <div
@@ -283,7 +295,7 @@
                   </div>
                   <div
                     (click)="openDialog()"
-                    class="team add-team d-flex align-items-center justify-content-start"
+                    class="sprint add-sprint d-flex align-items-center justify-content-start"
                   >
                     <span><i class="fa-solid fa-plus fa-xs"></i></span>
                     <p class="ps-2 m-0">Add Issue</p>

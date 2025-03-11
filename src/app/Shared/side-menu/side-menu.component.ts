@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProjectModalComponent } from '../../Components/project-modal/project-modal.component';
 import { IssueModalComponent } from '../../Components/issue-modal/issue-modal.component';
 import { AddCompanyModalComponent } from '../../Components/company-modal/company-modal.component';
+import { SprintModalComponent } from '../../Components/sprint-modal/sprint-modal.component';
 
 @Component({
   selector: 'app-side-menu',
@@ -85,6 +86,21 @@ export class SideMenuComponent {
       panelClass: 'custom-dialog-container', // Custom class for styling
       disableClose: true,
       data: { message: 'Hello from modal!' }, // ✅ Pass data to modal
+    });
+  }
+
+  // <!----- Sprint Modal ------>
+
+  openSprint() {
+    this.dialog.open(SprintModalComponent, {
+      width: 'auto',
+      minWidth: '50vw',
+      maxWidth: '80vw',
+      minHeight: '70vh',
+      maxHeight: '90vh',
+      panelClass: 'custom-dialog-container',
+      disableClose: true,
+      data: { message: 'Hello from modal!' },
     });
   }
 }

@@ -1,0 +1,397 @@
+/* dev-dash.component.scss */
+/* .welcome-container {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #0d0d0d;
+  overflow: hidden;
+  color: white;
+  text-align: center;
+}
+
+  .animated-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(-45deg, #0d0d0d, #222, #0d0d0d, #111);
+    background-size: 400% 400%;
+    animation: gradientAnimation 10s ease infinite;
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .logo {
+    width: 120px;
+    filter: drop-shadow(0 0 10px cyan);
+    animation: pulse 2s infinite alternate;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: cyan;
+    text-shadow: 0 0 15px cyan;
+  }
+
+  p {
+    font-size: 1.2rem;
+    color: #ccc;
+  }
+
+
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+} */
+
+
+/* ////////////////////////////////////////////////// */
+
+/* .welcome-container {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #0d0d0d;
+  overflow: hidden;
+  color: white;
+  text-align: center;
+}
+
+.animated-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(-45deg, #0d0d0d, #222, #0d0d0d, #111);
+  background-size: 400% 400%;
+  animation: gradientAnimation 10s ease infinite;
+}
+
+.decorations .blueWave {
+  position: absolute;
+  width: 300px;
+  height: 200px;
+  background: linear-gradient(90deg, #ff00ff, #0f0083);
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.6;
+  animation: float 6s infinite alternate ease-in-out;
+}
+
+.decorations .orgWave {
+  position: absolute;
+  width: 300px;
+  height: 200px;
+  background: linear-gradient(90deg, #ff00ff, #ff4500);
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.6;
+  animation: float 6s infinite alternate ease-in-out;
+}
+
+.decorations .yelWave {
+  position: absolute;
+  width: 300px;
+  height: 200px;
+  background: linear-gradient(90deg, #ff00ff, #cabd00);
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.6;
+  animation: float 6s infinite alternate ease-in-out;
+}
+
+.wave1 {
+  top: 35%;
+  left: 10%;
+}
+
+.wave2 {
+  bottom: 20%;
+  right: 15%;
+}
+
+.wave3 {
+  top: 5%;
+  right: -5%;
+}
+
+.wave4 {
+  top: -5%;
+  right: 35%;
+}
+
+.wave5 {
+    bottom: 5%;
+    left: 30%;
+}
+
+.wave6 {
+    bottom: -5%;
+    left: -5%;
+}
+.wave7 {
+    bottom: -5%;
+    right: -5%;
+}
+.wave8 {
+    top: -5%;
+    left: -5%;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  max-width: 400px;
+}
+
+.logo {
+  width: 100px;
+  filter: drop-shadow(0 0 10px cyan);
+  animation: pulse 2s infinite alternate;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: cyan;
+  text-shadow: 0 0 15px cyan;
+}
+
+p {
+  font-size: 1.2rem;
+  color: #ccc;
+}
+
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+}
+
+@keyframes float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-20px); }
+} */
+
+/* ////////////////////////////////////////////////////// */
+
+.welcome-container {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #0d0d0d;
+  overflow: hidden;
+  color: white;
+  text-align: center;
+}
+
+.animated-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(-45deg, #0d0d0d, #222, #0d0d0d, #111);
+  background-size: 400% 400%;
+  animation: gradientAnimation 10s ease infinite;
+}
+
+/* .decorations .wave {
+  position: absolute;
+  width: 300px;
+  height: 200px;
+  background: linear-gradient(90deg, #ff00ff, #ff4500);
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.6;
+  animation: floatSize 6s infinite alternate ease-in-out, floatMove 6s infinite alternate ease-in-out;
+} */
+.decorations .blueWave {
+  position: absolute;
+  width: 500px;
+  height: 400px;
+  background: linear-gradient(90deg, #ff00ff, #0f0083);
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.6;
+  animation: floatSize 18s infinite alternate ease-in-out, floatMove 18s infinite alternate ease-in-out;
+}
+
+.decorations .orgWave {
+  position: absolute;
+  width: 500px;
+  height: 400px;
+  background: linear-gradient(90deg, #ff00ff, #ff4500);
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.6;
+  animation: floatSize 18s infinite alternate ease-in-out, floatMove 18s infinite alternate ease-in-out;
+}
+
+.decorations .yelWave {
+  position: absolute;
+  width: 500px;
+  height: 400px;
+  background: linear-gradient(90deg, #0f0083, #01bd7e);
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.6;
+  animation: floatSize 18s infinite alternate ease-in-out, floatMove 18s infinite alternate ease-in-out;
+}
+
+.wave1 {
+  top: 30%;
+  left: 18%;
+    animation: floatSize 18s infinite alternate ease-in-out, floatMove2 18s infinite alternate ease-in-out !important;
+
+}
+
+.wave2 {
+  bottom: 20%;
+  right: 15%;
+
+}
+
+.wave3 {
+  top: 5%;
+  right: -5%;
+        animation: floatSize 18s infinite alternate ease-in-out, floatMove2 18s infinite alternate ease-in-out !important;
+
+}
+
+.wave4 {
+  top: -5%;
+  right: 35%;
+  
+}
+
+.wave5 {
+    bottom: 2%;
+    left: 34%;
+        animation: floatSize 18s infinite alternate ease-in-out, floatMove2 18s infinite alternate ease-in-out !important;
+
+}
+
+.wave6 {
+    bottom: -5%;
+    left: -5%;
+          animation: floatSize 18s infinite alternate ease-in-out, floatMove2 18s infinite alternate ease-in-out !important;
+
+}
+.wave7 {
+    bottom: -5%;
+    right: -5%;
+        animation: floatSize 18s infinite alternate ease-in-out, floatMove2 18s infinite alternate ease-in-out !important;
+
+}
+.wave8 {
+    top: -5%;
+    left: -5%;
+          animation: floatSize 18s infinite alternate ease-in-out, floatMove2 18s infinite alternate ease-in-out !important;
+
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  max-width: 400px;
+}
+
+.logo {
+  width: 100px;
+  filter: drop-shadow(0 0 10px cyan);
+  animation: pulse 2s infinite alternate;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: cyan;
+  text-shadow: 0 0 15px cyan;
+}
+
+p {
+  font-size: 1.2rem;
+  color: #ccc;
+}
+
+.cta-button {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(90deg, #ff4500, #ff00ff);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px rgba(255, 0, 255, 0.9);
+}
+
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+}
+
+@keyframes floatSize {
+  0% { transform: scale(2); }
+  50% { transform: scale(3); }
+  100% { transform: scale(2); }
+}
+
+@keyframes floatMove {
+  from { transform: translateY(0) , scale(3); }
+  to { transform: translateY(-20px), scale(1.3); }
+}
+
+@keyframes floatMove2 {
+  from { transform: translateY(-20px) , scale(1.5); }
+  to { transform: translateY(0) , scale(1.2); }
+}
