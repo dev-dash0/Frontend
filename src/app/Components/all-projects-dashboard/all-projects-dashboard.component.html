@@ -1,44 +1,44 @@
 <h4 class="mb-4 text-white">Project Overview</h4>
-<div class="row text-center mb-5 g-3 ">
+<div class="row text-center mb-3 g-3 ">
     <div class=" col-sm-6 col-md-3 totalProject d-flex justify-content-center align-items-center flex-column">
         <h5>Total Projects</h5>
         <div class="chart-card d-flex justify-content-center align-items-center">
-            <canvas id="totalProjectsChart"></canvas>
+            <canvas id="totalProjectsChart" #totalProjectsChart></canvas>
             <div class="chart-label">
-                <h3>10</h3>
+                <h3>{{totalProjects}}</h3>
             </div>
         </div>
     </div>
 
-    <!-- Total Completed Issues Chart -->
+    <!-- Total Completed Projects Chart -->
     <div class=" col-sm-6  col-md-3 Completed d-flex justify-content-center align-items-center flex-column">
-        <h5>Total Completed Issues</h5>
+        <h5>Total Completed Projects</h5>
         <div class="chart-card">
-            <canvas id="totalCompletedIssuesChart"></canvas>
+            <canvas id="totalCompletedIssuesChart" #totalCompletedProjectsChart></canvas>
             <div class="chart-label">
-                <h3>30</h3>
+                <h3>{{completedProjects}}</h3>
             </div>
         </div>
     </div>
 
-    <!-- Issues in Progress Chart -->
+    <!-- Projects in Progress Chart -->
     <div class=" col-sm-6  col-md-3 inProgress d-flex justify-content-center align-items-center flex-column">
-        <h5>Total Issues in Progress</h5>
+        <h5>Total Projects in Progress</h5>
         <div class="chart-card">
-            <canvas id="issuesInProgressChart"></canvas>
+            <canvas id="projectsInProgressChart" #projectsInProgressChart></canvas>
             <div class="chart-label">
-                <h3>5</h3>
+                <h3>{{projectsInProgress}}</h3>
             </div>
         </div>
     </div>
 
-    <!-- Issues Overdue Chart -->
+    <!-- Projects Overdue Chart -->
     <div class=" col-sm-6  col-md-3 overdue d-flex justify-content-center align-items-center flex-column">
-        <h5>Total Issues Overdue</h5>
+        <h5>Total Projects Overdue</h5>
         <div class="chart-card">
-            <canvas id="issuesOverdueChart"></canvas>
+            <canvas id="projectsOverdueChart" #projectsOverdueChart></canvas>
             <div class="chart-label">
-                <h3>3</h3>
+                <h3>{{projectsOverdue}}</h3>
             </div>
         </div>
     </div>
@@ -46,10 +46,10 @@
 
 
 <div class="row g-5">
-    <div class="col-sm-12 col-md-8">
+    <div class="col-sm-12 col-md-8 lineChart-Container">
         <canvas id="lineChart " #lineChart></canvas>
     </div>
-    <div class="col-sm-12 col-md-4">
+    <div class="col-sm-12 col-md-4 doughnutChart-container  ">
         <canvas id="doughnutChart" #doughnutChart></canvas>
     </div>
 </div>

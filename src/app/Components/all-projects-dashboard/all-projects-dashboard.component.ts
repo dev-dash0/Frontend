@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, ElementRef, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { DashboardService } from '../../Core/Services/dashboard/dashboard.service';
 
 Chart.register(...registerables)
 
@@ -13,12 +14,25 @@ Chart.register(...registerables)
 })
 export class AllProjectsDashboardComponent {
 
+  completedProjects: any;
+  projectsInProgress: any;
+  totalProjects: any;
+  projectsOverdue: any;
+
+  private readonly _DashboardService = inject(DashboardService);
+
   @ViewChild('doughnutChart') doughnutChart!: ElementRef<HTMLCanvasElement>;
   @ViewChild('lineChart') lineChart!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('totalProjectsChart') totalProjectsChart!: ElementRef;
+  @ViewChild('totalCompletedProjectsChart') totalCompletedProjectsChart!: ElementRef;
+  @ViewChild('projectsInProgressChart') projectsInProgressChart!: ElementRef;
+  @ViewChild('projectsOverdueChart') projectsOverdueChart!: ElementRef;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    this.getTenantDashboard(8);
 
-  ngAfterViewInit(): void {
+  }
+  initCharts() {
     if (isPlatformBrowser(this.platformId)) {
       this.initLineChart();
       this.initDoughnutChart();
@@ -26,7 +40,30 @@ export class AllProjectsDashboardComponent {
     }
   }
 
+  getTenantDashboard(tenentId: number) {
+    this._DashboardService.getDashboardData(tenentId).subscribe(
+      {
+        next: (res) => {
+          console.log(res);
+          this.completedProjects = res.result.completedProjects
+          this.projectsInProgress = res.result.projectsInProgress
+          this.totalProjects = res.result.totalProjects
+          this.projectsOverdue = res.result.projectsOverdue
 
+          this.initCharts();
+        },
+        error: (err) => {
+          console.log(err);
+          console.error(err);
+        },
+      }
+
+    );
+
+  }
+
+  // ///////////////////////////////////////////////////////
+  // ////////////////Charts Implementation///////////////
   initLineChart() {
     const ctx_line = this.lineChart.nativeElement.getContext('2d');
     const gradient_purple = ctx_line!.createLinearGradient(150, 350, 50, 150);
@@ -72,7 +109,7 @@ export class AllProjectsDashboardComponent {
         },
         options: {
           responsive: true, // Ensures the chart resizes with the window
-          maintainAspectRatio: true, // Maintains the aspect ratio (default: true)
+          maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
           plugins: {
             legend: {
               display: false,
@@ -157,14 +194,13 @@ export class AllProjectsDashboardComponent {
         },
         options: {
           responsive: true, // Ensures the chart resizes with the window
-          maintainAspectRatio: true, // Maintains the aspect ratio (default: true)
+          maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
           cutout: '55%',
           plugins: {
             legend: {
               display: false, // Optional: Hide legend
             },
           },
-
         }
       }
     )
@@ -176,7 +212,7 @@ export class AllProjectsDashboardComponent {
   initSmallCharts() {
 
     // Total Projects Chart
-    new Chart('totalProjectsChart', {
+    new Chart(this.totalProjectsChart.nativeElement.getContext('2d'), {
       type: 'doughnut',
       data: {
         datasets: [
@@ -203,7 +239,7 @@ export class AllProjectsDashboardComponent {
       },
       options: {
         responsive: true, // Ensures the chart resizes with the window
-        maintainAspectRatio: true, // Maintains the aspect ratio (default: true)
+        maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
         cutout: '80%',
         plugins: {
           tooltip: { enabled: false },
@@ -213,12 +249,12 @@ export class AllProjectsDashboardComponent {
     });
 
     // Total Completed Issues Chart
-    new Chart('totalCompletedIssuesChart', {
+    new Chart(this.totalCompletedProjectsChart.nativeElement.getContext('2d'), {
       type: 'doughnut',
       data: {
         datasets: [
           {
-            data: [30, 20],
+            data: [this.completedProjects, this.totalProjects],
             backgroundColor:
               function (context) {
                 const chart = context.chart;
@@ -231,7 +267,6 @@ export class AllProjectsDashboardComponent {
                 } else {
                   return '#F5F5F5';  // Solid color for the second slice
                 }
-
               }
             ,
             borderWidth: 0
@@ -250,12 +285,12 @@ export class AllProjectsDashboardComponent {
     });
 
     // Total Issues in Progress Chart
-    new Chart('issuesInProgressChart', {
+    new Chart(this.projectsInProgressChart.nativeElement.getContext('2d'), {
       type: 'doughnut',
       data: {
         datasets: [
           {
-            data: [12, 5],
+            data: [this.projectsInProgress, this.totalProjects],
             backgroundColor:
               function (context) {
                 const chart = context.chart;
@@ -288,12 +323,12 @@ export class AllProjectsDashboardComponent {
     });
 
     // Total Issues Overdue Chart
-    new Chart('issuesOverdueChart', {
+    new Chart(this.projectsOverdueChart.nativeElement.getContext('2d'), {
       type: 'doughnut',
       data: {
         datasets: [
           {
-            data: [9, 3],
+            data: [this.projectsOverdue, this.totalProjects],
             backgroundColor:
               function (context) {
                 const chart = context.chart;
