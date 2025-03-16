@@ -1,0 +1,18 @@
+<ul>
+    @for (node of nodes; track node) {
+    <li>
+        <span (click)="toggle(node)">
+            <!-- {{ node.name }} {{ node.expanded ? '▼' : '▶' }} -->
+            <i class="fa-solid fa-xs" [ngClass]="node.expanded ? 'fa-chevron-down' : 'fa-chevron-right'"
+                style="margin-right: 5px;">
+            </i>
+            {{ node.name }}
+        </span>
+        @if (node.children?.length) {
+        <div [@expandCollapse]="node.expanded ? 'expanded' : 'collapsed'" class="children-container">
+            <app-tree [nodes]="node.children??[]"></app-tree>
+        </div>
+        }
+    </li>
+    }
+</ul>

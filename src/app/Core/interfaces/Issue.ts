@@ -1,0 +1,15 @@
+export interface Issue {
+    // id: number;
+    title: string;
+    description: string;
+    // projectCode: string;
+    startDate: string;
+    deadline: string;
+    deliveredDate: Date;
+    lastUpdate: Date;
+    type: string;
+    priority: string;
+    status: string;
+    projectName: string;
+
+}

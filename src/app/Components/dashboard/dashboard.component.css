@@ -1,84 +1,3 @@
-/* .BG { */
-/* background: var(--mainBackgroundGradient); */
-/* min-height: 100vh; */
-/* overflow: hidden; */
-/* display: flex; */
-/* flex-wrap: wrap; */
-/* justify-content: center; */
-/* align-items: center; */
-/* flex-direction: column; */
-/* } */
-
-/* .cards {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  flex-wrap: wrap;
-  /* width: 85%;
-} */
-
-/* .card {
-  color: #fff;
-  border-radius: 15px;
-  padding: 20px;
-  margin: 20px auto;
-  /* width: 45%;
-  min-height: 300px;
-  text-align: left;
-
-  box-shadow: 5px 5px 12px 5px rgba(0, 0, 0, 0.25);
-  border-style: 1px solid;
-  border-radius: 15px;
-  border-image-source: linear-gradient(
-    123deg,
-    #3a4962 1%,
-    #ff90e97c 43%,
-    #74caff76 70%,
-    #292f65 91%
-  );
-  border-image-slice: 1;
-} */
-
-/* Sidebar Default (Closed) */
-/* .side-bar {
-  width: 60px;
-  transition: width 0.3s ease-in-out;
-}
-
-/* Sidebar Expanded 
-.side-bar.open {
-  max-width: 200px;
-} */
-
-/* Cards Default */
-/* .BG {
-  transition: width 0.3s ease-in-out;
-  width: calc(100% - 60px);
-}
-
-.BG.shrink {
-  width: calc(100% - 200px);
-} */
-
-/* .BG { */
-/* transition: all 0.3s ease-in-out;
-  margin-left: 0px; */
-/* Default width when sidebar is open */
-/* margin-left: 200px; */
-/* Shift to the right when sidebar is open */
-/* } */
-
-/* Shrink Cards and Move to Right when Sidebar is Collapsed */
-/* .BG.shrink { */
-/* margin-left: 60px;
-  width: calc(100% + 60px); */
-/* width: calc(100% + 60px); */
-/* Sidebar collapsed width */
-/* margin-right: 60px; */
-/* Shift less when sidebar is collapsed */
-/* } */
-
 .BG {
   transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
   transform: translateX(0px);
@@ -90,62 +9,8 @@
   width: calc(100% + 100px);
   margin-left: -100px;
 }
-/* Sidebar Toggle Button */
-/* .toggle-btn {
-  position: absolute;
-  top: 20px;
-  left: 70px;
-  background-color: #222;
-  color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  transition: left 0.3s ease-in-out;
-} */
-
-/* Move Button when Sidebar Expands */
-/* .side-bar.open + .toggle-btn {
-  left: 210px;
-} */
-
-/* /////////////////////////////////////// */
-/* .container-fluid {
-  display: grid;
-  grid-template-columns: 1fr 0.6fr 1.4fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 0.4fr 1.6fr 1fr 1fr 1fr 1fr 1fr;
-  gap: 0px 0px;
-  grid-auto-flow: row;
-  grid-template-areas:
-    "side-bar side-bar . search-bar search-bar search-bar search-bar search-bar search-bar ."
-    "side-bar side-bar dashboard dashboard dashboard dashboard dashboard dashboard dashboard dashboard"
-    "side-bar side-bar dashboard dashboard dashboard dashboard dashboard dashboard dashboard dashboard"
-    "side-bar side-bar dashboard dashboard dashboard dashboard dashboard dashboard dashboard dashboard"
-    "side-bar side-bar dashboard dashboard dashboard dashboard dashboard dashboard dashboard dashboard"
-    "side-bar side-bar dashboard dashboard dashboard dashboard dashboard dashboard dashboard dashboard"
-    "side-bar side-bar dashboard dashboard dashboard dashboard dashboard dashboard dashboard dashboard";
-}
 
 
-.side-barr {
-  grid-area: side-bar;
-}
-
-.search-barr {
-  grid-area: search-bar;
-}
-
-.dashboard {
-  grid-area: dashboard;
-} */
-
-/* .container-fluid {
-  display: flex;
-  /* min-height: 100vh;
-} */
-
-/* .container-fluid {
-  overflow-x: hidden;
-} */
 .headTitle {
   display: flex;
   align-items: center;
@@ -156,24 +21,25 @@
   font-family: var(--headerFontFamily);
 }
 
-ul {
+.card-sub-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding-inline: 1rem;
+}
+
+/* ul {
   padding-left: 3rem;
   padding-right: 3rem;
-}
+} */
 
 li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  list-style: none;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
 }
-
-/* .side-bar {
-  width: 60px;
-  transition: width 0.3s ease-in-out;
-    width: 250px;
-} */
 
 .main-container {
   flex: 1;

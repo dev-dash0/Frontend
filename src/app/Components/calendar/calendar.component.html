@@ -1,51 +1,41 @@
 <div class="calendar-container">
   <div class="calendar-header">
     <button (click)="prevMonth()">
-      <img
-        src="assets/images/dashboard icons/Back To.svg"
-        alt="Pervious arrow"
-        width="65%"
-      />
+      <img src="assets/images/dashboard icons/Back To.svg" alt="Pervious arrow" width="65%" />
     </button>
     <div class="month-title">
       <h4>{{ currentMonth }} {{ currentYear }}</h4>
     </div>
     <button (click)="nextMonth()">
-      <img
-        src="assets/images/dashboard icons/Next page.svg"
-        alt="Next arrow"
-        width="65%"
-      />
+      <img src="assets/images/dashboard icons/Next page.svg" alt="Next arrow" width="65%" />
     </button>
+
+
   </div>
+  <!-- Selectable Weekdays -->
   <div class="calendar-days">
-    <span
-      *ngFor="let day of days; let i = index"
-      [class.active]="i === currentDayIndex - 1"
-      class="day"
-      >{{ day }}</span
-    >
+    <span *ngFor="let day of days; let i = index" (click)="selectDay(i)" [class.active]="i === currentDayIndex - 1"
+      class="day-label">
+      {{ day}}</span>
   </div>
   <div class="calendar-body">
-    <div
-      class="day"
-      *ngFor="let date of dates"
-      [ngClass]="{ active: date === selectedDate }"
-      (click)="selectDate(date)"
-    >
-      {{ date }}
+    <div *ngFor="let date of dates">
+      <div class="day" *ngIf="date !== null" (click)="selectDate(date)"
+        [ngClass]="{ active: selectedDate === (currentYear + '-' + (currentDate.getMonth()+ 1 | number:'2.0-0') + '-' + (date | number:'2.0-0')) }">
+        {{ date }}
+      </div>
+      <div class="empty-slot" *ngIf="date === null"></div>
     </div>
   </div>
+
+  <!-- Issues List -->
   <div class="issues-list">
-    <div
-      *ngFor="let issue of issues"
-      class="issue-card d-flex justify-content-between align-items-center px-4"
-    >
+    <div *ngFor="let issue of filteredIssues" class="issue-card d-flex justify-content-between align-items-center px-4">
       <div class="issuePlace">
         <h3>{{ issue.title }}</h3>
-        <p>{{ issue.project }} | {{ issue.team }}</p>
+        <p>{{ issue.projectName }} | {{ issue.tenantName }}</p>
       </div>
-      <p>{{ issue.dates }}</p>
+      <p>{{ issue.startDate | date: 'EEE d' }} - {{ issue.deadline | date: 'EEE d' }}</p>
     </div>
   </div>
 </div>

@@ -1,5 +1,6 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { DashboardService } from '../../Core/Services/dashboard/dashboard.service';
 
 @Component({
   selector: 'app-calendar',
@@ -8,85 +9,100 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css',
 })
-export class CalendarComponent implements OnInit {
-  days: string[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+export class CalendarComponent {
+  days: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   dates: number[] = [];
   currentMonth: string = '';
   currentYear: number = new Date().getFullYear();
-  selectedDate: number | null = null;
+  currentDate: Date = new Date();
+  currentDayIndex: number = this.currentDate.getDay(); // 0 (Sunday) - 6 (Saturday)
 
-  currentDate: Date = new Date(); // Get the current date
-  currentDayIndex: number = this.currentDate.getDay(); // Get the index of the current day (0 = Sunday, 6 = Saturday)
-  // monthName: string = this.currentDate.toLocaleString('default', {
-  //   month: 'long',
-  // });
+  issues: any[] = [];
+  calendarData: any[] = [];
+  selectedDate: any; // Will store date as YYYY-MM-DD
+  filteredIssues: any[] = [];
 
-  issues = [
-    {
-      title: 'Issue 1',
-      project: 'Project 1',
-      team: 'Team 1',
-      dates: 'Wed 7 - Sat 10',
-    },
-    {
-      title: 'Issue 2',
-      project: 'Project 2',
-      team: 'Team 2',
-      dates: 'Wed 7 - Mon 12',
-    },
-  ];
+  private readonly _DashboardService = inject(DashboardService);
 
-  private months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
 
   ngOnInit(): void {
-    const today = new Date();
-    this.currentMonth = this.months[today.getMonth()];
-    this.generateCalendar(today.getMonth(), this.currentYear);
-    this.selectDate(this.currentDate.getDate());
+    this.currentMonth = this.currentDate.toLocaleString('default', { month: 'long' });
+    this.currentYear = this.currentDate.getFullYear();
+    this.selectedDate = this.formatDate(this.currentDate); // Set today's date as default
+    this.generateCalendarDays(this.currentDate.getMonth(), this.currentYear);
+    this.fetchCalendarData();
+
   }
 
-  generateCalendar(month: number, year: number): void {
-    this.dates = Array.from({ length: 31 }, (_, i) => i + 1).slice(
-      0,
-      new Date(year, month + 1, 0).getDate()
+
+  // Generate calendar dates for the current month
+  generateCalendarDays(month: number, year: number) {
+    const firstDayOfMonth = new Date(year, month, 1).getDay(); // Get first day index (0 = Sunday)
+    const lastDay = new Date(year, month + 1, 0).getDate(); // Get last date of the month
+
+    // Adjust for week starting on Monday (Make Sunday 7 instead of 0)
+    const adjustedFirstDay = firstDayOfMonth === 0 ? 7 : firstDayOfMonth;
+
+    // Create an array with empty slots + actual dates
+    this.dates = Array(adjustedFirstDay).fill(null).concat(
+      Array.from({ length: lastDay }, (_, i) => i + 1)
     );
-    this.currentMonth = this.months[month];
   }
 
-  prevMonth(): void {
-    const monthIndex = this.months.indexOf(this.currentMonth) - 1;
-    if (monthIndex < 0) {
-      this.currentYear -= 1;
-      this.generateCalendar(11, this.currentYear);
-    } else {
-      this.generateCalendar(monthIndex, this.currentYear);
-    }
+  // Fetch issues from the API
+  fetchCalendarData() {
+    this._DashboardService.getDashboardCalender().subscribe({
+      next: (res) => {
+        if (res.isSuccess) {
+          console.log(res);
+          this.calendarData = res.result;
+          this.updateFilteredIssues(); // Ensure today's issues are displayed by default
+        }
+      },
+      error: (err) => console.error('Error fetching calendar data', err),
+    });
   }
 
-  nextMonth(): void {
-    const monthIndex = this.months.indexOf(this.currentMonth) + 1;
-    if (monthIndex > 11) {
-      this.currentYear += 1;
-      this.generateCalendar(0, this.currentYear);
-    } else {
-      this.generateCalendar(monthIndex, this.currentYear);
-    }
+  // Update displayed issues based on the selected date
+  updateFilteredIssues() {
+    const foundData = this.calendarData.find(item => item.date === this.selectedDate);
+    this.filteredIssues = foundData ? foundData.issues : [];
   }
 
-  selectDate(date: number): void {
-    this.selectedDate = date;
+  // Select a date and filter issues
+  selectDate(date: number) {
+    const formattedDate = `${this.currentYear}-${String(this.currentDate.getMonth() + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+    this.selectedDate = formattedDate;
+    this.updateFilteredIssues();
+  }
+
+  // Select a weekday and filter issues
+  selectDay(dayIndex: number) {
+    const today = new Date();
+    const selectedDay = new Date();
+    selectedDay.setDate(today.getDate() - today.getDay() + dayIndex); // Get the correct date for the selected weekday
+
+    this.selectedDate = this.formatDate(selectedDay);
+    this.updateFilteredIssues();
+  }
+
+  // Navigate to the previous month
+  prevMonth() {
+    this.currentDate = new Date(this.currentYear, this.currentDate.getMonth() - 1, 1);
+    this.currentMonth = this.currentDate.toLocaleString('default', { month: 'long' });
+    this.currentYear = this.currentDate.getFullYear();
+    this.generateCalendarDays(this.currentDate.getMonth(), this.currentYear);
+  }
+
+  // Navigate to the next month
+  nextMonth() {
+    this.currentDate = new Date(this.currentYear, this.currentDate.getMonth() + 1, 1);
+    this.currentMonth = this.currentDate.toLocaleString('default', { month: 'long' });
+    this.currentYear = this.currentDate.getFullYear();
+    this.generateCalendarDays(this.currentDate.getMonth(), this.currentYear);
+  }
+
+  formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
   }
 }

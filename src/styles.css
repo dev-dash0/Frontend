@@ -32,36 +32,28 @@
   /*----------------------------------------------------------------------------------------*/
   /*Gradients*/
 
-  --mainBackgroundGradient: radial-gradient(
-    97.81% 96.5% at 2.19% 3.5%,
-    #000000 0%,
-    #102a56 100%
-  );
+  --mainBackgroundGradient: radial-gradient(97.81% 96.5% at 2.19% 3.5%,
+      #000000 0%,
+      #102a56 100%);
 
-  --strokeGradient: linear-gradient(
-    129deg,
-    #3a4962 1%,
-    #ff90e8 43%,
-    #74caff 70%,
-    #292f65 91%
-  );
+  --strokeGradient: linear-gradient(129deg,
+      #3a4962 1%,
+      #ff90e8 43%,
+      #74caff 70%,
+      #292f65 91%);
 
   /* added a new stroke try it out !*/
-  --newStrokeGradient: linear-gradient(
-    129deg,
-    #3a4962 0%,
-    #ff90e8 20%,
-    #74caff 70%,
-    #292f65 120%
-  );
+  --newStrokeGradient: linear-gradient(129deg,
+      #3a4962 0%,
+      #ff90e8 20%,
+      #74caff 70%,
+      #292f65 120%);
 
   /*Chart Gradients*/
 
-  --blueChartBackgroundGradient: linear-gradient(
-    131deg,
-    #292f65 8%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  --blueChartBackgroundGradient: linear-gradient(131deg,
+      #292f65 8%,
+      rgba(0, 0, 0, 0) 100%);
 
   --seaBlueGradient: radial-gradient(circle at 37% 56%, #09f0de, #4e83ed 26%);
 
@@ -70,71 +62,55 @@
   --purpleGradient: radial-gradient(circle at 50% 50%, #c120e6, #5b6eef 71%);
 
   /* --lightPinkGradient: radial-gradient(circle at 34% 19%, #db83f1, #eabef6 14%); */
-  --lightPinkGradient: radial-gradient(
-    37.98% 60.27% at 42.32% 50%,
-    #eabef6 0%,
-    #db83f1 100%
-  );
+  --lightPinkGradient: radial-gradient(37.98% 60.27% at 42.32% 50%,
+      #eabef6 0%,
+      #db83f1 100%);
 
   /*Side Bar Gradients*/
-  --sideBarBackgroundGradient: radial-gradient(
-      circle at 100% 95%,
+  --sideBarBackgroundGradient: radial-gradient(circle at 100% 95%,
       #4a314c 2%,
-      #161d3e 35%
-    ),
+      #161d3e 35%),
     linear-gradient(172deg, #3a4962 2%, #ff90e8 45%, #74caff 72%, #292f65 92%);
 
   /*Modal Gradients*/
   --modalGradient: radial-gradient(circle at 2% 99%, #4a314c, #141a4b 67%);
 
   /*search Gradients*/
-  --searchBlueGradient: linear-gradient(
-    to right,
-    #161d3e 63%,
-    rgba(65, 76, 179, 0.2)
-  );
+  --searchBlueGradient: linear-gradient(to right,
+      #161d3e 63%,
+      rgba(65, 76, 179, 0.2));
 
   --searchButtonGradient: linear-gradient(122deg, #c120e6 19%, #5b6eef 77%);
 
   /*Cards Gradients*/
-  --cardBottomRightGradient: radial-gradient(
-      circle at 100% 100%,
+  --cardBottomRightGradient: radial-gradient(circle at 100% 100%,
       #4a314c 7%,
-      #21264f 54%
-    ),
+      #21264f 54%),
     linear-gradient(129deg, #3a4962 1%, #ff90e8 43%, #74caff 70%, #292f65 91%);
 
-  --cardBottomLeftGradient: radial-gradient(
-      circle at 7% 100%,
+  --cardBottomLeftGradient: radial-gradient(circle at 7% 100%,
       #4a314c 1%,
-      #21264f 44%
-    ),
+      #21264f 44%),
     linear-gradient(123deg, #3a4962 1%, #ff90e8 43%, #74caff 70%, #292f65 91%);
 
-  --cardTopRightGradient: radial-gradient(
-    circle at 95% 0%,
-    #4a314c 1%,
-    #21264f 65%
-  );
+  --cardTopRightGradient: radial-gradient(circle at 95% 0%,
+      #4a314c 1%,
+      #21264f 65%);
 
   --cardTopLeftGradient: radial-gradient(circle at 0% 0%, #4a314c, #21264f 39%);
 
   /*Buttons Gradients*/
-  --allPinkButtonGradient: radial-gradient(
-      circle at 42% 50%,
+  --allPinkButtonGradient: radial-gradient(circle at 42% 50%,
       #eabef6,
-      #db83f1 65%
-    ),
+      #db83f1 65%),
     linear-gradient(100deg, #3a4962 0%, #ff90e8 42%, #74caff 70%, #292f65 90%);
 
   /*glass Effect Gradients*/
-  --glassGradient: linear-gradient(
-    144.86deg,
-    rgba(58, 73, 98, 0.18) 6.8%,
-    rgba(93, 104, 201, 0.143) 29.3%,
-    rgba(91, 177, 230, 0.105) 51.79%,
-    rgba(255, 144, 232, 0.03) 96.78%
-  );
+  --glassGradient: linear-gradient(144.86deg,
+      rgba(58, 73, 98, 0.18) 6.8%,
+      rgba(93, 104, 201, 0.143) 29.3%,
+      rgba(91, 177, 230, 0.105) 51.79%,
+      rgba(255, 144, 232, 0.03) 96.78%);
   --glassfilter: blur(12px);
 
   --issueGradient: linear-gradient(116.19deg, #292f65 24.99%, #0b1a34 100%);
@@ -186,6 +162,7 @@
   transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
   transform: translateX(0px);
 }
+
 .BG.expand {
   transform: translateX(-30px);
   width: calc(100% + 100px);
@@ -640,5 +617,10 @@ button.toast-close-button {
 }
 
 /* ================================================================================== */
+/* Global  */
+ul,
+li {
+  list-style: none;
+}
 
 /* ================================================================================== */

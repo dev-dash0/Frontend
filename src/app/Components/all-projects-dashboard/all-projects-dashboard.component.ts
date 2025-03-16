@@ -44,7 +44,7 @@ export class AllProjectsDashboardComponent {
     this._DashboardService.getDashboardData(tenentId).subscribe(
       {
         next: (res) => {
-          console.log(res);
+          // console.log(res);
           this.completedProjects = res.result.completedProjects
           this.projectsInProgress = res.result.projectsInProgress
           this.totalProjects = res.result.totalProjects

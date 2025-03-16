@@ -29,29 +29,29 @@ export class DashboardService {
   };
 
 
-  getDashboardAllProject = (Tenantid: number): Observable<any> => {
+  getDashboardAllProject = (): Observable<any> => {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     });
 
-    const params = new HttpParams().set('Tenantid', Tenantid.toString());
+    // const params = new HttpParams().set('Tenantid', Tenantid.toString());
 
     return this._HttpClient.get(baseUrl + '/api/DashBoard/allproject', {
       headers,
-      params
+      // params
     });
   };
 
-  getDashboardAllIssue = (Tenantid: number): Observable<any> => {
+  getDashboardAllIssue = (): Observable<any> => {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     });
-    const params = new HttpParams().set('Tenantid', Tenantid.toString());
+    // const params = new HttpParams().set('Tenantid', Tenantid.toString());
     return this._HttpClient.get(baseUrl + '/api/DashBoard/allissue', {
       headers,
-      params
+      // params
     });
   };
   getDashboardCalender = (): Observable<any> => {
@@ -63,6 +63,31 @@ export class DashboardService {
       headers,
     });
   };
+  getDashboardPinned = (): Observable<any> => {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    });
+    return this._HttpClient.get(baseUrl + '/api/DashBoard/Pinneditems', {
+      headers,
+    });
+  };
 
+  getIssueById = (issueId: number): Observable<any> => {
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+      Accept: 'text/plain',
+    });
+
+    const params = new HttpParams().set('Tenantid', issueId.toString());
+    return this._HttpClient.get(baseUrl + '/api/Issue',
+      {
+        headers,
+        params
+      }
+    );
+  };
 
 }

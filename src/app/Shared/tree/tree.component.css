@@ -1,0 +1,15 @@
+i {
+    transition: transform 0.3s ease-in-out;
+}
+
+i.fa-chevron-right {
+    transform: rotate(0deg);
+}
+
+i.fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+ul {
+    padding-left: 2rem;
+}

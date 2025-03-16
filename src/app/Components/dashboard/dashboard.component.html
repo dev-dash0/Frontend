@@ -1,184 +1,51 @@
-<!-- <div class="bg min-vh-100 ">
-    <div class="container-fluid">
-    
-        <div class="side-bar">
-            <app-side-menu></app-side-menu>
-        </div>
-        <div class="search-bar">
-            <app-search-bar></app-search-bar>
-        </div>
-        
-        <div class="BG">
-            <div class="cards">
-                <div class="card cardBottomLeft">
-                    <div class="headTitle d-flex justify-content-start align-items-center gap-2 mb-4">
-                  <img class="ms-5" src="assets/images/Projects icon.svg" alt="projects icon">
-                  <h3 class="">Projects</h3>
-                </div>
-                <ul class="ms-3">
-                    <li class="mb-2 list-unstyled">
-                        <img src="assets/images/list icon.svg" alt="">
-                        <span class="fs-5">project 1</span>
-                        <span class="text-white-50 ms-5">in OS company</span>
-                    </li>
-                    <li class="mb-2 list-unstyled">
-                        <img src="assets/images/list icon.svg" alt="">
-                        <span class="fs-5">project 2</span>
-                        <span class="text-white-50 ms-5">in OS company</span>
-                        
-                    </li>
-                    <li class="mb-2 list-unstyled">
-                        <img src="assets/images/list icon.svg" alt="">
-                        <span class="fs-5">project 3</span>
-                        <span class="text-white-50 ms-5">in OS company</span>
-                    </li>
-                </ul>
-                </div>
-                <div class="card cardBottomRight">
-                    <div class="headTitle d-flex justify-content-start align-items-center gap-2 mb-4">
-                        <img class="ms-5" src="assets/images/issues icon.svg" alt="Issues icon">
-                        <h3 class="">Issues</h3>
-                    </div>
-                    <ul class="ms-3">
-                        <li class="mb-2 list-unstyled">
-                            <img src="assets/images/list icon.svg" alt="">
-                            <span class="fs-5">Task 1</span>
-                        <span class="text-white-50 ms-5">in Project 1</span>
-                        </li>
-                        <li class="mb-2 list-unstyled">
-                            <img src="assets/images/list icon.svg" alt="">
-                            <span class="fs-5">Task 2</span>
-                            <span class="text-white-50 ms-5">in Project 2</span>
-                            
-                        </li>
-                    <li class="mb-2 list-unstyled">
-                        <img src="assets/images/list icon.svg" alt="">
-                        <span class="fs-5">Task 3</span>
-                        <span class="text-white-50 ms-5">in Project 3</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card cardTopLeft">
-                    <div class="headTitle d-flex justify-content-start align-items-center gap-2 mb-4">
-                    <img class="ms-5" src="assets/images/Pin icon.svg" alt="Pin icon">
-                    <h3 class="">Pinned</h3>
-                    </div>
-                    <ul class="ms-3">
-                        <li class="mb-2 list-unstyled">
-                            <img src="assets/images/list icon.svg" alt="">
-                            <span class="fs-5">project 1</span>
-                            <span class="text-white-50 ms-5">in OS company</span>
-                        </li>
-                    <li class="mb-2 list-unstyled">
-                        <img src="assets/images/list icon.svg" alt="">
-                        <span class="fs-5">Task 2</span>
-                        <span class="text-white-50 ms-5">in Project 1</span>
-                        
-                        </li>
-                        <li class="mb-2 list-unstyled">
-                            <img src="assets/images/list icon.svg" alt="">
-                            <span class="fs-5">Task 3</span>
-                            <span class="text-white-50 ms-5">in Project 3</span>
-                            
-                        </li>
-                        <li class="mb-2 list-unstyled">
-                        <img src="assets/images/list icon.svg" alt="">
-                        <span class="fs-5">project 3</span>
-                        <span class="text-white-50 ms-5">in OS company</span>
-                        </li>
-                </ul>
-                </div>
-                <div class="card cardTopRight">
-                    <div class="headTitle d-flex justify-content-start align-items-center gap-2 mb-4">
-                        <img class="ms-5" src="assets/images/Calendar icon.svg" alt="Calendar icon">
-                        <h3 class="">Issues calendar</h3>
-                    </div>
-                <app-calendar></app-calendar>
-                </div>
-            </div>
-        </div>
-        
-    </div>
-</div> -->
-
-<!-- <div class="bg min-vh-100"> -->
-<!-- <div class="bg min-vh-100"> -->
 <div class="container-fluid">
-  <!-- Sidebar -->
-  <!-- <app-side-menu class="side-bar position-fixed z-3"></app-side-menu> -->
 
   <div class="main-container my-4 BG" [ngClass]="{ expand: isSidebarCollapsed }">
-    <!-- Topbar -->
-    <!-- <app-search-bar class="topbar"></app-search-bar> -->
-
     <!-- Dashboard Content -->
-    <!-- <div class="dashboard"> -->
     <div class="GanttChart">
       <app-visualization></app-visualization>
     </div>
     <div class="row g-3 mt-2">
       <div class="col-lg-6">
         <div class="card cardBottomRight h-100">
-          <div class="card-body pe-4">
+          <div class="card-body ">
             <div class="headTitle mb-4">
               <img src="assets/images/dashboard icons/Group of Projects.svg" alt="projects icon" />
               <h3 class="m-0">Projects</h3>
             </div>
             <ul>
+              @for (project of AllProjectList; track $index)
+              {
               <li>
-                <div class="project">
-                  <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
-                  <span class="ps-1 fs-5">project 1</span>
+                <div class="project card-sub-title ">
+                  <img src="assets/images/dashboard icons/list.svg" alt="" />
+                  <span class="fs-5">{{capitalizeTitles(project.name)}}</span>
                 </div>
-                <span class="text-white-50">in OS company</span>
+                <span class="text-white-50">In {{project.tenant.name}} company</span>
               </li>
-              <!-- <li>
-                <div class="project">
-                  <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
-                  <span class="ps-1 fs-5">project 2</span>
-                </div>
-                <span class="text-white-50">in OS company</span>
-              </li>
-              <li>
-                <div class="project">
-                  <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
-                  <span class="ps-1 fs-5">project 3</span>
-                </div>
-                <span class="text-white-50">in OS company</span>
-              </li> -->
+              }
             </ul>
           </div>
         </div>
       </div>
       <div class="col-lg-6">
         <div class="card cardBottomLeft h-100">
-          <div class="card-body pe-4">
+          <div class="card-body">
             <div class="headTitle mb-4">
               <img src="assets/images/dashboard icons/Checklist.svg" alt="Issues icon" />
               <h3 class="m-0">Issues</h3>
             </div>
             <ul>
+              @for (issue of AllIssueList; track $index)
+              {
               <li>
-                <div class="issues">
-                  <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
-                  <span class="ps-1 fs-5">Issue 1</span>
+                <div class="issues card-sub-title">
+                  <img src="assets/images/dashboard icons/list.svg" alt="" />
+                  <span class="fs-5">{{capitalizeTitles(issue.title)}}</span>
                 </div>
-                <span class="text-white-50">in Project 1</span>
+                <span class="text-white-50">In {{capitalizeTitles(issue.projectName)}} Project</span>
               </li>
-              <li>
-                <div class="issues">
-                  <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
-                  <span class="ps-1 fs-5">Issue 2</span>
-                </div>
-                <span class="text-white-50">in Project 2</span>
-              </li>
-              <li>
-                <div class="issues">
-                  <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
-                  <span class="ps-1 fs-5">Issue 3</span>
-                </div>
-                <span class="text-white-50">in Project 3</span>
-              </li>
+              }
             </ul>
           </div>
         </div>
@@ -190,36 +57,21 @@
               <img src="assets/images/dashboard icons/Pin.svg" alt="Pin icon" />
               <h3 class="m-0">Pinned</h3>
             </div>
-            <ul>
-              <li>
-                <div class="pinned">
-                  <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
-                  <span class="ps-1 fs-5">project 1</span>
-                </div>
-                <span class="text-white-50">in OS company</span>
-              </li>
-              <li>
-                <div class="pinned">
-                  <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
-                  <span class="ps-1 fs-5">Task 2</span>
-                </div>
-                <span class="text-white-50">in Project 1</span>
-              </li>
-              <li>
-                <div class="pinned">
-                  <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
-                  <span class="ps-1 fs-5">Task 3</span>
-                </div>
-                <span class="text-white-50">in Project 3</span>
-              </li>
-              <li>
-                <div class="pinned">
-                  <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
-                  <span class="ps-1 fs-5">project 3</span>
-                </div>
-                <span class="text-white-50">in OS company</span>
-              </li>
-            </ul>
+            <!-- <ul> -->
+            <!-- <li> -->
+            <!-- <app-tree [nodes]="treeData()"></app-tree> -->
+            <!-- </li> -->
+            @for (pin of pinnedIssues; track $index)
+            {
+            <li>
+              <div class="pinned">
+                <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
+                <span class="ps-1 fs-5">{{pin.title}}</span>
+              </div>
+              <span class="text-white-50">in OS company</span>
+            </li>
+            }
+            <!-- </ul> -->
           </div>
         </div>
       </div>
@@ -237,158 +89,5 @@
         </div>
       </div>
     </div>
-    <!-- </div> -->
   </div>
 </div>
-<!-- </div> -->
-<!-- </div> -->
-
-<!-- <div class="bg min-vh-100">
-  <div class="container-fluid">
-    <div class="side-barr">
-      <app-side-menu></app-side-menu>
-    </div>
-    <div class="search-barr">
-      <app-search-bar></app-search-bar>
-    </div>
-    <div class="dashboard mx-5">
-      <div class="GanttChart">
-        <app-visualization></app-visualization>
-      </div>
-      <div class="cards">
-        <div class="row">
-          <div class="col-lg-6">
-            <div class="card row cardBottomLeft">
-              <div class="headTitle col-md-12 d-flex justify-content-start align-items-center gap-2 mb-4">
-                <img src="assets/images/Projects icon.svg" alt="projects icon" />
-                <h3 class="">Projects</h3>
-              </div>
-              <ul class="ms-3">
-                <li class=" row justify-content-center align-items-center list-unstyled">
-                  <div class="col-md-6">
-                    <img src="assets/images/list icon.svg" alt="" />
-                    <span class="fs-5">project 1</span>
-                  </div>
-                  <div class="col-md-6">
-                    <span class="text-white-50 ">in OS company</span>
-                  </div>
-                </li>
-                <li class=" row justify-content-center align-items-center list-unstyled">
-                  <div class="col-md-6">
-                    <img src="assets/images/list icon.svg" alt="" />
-                    <span class="fs-5">project 2</span>
-                  </div>
-                  <div class="col-md-6">
-                    <span class="text-white-50 ">in OS company</span>
-                  </div>
-                </li>
-                <li class=" row justify-content-center align-items-center list-unstyled">
-                  <div class="col-md-6">
-                    <img src="assets/images/list icon.svg" alt="" />
-                    <span class="fs-5">project 3</span>
-                  </div>
-                  <div class="col-md-6 py-3">
-                    <span class="text-white-50 ">in OS company</span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="card row cardBottomRight">
-              <div class="headTitle col-md-12 d-flex justify-content-start align-items-center gap-2 mb-4">
-                <img src="assets/images/issues icon.svg" alt="Issues icon" />
-                <h3 class="">Issues</h3>
-              </div>
-              <ul class="ms-3">
-                <li class="row justify-content-center align-items-center list-unstyled">
-                  <div class="col-md-6">
-                    <img src="assets/images/list icon.svg" alt="" />
-                    <span class="fs-5">Task 1</span>
-                  </div>
-                  <div class="col-md-6">
-                    <span class="text-white-50">in Project 1</span>
-                  </div>
-                </li>
-                <li class="row justify-content-center align-items-center list-unstyled">
-                  <div class="col-md-6">
-                    <img src="assets/images/list icon.svg" alt="" />
-                    <span class="fs-5">Task 2</span>
-                  </div>
-                  <div class="col-md-6">
-                    <span class="text-white-50">in Project 2</span>
-                  </div>
-                </li>
-                <li class="row justify-content-center align-items-center list-unstyled">
-                  <div class="col-md-6">
-                    <img src="assets/images/list icon.svg" alt="" />
-                    <span class="fs-5">Task 3</span>
-                  </div>
-                  <div class="col-md-6">
-                    <span class="text-white-50">in Project 3</span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="card row cardTopLeft">
-              <div class="headTitle col-md-12 d-flex justify-content-start align-items-center gap-2 mb-4">
-                <img src="assets/images/Pin icon.svg" alt="Pin icon" />
-                <h3 class="">Pinned</h3>
-              </div>
-              <ul class="ms-3">
-                <li class="row justify-content-center align-items-center list-unstyled">
-                  <div class="col-md-6">
-                    <img src="assets/images/list icon.svg" alt="" />
-                    <span class="fs-5">project 1</span>
-                  </div>
-                  <div class="col-md-6">
-                    <span class="text-white-50">in OS company</span>
-                  </div>
-                </li>
-                <li class="row justify-content-center align-items-center list-unstyled">
-                  <div class="col-md-6">
-                    <img src="assets/images/list icon.svg" alt="" />
-                    <span class="fs-5">Task 2</span>
-                  </div>
-                  <div class="col-md-6">
-                    <span class="text-white-50">in Project 1</span>
-                  </div>
-                </li>
-                <li class="row justify-content-center align-items-center list-unstyled">
-                  <div class="col-md-6">
-                    <img src="assets/images/list icon.svg" alt="" />
-                    <span class="fs-5">Task 3</span>
-                  </div>
-                  <div class="col-md-6">
-                    <span class="text-white-50">in Project 3</span>
-                  </div>
-                </li>
-                <li class="row justify-content-center align-items-center list-unstyled">
-                  <div class="col-md-6">
-                    <img src="assets/images/list icon.svg" alt="" />
-                    <span class="fs-5">project 3</span>
-                  </div>
-                  <div class="col-md-6">
-                    <span class="text-white-50">in OS company</span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="card row cardTopRight">
-              <div class="headTitle col-md-12 d-flex justify-content-start align-items-center gap-2 mb-4">
-                <img src="assets/images/Calendar icon.svg" alt="Calendar icon" />
-                <h3 class="">Issues calendar</h3>
-              </div>
-              <app-calendar></app-calendar>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div> -->
