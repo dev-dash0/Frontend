@@ -370,21 +370,3 @@ mat-form-field input:focus {
     background-color: #252748 !important;
     color: #96a0f7 !important;
 }
-
-/* ?************************ */
-/* Priority */
-.low {
-    color: #908F8F !important;
-}
-
-.normal {
-    color: #4854F1 !important;
-}
-
-.high {
-    color: #D07805 !important;
-}
-
-.urgent {
-    color: #D02705 !important;
-}

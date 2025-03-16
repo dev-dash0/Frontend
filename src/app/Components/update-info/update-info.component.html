@@ -14,11 +14,19 @@
                 <div class="col-md-2">
                     <label class="fw-semibold" for="imageUrl">Image Url</label>
                 </div>
-                <!-- <div class="col-md-10">
-                    <textarea id="imageUrl" rows="2" formControlName="imageUrl"
-                        placeholder="Put your Pictur Url here..."></textarea>   
-                </div> -->
-                <app-dragn-drop formControlName="imageUrl"></app-dragn-drop>
+                <div class="col-md-10">
+                    <input id="imageUrl" formControlName="imageUrl"
+                        placeholder="Put your Picture Url here..." > 
+                </div>
+                <!-- <app-dragn-drop 
+                [imagePath]="ProfileData?.imageUrl"
+                formControlName="imageUrl"
+                ></app-dragn-drop> -->
+                <!-- label="Upload Profile Picture" 
+                [allowedExtensions]="['png', 'jpg', 'jpeg']"
+                [allowMultipleFiles]="false"
+                [imagePath]="ProfileData?.imageUrl"
+                formControlName="imageUrl" -->
             </div>
             <div class="divider"></div>
             <!-- firstName -->
@@ -27,7 +35,8 @@
                     <label class="fw-semibold" for="firstName">First Name</label>
                 </div>
                 <div class="col-md-10">
-                    <input id="firstName" type="text" formControlName="firstName" placeholder="e.g. John" />
+                    <input id="firstName" type="text" formControlName="firstName" placeholder="e.g. John" 
+                    />
                 </div>
             </div>
             <!-- lastName -->
@@ -36,8 +45,8 @@
                     <label class="fw-semibold" for="lastName">Last Name</label>
                 </div>
                 <div class="col-md-10">
-                    <textarea id="lastName" rows="2" formControlName="lastName"
-                        placeholder="e.g. Doe"></textarea>
+                    <input id="lastName" formControlName="lastName"
+                        placeholder="e.g. Doe">
                 </div>
             </div>
             <!-- userName -->
@@ -46,8 +55,8 @@
                     <label class="fw-semibold" for="userName">User Name</label>
                 </div>
                 <div class="col-md-10">
-                    <textarea id="userName" rows="2" formControlName="userName"
-                        placeholder="e.g. John_Doe"></textarea>
+                    <input id="userName" formControlName="userName"
+                        placeholder="e.g. John_Doe">
                 </div>
             </div>
             <div class="divider"></div>
@@ -57,8 +66,8 @@
                     <label class="fw-semibold" for="phoneNumber">Phone Number</label>
                 </div>
                 <div class="col-md-10">
-                    <textarea id="phoneNumber" rows="2" formControlName="phoneNumber"
-                        placeholder="e.g. +12345678910"></textarea>
+                    <input id="phoneNumber" rows="2" formControlName="phoneNumber"
+                        placeholder="e.g. +12345678910" >
                 </div>
             </div>
             <!-- Birthday -->
@@ -67,8 +76,8 @@
                     <label class="fw-semibold" for="birthday">Birthday Date</label>
                 </div>
                 <div class="col-md-10">
-                    <textarea id="birthday" rows="2" formControlName="birthday"
-                        placeholder="1995-5-15"></textarea>
+                    <input id="birthday" rows="2" formControlName="birthday"
+                        placeholder="1995-5-15">
                 </div>
             </div>
         </div>

@@ -243,7 +243,7 @@ p {
   border-radius: 50%;
   filter: blur(40px);
   opacity: 0.6;
-  animation: floatSize 18s infinite alternate ease-in-out, floatMove 18s infinite alternate ease-in-out;
+  animation: floatSize 9s infinite alternate ease-in-out, floatMove 9s infinite alternate ease-in-out;
 }
 
 .decorations .orgWave {
@@ -254,7 +254,7 @@ p {
   border-radius: 50%;
   filter: blur(40px);
   opacity: 0.6;
-  animation: floatSize 18s infinite alternate ease-in-out, floatMove 18s infinite alternate ease-in-out;
+  animation: floatSize 9s infinite alternate ease-in-out, floatMove 9s infinite alternate ease-in-out;
 }
 
 .decorations .yelWave {
@@ -265,13 +265,13 @@ p {
   border-radius: 50%;
   filter: blur(40px);
   opacity: 0.6;
-  animation: floatSize 18s infinite alternate ease-in-out, floatMove 18s infinite alternate ease-in-out;
+  animation: floatSize 9s infinite alternate ease-in-out, floatMove 9s infinite alternate ease-in-out;
 }
 
 .wave1 {
   top: 30%;
   left: 18%;
-    animation: floatSize 18s infinite alternate ease-in-out, floatMove2 18s infinite alternate ease-in-out !important;
+    animation: floatSize 9s infinite alternate ease-in-out, floatMove2 9s infinite alternate ease-in-out !important;
 
 }
 
@@ -284,7 +284,7 @@ p {
 .wave3 {
   top: 5%;
   right: -5%;
-        animation: floatSize 18s infinite alternate ease-in-out, floatMove2 18s infinite alternate ease-in-out !important;
+        animation: floatSize 9s infinite alternate ease-in-out, floatMove2 9s infinite alternate ease-in-out !important;
 
 }
 
@@ -297,26 +297,26 @@ p {
 .wave5 {
     bottom: 2%;
     left: 34%;
-        animation: floatSize 18s infinite alternate ease-in-out, floatMove2 18s infinite alternate ease-in-out !important;
+        animation: floatSize 9s infinite alternate ease-in-out, floatMove2 9s infinite alternate ease-in-out !important;
 
 }
 
 .wave6 {
     bottom: -5%;
     left: -5%;
-          animation: floatSize 18s infinite alternate ease-in-out, floatMove2 18s infinite alternate ease-in-out !important;
+          animation: floatSize 9s infinite alternate ease-in-out, floatMove2 9s infinite alternate ease-in-out !important;
 
 }
 .wave7 {
     bottom: -5%;
     right: -5%;
-        animation: floatSize 18s infinite alternate ease-in-out, floatMove2 18s infinite alternate ease-in-out !important;
+        animation: floatSize 9s infinite alternate ease-in-out, floatMove2 9s infinite alternate ease-in-out !important;
 
 }
 .wave8 {
     top: -5%;
     left: -5%;
-          animation: floatSize 18s infinite alternate ease-in-out, floatMove2 18s infinite alternate ease-in-out !important;
+          animation: floatSize 9s infinite alternate ease-in-out, floatMove2 9s infinite alternate ease-in-out !important;
 
 }
 
