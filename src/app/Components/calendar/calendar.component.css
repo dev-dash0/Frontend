@@ -3,6 +3,7 @@
   border-radius: 10px;
   margin: 0 auto;
   font-family: Arial, sans-serif;
+  transition: all 0.3s ease-in-out;
 }
 
 /* Header: Month & Navigation */
@@ -16,9 +17,14 @@
 .calendar-header button {
   background: none;
   border: none;
-  color: white;
-  font-size: 20px;
+  /* color: white; */
+  /* font-size: 20px; */
   cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.calendar-header button:active {
+  transform: scale(0.9);
 }
 
 .month-title {
@@ -47,7 +53,7 @@
 }
 
 .day {
-  aspect-ratio: 1 / 0.6;
+  aspect-ratio: 1 / 0.5;
   /* Keeps the slots square */
   display: flex;
   align-items: center;
@@ -55,12 +61,20 @@
   background: rgba(255, 255, 255, 0.1);
   border-radius: 5px;
   cursor: pointer;
+  transition: transform 0.2s ease-in-out, background 0.3s;
+}
+
+/* Hover effect */
+.day:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* Highlight Selected Date */
 .day.active {
   background: #774f7e;
   font-weight: bold;
+  animation: pulse 0.3s ease-in-out;
 }
 
 /* Issues List */
@@ -70,6 +84,25 @@
   border-radius: 10px;
   margin-top: 20px;
   padding: 10px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out, max-height 0.4s ease-in-out, overflow-y 0.4 ease-in-out;
+  /* Adjust this as needed */
+  overflow-y: hidden;
+  max-height: 0;
+  ;
+}
+
+.issues-list.scrollable {
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+/* When issues appear */
+.issues-list.show {
+  opacity: 1;
+  max-height: 400px;
+  transform: translateY(0);
 }
 
 .issue-card {
@@ -77,6 +110,22 @@
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+/* Delay issue appearance */
+.issue-card:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.issue-card:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.issue-card:nth-child(3) {
+  animation-delay: 0.6s;
 }
 
 .issue-card h3 {
@@ -92,4 +141,32 @@
   width: 40px;
   height: 40px;
   visibility: hidden;
+}
+
+/* //////////////////////////////////////////////////////////// */
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }

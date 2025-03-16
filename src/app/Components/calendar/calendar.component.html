@@ -29,7 +29,7 @@
   </div>
 
   <!-- Issues List -->
-  <div class="issues-list">
+  <div #issuesList class="issues-list">
     <div *ngFor="let issue of filteredIssues" class="issue-card d-flex justify-content-between align-items-center px-4">
       <div class="issuePlace">
         <h3>{{ issue.title }}</h3>

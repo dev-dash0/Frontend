@@ -206,6 +206,7 @@
   position: relative;
   overflow: hidden;
   padding: 0.5rem;
+  transition: height 0.4s ease-in-out;
 }
 
 .card p,

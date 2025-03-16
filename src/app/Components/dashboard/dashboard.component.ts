@@ -27,16 +27,11 @@ export class DashboardComponent {
   AllIssueList: Issue[] = [];
   AllPinnedList: any = [];
   pinnedIssues: any[] = [];
-  // CalenderIssues: any[] = [];
-  // treeData = signal<TreeNode[]>([]);
+  treeData = signal<TreeNode[]>([]);
 
 
   private readonly _DashboardService = inject(DashboardService);
-
-  constructor(private sidebarService: SidebarService) {
-
-
-  }
+  constructor(private sidebarService: SidebarService) { }
 
   ngOnInit(): void {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
@@ -45,8 +40,7 @@ export class DashboardComponent {
 
     this.getDashboardAllIProject();
     this.getDashboardAllIssue();
-    // this.getDashboardCalender();
-    this.getDashboardPinned();
+    // this.getDashboardPinned();
   }
 
 
@@ -78,50 +72,48 @@ export class DashboardComponent {
           console.error(err);
         },
       }
-
-    );
-
-  }
-
-  getDashboardPinned() {
-    this._DashboardService.getDashboardPinned().subscribe(
-      {
-        next: (res) => {
-          console.log(res.result);
-          this.AllPinnedList = res.result.issues;
-
-          if (res.isSuccess && res.result.issues.length > 0) {
-            const pinnedIssueIds = res.result.issues.map((issue: any) => issue.itemId);
-
-            // Fetch issue details for each pinned issue
-            this.fetchPinnedIssueDetails(pinnedIssueIds);
-          }
-          // this.AllPinnedList = Array.isArray(res.result) ? res.result : [];
-          // this.treeData.set(res.result)
-          // this.completedIssues = res.result.completedIssues
-        },
-        error: (err) => {
-          console.log(err);
-          // console.error("Error fetching tree data", err);
-        },
-      }
-
-    );
-
-  }
-
-  fetchPinnedIssueDetails(issueIds: number[]) {
-    const issueRequests = issueIds.map((id) =>
-      this._DashboardService.getIssueById(id).subscribe({
-        next: (issue) => {
-          if (issue.isSuccess) {
-            this.pinnedIssues.push(issue.result);
-          }
-        },
-        error: (err) => console.error('Error fetching issue details', err),
-      })
     );
   }
+
+  // getDashboardPinned() {
+  //   this._DashboardService.getDashboardPinned().subscribe(
+  //     {
+  //       next: (res) => {
+  //         console.log(res.result);
+  //         this.AllPinnedList = res.result.issues;
+
+  //         if (res.isSuccess && res.result.issues.length > 0) {
+  //           const pinnedIssueIds = res.result.issues.map((issue: any) => issue.itemId);
+
+  //           // Fetch issue details for each pinned issue
+  //           // this.fetchPinnedIssueDetails(pinnedIssueIds);
+  //         }
+  //         // this.AllPinnedList = Array.isArray(res.result) ? res.result : [];
+  //         this.treeData.set(res.result)
+  //         // this.completedIssues = res.result.completedIssues
+  //       },
+  //       error: (err) => {
+  //         console.log(err);
+  //         // console.error("Error fetching tree data", err);
+  //       },
+  //     }
+
+  //   );
+
+  // }
+
+  // fetchPinnedIssueDetails(issueIds: number[]) {
+  //   const issueRequests = issueIds.map((id) =>
+  //     this._DashboardService.getIssueById(id).subscribe({
+  //       next: (issue) => {
+  //         if (issue.isSuccess) {
+  //           this.pinnedIssues.push(issue.result);
+  //         }
+  //       },
+  //       error: (err) => console.error('Error fetching issue details', err),
+  //     })
+  //   );
+  // }
 
   capitalizeTitles(title: string) {
     return title.charAt(0).toUpperCase() + title.slice(1)

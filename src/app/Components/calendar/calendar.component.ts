@@ -1,5 +1,5 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { DashboardService } from '../../Core/Services/dashboard/dashboard.service';
 
 @Component({
@@ -16,13 +16,16 @@ export class CalendarComponent {
   currentYear: number = new Date().getFullYear();
   currentDate: Date = new Date();
   currentDayIndex: number = this.currentDate.getDay(); // 0 (Sunday) - 6 (Saturday)
-
   issues: any[] = [];
   calendarData: any[] = [];
   selectedDate: any; // Will store date as YYYY-MM-DD
   filteredIssues: any[] = [];
 
   private readonly _DashboardService = inject(DashboardService);
+  private priorityOrder = ['Low', 'Medium', 'High', 'Critical'];
+  private statusOrder = ['BackLog', 'To Do', 'In Progress', 'Reviewing', 'Completed', 'Canceled', 'Postponed'];
+
+  @ViewChild('issuesList') issuesList!: ElementRef;
 
 
   ngOnInit(): void {
@@ -39,15 +42,14 @@ export class CalendarComponent {
   generateCalendarDays(month: number, year: number) {
     const firstDayOfMonth = new Date(year, month, 1).getDay(); // Get first day index (0 = Sunday)
     const lastDay = new Date(year, month + 1, 0).getDate(); // Get last date of the month
-
     // Adjust for week starting on Monday (Make Sunday 7 instead of 0)
     const adjustedFirstDay = firstDayOfMonth === 0 ? 7 : firstDayOfMonth;
-
     // Create an array with empty slots + actual dates
     this.dates = Array(adjustedFirstDay).fill(null).concat(
       Array.from({ length: lastDay }, (_, i) => i + 1)
     );
   }
+
 
   // Fetch issues from the API
   fetchCalendarData() {
@@ -66,7 +68,47 @@ export class CalendarComponent {
   // Update displayed issues based on the selected date
   updateFilteredIssues() {
     const foundData = this.calendarData.find(item => item.date === this.selectedDate);
-    this.filteredIssues = foundData ? foundData.issues : [];
+
+    if (foundData) {
+      this.filteredIssues = foundData.issues.sort((a: { priority: string; status: string }, b: { priority: string; status: string }) => this.sortIssues(a, b));
+    } else {
+      this.filteredIssues = [];
+    }
+
+    // setTimeout(() => {
+    //   const issueListElement = document.querySelector('.issues-list');
+    //   if (issueListElement) {
+    //     issueListElement.classList.add('show');
+    //   }
+    // }, 100);
+
+    // Add a class if there are more than 6 issues
+    setTimeout(() => {
+      if (this.issuesList) {
+        const issueListElement = this.issuesList.nativeElement as HTMLElement;
+        console.log('Issue Count:', this.filteredIssues.length);
+        console.log('ClassList:', issueListElement.classList);
+        if (this.filteredIssues.length > 0) {
+          issueListElement.classList.add('show');
+        } else {
+          issueListElement.classList.remove('show');
+        }
+
+        // Apply scrollable class *after* .show
+        if (this.filteredIssues.length > 1) {
+          setTimeout(() => issueListElement.classList.add('scrollable'), 50);
+        } else {
+          issueListElement.classList.remove('scrollable');
+        }
+      }
+    }, 10);
+  }
+
+  private sortIssues(a: { priority: string; status: string }, b: { priority: string; status: string }): number {
+    const priorityDiff = this.priorityOrder.indexOf(b.priority) - this.priorityOrder.indexOf(a.priority);
+    if (priorityDiff !== 0) return priorityDiff; // Sort by priority first
+
+    return this.statusOrder.indexOf(a.status) - this.statusOrder.indexOf(b.status); // Then by status
   }
 
   // Select a date and filter issues
