@@ -6,23 +6,25 @@
     </div>
     <div class="row gy-4">
       <div class="col-md-12 card cardBottomLeft">
-        <div class="row justify-content-center">
+        <div class="row ">
           <div class="Title d-flex">
             <img src="assets/images/Male User.svg" alt="User profile" />
             <h2>Profile</h2>
           </div>
-          <div class="ProfileContent row align-items-center w-75 pe-5">
-            <div class="col-md-3 Profile Picture mt-3">
-              <div class="col-md-12 justify-content-start row">
+          <div class="ProfileContent row justify-content-center align-items-center px-5">
+            <div class="col-md-3 Profile Picture mt-3 ">
+              <div class="col-md-12 justify-content-start">
                 <!-- Profile Picture: -->
-                <img
-                  src="assets/images/Profile Pic.svg"
-                  class="Profile-Pic"
-                  alt="Profile Picture"
-                />
+                  <img
+                    [src]="ProfileData?.imageUrl"
+                    class="Profile-Pic"
+                    alt="Profile Picture"
+                  />
+                <!-- src="assets/images/Profile Pic.svg" -->
               </div>
             </div>
-            <div class="col-md-6 Profile-Info">
+            <div class="col-md-1"></div>
+            <div class="col-md-5 Profile-Info">
               <!-- First Name -->
               <div class="col-md-12 row align-items-center">
                 <div class="col-md-4">
@@ -70,15 +72,25 @@
                 </div>
               </div>
               <!-- Phone Number -->
-              <!-- <div class="col-md-12 row justify-content-between align-items-center">
-                                <p class="w-auto" >Phone Number:</p>
-                                <p class="w-auto text-white-50">{{ProfileData.}}</p>
-                            </div> -->
+              <div class="col-md-12 row align-items-center">
+                  <div class="col-md-4">
+                  <p class="w-auto" >Phone Number:</p>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-4">
+                  <p class="w-auto text-white-50">{{ProfileData?.phoneNumber}}</p>
+                </div>
+              </div>
               <!-- Birthday Date -->
-              <!-- <div class="col-md-12 row justify-content-between align-items-center">
-                                <p class="w-auto" >Birthday Date:</p>
-                                <p class="w-auto text-white-50">{{ProfileData.}}</p>
-                            </div> -->
+              <div class="col-md-12 row align-items-center">
+                  <div class="col-md-4">
+                    <p class="w-auto" >Birthday Date:</p>
+                  </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-4">
+                  <p class="w-auto text-white-50">{{ProfileData?.birthday}}</p>
+                </div>
+              </div>
             </div>
             <!-- <div class="divider2"></div> -->
             <div class="col-md-3">
@@ -103,7 +115,7 @@
       </div>
       <div class="col-md-12">
         <div class="row justify-content-between">
-          <div class="col-md-6 card Time&DateCard cardBottomRight">
+          <div class="col-md-6 card featuresChange Time&DateCard cardBottomRight">
             <div class="Title d-flex gap-3">
               <img src="assets/images/Delivery Time.svg" alt="User profile" />
               <h2>Time & Date</h2>
@@ -155,7 +167,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6 card Preferences cardBottomLeft">
+          <div class="col-md-6 card Preferences featuresChange cardBottomLeft">
             <div class="Title d-flex gap-3">
               <img src="assets/images/Slider.svg" alt="User profile" />
               <h2>Preferences</h2>

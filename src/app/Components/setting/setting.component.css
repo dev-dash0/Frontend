@@ -103,3 +103,16 @@ h2 {
 .dropdown-menu {
   width: 75%;
 }
+
+.Profile-Pic{
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid ;
+  border-color: var(--mainLightBlueColor);
+}
+
+.featuresChange{
+  width: 49%;
+}

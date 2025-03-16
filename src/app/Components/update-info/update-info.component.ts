@@ -10,6 +10,8 @@ import {
 import { UpdateService } from '../../Core/Services/update.service';
 import { Router } from '@angular/router';
 import { FiledropComponent } from "../dragn-drop/dragn-drop.component";
+import { ProfileData } from '../../Core/interfaces/profile';
+import { ProfileService } from '../../Core/Services/profile.service';
 
 @Component({
   selector: 'app-update-info',
@@ -28,9 +30,12 @@ export class UpdateInfoComponent {
   private readonly _UpdateService = inject(UpdateService);
   private readonly _FormBuilder = inject(FormBuilder);
   private readonly _Router = inject(Router);
+  private readonly _ProfileService = inject(ProfileService);
+  ProfileData?: ProfileData;
 
   ngOnInit() {
     console.log(this.data); // ✅ Access the passed data
+    this.GetProfile();
   }
 
   UpdateInfoForm = new FormGroup({
@@ -42,13 +47,35 @@ export class UpdateInfoComponent {
     birthday: new FormControl(null),
   });
 
+  GetProfile() {
+    this._ProfileService.getProfileData().subscribe({
+      next: (res) => {
+        console.log(res);
+        this.ProfileData = res;
+
+        // ✅ Set values dynamically to avoid null issues
+        this.UpdateInfoForm.patchValue({
+          firstName: res.firstName,
+          lastName: res.lastName,
+          userName: res.userName,
+          imageUrl: res.imageUrl,
+          phoneNumber: res.phoneNumber,
+          birthday: res.birthday,
+        });
+      },
+      error: (err) => {
+        console.error('Error fetching profile data', err);
+      },
+    });
+  }
+
   sendData() {
     if (this.UpdateInfoForm.valid) {
       this._UpdateService.UpdateInfo(this.UpdateInfoForm.value).subscribe({
         next: (res) => {
           // if (res.message == 'success') {
           console.log('Tmaaaam');
-          // this.close();
+          this.close();
         },
         error: (err) => {
           console.log('ERRRRRRRRR');
