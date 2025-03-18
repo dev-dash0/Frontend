@@ -220,6 +220,10 @@
   color: var(--mainLightBlueColor);
 }
 
+.card .CardbelongToSec {
+  color: #7d92ca;
+}
+
 /* =============================================================================== */
 /**********Handling Scroll bar ************/
 ::-webkit-scrollbar {

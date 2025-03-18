@@ -177,7 +177,8 @@ export class AllProjectsDashboardComponent {
           labels: ['Completed', 'In Progress', 'Overdue'],
           datasets: [{
             label: '# of Votes',
-            data: [50, 30, 20],
+            // data: [50, 30, 20],
+            data: [this.completedProjects, this.projectsInProgress, this.projectsOverdue],
             backgroundColor: [
               gradient_purple,
               gradient_blueSky,
@@ -198,15 +199,21 @@ export class AllProjectsDashboardComponent {
           cutout: '55%',
           plugins: {
             legend: {
-              display: false, // Optional: Hide legend
+              display: true, // Optional: Hide legend
+              position: 'bottom', // Set legend position to bottom
+              labels: {
+                padding: 35, // Optional: Add some spacing
+                color: '#7d92ca', // Optional: Set text color
+                font: {
+                  size: 10, // Reduce the font size
+                },
+                boxWidth: 10, // Reduce the size of color indicator boxes
+              },
             },
           },
         }
       }
     )
-
-
-
   }
 
   initSmallCharts() {
@@ -254,7 +261,7 @@ export class AllProjectsDashboardComponent {
       data: {
         datasets: [
           {
-            data: [this.completedProjects, this.totalProjects],
+            data: [this.completedProjects, this.totalProjects - this.completedProjects],
             backgroundColor:
               function (context) {
                 const chart = context.chart;
@@ -290,7 +297,7 @@ export class AllProjectsDashboardComponent {
       data: {
         datasets: [
           {
-            data: [this.projectsInProgress, this.totalProjects],
+            data: [this.projectsInProgress, this.totalProjects - this.projectsInProgress],
             backgroundColor:
               function (context) {
                 const chart = context.chart;
@@ -328,7 +335,7 @@ export class AllProjectsDashboardComponent {
       data: {
         datasets: [
           {
-            data: [this.projectsOverdue, this.totalProjects],
+            data: [this.projectsOverdue, this.totalProjects - this.projectsOverdue],
             backgroundColor:
               function (context) {
                 const chart = context.chart;

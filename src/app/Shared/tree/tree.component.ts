@@ -20,12 +20,18 @@ import { CommonModule } from '@angular/common';
 })
 
 export class TreeComponent {
-  // treeData = signal<TreeNode[]>([]);
   @Input() nodes: TreeNode[] = [];
 
 
   toggle(node: TreeNode) {
-    node.expanded = !node.expanded;
+    if (node.children?.length) {
+      node.expanded = !node.expanded;
+
+    }
+  }
+  // Function to check if the node is a root or parent
+  isRootOrParent(node: TreeNode): boolean {
+    return node.expanded ?? false; // ✅ This ensures it's always a boolean
   }
 
 }

@@ -29,10 +29,10 @@
   padding-inline: 1rem;
 }
 
-/* ul {
-  padding-left: 3rem;
-  padding-right: 3rem;
-} */
+.Pinnedcard-sub-title {
+  padding-inline: 0.5rem;
+}
+
 
 li {
   display: flex;
@@ -57,4 +57,46 @@ li {
 .dashboard {
   flex: 1;
   padding: 20px;
+}
+
+/* //////////////////// */
+/* dropdwon */
+
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  /* background: #f8f9fa; */
+  border-radius: 5px;
+  margin-bottom: 5px;
+  transition: background 0.3s;
+
+  /* &:hover {
+    background: #e2e6ea;
+  } */
+
+  .dropdown-icon {
+    margin-left: auto;
+    font-size: 14px;
+  }
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 20px;
+
+  li {
+    padding: 5px 0;
+
+    a {
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 }

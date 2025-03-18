@@ -1,5 +1,6 @@
 i {
     transition: transform 0.3s ease-in-out;
+    margin-inline: 5px;
 }
 
 i.fa-chevron-right {
@@ -12,4 +13,32 @@ i.fa-chevron-down {
 
 ul {
     padding-left: 2rem;
+}
+
+li {
+    cursor: pointer;
+
+}
+
+.children-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* Adds space between children */
+    overflow: hidden;
+    transition: height 0.3s ease-in-out;
+    font-weight: 400;
+}
+
+.node-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px;
+    user-select: none;
+    /* Prevent text selection on click */
+}
+
+.node-label:hover {
+    color: #e89ede;
 }

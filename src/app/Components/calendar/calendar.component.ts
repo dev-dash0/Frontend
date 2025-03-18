@@ -75,19 +75,10 @@ export class CalendarComponent {
       this.filteredIssues = [];
     }
 
-    // setTimeout(() => {
-    //   const issueListElement = document.querySelector('.issues-list');
-    //   if (issueListElement) {
-    //     issueListElement.classList.add('show');
-    //   }
-    // }, 100);
-
     // Add a class if there are more than 6 issues
     setTimeout(() => {
       if (this.issuesList) {
         const issueListElement = this.issuesList.nativeElement as HTMLElement;
-        console.log('Issue Count:', this.filteredIssues.length);
-        console.log('ClassList:', issueListElement.classList);
         if (this.filteredIssues.length > 0) {
           issueListElement.classList.add('show');
         } else {

@@ -1,13 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
 import { CalendarComponent } from '../calendar/calendar.component';
-import { NgClass } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { SidebarService } from '../../Core/Services/sidebar.service';
 import { VisualizationComponent } from '../visualization/visualization.component';
 import { DashboardService } from '../../Core/Services/dashboard/dashboard.service';
-import { Project } from '../../Core/interfaces/Project';
-import { Issue } from '../../Core/interfaces/Issue';
+import { Project } from '../../Core/interfaces/Dashboard/Project';
+import { Issue } from '../../Core/interfaces/Dashboard/Issue';
 import { TreeNode } from '../../Core/interfaces/TreeNode';
 import { TreeComponent } from "../../Shared/tree/tree.component";
+import { RouterLink } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,6 +19,8 @@ import { TreeComponent } from "../../Shared/tree/tree.component";
     NgClass,
     VisualizationComponent,
     TreeComponent,
+    RouterLink,
+    CommonModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
@@ -26,9 +30,27 @@ export class DashboardComponent {
   AllProjectList: Project[] = [];
   AllIssueList: Issue[] = [];
   AllPinnedList: any = [];
+  pinnedTenants: any[] = [];
+  pinnedProjects: any[] = [];
   pinnedIssues: any[] = [];
-  treeData = signal<TreeNode[]>([]);
+  pinnedSprints: any[] = [];
+  // treeData = signal<TreeNode[]>([]);
+  treeData = new BehaviorSubject<TreeNode[]>([]);
 
+
+
+
+  isDropdownOpen = {
+    tenants: false,
+    projects: false,
+    issues: false,
+    sprints: false
+  };
+
+
+  get treeNodes(): TreeNode[] {
+    return this.treeData.value || []; // Ensure a default empty array
+  }
 
   private readonly _DashboardService = inject(DashboardService);
   constructor(private sidebarService: SidebarService) { }
@@ -40,7 +62,8 @@ export class DashboardComponent {
 
     this.getDashboardAllIProject();
     this.getDashboardAllIssue();
-    // this.getDashboardPinned();
+    this.getDashboardPinned();
+
   }
 
 
@@ -74,64 +97,78 @@ export class DashboardComponent {
       }
     );
   }
+  getDashboardPinned() {
+    this._DashboardService.getDashboardPinned().subscribe({
+      next: (res) => {
+        console.log("API Response:", res);
 
-  // getDashboardPinned() {
-  //   this._DashboardService.getDashboardPinned().subscribe(
-  //     {
-  //       next: (res) => {
-  //         console.log(res.result);
-  //         this.AllPinnedList = res.result.issues;
+        // Ensure we have valid data
+        const result = res?.result ?? {};
+        this.pinnedIssues = result.issues ?? [];
+        this.pinnedProjects = result.projects ?? [];
+        this.pinnedTenants = result.tenants ?? [];
+        this.pinnedSprints = result.sprints ?? [];
 
-  //         if (res.isSuccess && res.result.issues.length > 0) {
-  //           const pinnedIssueIds = res.result.issues.map((issue: any) => issue.itemId);
+        // Update treeData using .next()
+        this.treeData.next([
+          {
+            id: 'tenants',
+            name: 'Tenants',
+            type: 'tenant',
+            expanded: false,
+            children: this.pinnedTenants.map(t => ({
+              id: t?.id ?? 0,
+              name: t?.name ?? 'Unnamed Tenant',
+              type: 'tenant',
+              expanded: Boolean(t?.expanded), // ✅ Force boolean
+            })) || []
+          },
+          {
+            id: 'projects',
+            name: 'Projects',
+            type: 'project',
+            expanded: false,
+            children: this.pinnedProjects.map(p => ({
+              id: p?.id ?? 0,
+              name: p?.name ?? 'Unnamed Project',
+              type: 'project',
+              expanded: p?.expanded ?? false, // ✅ Ensure boolean
+            })) || []
+          },
+          {
+            id: 'issues',
+            name: 'Issues',
+            type: 'issue',
+            expanded: false,
+            children: this.pinnedIssues.map(i => ({
+              id: i?.id ?? 0,
+              name: i?.title ?? 'Unnamed Issue',
+              type: 'issue',
+              expanded: !!i?.expanded, // ✅ Force boolean using !!
+            })) || []
+          },
+          {
+            id: 'sprints',
+            name: 'Sprints',
+            type: 'sprint',
+            expanded: false,
+            children: this.pinnedSprints.map(s => ({
+              id: s?.id ?? 0,
+              name: s?.title ?? 'Unnamed Sprint',
+              type: 'sprint',
+              expanded: Boolean(s?.expanded) // ✅ Ensure boolean
+            })) || []
+          }
+        ]);
+      },
+      error: (err) => {
+        console.error("Error fetching tree data", err);
+      },
+    });
+  }
 
-  //           // Fetch issue details for each pinned issue
-  //           // this.fetchPinnedIssueDetails(pinnedIssueIds);
-  //         }
-  //         // this.AllPinnedList = Array.isArray(res.result) ? res.result : [];
-  //         this.treeData.set(res.result)
-  //         // this.completedIssues = res.result.completedIssues
-  //       },
-  //       error: (err) => {
-  //         console.log(err);
-  //         // console.error("Error fetching tree data", err);
-  //       },
-  //     }
-
-  //   );
-
-  // }
-
-  // fetchPinnedIssueDetails(issueIds: number[]) {
-  //   const issueRequests = issueIds.map((id) =>
-  //     this._DashboardService.getIssueById(id).subscribe({
-  //       next: (issue) => {
-  //         if (issue.isSuccess) {
-  //           this.pinnedIssues.push(issue.result);
-  //         }
-  //       },
-  //       error: (err) => console.error('Error fetching issue details', err),
-  //     })
-  //   );
-  // }
 
   capitalizeTitles(title: string) {
     return title.charAt(0).toUpperCase() + title.slice(1)
   }
-  // treeData: TreeNode[] = [
-  //   {
-  //     name: 'Root 1',
-  //     children: [
-  //       { name: 'Child 1' },
-  //       {
-  //         name: 'Child 2',
-  //         children: [{ name: 'Subchild 1' }]
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     name: 'Root 2',
-  //     children: [{ name: 'Child 3' }]
-  //   }
-  // ];
 }

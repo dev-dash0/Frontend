@@ -1,5 +1,7 @@
 export interface TreeNode {
+    id: string | number;
     name: string;
-    expanded?: boolean;
+    type: 'tenant' | 'project' | 'issue' | 'sprint';  // To differentiate items
+    expanded: boolean;
     children?: TreeNode[];
 }

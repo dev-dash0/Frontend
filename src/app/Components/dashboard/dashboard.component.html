@@ -21,7 +21,7 @@
                   <img src="assets/images/dashboard icons/list.svg" alt="" />
                   <span class="fs-5">{{capitalizeTitles(project.name)}}</span>
                 </div>
-                <span class="text-white-50">In {{project.tenant.name}} company</span>
+                <span class="CardbelongToSec">In {{project.tenant.name}} company</span>
               </li>
               }
             </ul>
@@ -43,38 +43,80 @@
                   <img src="assets/images/dashboard icons/list.svg" alt="" />
                   <span class="fs-5">{{capitalizeTitles(issue.title)}}</span>
                 </div>
-                <span class="text-white-50">In {{capitalizeTitles(issue.projectName)}} Project</span>
+                <span class="CardbelongToSec">In {{capitalizeTitles(issue.projectName)}} Project</span>
               </li>
               }
             </ul>
           </div>
         </div>
       </div>
+
       <div class="col-lg-6">
         <div class="card cardTopRight">
           <div class="card-body">
             <div class="headTitle mb-4">
               <img src="assets/images/dashboard icons/Pin.svg" alt="Pin icon" />
-              <h3 class="m-0">Pinned</h3>
+              <h3 class="m-0"> Pinned</h3>
             </div>
-            <!-- <ul> -->
-            <!-- <li> -->
-            <app-tree [nodes]="treeData()"></app-tree>
-            <!-- </li> -->
-            @for (pin of pinnedIssues; track $index)
-            {
-            <li>
-              <div class="pinned">
-                <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
-                <span class="ps-1 fs-5">{{pin.title}}</span>
-              </div>
-              <span class="text-white-50">in OS company</span>
-            </li>
-            }
-            <!-- </ul> -->
+            <div class="Pinnedcard-sub-title">
+              <app-tree [nodes]="treeNodes" class="fs-5"></app-tree>
+            </div>
+
+
+
+            <!-- Pinned Tenants -->
+            <!-- <div (click)="toggleDropdown('tenants')" class="dropdown-header">
+              <img src="assets/images/dashboard icons/list.svg" alt="" />
+              <span class="ps-1 fs-5">Pinned Tenants</span>
+              <span class="dropdown-icon">{{ isDropdownOpen.tenants ? '▼' : '▶' }}</span>
+            </div>
+            <ul *ngIf="isDropdownOpen.tenants">
+              <li *ngFor="let tenant of pinnedTenants">
+                <a [routerLink]="['/tenant', tenant.id]">{{ tenant.name }}</a>
+              </li>
+            </ul> -->
+
+            <!-- Pinned Projects -->
+            <!-- <div (click)="toggleDropdown('projects')" class="dropdown-header">
+              <img src="assets/images/dashboard icons/list.svg" alt="" />
+              <span class="ps-1 fs-5">Pinned Projects</span>
+              <span class="dropdown-icon">{{ isDropdownOpen.projects ? '▼' : '▶' }}</span>
+            </div>
+            <ul *ngIf="isDropdownOpen.projects">
+              <li *ngFor="let project of pinnedProjects">
+                <a [routerLink]="['/project', project.id]">{{ project.name }}</a>
+              </li>
+            </ul> -->
+
+            <!-- Pinned Issues -->
+            <!-- <div (click)="toggleDropdown('issues')" class="dropdown-header">
+              <img src="assets/images/dashboard icons/list.svg" alt="" />
+              <span class="ps-1 fs-5">Pinned Issues</span>
+              <span class="dropdown-icon">{{ isDropdownOpen.issues ? '▼' : '▶' }}</span>
+            </div>
+            <ul *ngIf="isDropdownOpen.issues">
+              <li *ngFor="let issue of pinnedIssues">
+                <a [routerLink]="['/issue', issue.id]">{{ issue.title }}</a>
+              </li>
+            </ul> -->
+
+            <!-- Pinned Sprints -->
+            <!-- <div (click)="toggleDropdown('sprints')" class="dropdown-header">
+              <img src="assets/images/dashboard icons/list.svg" alt="" />
+              <span class="ps-1 fs-5">Pinned Sprints</span>
+              <span class="dropdown-icon">{{ isDropdownOpen.sprints ? '▼' : '▶' }}</span>
+            </div> -->
+            <!-- <ul *ngIf="isDropdownOpen.sprints">
+              <li *ngFor="let sprint of pinnedSprints">
+                <a [routerLink]="['/sprint', sprint.id]">{{ sprint.title }}</a>
+              </li>
+            </ul> -->
+
           </div>
         </div>
       </div>
+
+
       <div class="col-lg-6">
         <div class="card cardTopLeft">
           <div class="card-body mb-2">

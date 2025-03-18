@@ -1,13 +1,19 @@
 <ul>
     @for (node of nodes; track node) {
     <li>
-        <span (click)="toggle(node)">
-            <!-- {{ node.name }} {{ node.expanded ? '▼' : '▶' }} -->
-            <i class="fa-solid fa-xs" [ngClass]="node.expanded ? 'fa-chevron-down' : 'fa-chevron-right'"
-                style="margin-right: 5px;">
-            </i>
-            {{ node.name }}
-        </span>
+        <div (click)="toggle(node)" class="node-label d-flex justify-content-between align-items-baseline">
+            <span class="node-label ">
+                {{ node.name }}
+            </span>
+            <span class="node-label ">
+                @if (node.children?.length) {
+                <i class="fa-solid fa-2xs mx-2" [ngClass]="node.expanded ? 'fa-chevron-down' : 'fa-chevron-right'">
+                </i>
+
+
+                }
+            </span>
+        </div>
         @if (node.children?.length) {
         <div [@expandCollapse]="node.expanded ? 'expanded' : 'collapsed'" class="children-container">
             <app-tree [nodes]="node.children??[]"></app-tree>
