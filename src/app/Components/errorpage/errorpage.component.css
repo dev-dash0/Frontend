@@ -1,0 +1,19 @@
+h1 {
+  font-size: 12rem;
+  font-weight: bold;
+  color: var(--importantPinkColor);
+}
+
+h2 {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--importantPinkColor);
+  font-family: var(--headerFontFamily);
+}
+
+p {
+  color: var(--mainLightBlueColor);
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-top: 50px;
+}

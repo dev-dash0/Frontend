@@ -1,28 +1,117 @@
-import { RouterLink, RouterOutlet } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterOutlet,
+} from '@angular/router';
 import { Component, EventEmitter, HostListener, Output } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
 import { SidebarService } from '../../Core/Services/sidebar.service';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
-import { ProjectModalComponent } from '../../Components/project-modal/project-modal.component';
-import { IssueModalComponent } from '../../Components/issue-modal/issue-modal.component';
-import { AddCompanyModalComponent } from '../../Components/company-modal/company-modal.component';
-import { SprintModalComponent } from '../../Components/sprint-modal/sprint-modal.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { DialogService } from '../../Core/Services/dialog.service';
+import { Company } from '../../Core/interfaces/company/company';
+import { CompanyService } from '../../Core/Services/company.service';
 
 @Component({
   selector: 'app-side-menu',
   standalone: true,
-  imports: [MatSidenavModule, CommonModule, RouterLink],
+  imports: [MatSidenavModule, CommonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './side-menu.component.html',
   styleUrls: ['./side-menu.component.css'],
 })
 export class SideMenuComponent {
   dropdownStates: { [key: string]: boolean } = {};
-
+  constructor(
+    private sidebarService: SidebarService,
+    private dialogService: DialogService,
+    private _companyService: CompanyService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+  companyData: Company[] = [];
+  companyNames: { id: string; name: string }[] = [];
+  // ---------------------------------------
+  mainServices = [
+    {
+      imagePath: 'assets/images/sidebar icons/Dashboard Layout.svg',
+      path: '/MyDashboard/Dashboard',
+      title: 'Dashboard',
+    },
+    {
+      imagePath: 'assets/images/sidebar icons/Pin.svg',
+      path: '',
+      title: 'Pinned',
+    },
+    {
+      imagePath: 'assets/images/sidebar icons/Group of Projects.svg',
+      path: '',
+      title: 'Projects',
+    },
+    {
+      imagePath: 'assets/images/sidebar icons/Checklist.svg',
+      path: '',
+      title: 'Issues',
+    },
+  ];
+  // -----------------------------------------
+  otherServices = [
+    {
+      imagePath: 'assets/images/sidebar icons/Plus.svg',
+      path: '',
+      text: 'Integrations',
+    },
+    {
+      imagePath: 'assets/images/sidebar icons/Add User Male.svg',
+      path: '',
+      text: 'Invite',
+    },
+    {
+      imagePath: 'assets/images/sidebar icons/Help.svg',
+      path: '',
+      text: 'Help',
+    },
+  ];
+  // ------------------------------------------
+  collapsedIcons = [
+    {
+      path: '/MyDashboard/Dashboard',
+      imagePath: 'assets/images/sidebar icons/Dashboard Layout.svg',
+    },
+    {
+      path: '',
+      imagePath: 'assets/images/sidebar icons/Pin.svg',
+    },
+    {
+      imagePath: 'assets/images/sidebar icons/Group of Projects.svg',
+      path: '',
+    },
+    {
+      imagePath: 'assets/images/sidebar icons/Checklist.svg',
+      path: '',
+    },
+    {
+      path: '/MyDashboard/allcompanies',
+      imagePath: 'assets/images/sidebar icons/Company.svg',
+    },
+    {
+      path: '',
+      imagePath: 'assets/images/sidebar icons/Project Management.svg',
+    },
+    {
+      path: '',
+      imagePath: 'assets/images/sidebar icons/Plus.svg',
+    },
+    {
+      path: '',
+      imagePath: 'assets/images/sidebar icons/Add User Male.svg',
+    },
+    {
+      path: '',
+      imagePath: 'assets/images/sidebar icons/Help.svg',
+    },
+  ];
+  // -------------- collapse ------------------
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
     const width = window.innerWidth;
@@ -34,73 +123,99 @@ export class SideMenuComponent {
 
   collapsed = false;
 
-  constructor(
-    private sidebarService: SidebarService,
-    private dialog: MatDialog
-  ) {}
-
   toggleCollapse(): void {
     this.collapsed = !this.collapsed;
     this.sidebarService.setSidebarState(this.collapsed); // Notify other components
   }
+  // ----------- dropdown optimization ------------
 
+  workspaceIssues = ['Issue 1', 'Issue 2'];
+
+  getCollapseId(companyIndex: number, projectIndex?: number): string {
+    if (projectIndex !== undefined) {
+      return `collapse-${companyIndex}-${projectIndex}`;
+    } else {
+      return `collapse-${companyIndex}`;
+    }
+  }
   // ! <------- Project Modal ------->
 
   openProj() {
-    this.dialog.open(ProjectModalComponent, {
-      width: 'auto',
-      minWidth: '50vw',
-      maxWidth: '80vw', // Limits width to 90% of viewport
-      minHeight: '70vh',
-      maxHeight: '90vh', // Prevents excessive height
-      panelClass: 'custom-dialog-container', // Custom class for styling
-      disableClose: true,
-      data: { message: 'Hello from modal!' }, // ✅ Pass data to modal
-    });
+    this.dialogService.openProjModal();
   }
 
   // ! <------- Issue Modal ------->
 
-  openDialog() {
-    this.dialog.open(IssueModalComponent, {
-      width: 'auto',
-      minWidth: '60vw',
-      maxWidth: '80vw', // Limits width to 90% of viewport
-      minHeight: '70vh',
-      maxHeight: '90vh', // Prevents excessive height
-      panelClass: 'custom-dialog-container', // Custom class for styling
-      disableClose: true,
-      data: { message: 'Hello from modal!' }, // ✅ Pass data to modal
-    });
+  openIssue() {
+    this.dialogService.openIssueModal();
   }
 
   // ! <------- Company Modal ------->
 
   openCompany() {
-    this.dialog.open(AddCompanyModalComponent, {
-      width: 'auto',
-      minWidth: '60vw',
-      maxWidth: '80vw', // Limits width to 90% of viewport
-      minHeight: '70vh',
-      maxHeight: '90vh', // Prevents excessive height
-      panelClass: 'custom-dialog-container', // Custom class for styling
-      disableClose: true,
-      data: { message: 'Hello from modal!' }, // ✅ Pass data to modal
-    });
+    this.dialogService.openCompanyModal();
   }
 
   // <!----- Sprint Modal ------>
 
   openSprint() {
-    this.dialog.open(SprintModalComponent, {
-      width: 'auto',
-      minWidth: '50vw',
-      maxWidth: '80vw',
-      minHeight: '70vh',
-      maxHeight: '90vh',
-      panelClass: 'custom-dialog-container',
-      disableClose: true,
-      data: { message: 'Hello from modal!' },
+    this.dialogService.openSprintModal();
+  }
+
+  //<!------ Company APi ------->
+
+  companies = [
+    {
+      name: 'Company A',
+      projects: [
+        {
+          name: 'Project 1',
+          sprints: [{ name: 'Sprint 1' }, { name: 'Sprint 2' }],
+        },
+      ],
+    },
+    {
+      name: 'Company B',
+      projects: [
+        {
+          name: 'Project 1',
+          sprints: [{ name: 'Sprint 1' }, { name: 'Sprint 2' }],
+        },
+      ],
+    },
+  ];
+
+  ngOnInit() {
+    this.getCompanies();
+    this.sidebarService.companyCreated$.subscribe(() => {
+      console.log('Refreshing sidebar...');
+      this.getCompanies();
     });
+    this.sidebarService.companyDeleted$.subscribe(() => {
+      console.log('Refreshing sidebar...');
+      this.getCompanies();
+    });
+  }
+
+  getCompanies(): void {
+    this._companyService.getAllCompanies(null).subscribe({
+      next: (res) => {
+        console.log(res);
+        if (res?.result?.length > 0) {
+          this.companyNames = res.result.map(
+            (company: { id: string; name: string }) => ({
+              id: company.id,
+              name: company.name,
+            })
+          );
+          this.companyData = res.result;
+        }
+      },
+      error: (err) => console.error(err),
+    });
+  }
+
+  selectCompany(companyId: string) {
+    this.router.navigate(['/MyDashboard/Company', companyId]);
   }
 }

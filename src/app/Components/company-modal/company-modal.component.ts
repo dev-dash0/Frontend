@@ -3,98 +3,53 @@ import {
   FormBuilder,
   FormGroup,
   FormsModule,
+  ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { FiledropComponent } from '../dragn-drop/dragn-drop.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CompanyService } from '../../Core/Services/company.service';
 
 @Component({
   selector: 'app-company-modal',
   standalone: true,
-  imports: [FormsModule, FiledropComponent],
+  imports: [FormsModule, FiledropComponent, ReactiveFormsModule],
   templateUrl: './company-modal.component.html',
   styleUrl: './company-modal.component.css',
 })
 export class AddCompanyModalComponent {
-  close: boolean = false;
   companyForm: FormGroup;
 
-  // constructor(private fb: FormBuilder) {
-  //   this.companyForm = this.fb.group({
-  //     companyName: ['', Validators.required],
-  //     websiteURL: [
-  //       '',
-  //       [Validators.required, Validators.pattern('https?://.+')],
-  //     ],
-  //     profileImage: [''],
-  //     keywords: ['', Validators.required],
-  //     description: ['', Validators.required],
-  //   });
-  // }
   constructor(
     private dialogRef: MatDialogRef<AddCompanyModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private _companyService: CompanyService,
     private fb: FormBuilder
   ) {
     this.companyForm = this.fb.group({
-      companyName: ['', Validators.required],
-      websiteURL: [
-        '',
-        [Validators.required, Validators.pattern('https?://.+')],
-      ],
-      profileImage: [''],
-      keywords: ['', Validators.required],
-      description: ['', Validators.required],
+      name: ['', Validators.required],
+      tenantUrl: ['', Validators.pattern('https?://.+')],
+      image: [''],
+      keywords: [''],
+      description: [''],
     });
   }
 
-  onSubmit() {
+  createNewCompany() {
     if (this.companyForm.valid) {
-      console.log('Company Data:', this.companyForm.value);
-    } else {
-      console.log('Form is invalid');
+      this._companyService.createCompany(this.companyForm.value).subscribe({
+        next: (res) => {
+          console.log(res);
+          this.dialogRef.close();
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
     }
   }
 
-  closeModal() {
-    console.log('Close modal');
-    this.close = true;
+  close() {
+    this.dialogRef.close();
   }
-
-  // isDragging = false;
-  // uploadedFiles: File[] = [];
-
-  // onDragOver(event: DragEvent) {
-  //   event.preventDefault();
-  //   this.isDragging = true;
-  // }
-
-  // onDragLeave(event: DragEvent) {
-  //   event.preventDefault();
-  //   this.isDragging = false;
-  // }
-
-  // onDrop(event: DragEvent) {
-  //   event.preventDefault();
-  //   this.isDragging = false;
-
-  //   if (event.dataTransfer && event.dataTransfer.files) {
-  //     const files = Array.from(event.dataTransfer.files);
-  //     this.handleFiles(files);
-  //   }
-  // }
-
-  // onFileSelect(event: Event) {
-  //   const input = event.target as HTMLInputElement;
-  //   if (input.files) {
-  //     const files = Array.from(input.files);
-  //     this.handleFiles(files);
-  //   }
-  // }
-
-  // handleFiles(files: File[]) {
-  //   this.uploadedFiles = [...this.uploadedFiles, ...files];
-  //   console.log('Files:', this.uploadedFiles);
-  //   // Add logic to upload files to the server if needed
-  // }
 }

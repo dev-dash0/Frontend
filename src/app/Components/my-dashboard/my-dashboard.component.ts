@@ -10,6 +10,8 @@ import { ProjectViewComponent } from '../project-view/project-view.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { AllProjectsDashboardComponent } from '../all-projects-dashboard/all-projects-dashboard.component';
 import { CommonModule } from '@angular/common';
+import { DeleteModalComponent } from '../deletemodal/deletemodal.component';
+import { ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-my-dashboard',
   standalone: true,
@@ -20,11 +22,13 @@ import { CommonModule } from '@angular/common';
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
-    ProjectViewComponent,
-    DashboardComponent,
+    // ProjectViewComponent,
+    // DashboardComponent,
     RouterOutlet,
-    AllProjectsDashboardComponent,
+    // AllProjectsDashboardComponent,
     CommonModule,
+    // DeleteModalComponent,
+    ReactiveFormsModule,
   ],
   templateUrl: './my-dashboard.component.html',
   styleUrl: './my-dashboard.component.css',

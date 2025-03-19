@@ -8,14 +8,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { IssueModalComponent } from './Components/issue-modal/issue-modal.component';
 import { ProjectModalComponent } from './Components/project-modal/project-modal.component';
 import { SprintModalComponent } from './Components/sprint-modal/sprint-modal.component';
-import { AddCompanyModalComponent } from "./Components/company-modal/company-modal.component";
-import { MyDashboardComponent } from "./Components/my-dashboard/my-dashboard.component";
-import { DashboardTestComponent } from "./Components/dashboard-test/dashboard-test.component";
-import { DashboardComponent } from "./Components/dashboard/dashboard.component";
-import { SigninComponent } from "./Components/signin/signin.component";
-import { SignupComponent } from "./Components/signup/signup.component";
+import { AddCompanyModalComponent } from './Components/company-modal/company-modal.component';
+import { MyDashboardComponent } from './Components/my-dashboard/my-dashboard.component';
+import { DashboardTestComponent } from './Components/dashboard-test/dashboard-test.component';
+import { DashboardComponent } from './Components/dashboard/dashboard.component';
+import { SigninComponent } from './Components/signin/signin.component';
+import { SignupComponent } from './Components/signup/signup.component';
 import { UpdateInfoComponent } from './Components/update-info/update-info.component';
-import { WelcomePageComponent } from "./Components/welcome-page/welcome-page.component";
+import { WelcomePageComponent } from './Components/welcome-page/welcome-page.component';
 
 @Component({
   selector: 'app-root',
@@ -26,21 +26,14 @@ import { WelcomePageComponent } from "./Components/welcome-page/welcome-page.com
     MatButtonModule,
     MatDividerModule,
     MatIconModule,
-    AddCompanyModalComponent,
-    MyDashboardComponent,
-    DashboardTestComponent,
-    DashboardComponent,
-    SigninComponent,
-    SignupComponent,
-    WelcomePageComponent
-],
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'Dev-Dash';
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog) {}
 
   openDialog(component: any, data: any = null) {
     this.dialog.open(component, {

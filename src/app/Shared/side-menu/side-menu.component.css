@@ -101,6 +101,25 @@ mat-sidenav-container {
   cursor: pointer;
 }
 
+.side-logo,
+.main-service,
+.all-companies,
+.team,
+.add-company,
+.sprint,
+.work-space,
+.other-service,
+.collapsed-icons,
+.add-project {
+  display: flex;
+  align-items: center;
+}
+
+.drop-button {
+  display: flex;
+  justify-content: space-between;
+}
+
 @media (max-width: 992px) {
   mat-sidenav-container {
     top: 80px;

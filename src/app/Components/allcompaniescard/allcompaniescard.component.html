@@ -1,0 +1,81 @@
+<div class="card cardBottomRight">
+  <div class="company">
+    <div class="card-img object-fit-cover">
+      <img
+        class="object-fit-cover w-100"
+        [src]="
+          isValidUrl(company.image) ? company.image : 'assets/images/cover.jpg'
+        "
+        alt="{{ company.name }}"
+      />
+    </div>
+    <div class="card-body">
+      <div class="header">
+        <h2 class="text-capitalize">{{ company.name }}</h2>
+        <div class="icons gap-3">
+          <a (click)="copyText('code')">
+            <span *ngIf="!copied.code">
+              <i
+                class="fa-regular fa-file-lines fa-xl"
+                style="color: var(--mainLightBlueColor)"
+              ></i>
+            </span>
+            <span *ngIf="copied.code">
+              <i class="fa-check fa-solid fa-xl" style="color: #28a745"></i>
+            </span>
+          </a>
+          <a
+            [href]="isValidUrl(company.tenantUrl) ? company.tenantUrl : ''"
+            target="_blank"
+          >
+            <i
+              class="fa-solid fa-link fa-xl"
+              style="color: var(--mainLightBlueColor)"
+            ></i>
+          </a>
+        </div>
+      </div>
+      <mat-chip-set>
+        <mat-chip
+          *ngFor="
+            let tag of company.keywords ? company.keywords.split(' ') : []
+          "
+          >{{ tag }}</mat-chip
+        >
+      </mat-chip-set>
+      <p class="mt-2">
+        {{ company.description }}
+      </p>
+      <div class="members-details">
+        <div class="people gap-1">
+          <ng-container
+            *ngFor="let member of company.joinedUsers; let last = last"
+          >
+            <div class="gap-1 member">
+              <img
+                [src]="
+                  isValidUrl(member.imageUrl)
+                    ? member?.imageUrl
+                    : 'assets/images/Test Account.svg'
+                "
+                [style.border]="
+                  isValidUrl(member.imageUrl)
+                    ? '2px var(--mainLightBlueColor) solid'
+                    : ''
+                "
+                [style.border-radius]="isValidUrl(member.imageUrl) ? '50%' : ''"
+                alt=""
+              />
+            </div>
+            <hr *ngIf="!last" />
+          </ng-container>
+          <h4 class="m-0 p-0">+5</h4>
+        </div>
+        <button class="btn" (click)="selectCompany()">
+          View More
+          <i class="fa-solid fa-angles-right ps-1" style="color: #dcdfff"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

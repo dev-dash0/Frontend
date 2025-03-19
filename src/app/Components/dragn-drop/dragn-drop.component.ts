@@ -1,10 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
-import { ControlContainer, FormControl, FormControlName, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  ControlContainer,
+  FormControl,
+  FormControlName,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { CommonEngine } from '@angular/ssr';
 
 @Component({
   selector: 'app-dragn-drop',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './dragn-drop.component.html',
   styleUrl: './dragn-drop.component.css',
 })

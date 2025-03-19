@@ -108,7 +108,7 @@
                   <img src="assets/images/issue view/To Do.svg" alt="" />
                   <span>Issues</span>
                 </h2>
-                <button class="add-btn btn">
+                <button class="add-btn btn" (click)="openIssue()">
                   <img
                     class="pe-2"
                     src="assets/images/sidebar icons/Plus.svg"
@@ -117,364 +117,61 @@
                   Add Issues
                 </button>
               </div>
+
               <div class="row g-3 mt-1">
-                <div class="col-md-4">
-                  <div class="tag-box backlog-tag">
+                <div class="col-md-4" *ngFor="let category of issueCategories">
+                  <div class="tag-box" [ngClass]="category.class">
                     <div class="tag-name">
-                      <img
-                        src="assets/images/Issue Status/backlog.svg"
-                        alt=""
-                      />
-                      <p>Backlog</p>
+                      <img [src]="category.icon" alt="" />
+                      <p>{{ category.name }}</p>
                     </div>
-                    <span class="backlog-span">3</span>
+                    <span [ngClass]="getSpanStatus(category.status)">{{
+                      category.issues.length
+                    }}</span>
                   </div>
-                  <div class="wrapper backlog-wrapper gap-3">
-                    <div class="col-md-12">
+
+                  <div
+                    class="wrapper gap-3"
+                    [ngClass]="getWrapperClass(category.status)"
+                  >
+                    <div
+                      class="col-md-12"
+                      *ngFor="let issue of category.issues"
+                    >
                       <div class="card p-1">
                         <div class="card-body">
-                          <div class="issue-name-date">
-                            <h3>Issue 1</h3>
-                            <p class="p-0 m-0">Start 5-1 | Due 5-12</p>
-                          </div>
-                          <div class="issue-description">
-                            <p>
-                              Lorem ipsum dolor sit amet consectetur adipisicing
-                              elit. Quisquam, voluptas.
-                            </p>
-                          </div>
-                          <div class="field-tag mt-4">
-                            <p class="text-uppercase">web</p>
-                          </div>
-                          <div class="button-options d-flex align-items-end">
-                            <button class="btn mt-3">
-                              <i
-                                class="fa-regular fa-keyboard fa-lg pe-1"
-                                style="color: #dcdfff"
-                              ></i>
-                              View Details
-                            </button>
-                            <div class="options-imgs gap-2">
+                          <div class="issue-header">
+                            <!-- Priority Tag -->
+                            <div
+                              class="priority-tag"
+                              [ngClass]="issue.priority"
+                            >
                               <img
-                                src="assets/images/issue view/Add File.svg"
-                                alt=""
+                                [src]="issue.priorityIcon"
+                                alt="{{ issue.priority }} Icon"
                               />
-                              <img
-                                src="assets/images/issue view/Edit Chat History.svg"
-                                alt=""
-                              />
+                              <span>{{ issue.priority }}</span>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="card p-1">
-                        <div class="card-body">
+
                           <div class="issue-name-date">
-                            <h3>Issue 1</h3>
-                            <p class="p-0 m-0">Start 5-1 | Due 5-12</p>
-                          </div>
-                          <div class="issue-description">
-                            <p>
-                              Lorem ipsum dolor sit amet consectetur adipisicing
-                              elit. Quisquam, voluptas.
+                            <h3>{{ issue.title }}</h3>
+                            <p class="p-0 m-0">
+                              Start {{ issue.startDate }} | Due
+                              {{ issue.dueDate }}
                             </p>
                           </div>
-                          <div class="field-tag mt-4">
-                            <p class="p-0 m-0 text-uppercase">web</p>
-                          </div>
-                          <div class="button-options d-flex align-items-end">
-                            <button class="btn mt-3">
-                              <i
-                                class="fa-regular fa-keyboard fa-lg pe-1"
-                                style="color: #dcdfff"
-                              ></i>
-                              View Details
-                            </button>
-                            <div class="options-imgs gap-2">
-                              <img
-                                src="assets/images/issue view/Add File.svg"
-                                alt=""
-                              />
-                              <img
-                                src="assets/images/issue view/Edit Chat History.svg"
-                                alt=""
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="card p-1">
-                        <div class="card-body">
-                          <div class="issue-name-date">
-                            <h3>Issue 1</h3>
-                            <p class="p-0 m-0">Start 5-1 | Due 5-12</p>
-                          </div>
+
                           <div class="issue-description">
-                            <p>
-                              Lorem ipsum dolor sit amet consectetur adipisicing
-                              elit. Quisquam, voluptas.
+                            <p>{{ issue.description }}</p>
+                          </div>
+
+                          <div class="field-tag mt-4">
+                            <p class="p-0 m-0 text-capitalize">
+                              {{ issue.category }}
                             </p>
                           </div>
-                          <div class="field-tag mt-4">
-                            <p class="p-0 m-0 text-uppercase">web</p>
-                          </div>
-                          <div class="button-options d-flex align-items-end">
-                            <button class="btn mt-3">
-                              <i
-                                class="fa-regular fa-keyboard fa-lg pe-1"
-                                style="color: #dcdfff"
-                              ></i>
-                              View Details
-                            </button>
-                            <div class="options-imgs gap-2">
-                              <img
-                                src="assets/images/issue view/Add File.svg"
-                                alt=""
-                              />
-                              <img
-                                src="assets/images/issue view/Edit Chat History.svg"
-                                alt=""
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="tag-box todo-tag">
-                    <div class="tag-name">
-                      <img src="assets/images/Issue Status/todo.svg" alt="" />
-                      <p>To Do</p>
-                    </div>
-                    <span class="todo-span">3</span>
-                  </div>
-                  <div class="wrapper todo-wrapper gap-3">
-                    <div class="col-md-12">
-                      <div class="card p-1">
-                        <div class="card-body">
-                          <div class="issue-name-date">
-                            <h3>Issue 1</h3>
-                            <p class="p-0 m-0">Start 5-1 | Due 5-12</p>
-                          </div>
-                          <div class="issue-description">
-                            <p>
-                              Lorem ipsum dolor sit amet consectetur adipisicing
-                              elit. Quisquam, voluptas.
-                            </p>
-                          </div>
-                          <div class="field-tag mt-4">
-                            <p class="p-0 m-0 text-uppercase">web</p>
-                          </div>
-                          <div class="button-options d-flex align-items-end">
-                            <button class="btn mt-3">
-                              <i
-                                class="fa-regular fa-keyboard fa-lg pe-1"
-                                style="color: #dcdfff"
-                              ></i>
-                              View Details
-                            </button>
-                            <div class="options-imgs gap-2">
-                              <img
-                                src="assets/images/issue view/Add File.svg"
-                                alt=""
-                              />
-                              <img
-                                src="assets/images/issue view/Edit Chat History.svg"
-                                alt=""
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="card p-1">
-                        <div class="card-body">
-                          <div class="issue-name-date">
-                            <h3>Issue 1</h3>
-                            <p class="p-0 m-0">Start 5-1 | Due 5-12</p>
-                          </div>
-                          <div class="issue-description">
-                            <p>
-                              Lorem ipsum dolor sit amet consectetur adipisicing
-                              elit. Quisquam, voluptas.
-                            </p>
-                          </div>
-                          <div class="field-tag mt-4">
-                            <p class="p-0 m-0 text-uppercase">web</p>
-                          </div>
-                          <div class="button-options d-flex align-items-end">
-                            <button class="btn mt-3">
-                              <i
-                                class="fa-regular fa-keyboard fa-lg pe-1"
-                                style="color: #dcdfff"
-                              ></i>
-                              View Details
-                            </button>
-                            <div class="options-imgs gap-2">
-                              <img
-                                src="assets/images/issue view/Add File.svg"
-                                alt=""
-                              />
-                              <img
-                                src="assets/images/issue view/Edit Chat History.svg"
-                                alt=""
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="card p-1">
-                        <div class="card-body">
-                          <div class="issue-name-date">
-                            <h3>Issue 1</h3>
-                            <p class="p-0 m-0">Start 5-1 | Due 5-12</p>
-                          </div>
-                          <div class="issue-description">
-                            <p>
-                              Lorem ipsum dolor sit amet consectetur adipisicing
-                              elit. Quisquam, voluptas.
-                            </p>
-                          </div>
-                          <div class="field-tag mt-4">
-                            <p class="p-0 m-0 text-uppercase">web</p>
-                          </div>
-                          <div class="button-options d-flex align-items-end">
-                            <button class="btn mt-3">
-                              <i
-                                class="fa-regular fa-keyboard fa-lg pe-1"
-                                style="color: #dcdfff"
-                              ></i>
-                              View Details
-                            </button>
-                            <div class="options-imgs gap-2">
-                              <img
-                                src="assets/images/issue view/Add File.svg"
-                                alt=""
-                              />
-                              <img
-                                src="assets/images/issue view/Edit Chat History.svg"
-                                alt=""
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="tag-box completed-tag">
-                    <div class="tag-name">
-                      <img
-                        src="assets/images/Issue Status/Completed.svg"
-                        alt=""
-                      />
-                      <p>Completed</p>
-                    </div>
-                    <span class="completed-span">3</span>
-                  </div>
-                  <div class="wrapper completed-wrapper gap-3">
-                    <div class="col-md-12">
-                      <div class="card p-1">
-                        <div class="card-body">
-                          <div class="issue-name-date">
-                            <h3>Issue 1</h3>
-                            <p class="p-0 m-0">Start 5-1 | Due 5-12</p>
-                          </div>
-                          <div class="issue-description">
-                            <p>
-                              Lorem ipsum dolor sit amet consectetur adipisicing
-                              elit. Quisquam, voluptas.
-                            </p>
-                          </div>
-                          <div class="field-tag mt-4">
-                            <p class="p-0 m-0 text-uppercase">web</p>
-                          </div>
-                          <div class="button-options d-flex align-items-end">
-                            <button class="btn mt-3">
-                              <i
-                                class="fa-regular fa-keyboard fa-lg pe-1"
-                                style="color: #dcdfff"
-                              ></i>
-                              View Details
-                            </button>
-                            <div class="options-imgs gap-2">
-                              <img
-                                src="assets/images/issue view/Add File.svg"
-                                alt=""
-                              />
-                              <img
-                                src="assets/images/issue view/Edit Chat History.svg"
-                                alt=""
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="card p-1">
-                        <div class="card-body">
-                          <div class="issue-name-date">
-                            <h3>Issue 1</h3>
-                            <p class="p-0 m-0">Start 5-1 | Due 5-12</p>
-                          </div>
-                          <div class="issue-description">
-                            <p>
-                              Lorem ipsum dolor sit amet consectetur adipisicing
-                              elit. Quisquam, voluptas.
-                            </p>
-                          </div>
-                          <div class="field-tag mt-4">
-                            <p class="p-0 m-0 text-uppercase">web</p>
-                          </div>
-                          <div class="button-options d-flex align-items-end">
-                            <button class="btn mt-3">
-                              <i
-                                class="fa-regular fa-keyboard fa-lg pe-1"
-                                style="color: #dcdfff"
-                              ></i>
-                              View Details
-                            </button>
-                            <div class="options-imgs gap-2">
-                              <img
-                                src="assets/images/issue view/Add File.svg"
-                                alt=""
-                              />
-                              <img
-                                src="assets/images/issue view/Edit Chat History.svg"
-                                alt=""
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="card p-1">
-                        <div class="card-body">
-                          <div class="issue-name-date">
-                            <h3>Issue 1</h3>
-                            <p class="p-0 m-0">Start 5-1 | Due 5-12</p>
-                          </div>
-                          <div class="issue-description">
-                            <p>
-                              Lorem ipsum dolor sit amet consectetur adipisicing
-                              elit. Quisquam, voluptas.
-                            </p>
-                          </div>
-                          <div class="field-tag mt-4">
-                            <p class="p-0 m-0 text-uppercase">web</p>
-                          </div>
+
                           <div class="button-options d-flex align-items-end">
                             <button class="btn mt-3">
                               <i
@@ -500,6 +197,7 @@
                   </div>
                 </div>
               </div>
+
               <button class="btn mt-4">
                 View More
                 <i
