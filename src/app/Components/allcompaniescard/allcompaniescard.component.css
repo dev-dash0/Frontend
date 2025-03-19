@@ -1,0 +1,106 @@
+::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+  color: #8aa0f2 !important;
+}
+
+::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #dd8af2 !important;
+}
+
+::ng-deep .mdc-tab {
+  border-radius: 10px 10px 0px 0 !important;
+}
+
+::ng-deep.mat-mdc-tab-ripple {
+  border-radius: 10px 10px 0 0;
+}
+
+::ng-deep .mdc-tab__ripple:before {
+  border-radius: 10px 10px 0 0 !important;
+}
+
+::ng-deep .mdc-tab-indicator {
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep .mdc-tab-indicator--active {
+  background-color: #0d1123 !important;
+}
+
+::ng-deep .mdc-tab-indicator--active:hover {
+  background-color: #0d1123 !important;
+}
+
+::ng-deep .mat-mdc-standard-chip .mdc-evolution-chip__text-label {
+  color: var(--mainColor) !important;
+  font-weight: var(--middleFontWeight) !important;
+}
+
+mat-chip {
+  background-color: var(--importantPinkColor) !important;
+}
+
+.card1 {
+  background-color: #0d1123;
+  border-radius: var(--standardRoundness) !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  position: relative;
+  overflow: hidden;
+  padding: 1.5rem var(--standardPadding);
+}
+
+h2 {
+  font-family: var(--headerFontFamily);
+}
+
+.company img {
+  border-top-left-radius: var(--standardRoundness);
+  border-top-right-radius: var(--standardRoundness);
+}
+
+.company .card-body {
+  background: var(--issueGradient);
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  border-radius: var(--standardRoundness);
+}
+.company p {
+  font-size: var(--middleFontWeight);
+  color: var(--lightGrayColor);
+}
+
+.members-details,
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.people,
+.icons {
+  display: flex;
+  align-items: center;
+}
+
+.member img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  max-width: 100%;
+  border-radius: 50%;
+  padding: 1rem;
+  padding: 0;
+  margin: 0;
+  /* border: 2px var(--mainLightBlueColor) solid; */
+  color: var(--mainLightBlueColor);
+}
+
+button {
+  background: var(--lightPinkGradient);
+  color: var(--mainLightBlueColor);
+  font-weight: var(--middleFontWeight);
+  border: none;
+}

@@ -1,0 +1,352 @@
+<div class="my-4 min-vh-100">
+  <div class="BG" [ngClass]="{ expand: isSidebarCollapsed }">
+    <div class="container">
+      <div class="row g-3">
+        <div class="col-md-8">
+          <div class="card cardBottomRight">
+            <div class="card-body">
+              <div class="header">
+                <div
+                  class="company-header-data d-flex align-items-center gap-2"
+                >
+                  <img
+                    src="assets/images/sidebar icons/Company.svg"
+                    alt="Company Logo"
+                  />
+                  <h2>{{ company.name }}</h2>
+                </div>
+                <button
+                  [style.display]="isOwner ? 'block' : 'none'"
+                  class="btn card px-3 py-2 trash-icon"
+                  (click)="delete()"
+                >
+                  <i class="fa-solid fa-trash" style="color: red"></i>
+                </button>
+              </div>
+              <div class="content mt-3">
+                <div class="row g-4">
+                  <div class="col-md-6">
+                    <!--image-->
+                    <img
+                      class="company-img"
+                      [src]="
+                        isValidUrl(company.image)
+                          ? company.image
+                          : 'assets/images/cover.jpg'
+                      "
+                      alt="Company Cover"
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <div class="code">
+                      <h5>
+                        <i
+                          class="fa-regular fa-file-lines pe-1"
+                          style="color: var(--mainLightBlueColor)"
+                        ></i>
+                        <!--code-->
+                        Company Code
+                      </h5>
+                      <div class="copy-text d-flex align-items-center gap-2">
+                        <p>{{ company.tenantCode }}</p>
+                        <div (click)="copyText('code')">
+                          <span *ngIf="!copied.code">
+                            <i
+                              class="fa-clipboard fa-regular"
+                              style="color: #2459fffc"
+                            ></i>
+                          </span>
+                          <span *ngIf="copied.code">
+                            <i
+                              class="fa-check fa-solid"
+                              style="color: #28a745"
+                            ></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="url">
+                      <h5>
+                        <i
+                          class="fa-solid fa-link pe-1"
+                          style="color: var(--mainLightBlueColor)"
+                        ></i>
+                        <!--url-->
+                        Company URL
+                      </h5>
+                      <div class="copy-text d-flex align-items-center gap-2">
+                        <p>
+                          {{
+                            isValidUrl(company.tenantUrl)
+                              ? company.tenantUrl
+                              : "No Company URL Available"
+                          }}
+                        </p>
+                        <div
+                          [style.display]="
+                            isValidUrl(company.tenantUrl) ? 'block' : 'none'
+                          "
+                          (click)="copyText('url')"
+                        >
+                          <span *ngIf="!copied.url">
+                            <i
+                              class="fa-clipboard fa-regular"
+                              style="color: #2459fffc"
+                            ></i>
+                          </span>
+                          <span *ngIf="copied.url">
+                            <i
+                              class="fa-check fa-solid"
+                              style="color: #28a745"
+                            ></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="description">
+                      <h5>
+                        <img
+                          src="assets/images/issue view/sprint details/Playlist.svg"
+                          alt=""
+                          class="pe-1 pb-1"
+                        />
+                        Description
+                      </h5>
+                      <!--description-->
+                      <p>{{ company.description }}</p>
+                    </div>
+
+                    <div class="tags">
+                      <h5>
+                        <i
+                          class="fa-solid fa-hashtag pe-1"
+                          style="color: var(--mainLightBlueColor)"
+                        ></i>
+                        Tags
+                      </h5>
+                      <mat-chip-set>
+                        <!--tags-->
+                        <mat-chip
+                          *ngFor="
+                            let tag of company?.keywords
+                              ? company?.keywords?.split(' ')
+                              : []
+                          "
+                          >{{ tag }}</mat-chip
+                        >
+                      </mat-chip-set>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="row g-2 h-100">
+            <div
+              class="col-md-6"
+              *ngFor="let stat of projectStats; let i = index"
+            >
+              <div class="card h-100" [ngClass]="[stat.class, cardClasses[i]]">
+                <div class="card-body">
+                  <h4>{{ stat.title }}</h4>
+                  <h3>{{ stat.count }}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card cardBottomRight h-100">
+            <div class="card-body">
+              <div class="owner-header">
+                <h4 style="font-family: var(--headerFontFamily)">
+                  <i
+                    class="fa-regular fa-address-card pe-1 fa-lg"
+                    style="color: var(--mainLightBlueColor)"
+                  ></i>
+                  Owner Details
+                </h4>
+              </div>
+              <div class="d-flex align-items-center gap-2 mt-3">
+                <!--owner image-->
+                <img
+                  class="owner-img"
+                  [style.border]="
+                    isValidUrl(company.owner.imageUrl)
+                      ? '2px var(--mainLightBlueColor) solid'
+                      : ''
+                  "
+                  [style.width]="
+                    isValidUrl(company.owner.imageUrl) ? '50px' : '60px'
+                  "
+                  [style.height]="
+                    isValidUrl(company.owner.imageUrl) ? '50px' : '60px'
+                  "
+                  [src]="
+                    isValidUrl(company.owner.imageUrl)
+                      ? company.owner.imageUrl
+                      : 'assets/images/placeholder pic.png'
+                  "
+                  alt="Owner Image"
+                />
+                <div class="owner">
+                  <h5 class="mb-0 text-capitalize">
+                    {{ company.owner.firstName }}
+                    {{ company.owner.lastName }}
+                  </h5>
+                  <p class="m-0 p-0">
+                    {{ company.owner.userName }}
+                  </p>
+                </div>
+              </div>
+              <div class="contact mt-2">
+                <h4>Contact Info</h4>
+                <div
+                  *ngFor="let contact of contactInfo"
+                  class="d-flex align-items-center gap-1 mb-2"
+                >
+                  <img [src]="contact.icon" alt="{{ contact.label }}" />
+                  <p class="m-0 p-0">
+                    {{ contact.label }}: {{ contact.value }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card p-2 cardBottomLeft project-members">
+            <div class="card-body">
+              <div class="header text-center">
+                <h2>Company Members</h2>
+              </div>
+              <hr />
+              <div class="members">
+                <ng-container
+                  *ngFor="let member of company.joinedUsers; let last = last"
+                >
+                  <div class="gap-2 member">
+                    <img
+                      [src]="
+                        isValidUrl(member.imageUrl)
+                          ? member?.imageUrl
+                          : 'assets/images/Test Account.svg'
+                      "
+                      [style.border]="
+                        isValidUrl(member.imageUrl)
+                          ? '2px var(--mainLightBlueColor) solid'
+                          : ''
+                      "
+                      alt=""
+                    />
+                    <p class="m-0 p-0 text-capitalize">
+                      {{ member?.firstName }} {{ member?.lastName }}
+                    </p>
+                  </div>
+                  <hr *ngIf="!last" />
+                </ng-container>
+                <hr />
+                <div class="add-members gap-2">
+                  <img src="./assets/images/Plus.svg" alt="" />
+                  <p class="m-0 p-0">Add Members</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="card cardBottomRight h-100">
+            <div class="card-body">
+              <div class="project-header">
+                <h2 class="gap-2">
+                  <img
+                    src="assets/images/dashboard icons/Group of Projects.svg"
+                    alt=""
+                  />
+                  <span>Projects</span>
+                </h2>
+              </div>
+
+              <div class="row g-3 mt-1">
+                <div
+                  class="col-md-4"
+                  *ngFor="let category of ProjectCategories"
+                >
+                  <div class="tag-box" [ngClass]="category.class">
+                    <div class="tag-name">
+                      <img [src]="category.icon" alt="" />
+                      <p>{{ category.name }}</p>
+                    </div>
+                    <span [ngClass]="getSpanStatus(category.status)">{{
+                      category.issues.length
+                    }}</span>
+                  </div>
+
+                  <div
+                    class="wrapper gap-3"
+                    [ngClass]="getWrapperClass(category.status)"
+                  >
+                    <div
+                      class="col-md-12"
+                      *ngFor="let issue of category.issues"
+                    >
+                      <div class="card p-1">
+                        <div class="card-body">
+                          <div class="issue-name-date">
+                            <h3>{{ issue.title }}</h3>
+                            <p class="p-0 m-0">
+                              Start {{ issue.startDate }} | Due
+                              {{ issue.dueDate }}
+                            </p>
+                          </div>
+                          <div class="issue-description">
+                            <p>{{ issue.description }}</p>
+                          </div>
+                          <div class="field-tag mt-4">
+                            <p class="p-0 m-0 text-capitalize">
+                              {{ issue.category }}
+                            </p>
+                          </div>
+                          <div class="button-options d-flex align-items-end">
+                            <button class="btn mt-3">
+                              <i
+                                class="fa-regular fa-keyboard fa-lg pe-1"
+                                style="color: #dcdfff"
+                              ></i>
+                              View Details
+                            </button>
+                            <div class="options-imgs gap-2">
+                              <img
+                                src="assets/images/issue view/Add File.svg"
+                                alt=""
+                              />
+                              <img
+                                src="assets/images/issue view/Edit Chat History.svg"
+                                alt=""
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn mt-4">
+                View More
+                <i
+                  class="fa-solid fa-angles-right ps-1"
+                  style="color: #dcdfff"
+                ></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

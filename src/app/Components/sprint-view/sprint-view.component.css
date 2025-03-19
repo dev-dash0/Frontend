@@ -161,11 +161,14 @@ h5 p {
 }
 
 .field-tag {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  padding: var(--standardPadding) var(--standardPadding / 2);
+  /* display: flex;
+  align-items: center; */
+  /* justify-content: center; */
+  /* width: 50px; */
+  display: inline-block;
+  min-width: 50px;
+  text-align: center;
+  padding: 0 10px;
   background-color: var(--importantPinkColor);
   border-radius: 0.3rem;
 }
@@ -190,4 +193,26 @@ h5 p {
 
 .header {
   text-align: center;
+}
+/*-------------------------------------------*/
+/*issue status*/
+
+.Low {
+  /* background-color: #908f8f; */
+  color: #908f8f !important;
+}
+
+.Normal {
+  /* background-color: #4854f1; */
+  color: #4854f1 !important;
+}
+
+.High {
+  /* background-color: #d07805; */
+  color: #d07805 !important;
+}
+
+.Urgent {
+  /* background-color: #d02705; */
+  color: #d02705 !important;
 }

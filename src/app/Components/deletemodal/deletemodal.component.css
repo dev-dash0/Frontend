@@ -1,0 +1,89 @@
+::ng-deep .mat-mdc-dialog-container,
+.mat-mdc-dialog-container .mdc-dialog__container,
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  min-height: auto;
+}
+.modal-container {
+  color: var(--mainLightBlueColor);
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  background-image: linear-gradient(134deg, #292f65 8%, #0b1a34 54%);
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-weight: var(--middleFontWeight);
+  font-family: var(--headerFontFamily);
+  color: var(--importantPinkColor);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.cancel-btn {
+  background: none;
+  border: none;
+  color: #b5b5b5;
+  font-size: 0.875rem;
+  cursor: pointer;
+  border: 1px solid #b5b5b5;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: all 0.1s;
+}
+
+.delete-btn {
+  background-color: var(--importantPinkColor);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.delete-btn:hover {
+  background-color: #d076be;
+}
+.cancel-btn:hover {
+  background-color: #acaaaa6e;
+  color: #fff;
+}
+
+button {
+  margin-top: 15px;
+}
+
+@media screen and (max-width: 1010px) {
+  .modal-container {
+    width: 70%;
+  }
+}
+@media screen and (max-width: 607px) {
+  .modal-container {
+    width: 90%;
+  }
+}
+@media screen and (max-width: 498px) {
+  .modal-container {
+    width: 97%;
+  }
+}

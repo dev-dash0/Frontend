@@ -1,0 +1,47 @@
+::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+  color: #8aa0f2 !important;
+}
+
+::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #dd8af2 !important;
+}
+
+::ng-deep .mdc-tab {
+  border-radius: 10px 10px 0px 0 !important;
+}
+
+::ng-deep.mat-mdc-tab-ripple {
+  border-radius: 10px 10px 0 0;
+}
+
+::ng-deep .mdc-tab__ripple:before {
+  border-radius: 10px 10px 0 0 !important;
+}
+
+::ng-deep .mdc-tab-indicator {
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::ng-deep .mdc-tab-indicator--active {
+  background-color: #0d1123 !important;
+}
+
+::ng-deep .mdc-tab-indicator--active:hover {
+  background-color: #0d1123 !important;
+}
+
+::ng-deep .mat-mdc-standard-chip .mdc-evolution-chip__text-label {
+  color: var(--mainColor) !important;
+  font-weight: var(--middleFontWeight) !important;
+}
+
+.card1 {
+  background-color: #0d1123;
+  border-radius: var(--standardRoundness) !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  position: relative;
+  overflow: hidden;
+  padding: 1.5rem var(--standardPadding);
+}

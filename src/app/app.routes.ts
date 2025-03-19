@@ -13,6 +13,9 @@ import { MainLayoutComponent } from './layouts/main-layout/main-layout.component
 import { isLoggedInGuardGuard } from './Core/guards/is-logged-in-guard.guard';
 import { SprintViewComponent } from './Components/sprint-view/sprint-view.component';
 import { WelcomePageComponent } from './Components/welcome-page/welcome-page.component';
+import { CompanyViewComponent } from './Components/company-view/company-view.component';
+import { AllcompaniesComponent } from './Components/allcompanies/allcompanies.component';
+import { ErrorpageComponent } from './Components/errorpage/errorpage.component';
 
 export const routes: Routes = [
   { path: 'welcome', component: WelcomePageComponent, title: 'Welcome' },
@@ -68,8 +71,19 @@ export const routes: Routes = [
           },
           { path: 'Setting', component: SettingComponent, title: 'Settings' },
           { path: 'Sprint', component: SprintViewComponent, title: 'Sprint' },
+          {
+            path: 'Company/:id',
+            component: CompanyViewComponent,
+            title: 'Company',
+          },
+          {
+            path: 'allcompanies',
+            component: AllcompaniesComponent,
+            title: 'All Companies',
+          },
         ],
       },
     ],
   },
+  { path: '**', component: ErrorpageComponent, title: 'Error' },
 ];
