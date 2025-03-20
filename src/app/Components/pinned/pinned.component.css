@@ -1,0 +1,47 @@
+.BG {
+  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+  transform: translateX(0px);
+}
+
+/* When Sidebar Collapses, Content Expands Left */
+.BG.expand {
+  transform: translateX(-30px);
+  width: calc(100% + 100px);
+  margin-left: -100px;
+}
+
+.headTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.headTitle h3 {
+  font-family: var(--headerFontFamily);
+}
+
+ul {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  margin-bottom: 10px;
+}
+
+.main-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}

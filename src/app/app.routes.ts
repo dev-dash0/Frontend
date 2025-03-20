@@ -13,6 +13,7 @@ import { MainLayoutComponent } from './layouts/main-layout/main-layout.component
 import { isLoggedInGuardGuard } from './Core/guards/is-logged-in-guard.guard';
 import { SprintViewComponent } from './Components/sprint-view/sprint-view.component';
 import { WelcomePageComponent } from './Components/welcome-page/welcome-page.component';
+import { PinnedComponent } from './Components/pinned/pinned.component';
 
 export const routes: Routes = [
   { path: 'welcome', component: WelcomePageComponent, title: 'Welcome' },
@@ -68,6 +69,7 @@ export const routes: Routes = [
           },
           { path: 'Setting', component: SettingComponent, title: 'Settings' },
           { path: 'Sprint', component: SprintViewComponent, title: 'Sprint' },
+          { path: 'Pinned', component: PinnedComponent, title: 'Pinned' },
         ],
       },
     ],
