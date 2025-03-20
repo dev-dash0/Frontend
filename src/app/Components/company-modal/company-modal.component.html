@@ -69,6 +69,8 @@
                 type="file"
                 formControlName="image"
                 placeholder="Click to upload"
+                (change)="onFileSelected($event)"
+                accept="image/*"
               />
             </div>
             <div class="col-9">
