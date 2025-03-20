@@ -94,7 +94,6 @@ h2 {
   padding: 1rem;
   padding: 0;
   margin: 0;
-  /* border: 2px var(--mainLightBlueColor) solid; */
   color: var(--mainLightBlueColor);
 }
 
@@ -103,4 +102,9 @@ button {
   color: var(--mainLightBlueColor);
   font-weight: var(--middleFontWeight);
   border: none;
+}
+
+.card-img img {
+  width: 300px;
+  height: 300px;
 }

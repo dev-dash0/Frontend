@@ -9,6 +9,7 @@ import {
 import { FiledropComponent } from '../dragn-drop/dragn-drop.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CompanyService } from '../../Core/Services/company.service';
+import { SidebarService } from '../../Core/Services/sidebar.service';
 
 @Component({
   selector: 'app-company-modal',
@@ -24,6 +25,7 @@ export class AddCompanyModalComponent {
     private dialogRef: MatDialogRef<AddCompanyModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _companyService: CompanyService,
+    private sidebarService: SidebarService,
     private fb: FormBuilder
   ) {
     this.companyForm = this.fb.group({
@@ -35,11 +37,33 @@ export class AddCompanyModalComponent {
     });
   }
 
+  selectedImage!: string | null;
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.selectedImage = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   createNewCompany() {
     if (this.companyForm.valid) {
-      this._companyService.createCompany(this.companyForm.value).subscribe({
+      const companyData = this.companyForm.value;
+      const requestBody = {
+        name: companyData.name,
+        tenantUrl: companyData.tenantUrl,
+        description: companyData.description,
+        keywords: companyData.keywords,
+        image: this.selectedImage,
+      };
+      this._companyService.createCompany(requestBody).subscribe({
         next: (res) => {
           console.log(res);
+          this.sidebarService.notifyCompanyCreated();
           this.dialogRef.close();
         },
         error: (err) => {

@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { baseUrl } from '../environment/environment.local';
@@ -40,5 +40,11 @@ export class CompanyService {
     return this._HttpClient.delete(baseUrl + `/api/Tenant/${companyId}`, {
       headers: this.headers,
     });
+  }
+
+  getAllCompanyIds(): Observable<string[]> {
+    return this.getAllCompanies().pipe(
+      map((response: any) => response.result.map((company: any) => company.id))
+    );
   }
 }

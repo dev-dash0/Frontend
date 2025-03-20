@@ -12,6 +12,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DialogService } from '../../Core/Services/dialog.service';
 import { Company } from '../../Core/interfaces/company/company';
 import { CompanyService } from '../../Core/Services/company.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddCompanyModalComponent } from '../../Components/company-modal/company-modal.component';
 
 @Component({
   selector: 'app-side-menu',
@@ -27,7 +29,8 @@ export class SideMenuComponent {
     private dialogService: DialogService,
     private _companyService: CompanyService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dialog: MatDialog
   ) {}
   companyData: Company[] = [];
   companyNames: { id: string; name: string }[] = [];
@@ -188,11 +191,11 @@ export class SideMenuComponent {
   ngOnInit() {
     this.getCompanies();
     this.sidebarService.companyCreated$.subscribe(() => {
-      console.log('Refreshing sidebar...');
+      console.log('Refreshing sidebar after company creation...');
       this.getCompanies();
     });
     this.sidebarService.companyDeleted$.subscribe(() => {
-      console.log('Refreshing sidebar...');
+      console.log('Refreshing sidebar after deletion...');
       this.getCompanies();
     });
   }

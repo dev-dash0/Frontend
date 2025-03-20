@@ -41,11 +41,12 @@ export class AllcompaniesComponent {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
       this.isSidebarCollapsed = collapsed;
     });
-    this.getCompanies();
     this.sidebarService.companyCreated$.subscribe(() => {
-      console.log('Refreshing All Companies page...');
+      console.log('company is being created...');
       this.getCompanies();
     });
+    this.getCompanies();
+    this.getCompaniesids();
   }
 
   // get all tenants api and show all the companies i am in
@@ -72,5 +73,12 @@ export class AllcompaniesComponent {
   // routing to every comapny by id
   viewCompany(companyId: string): void {
     this._router.navigate(['/MyDashboard/Company', companyId]);
+  }
+
+  //get all companies ids
+  getCompaniesids() {
+    this._companyService.getAllCompanyIds().subscribe((companyId) => {
+      console.log('Company IDs:', companyId);
+    });
   }
 }
