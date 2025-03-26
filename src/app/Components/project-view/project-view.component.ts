@@ -48,22 +48,10 @@ export class ProjectViewComponent {
   //   });
   // }
 
-  GetPinnedProjects() {
-    this._ProjectService.getProjectData().subscribe({
-      next: (res) => {
-        console.log(res);
-        console.log(res.result);
-        console.log(res.result.UserProject);
-        this.ProjectsList = res.result;
-      },
-    });
-  }
-
   ngOnInit(): void {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
       this.isSidebarCollapsed = collapsed;
     });
-    this.GetPinnedProjects();
   }
   openIssue() {
     this.dialogService.openIssueModal();

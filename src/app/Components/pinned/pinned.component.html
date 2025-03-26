@@ -13,13 +13,13 @@
                     </div>
                     
                     <ul>
-                            @for (item of ProjectsList ; track $index) {
+                            @for (item of ProjectsRes?.result ; track $index) {
                                 <li>
                                     <div class="pinned">
                                         <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
                                         <span class="ps-1 fs-5">{{ item.name }}</span>
                                     </div>
-                                    <span class="text-white-50">in OS company</span>
+                                    <span class="text-white-50">in : {{ item.tenant.name }}</span>
                                 </li>
                             }
                         <!-- <li>
@@ -42,13 +42,13 @@
                     </div>
                     
                     <ul>
-                            @for (item of TenantsLists ; track $index) {
+                            @for (item of TenantsRes?.result ; track $index) {
                                 <li>
                                     <div class="pinned">
                                         <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
                                         <span class="ps-1 fs-5">{{ item.name }}</span>
                                     </div>
-                                    <span class="text-white-50">in OS company</span>
+                                    <span class="text-white-50">owner : {{ item.owner.firstName }}</span>
                                 </li>
                             }
                             <!-- @for (item of Tenants ; track $index) {

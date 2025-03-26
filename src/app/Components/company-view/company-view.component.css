@@ -145,6 +145,14 @@ p {
   justify-content: center;
 }
 
+.planning-wrapper {
+  border: 2px solid #aa9900;
+}
+
+.canceled-wrapper {
+  border: 2px solid #4b4a4a;
+}
+
 .overdue-wrapper {
   border: 2px var(--importantPinkColor) solid;
 }
@@ -192,6 +200,22 @@ p {
   border-radius: 0.2rem;
   color: var(--secondStandardBlueColor);
   font-weight: var(--middleFontWeight);
+}
+
+.planning-span {
+  background-color: #aa9900;
+}
+
+.planning-tag {
+  border: 2px solid #aa9900;
+}
+
+.canceled-span {
+  background-color: #4b4a4a;
+}
+
+.canceled-tag {
+  border: 2px solid #4b4a4a;
 }
 
 .overdue-span {

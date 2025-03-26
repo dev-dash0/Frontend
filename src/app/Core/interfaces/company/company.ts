@@ -22,7 +22,7 @@ interface JoinedUser {
   birthday: string;
 }
 
-interface Owner {
+export interface Owner {
   id: number;
   imageUrl: string;
   firstName: string;

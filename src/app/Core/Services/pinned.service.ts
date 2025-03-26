@@ -15,7 +15,8 @@ export class PinnedService {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
     return this._HttpClient.get(
-      baseUrl + '/api/PinnedItem/show-pinned?itemType=project',
+      baseUrl +
+        '/api/PinnedItem/owned-pinned-items?itemType=Project',
       {
         headers,
       }
@@ -28,7 +29,20 @@ export class PinnedService {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
     return this._HttpClient.get(
-      baseUrl + '/api/PinnedItem/show-pinned?itemType=tenant',
+      baseUrl + '/api/PinnedItem/owned-pinned-items?itemType=Tenant',
+      {
+        headers,
+      }
+    );
+  };
+
+  getPinnedIssues = (): Observable<any> => {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+    return this._HttpClient.get(
+      baseUrl + '/api/PinnedItem/owned-pinned-items?itemType=Issue',
       {
         headers,
       }
