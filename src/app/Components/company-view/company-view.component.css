@@ -16,6 +16,9 @@ mat-chip {
 }
 
 .trash-icon {
+  background: var(--cardBottomLeftGradient);
+}
+.edit-icon {
   background: var(--cardBottomRightGradient);
 }
 
@@ -102,6 +105,7 @@ p {
   border-radius: var(--standardRoundness);
   border: 3px var(--veryLightLavenderColor) solid;
 }
+
 .copy-text div {
   cursor: pointer;
   padding-bottom: 19px;
@@ -116,7 +120,7 @@ p {
   border-radius: 50%;
   width: 50px;
   height: 50px;
-  /* border: 2px var(--mainLightBlueColor) solid; */
+  border: 2px var(--mainLightBlueColor) solid;
 }
 .project-header h2,
 .issue-name-date,
@@ -271,6 +275,10 @@ p {
   padding: 0px 6px !important;
 }
 
+.issue-name-date p {
+  font-size: 13px;
+}
+
 .issue-name-date p,
 .issue-description p {
   color: var(--lightGrayColor);
@@ -293,6 +301,7 @@ button {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  border: 2px var(--mainLightBlueColor) solid;
 }
 
 .members {
