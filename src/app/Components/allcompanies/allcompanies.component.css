@@ -45,3 +45,33 @@
   overflow: hidden;
   padding: 1.5rem var(--standardPadding);
 }
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header img {
+  width: 40px;
+  height: 40px;
+}
+
+.header h2 {
+  color: var(--mainLightBlueColor);
+  font-family: var(--headerFontFamily);
+  margin: 0;
+}
+
+button {
+  color: var(--mainLightBlueColor);
+  font-weight: var(--middleFontWeight);
+  background: var(--lightPinkGradient);
+}

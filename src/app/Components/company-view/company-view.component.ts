@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   OnInit,
@@ -13,13 +12,13 @@ import {
 import { MatChipsModule } from '@angular/material/chips';
 import { Company, Owner } from '../../Core/interfaces/company/company';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AddCompanyModalComponent } from '../company-modal/company-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteModalComponent } from '../deletemodal/deletemodal.component';
 import { ProfileService } from '../../Core/Services/profile.service';
 import { ProjectCategory } from '../../Core/interfaces/company/project-category';
 import { ProjectService } from '../../Core/Services/project.service';
 import { Project, ProjectResult } from '../../Core/interfaces/project';
+import { UpdateCompanyComponent } from '../update-company/update-company.component';
 
 @Component({
   selector: 'app-company-view',
@@ -348,6 +347,24 @@ export class CompanyViewComponent implements OnInit {
         console.log('Company deleted successfully');
         this.sidebarService.notifyCompanyDeleted();
         this.router.navigate(['/MyDashboard/allcompanies']);
+      }
+    });
+  }
+
+  update() {
+    const dialogRef = this.dialog.open(UpdateCompanyComponent, {
+      width: 'auto',
+      minWidth: '60vw',
+      maxWidth: '70vw',
+      minHeight: '60vh',
+      maxHeight: '90vh',
+      disableClose: true,
+      data: { companyId: this.company.id }, // ✅ Pass company id to modal
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'updated') {
+        this.sidebarService.notifyCompanyUpdated();
+        console.log('Company updated successfully');
       }
     });
   }

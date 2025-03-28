@@ -56,14 +56,8 @@
                 [src]="
                   isValidUrl(member.imageUrl)
                     ? member?.imageUrl
-                    : 'assets/images/Test Account.svg'
+                    : 'assets/images/blank profile.svg'
                 "
-                [style.border]="
-                  isValidUrl(member.imageUrl)
-                    ? '2px var(--mainLightBlueColor) solid'
-                    : ''
-                "
-                [style.border-radius]="isValidUrl(member.imageUrl) ? '50%' : ''"
                 alt=""
               />
             </div>

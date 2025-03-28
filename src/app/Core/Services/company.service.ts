@@ -42,6 +42,20 @@ export class CompanyService {
     });
   }
 
+  updateCompany(companyId: any, company: any): Observable<any> {
+    return this._HttpClient.put(baseUrl + `/api/Tenant/${companyId}`, company, {
+      headers: this.headers,
+    });
+  }
+
+  joinCompany(companyCode: any): Observable<any> {
+    return this._HttpClient.post(
+      baseUrl + `/api/UserTenant?tenantCode=${encodeURIComponent(companyCode)}`,
+      {},
+      { headers: this.headers }
+    );
+  }
+
   getAllCompanyIds(): Observable<string[]> {
     return this.getAllCompanies().pipe(
       map((response: any) => response.result.map((company: any) => company.id))
