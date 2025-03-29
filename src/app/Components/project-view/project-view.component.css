@@ -1,6 +1,7 @@
 h2 {
   font-family: var(--headerFontFamily);
 }
+
 .cardBottomRight p,
 .sprints p,
 .issue-details p,
@@ -8,14 +9,17 @@ h2 {
   color: var(--lightGrayColor);
   font-weight: var(--middleFontWeight);
 }
+
 hr {
   margin: 0.75rem 0 !important;
   color: var(--lightGrayColor);
 }
+
 .project-members {
   font-size: var(--middleFontSize);
   font-weight: var(--middleFontWeight);
 }
+
 .add-members p,
 .create-sprint p,
 .create-issue p {
@@ -28,7 +32,165 @@ button {
   color: var(--mainColor);
   border: none;
 }
+
 button:hover {
   background-color: #750b27;
   outline: none;
+}
+
+/* ////////////////////////////////////// */
+.backlog-container {
+  background: #0b1522;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  width: 300px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.issue-item {
+  /* display: flex;
+  justify-content: space-between;
+  align-items: center; */
+
+  background-color: rgba(57, 73, 118, 0.1);
+  padding: 8px;
+  margin-top: 8px;
+  border-radius: 6px;
+}
+
+.issue-details {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* .label {
+  background: #7979a3;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-size: 12px;
+} */
+
+.priority {
+  display: flex;
+  align-items: center;
+  color: orange;
+}
+
+.issue-meta {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 10px;
+}
+
+.avatars {
+  display: flex;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  /* margin-left: -5px; */
+  border: 2px solid #0b1522;
+}
+
+.dates,
+.created-by {
+  font-size: 12px;
+  color: #948ad9;
+  /* color: #7b86e8; */
+}
+
+.add-issue {
+  background: none;
+  border: none;
+  color: white;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.priority {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+}
+
+.priority-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.backlog-issue-title {
+  transition: all 0.2s;
+}
+
+.backlog-issue-title:hover {
+  color: #387fcb;
+}
+
+/* ////////////////////////// */
+/* add button */
+.add-issue-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #2286f1, #0056b3);
+  color: rgb(201, 221, 251);
+  border: none;
+  padding: 6px 12px;
+  margin-block: 15px;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  width: fit-content;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.add-issue-btn .plus-icon {
+  display: inline-block;
+  font-size: 14px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.add-issue-btn:hover .plus-icon {
+  transform: rotate(90deg);
+}
+
+.add-issue-btn:hover {
+  transform: scale(1.02);
+  animation: glow 1.5s infinite alternate;
+  /* box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1); */
+}
+
+/* ============================================================ */
+
+/* /////////////////// */
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 2px #2b79cc;
+  }
+
+  50% {
+    box-shadow: 0 0 5px #2b79cc;
+  }
+
+  100% {
+    box-shadow: 0 0 2px #2b79cc;
+  }
 }
