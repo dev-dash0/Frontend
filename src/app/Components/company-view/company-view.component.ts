@@ -240,6 +240,7 @@ export class CompanyViewComponent implements OnInit {
               this.Owner = res.result.owner;
               // console.log(this.Owner);
               this.CompanyId = res.result.id; // ✅ Set CompanyId here
+              localStorage.setItem('CompanyId', this.CompanyId.toString());
               this.getProjectData(); // ✅ Fetch project data after setting ID
               // ✅ Update contactInfo after Owner is assigned
               this.contactInfo = [
@@ -389,7 +390,7 @@ export class CompanyViewComponent implements OnInit {
               case 'Working on':
                 workingOnProjectsCounter++;
                 break;
-              case 'Postponede':
+              case 'Postponed':
                 overdueProjectsCounter++;
                 break;
             }

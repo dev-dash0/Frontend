@@ -9,7 +9,7 @@ import { baseUrl } from '../environment/environment.local';
 export class ProjectService {
   constructor(private _HttpClient: HttpClient) {}
 
-  getProjectData = (Tenantid :any): Observable<any> => {
+  getProjectData = (Tenantid: any): Observable<any> => {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + localStorage.getItem('token'),
@@ -25,14 +25,14 @@ export class ProjectService {
     );
   };
 
-  CreateProject = (Tenantid :number): Observable<any> => {
+  CreateProject = (Tenantid: any, user: any): Observable<any> => {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
     const params = new HttpParams().set('Tenantid', Tenantid.toString());
     return this._HttpClient.post(
-      baseUrl + `/api/Project?tenantid=${Tenantid}`,
+      baseUrl + `/api/Project?tenantid=${Tenantid}`, user ,
       {
         headers,
         params,

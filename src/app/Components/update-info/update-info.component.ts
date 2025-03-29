@@ -78,6 +78,7 @@ export class UpdateInfoComponent {
           // if (res.message == 'success') {
           console.log('Tmaaaam');
           this.close();
+          window.location.reload();
         },
         error: (err) => {
           console.log('ERRRRRRRRR');
