@@ -1,5 +1,18 @@
 <div class="my-4 min-vh-100">
   <div class="BG" [ngClass]="{ expand: isSidebarCollapsed }">
+    <header>
+      <div class="header">
+        <img src="assets/images/sidebar icons/Company.svg" alt="" />
+        <h2>Your Companies</h2>
+      </div>
+      <button class="btn" (click)="join()">
+        <img
+          src="assets/images/sidebar icons/Plus.svg"
+          class="pe-2"
+          alt=""
+        />Join Company
+      </button>
+    </header>
     <mat-tab-group>
       <mat-tab label="Joined Companies">
         <div class="card1">

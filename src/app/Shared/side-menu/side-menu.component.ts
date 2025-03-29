@@ -14,6 +14,8 @@ import { Company } from '../../Core/interfaces/company/company';
 import { CompanyService } from '../../Core/Services/company.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddCompanyModalComponent } from '../../Components/company-modal/company-modal.component';
+import { ProjectService } from '../../Core/Services/project.service';
+import { Project, ProjectResult } from '../../Core/interfaces/project';
 
 @Component({
   selector: 'app-side-menu',
@@ -28,12 +30,16 @@ export class SideMenuComponent {
     private sidebarService: SidebarService,
     private dialogService: DialogService,
     private _companyService: CompanyService,
+    private _ProjectService: ProjectService,
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog
   ) { }
   companyData: Company[] = [];
   companyNames: { id: string; name: string }[] = [];
+  projectsNames: { id: string; name: string }[] = [];
+  SelectedCompanyId: number = 0;
+  projects: ProjectResult[] = [];
   // ---------------------------------------
   mainServices = [
     {
@@ -43,7 +49,7 @@ export class SideMenuComponent {
     },
     {
       imagePath: 'assets/images/sidebar icons/Pin.svg',
-      path: '',
+      path: '/MyDashboard/Pinned',
       title: 'Pinned',
     },
     {
@@ -122,6 +128,7 @@ export class SideMenuComponent {
   }
   toggleCollapseDropDown(id: string) {
     this.dropdownStates[id] = !this.dropdownStates[id];
+    // this.getCompanies();
   }
 
   collapsed = false;
@@ -129,6 +136,7 @@ export class SideMenuComponent {
   toggleCollapse(): void {
     this.collapsed = !this.collapsed;
     this.sidebarService.setSidebarState(this.collapsed); // Notify other components
+    // this.getCompanies();
   }
   // ----------- dropdown optimization ------------
 
@@ -169,6 +177,7 @@ export class SideMenuComponent {
 
   companies = [
     {
+      id: 0,
       name: 'Company A',
       projects: [
         {
@@ -178,6 +187,7 @@ export class SideMenuComponent {
       ],
     },
     {
+      id: 1,
       name: 'Company B',
       projects: [
         {
@@ -200,25 +210,174 @@ export class SideMenuComponent {
     });
   }
 
+  // ! getCompanies(): void {
+  //   this._companyService.getAllCompanies(null).subscribe({
+  //     next: (res) => {
+  //       console.log(res);
+  //       if (res?.result && res.result.length > 0) {
+  //         this.companyNames = res.result.map(
+  //           (company: { id: string; name: string }) => ({
+  //             id: company.id,
+  //             name: company.name,
+  //           })
+  //         );
+  //         this.companyData = res.result;
+
+  //         // this.companies = [
+  //         //   {
+  //         //     // id: this.companyData.id,
+  //         //     id: 0,
+  //         //     name: 'Company A',
+  //         //     projects: [
+  //         //       {
+  //         //         name: 'Project 1',
+  //         //         sprints: [{ name: 'Sprint 1' }, { name: 'Sprint 2' }],
+  //         //       },
+  //         //     ],
+  //         //   },
+  //         // ]
+
+  //         const companyIndex = this.companies.findIndex(
+  //           (c) => c.id === this.SelectedCompanyId
+  //         );
+
+  //         // Call getProjectData only if SelectedCompanyId is defined
+  //         if (this.SelectedCompanyId) {
+  //           this.getProjectData();
+  //         }
+  //       }
+  //     },
+  //     error: (err) => console.error(err),
+  //   });
+  // }
+
+  // getCompanies(): void {
+  //   this._companyService.getAllCompanies(null).subscribe({
+  //     next: (res) => {
+  //       console.log('Companies API response:', res);
+  //       if (res?.result && res.result.length > 0) {
+  //         this.companyNames = res.result.map((company: any) => ({
+  //           id: company.id,
+  //           name: company.name,
+  //         }));
+  //         this.companyData = res.result;
+
+  //         // Store companies and initialize projects as empty
+  //         this.companies = this.companyData.map((company) => ({
+  //           id: company.id,
+  //           name: company.name,
+  //           projects: [],
+  //         }));
+
+  //         // Automatically select the first company (Optional)
+  //         this.SelectedCompanyId = this.companyData[0]?.id || 0;
+  //         console.log('Selected Company ID:', this.SelectedCompanyId);
+
+  //         if (this.SelectedCompanyId) {
+  //           this.getProjectData(); // Fetch projects after setting company
+  //         }
+  //       }
+  //     },
+  //     error: (err) => console.error('Error fetching companies:', err),
+  //   });
+  // }
+
   getCompanies(): void {
     this._companyService.getAllCompanies(null).subscribe({
       next: (res) => {
-        console.log(res);
-        if (res?.result?.length > 0) {
-          this.companyNames = res.result.map(
-            (company: { id: string; name: string }) => ({
-              id: company.id,
-              name: company.name,
-            })
-          );
+        console.log('Companies API response:', res);
+        if (res?.result && res.result.length > 0) {
+          this.companyNames = res.result.map((company : any) => ({
+            id: company.id,
+            name: company.name,
+          }));
           this.companyData = res.result;
+
+          // Store companies and initialize projects as empty
+          this.companies = this.companyData.map((company) => ({
+            id: company.id,
+            name: company.name,
+            projects: [],
+          }));
+
+          console.log('Companies after processing:', this.companies);
+
+          // Fetch projects for each company
+          this.fetchProjectsForAllCompanies();
         }
       },
-      error: (err) => console.error(err),
+      error: (err) => console.error('Error fetching companies:', err),
     });
   }
 
   selectCompany(companyId: string) {
     this.router.navigate(['/MyDashboard/Company', companyId]);
+    this.SelectedCompanyId = parseInt(companyId);
+    console.log(this.SelectedCompanyId);
   }
+
+  fetchProjectsForAllCompanies() {
+    this.companies.forEach((company, index) => {
+      this._ProjectService.getProjectData(company.id).subscribe({
+        next: (res) => {
+          console.log(`Project API response for company ${company.id}:`, res);
+
+          if (res && res.result && res.result.length > 0) {
+            this.companies[index].projects = res.result.map((project :any) => ({
+              name: project.name,
+              sprints: [{ name: 'Sprint 1' }, { name: 'Sprint 2' }],
+            }));
+          } else {
+            console.warn(`No projects found for company ID: ${company.id}`);
+          }
+        },
+        error: (err) =>
+          console.error(
+            `Error fetching project data for company ${company.id}:`,
+            err
+          ),
+      });
+    });
+  }
+
+  // getProjectData() {
+  //   if (!this.SelectedCompanyId) {
+  //     console.error(
+  //       'SelectedCompanyId is undefined, skipping project data fetch.'
+  //     );
+  //     return;
+  //   }
+
+  //   this._ProjectService.getProjectData(this.SelectedCompanyId).subscribe({
+  //     next: (res) => {
+  //       if (res.isSuccess && res.result.length > 0) {
+  //         console.log('Project data received:', res.result);
+  //         this.projects = res.result;
+
+  //         // Find the selected company in the array
+  //         const companyIndex = this.companies.findIndex(
+  //           (c) => c.id === this.SelectedCompanyId
+  //         );
+
+  //         if (companyIndex !== -1) {
+  //           // Assign projects with static sprints
+  //           this.companies[companyIndex].projects = this.projects.map(
+  //             (project) => ({
+  //               name: project.name,
+  //               sprints: [{ name: 'Sprint 1' }, { name: 'Sprint 2' }],
+  //             })
+  //           );
+  //         } else {
+  //           console.warn('Company not found in companies array.');
+  //         }
+  //       } else {
+  //         console.warn(
+  //           'No projects found or API response error:',
+  //           res.errorMessages
+  //         );
+  //       }
+  //     },
+  //     error: (err) => console.error('Error fetching project data:', err),
+  //   });
+  // }
 }

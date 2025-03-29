@@ -1,0 +1,57 @@
+<div class="modal-container">
+  <div class="modal-header d-flex justify-content-between">
+    <div class="header d-flex justify-content-between align-items-center gap-3">
+      <h4>Join Company</h4>
+    </div>
+    <button class="close-btn" (click)="close()">&#x2715;</button>
+  </div>
+  <div class="divider"></div>
+  <form [formGroup]="joinCompanyForm" (ngSubmit)="joinCompany()">
+    <div class="form-group">
+      <div class="row justify-content-center align-items-center">
+        <div class="col-md-12">
+          <p class="content py-2">
+            Join a company using a unique access code. Enter the company code
+            provided by the company owner below to gain access and become a part
+            of the organization.
+            <br />
+          </p>
+        </div>
+        <div class="col-md-12">
+          <input
+            id="companyCode"
+            type="text"
+            placeholder="1255BVc"
+            formControlName="tenantCode"
+          />
+        </div>
+        <!-- @if (companyForm.controls['tenantUrl'].invalid &&
+        (companyForm.controls['tenantUrl'].touched ||
+        companyForm.controls['tenantUrl'].dirty)) {
+        <div class="col-md-3"></div>
+        <div class="col-md-9">
+          <p>
+            Company code is invalid
+          </p>
+        </div>
+        } -->
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div
+        class="buttons w-100 d-flex justify-content-center align-items-center gap-3"
+      >
+        <button
+          type="button"
+          class="cancel-btn w-50 fw-semibold"
+          (click)="close()"
+        >
+          Cancel
+        </button>
+        <button type="submit" class="join-btn w-50 fw-semibold">
+          Send Code
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

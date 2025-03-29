@@ -15,16 +15,25 @@
                   />
                   <h2>{{ company.name }}</h2>
                 </div>
-                <button
-                  [style.display]="isOwner ? 'block' : 'none'"
-                  class="btn card px-3 py-2 trash-icon"
-                  (click)="delete()"
-                >
-                  <i class="fa-solid fa-trash" style="color: red"></i>
-                </button>
+                @if (isOwner) {
+                <div class="header-buttons d-flex align-items-center gap-2">
+                  <button
+                    class="btn card px-3 py-2 edit-icon"
+                    (click)="update()"
+                  >
+                    <i class="fa-solid fa-pen" style="color: #ffd43b"></i>
+                  </button>
+                  <button
+                    class="btn card px-3 py-2 trash-icon"
+                    (click)="delete()"
+                  >
+                    <i class="fa-solid fa-trash" style="color: red"></i>
+                  </button>
+                </div>
+                }
               </div>
               <div class="content mt-3">
-                <div class="row g-4">
+                <div class="row g-4 h-50">
                   <div class="col-md-6">
                     <!--image-->
                     <img
@@ -38,6 +47,7 @@
                     />
                   </div>
                   <div class="col-md-6">
+                    @if(isOwner) {
                     <div class="code">
                       <h5>
                         <i
@@ -65,7 +75,7 @@
                         </div>
                       </div>
                     </div>
-
+                    }
                     <div class="url">
                       <h5>
                         <i
@@ -115,7 +125,13 @@
                         Description
                       </h5>
                       <!--description-->
-                      <p>{{ company.description }}</p>
+                      <p>
+                        {{
+                          company.description
+                            ? company.description
+                            : "No Description Available"
+                        }}
+                      </p>
                     </div>
 
                     <div class="tags">
@@ -126,6 +142,7 @@
                         ></i>
                         Tags
                       </h5>
+                      @if(company.keywords) {
                       <mat-chip-set>
                         <!--tags-->
                         <mat-chip
@@ -137,6 +154,9 @@
                           >{{ tag }}</mat-chip
                         >
                       </mat-chip-set>
+                      } @else {
+                      <p>No Tags Available</p>
+                      }
                     </div>
                   </div>
                 </div>
@@ -160,7 +180,7 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div class="card cardBottomRight h-100">
+          <div class="card cardBottomRight">
             <div class="card-body">
               <div class="owner-header">
                 <h4 style="font-family: var(--headerFontFamily)">
@@ -175,21 +195,10 @@
                 <!--owner image-->
                 <img
                   class="owner-img"
-                  [style.border]="
-                    isValidUrl(company.owner.imageUrl)
-                      ? '2px var(--mainLightBlueColor) solid'
-                      : ''
-                  "
-                  [style.width]="
-                    isValidUrl(company.owner.imageUrl) ? '50px' : '60px'
-                  "
-                  [style.height]="
-                    isValidUrl(company.owner.imageUrl) ? '50px' : '60px'
-                  "
                   [src]="
                     isValidUrl(company.owner.imageUrl)
                       ? company.owner.imageUrl
-                      : 'assets/images/placeholder pic.png'
+                      : 'assets/images/blank profile.svg'
                   "
                   alt="Owner Image"
                 />
@@ -234,12 +243,7 @@
                       [src]="
                         isValidUrl(member.imageUrl)
                           ? member?.imageUrl
-                          : 'assets/images/Test Account.svg'
-                      "
-                      [style.border]="
-                        isValidUrl(member.imageUrl)
-                          ? '2px var(--mainLightBlueColor) solid'
-                          : ''
+                          : 'assets/images/blank profile.svg'
                       "
                       alt=""
                     />
@@ -271,7 +275,7 @@
                 </h2>
               </div>
 
-              <div class="row g-3 mt-1">
+              <div class="row flex-nowrap overflow-x-scroll g-3 mt-1">
                 <div
                   class="col-md-4"
                   *ngFor="let category of ProjectCategories"
@@ -299,8 +303,8 @@
                           <div class="issue-name-date">
                             <h3>{{ issue.title }}</h3>
                             <p class="p-0 m-0">
-                              Start {{ issue.startDate }} | Due
-                              {{ issue.dueDate }}
+                              Start {{ issue.startDate }}<br />
+                              Due {{ issue.dueDate }}
                             </p>
                           </div>
                           <div class="issue-description">

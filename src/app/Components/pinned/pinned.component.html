@@ -1,0 +1,85 @@
+<div
+    class="main-container my-4 BG min-vh-100"
+    [ngClass]="{ expand: isSidebarCollapsed }"
+    >
+
+    <div class="row g-3 mt-2">
+        <div class="col-lg-6">
+            <div class="card cardBottomRight h-100">
+                <div class="card-body">
+                    <div class="headTitle mb-4">
+                        <img src="assets/images/dashboard icons/Pin.svg" alt="Pin icon" />
+                        <h3 class="m-0">Pinned Projects</h3>
+                    </div>
+                    
+                    <ul>
+                            @for (item of ProjectsRes?.result ; track $index) {
+                                <li>
+                                    <div class="pinned">
+                                        <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
+                                        <span class="ps-1 fs-5">{{ item.name }}</span>
+                                    </div>
+                                    <span class="text-white-50">in : {{ item.tenant.name }}</span>
+                                </li>
+                            }
+                        <!-- <li>
+                            <div class="pinned">
+                                <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
+                                <span class="ps-1 fs-5">project 1</span>
+                            </div>
+                            <span class="text-white-50">in OS company</span>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card cardBottomLeft h-100">
+                <div class="card-body">
+                    <div class="headTitle mb-4">
+                        <img src="assets/images/dashboard icons/Pin.svg" alt="Pin icon" />
+                        <h3 class="m-0">Pinned Tenants</h3>
+                    </div>
+                    
+                    <ul>
+                            @for (item of TenantsRes?.result ; track $index) {
+                                <li>
+                                    <div class="pinned">
+                                        <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
+                                        <span class="ps-1 fs-5">{{ item.name }}</span>
+                                    </div>
+                                    <span class="text-white-50">owner : {{ item.owner.firstName }}</span>
+                                </li>
+                            }
+                            <!-- @for (item of Tenants ; track $index) {
+                                <li>
+                                    <div class="pinned">
+                                        <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
+                                        <span class="ps-1 fs-5">{{ item.result[0].name }}</span>
+                                    </div>
+                                    <span class="text-white-50">{{ item.result[0].owner.firstName }}</span>
+                                </li>
+                            } -->
+                        <!-- <li>
+                            <div class="pinned">
+                                <img src="assets/images/dashboard icons/Group 5.svg" alt="" />
+                                <span class="ps-1 fs-5">project 1</span>
+                            </div>
+                            <span class="text-white-50">in OS company</span>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card cardTopRight">
+            
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card cardTopLeft">
+            
+            </div>
+        </div>
+    </div>
+</div>

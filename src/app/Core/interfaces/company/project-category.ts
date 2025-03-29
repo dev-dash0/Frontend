@@ -4,6 +4,12 @@ export interface ProjectCategory {
   name: string;
   icon: string;
   class: string;
-  status: 'completed' | 'overdue' | 'inprogress';
+  status:
+    | 'completed'
+    | 'overdue'
+    | 'working on'
+    | 'planning'
+    | 'canceled'
+    | 'postponed';
   issues: Projects[];
 }

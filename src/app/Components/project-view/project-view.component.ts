@@ -2,10 +2,12 @@ import { Issue } from './../../Core/interfaces/Dashboard/Issue';
 import { DialogService } from './../../Core/Services/dialog.service';
 import { Component, inject, Input } from '@angular/core';
 import { SidebarService } from '../../Core/Services/sidebar.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
+import { ProjectService } from '../../Core/Services/project.service';
+import { ProjectResult, UserProject } from '../../Core/interfaces/project';
+import { MatDialog } from '@angular/material/dialog';
 import { IssueService } from '../../Core/Services/issue/issue.service';
 import { DeleteModalComponent } from '../deletemodal/deletemodal.component';
-import { MatDialog } from '@angular/material/dialog';
 import { IssueModalComponent } from '../issue-modal/issue-modal.component';
 import { SharedDeleteModalComponent } from '../../Shared/delete-modal/delete-modal.component';
 import { ToastrService } from 'ngx-toastr';
@@ -14,7 +16,7 @@ import { of } from 'rxjs';
 @Component({
   selector: 'app-project-view',
   standalone: true,
-  imports: [CommonModule, SharedDeleteModalComponent],
+  imports: [CommonModule, NgFor, SharedDeleteModalComponent],
   templateUrl: './project-view.component.html',
   styleUrl: './project-view.component.css',
 })
@@ -24,21 +26,22 @@ export class ProjectViewComponent {
   private _IssueService = inject(IssueService);
   private dialog = inject(MatDialog);
   private toastr = inject(ToastrService);
+  private readonly _ProjectService = inject(ProjectService);
 
 
 
   issue?: Issue;
   // showBacklog: boolean = true;
   backlogIssues: Issue[] = [];
+
   isSidebarCollapsed = true;
+  ProjectsList: ProjectResult[] = [];
   priorityConfig: any = {
     Critical: { icon: 'assets/images/Issue Priorities/urgent.svg', color: '#D02705' }, // Red
     High: { icon: 'assets/images/Issue Priorities/high.svg', color: '#D07805' }, // Orange
     Medium: { icon: 'assets/images/Issue Priorities/normal.svg', color: '#4854F1' }, // Yellow
     Low: { icon: 'assets/images/Issue Priorities/low.svg', color: '#908F8F' }, // Green
   };
-
-
 
   ngOnInit(): void {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
