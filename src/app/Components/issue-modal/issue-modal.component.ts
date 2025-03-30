@@ -16,6 +16,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ModalComponent } from '../../Shared/modal/modal.component';
 import { IssueService } from '../../Core/Services/issue/issue.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 export interface Label {
   name: string;
 }
@@ -50,8 +51,8 @@ export class IssueModalComponent {
   readonly separatorKeysCodes: number[] = [13, 188]; // Enter, Comma
   readonly addOnBlur = true;
   private readonly _IssueService = inject(IssueService);
-  private readonly router = inject(Router);
-
+  // private readonly router = inject(Router);
+  private readonly toaster = inject(ToastrService);
 
   ngOnInit(): void {
     // if (!this.issueContent) {
@@ -148,20 +149,44 @@ export class IssueModalComponent {
         next: (response) => {
           console.log('Issue created successfully:', response);
           this._IssueService.notifyIssueCreated();
-          // this._snackBar.open('Issue created successfully!', 'Close', { duration: 3000 });
           this.dialogRef.close('created'); // Close modal and return status
         },
         error: (err) => {
           console.error('Error creating issue:', err);
-          // this._snackBar.open('Failed to create issue. Try again!', 'Close', { duration: 3000 });
+          this.showError('Error creating Issue');
         },
       });
+    }
+    else if (this.issueForm.get('name')?.invalid) {
+      this.showError('Invalid Title');
+    } else if (this.issueForm.get('status')?.valid) {
+      this.showError('Invalid status');
+    } else if (this.issueForm.get('priority')?.valid) {
+      this.showError('Invalid priority');
+    } else if (this.issueForm.get('startDate')?.invalid) {
+      this.showError('Invalid start Date');
+    } else if (this.issueForm.get('endDate')?.invalid) {
+    } else if (this.issueForm.get('deliveredDate')?.invalid) {
+      this.showError('Invalid Delivered Date');
+    } else if (this.issueForm.get('endDate')?.invalid) {
+      this.showError('Invalid End Date');
     } else {
+      console.log(this.issueForm.errors);
       console.log('Form is invalid');
-      // this._snackBar.open('Please fill all required fields!', 'Close', { duration: 3000 });
+      this.showError('Please fill all the fields');
+      this.issueForm.markAllAsTouched();
     }
   }
 
+  showError(err: string) {
+    this.toaster.error(err, 'Error Message', {
+      toastClass: 'toast-pink',
+      timeOut: 5000,
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+    });
+  }
 
 
 }
