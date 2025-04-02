@@ -6,7 +6,7 @@
     <button class="close-btn" (click)="close()">&#x2715;</button>
   </div>
   <div class="divider"></div>
-  <form [formGroup]="joinCompanyForm" (ngSubmit)="joinCompany()">
+  <form [formGroup]="joinProjectForm" (ngSubmit)="joinProject()">
     <div class="form-group">
       <div class="row justify-content-center align-items-center">
         <div class="col-md-12">
@@ -22,7 +22,7 @@
             id="companyCode"
             type="text"
             placeholder="1255BVc"
-            formControlName="tenantCode"
+            formControlName="ProjectCode"
           />
         </div>
             <!-- @if (companyForm.controls['tenantUrl'].invalid &&

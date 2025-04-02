@@ -64,18 +64,18 @@ export class ProjectService {
     });
   }
 
-  JoinProject = (projectCode: any): Observable<any> => {
+  JoinProject = (projectCode: string): Observable<any> => {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + localStorage.getItem('token'),
     });
+
     const params = new HttpParams().set('projectCode', projectCode.toString());
+
     return this._HttpClient.post(
-      baseUrl + `/api/UserProject?projectCode=${projectCode}`,
-      {
-        headers,
-        params,
-      }
+      baseUrl + `/api/UserProject`, // ✅ Remove query parameter from URL
+      {}, // ✅ Empty body since it's a POST request with params
+      { headers, params } 
     );
   };
 }

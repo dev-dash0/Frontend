@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { FiledropComponent } from "../dragn-drop/dragn-drop.component";
 import { ProfileData } from '../../Core/interfaces/profile';
 import { ProfileService } from '../../Core/Services/profile.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-info',
@@ -31,6 +32,8 @@ export class UpdateInfoComponent {
   private readonly _FormBuilder = inject(FormBuilder);
   private readonly _Router = inject(Router);
   private readonly _ProfileService = inject(ProfileService);
+  private readonly toastr = inject(ToastrService);
+
   ProfileData?: ProfileData;
 
   ngOnInit() {
@@ -78,6 +81,7 @@ export class UpdateInfoComponent {
           // if (res.message == 'success') {
           console.log('Tmaaaam');
           this.close();
+          this.showSuccess();
           window.location.reload();
         },
         error: (err) => {
@@ -87,6 +91,20 @@ export class UpdateInfoComponent {
         },
       });
     }
+  }
+
+  showSuccess() {
+    this.toastr.success(
+      'The account Information has been Updated',
+      'Updated Successfully',
+      {
+        toastClass: 'toast-pink',
+        timeOut: 10000,
+        closeButton: true,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+      }
+    );
   }
 
   close() {
