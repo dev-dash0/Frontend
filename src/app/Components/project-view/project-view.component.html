@@ -11,10 +11,7 @@
               <hr />
               <div class="content">
                 <div class="profile d-flex align-items-center gap-2">
-                  <img
-                    src="assets/images/scrum master profile photo.svg"
-                    alt="scrum master profile icon"
-                  />
+                  <img src="assets/images/scrum master profile photo.svg" alt="scrum master profile icon" />
                   <div class="scrum-master-headar">
                     <h3 class="mb-0">John Smith</h3>
                     <p class="m-0 p-0">Scrum Master</p>
@@ -107,10 +104,7 @@
                 </div>
                 <hr />
               </div>
-              <div
-                class="create-sprint d-flex align-items-center gap-2"
-                (click)="openSprint()"
-              >
+              <div class="create-sprint d-flex align-items-center gap-2" (click)="openSprint()">
                 <img src="./assets/images/Plus.svg" alt="" />
                 <p class="m-0 p-0" (click)="openSprint()">Create Sprint</p>
               </div>
@@ -124,69 +118,74 @@
                 <h2>Project Issues</h2>
               </div>
               <hr />
-              <div class="issues d-flex justify-content-center flex-column">
+              <div *ngFor="let issue of backlogIssues" class="issues d-flex justify-content-center flex-column">
                 <div class="issue-name-status d-flex justify-content-between">
-                  <h3>Issue 1</h3>
-                  <p class="m-0 p-0">Status</p>
+                  <h3>{{ issue.title }}</h3>
+                  <p class="m-0 p-0">{{ issue.status }}</p>
                 </div>
                 <div class="issue-details d-flex justify-content-between">
-                  <p class="m-0 p-0">Description ...</p>
+                  <p class="m-0 p-0">{{ issue.description }}</p>
                 </div>
                 <hr />
               </div>
-              <div class="issues d-flex justify-content-center flex-column">
-                <div class="issue-name-status d-flex justify-content-between">
-                  <h3>Issue 2</h3>
-                  <p class="m-0 p-0">Status</p>
-                </div>
-                <div class="issue-details d-flex justify-content-between">
-                  <p class="m-0 p-0">Description ...</p>
-                </div>
-                <hr />
-              </div>
-              <div
-                class="create-issue d-flex align-items-center gap-2"
-                (click)="openIssue()"
-              >
-                <img src="./assets/images/Plus.svg" alt="" />
+              <div class="create-issue d-flex align-items-center gap-2" (click)="openCreateIssue()">
+                <img src="/assets/images/Plus.svg" alt="plus" style="height: 0px;" />
                 <p class="m-0 p-0">Create Issue</p>
               </div>
             </div>
           </div>
         </div>
+
         <div class="col-md-12">
-          <div class="card p-2 cardBottomLeft">
-            <div class="card-body">
-              <div class="header text-center">
-                <h2>Project Backlog</h2>
-              </div>
-              <hr />
-              <div class="issues d-flex justify-content-center flex-column">
-                <div
-                  class="issues d-flex align-items-start justify-content-between"
-                >
-                  <div class="d-flex flex-column issue-name-status">
-                    <div class="d-flex align-items-center gap-2">
-                      <h3>Issue 2</h3>
-                      <p class="m-0 p-0">Status</p>
+          <div class="card dark-card p-4 ">
+            <div class="header">
+              <h2>Project Backlog</h2>
+            </div>
+            <div class="dark-card-content p-3">
+              <div class="backlog-content">
+                <div *ngFor="let issue of backlogIssues" class="issue-item" (dblclick)="loadIssue(issue.id)">
+                  <div class="issue-details">
+                    <div class="issue-details">
+                      <h4 class="text-capitalize cursor-pointer backlog-issue-title " (click)="loadIssue(issue.id)">{{
+                        issue.title }}</h4>
+                      <span class="label">Label</span>
+                      <span class="label">Label</span>
                     </div>
-                    <p class="m-0 p-0">Description ...</p>
+                    <div class="">
+                      <div class="delete d-flex justify-content-end">
+                        <span class="px-3 py-2 cursor-pointer" (click)="openDeleteIssueModal(issue.id,issue.title)">
+                          <i class="fa-solid fa-trash " style="color: #D02705"></i>
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <button class="btn">Remove From Backlog</button>
-                </div>
-                <hr />
-              </div>
-              <div
-                class="issues d-flex align-items-start justify-content-between"
-              >
-                <div class="d-flex flex-column issue-name-status">
-                  <div class="d-flex align-items-center gap-2">
-                    <h3>Issue 2</h3>
-                    <p class="m-0 p-0">Status</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="priority">
+                      <i class="icon-flag"></i>
+                      <div class="priority">
+                        <img [src]="getPriorityIcon(issue.priority)" alt="Priority Icon" class="priority-icon" />
+                        <span [ngStyle]="getPriorityStyle(issue.priority)">{{ issue.priority }}</span>
+                      </div>
+                    </div>
+                    <div class="issue-meta">
+                      <!-- <div class="avatars">
+                        <img *ngFor="let user of issue.createdBy?.imageUrl" [src]="user.avatarUrl" class="avatar" />
+                      </div> -->
+                      <span class="created-by">Created by : </span>
+
+                      <img src="{{issue.createdBy?.imageUrl}}" class="avatar" alt="Created by">
+
+                      <span class="dates">{{ issue.startDate | date: 'd MMM' }} | {{ issue.deadline | date: 'd MMM'
+                        }}</span>
+                    </div>
                   </div>
-                  <p class="m-0 p-0">Description ...</p>
                 </div>
-                <button class="btn">Remove From Backlog</button>
+                <div class="add-issue-btn" (click)="openCreateIssue()">
+                  <span class="plus-icon"> <img src="/assets/images/Plus.svg" alt="plus" />
+                  </span> Add Issue
+                </div>
+                <!-- <button mat-raised-button color="primary" (click)="openModal()">Open Modal</button> -->
+                <!-- <button mat-raised-button color="primary" (click)="openCreateIssueModal()">Create Issue</button> -->
               </div>
             </div>
           </div>
@@ -194,4 +193,3 @@
       </div>
     </div>
   </div>
-</div>

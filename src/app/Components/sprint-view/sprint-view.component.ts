@@ -120,7 +120,7 @@ export class SprintViewComponent {
   }
 
   openIssue() {
-    this.dialogService.openIssueModal();
+    this.dialogService.openIssueModal(6);
   }
 
   getWrapperClass(status: string): string {

@@ -19,7 +19,6 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatChipsModule, } from '@angular/material/chips';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ProjectService } from '../../Core/Services/project.service';
-import { log } from 'console';
 import { ToastrService } from 'ngx-toastr';
 export interface Label {
   name: string;
@@ -49,7 +48,7 @@ export class ProjectModalComponent {
   constructor(
     private dialogRef: MatDialogRef<ProjectModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) { }
 
   private readonly _ProjectService = inject(ProjectService);
   private readonly toastr = inject(ToastrService);

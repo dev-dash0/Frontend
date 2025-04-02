@@ -1,0 +1,34 @@
+<div class="modal-container delete-modal-container">
+    <!-- Header -->
+    <div class="modal-header d-flex justify-content-between align-items-start">
+        <div class="title d-flex gap-3 align-items-center">
+            <img src="assets/images/Trash.svg" width="30px" height="30px" alt="Trash Icon" />
+            <h2 style="color: rgb(190, 190, 231);">{{ data.title || 'Confirm Deletion' }}</h2>
+        </div>
+        <button class="close-btn" (click)="onCancel()">&#x2715;</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Dynamic Message -->
+    <div class="d-flex flex-column align-items-center justify-content-center mt-3">
+        <p style="color: rgb(190, 190, 231);" class="fs-6 ">{{ data.message }}</p>
+        <p style="color: rgb(169, 82, 82);">This action cannot be undone.</p>
+    </div>
+
+    <!-- Footer Buttons -->
+    <div class="modal-footer d-flex justify-content-between align-items-center ">
+        <div class="d-flex w-50 justify-content-start align-items-center gap-2">
+            <input class="checkbox-style" type="checkbox" id="dontShowAgain" [(ngModel)]="dontShowAgain" />
+            <label for="dontShowAgain">Don't show again</label>
+        </div>
+        <div class="buttons d-flex justify-content-end align-items-center gap-3">
+            <button mat-button type="button" class="cancel-btn " (click)="onCancel()">
+                {{ data.cancelText || 'Cancel' }}
+            </button>
+            <button mat-flat-button type="submit" (click)="onConfirm()" class=" btn-delete">
+                {{ data.confirmText || 'Delete' }}
+            </button>
+        </div>
+    </div>
+</div>

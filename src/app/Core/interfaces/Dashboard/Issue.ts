@@ -1,5 +1,6 @@
+import { ProfileData } from '../profile';
 export interface Issue {
-    // id: number;
+    id: number;
     title: string;
     description: string;
     // projectCode: string;
@@ -11,5 +12,6 @@ export interface Issue {
     priority: string;
     status: string;
     projectName: string;
+    createdBy?: ProfileData;
 
 }

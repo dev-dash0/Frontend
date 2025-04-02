@@ -11,18 +11,20 @@ export class DashboardService {
 
   constructor(private _HttpClient: HttpClient) { }
 
+  token = localStorage.getItem('token');
+  headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${this.token}`,
+  });
+
   getDashboardData = (Tenantid: number): Observable<any> => {
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-      Accept: 'text/plain',
-    });
 
     const params = new HttpParams().set('Tenantid', Tenantid.toString());
     return this._HttpClient.get(baseUrl + '/api/DashBoard/Tenants',
       {
-        headers,
+        headers: this.headers,
         params
       }
     );
@@ -30,61 +32,34 @@ export class DashboardService {
 
 
   getDashboardAllProject = (): Observable<any> => {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    });
-
-    // const params = new HttpParams().set('Tenantid', Tenantid.toString());
-
     return this._HttpClient.get(baseUrl + '/api/DashBoard/allproject', {
-      headers,
-      // params
+      headers: this.headers,
     });
   };
 
   getDashboardAllIssue = (): Observable<any> => {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    });
-    // const params = new HttpParams().set('Tenantid', Tenantid.toString());
     return this._HttpClient.get(baseUrl + '/api/DashBoard/allissue', {
-      headers,
-      // params
+      headers: this.headers,
     });
   };
+
   getDashboardCalender = (): Observable<any> => {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    });
     return this._HttpClient.get(baseUrl + '/api/DashBoard/Calender', {
-      headers,
+      headers: this.headers,
     });
   };
+
   getDashboardPinned = (): Observable<any> => {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    });
     return this._HttpClient.get(baseUrl + '/api/DashBoard/Pinneditems', {
-      headers,
+      headers: this.headers,
     });
   };
 
   getIssueById = (issueId: number): Observable<any> => {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-      Accept: 'text/plain',
-    });
-
     const params = new HttpParams().set('Tenantid', issueId.toString());
     return this._HttpClient.get(baseUrl + '/api/Issue',
       {
-        headers,
+        headers: this.headers,
         params
       }
     );

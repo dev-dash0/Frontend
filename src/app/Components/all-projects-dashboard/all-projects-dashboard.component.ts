@@ -36,7 +36,7 @@ export class AllProjectsDashboardComponent {
   @ViewChild('projectsOverdueChart') projectsOverdueChart!: ElementRef;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    this.getTenantDashboard(11);
+    this.getTenantDashboard(8);
   }
   initCharts() {
     if (isPlatformBrowser(this.platformId)) {

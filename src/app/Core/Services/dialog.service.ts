@@ -5,12 +5,14 @@ import { ProjectModalComponent } from '../../Components/project-modal/project-mo
 import { SprintModalComponent } from '../../Components/sprint-modal/sprint-modal.component';
 import { UpdateInfoComponent } from '../../Components/update-info/update-info.component';
 import { AddCompanyModalComponent } from '../../Components/company-modal/company-modal.component';
+import { IssueViewModalComponent } from '../../Components/issue-view-modal/issue-view-modal.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DialogService {
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private toastr: ToastrService) { }
 
   openDialog(component: any, data: any = null) {
     this.dialog.open(component, {
@@ -26,11 +28,19 @@ export class DialogService {
   }
 
   // ! Issue Modal  //////////////////////////////////////////////////////////////////
-  openIssueModal() {
+  openIssueModal(projectId: number) {
     this.openDialog(IssueModalComponent, {
       message: 'Hello from Issue Modal!',
+      projectId, // ✅ Directly pass projectId instead of nesting it under another 'data' object
     });
   }
+  openIssueViewModal(issueId: number) {
+    this.openDialog(IssueViewModalComponent, {
+      message: 'Hello from Issue View Modal!',
+      issueId, // ✅ Directly pass projectId instead of nesting it under another 'data' object
+    });
+  }
+
 
   // ! Project Modal //////////////////////////////////////////////////////////////////
   openProjModal() {
@@ -58,5 +68,19 @@ export class DialogService {
     this.openDialog(AddCompanyModalComponent, {
       message: 'Hello from Create company Modal!',
     });
+  }
+  // /////////////////////////////////////
+  showDeletionSuccess() {
+    this.toastr.success(
+      'The item has been removed',
+      'Removed Successfully',
+      {
+        toastClass: 'toast-pink',
+        timeOut: 5000,
+        closeButton: true,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+      }
+    );
   }
 }
