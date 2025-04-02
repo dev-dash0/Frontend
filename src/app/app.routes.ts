@@ -17,6 +17,7 @@ import { CompanyViewComponent } from './Components/company-view/company-view.com
 import { AllcompaniesComponent } from './Components/allcompanies/allcompanies.component';
 import { ErrorpageComponent } from './Components/errorpage/errorpage.component';
 import { PinnedComponent } from './Components/pinned/pinned.component';
+import { AllProjectsComponent } from './Components/all-projects/all-projects.component';
 
 export const routes: Routes = [
   { path: 'welcome', component: WelcomePageComponent, title: 'Welcome' },
@@ -81,6 +82,11 @@ export const routes: Routes = [
             path: 'allcompanies',
             component: AllcompaniesComponent,
             title: 'All Companies',
+          },
+          {
+            path: 'allProjects',
+            component: AllProjectsComponent,
+            title: 'All Projects',
           },
           { path: 'Pinned', component: PinnedComponent, title: 'Pinned' },
         ],

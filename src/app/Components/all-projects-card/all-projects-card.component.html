@@ -1,0 +1,92 @@
+<div class="card cardBottomRight">
+  <div class="company">
+    <!-- <div class="card-img object-fit-cover">
+      <img
+        class="object-fit-cover w-100"
+        [src]="
+          isValidUrl(company.image) ? company.image : 'assets/images/cover.jpg'
+        "
+        alt="{{ company.name }}"
+      />
+    </div> -->
+    <div class="card-body">
+        <div class="header">
+            <div class="HeaderFirstPart">
+                <h2 class="text-capitalize">{{ project.name }}</h2>
+                <div class="Priority-Status d-flex gap-2">
+                    <mat-chip-set>
+                        <mat-chip [ngClass]="getPriorityClass(project.priority)">
+                            {{ project.priority }}
+                        </mat-chip>
+                    </mat-chip-set>
+                    <mat-chip-set>
+                        <mat-chip [ngClass]="{
+                            'planning-status': project.status === 'Planning',
+                            'reviewing-status': project.status === 'Reviewing',
+                            'working-on-status': project.status === 'Working on',
+                            'completed-status': project.status === 'Completed',
+                            'canceled-status': project.status === 'Canceled',
+                            'postponed-status': project.status === 'Postponed'
+                            }" class="status-chip">
+                            {{ project.status }}
+                        </mat-chip>
+                    </mat-chip-set>
+                </div>
+            </div>
+            <!-- <div class="icons gap-3">
+            <a (click)="copyText('code')">
+                <span *ngIf="!copied.code">
+                <i
+                    class="fa-regular fa-file-lines fa-xl"
+                    style="color: var(--mainLightBlueColor)"
+                ></i>
+                </span>
+                <span *ngIf="copied.code">
+                <i class="fa-check fa-solid fa-xl" style="color: #28a745"></i>
+                </span>
+            </a>
+            </div> -->
+            <p class="p-0 m-0">
+                Start {{ project.startDate }}<br />
+                Due {{ project.endDate }}
+            </p>
+        </div>
+      <p class="my-3 ">
+        {{ project.description }}
+      </p>
+      <div class="TenantDetails mb-3">
+        <h4>Company {{project.tenant.name}}</h4>
+      </div>
+      <div class="members-details">
+        <div class="people gap-1">
+            <img src="assets/images/blank profile.svg" class="member-img me-3" alt="">
+            <h4>{{ project.userProjects.length }}</h4>
+          <!-- <ng-container
+            *ngFor="let member of project.userProjects; let last = last"
+          >
+            <div class="gap-1 member">
+              <img
+                [src]="
+                  isValidUrl(member.imgUrl)
+                    ? member?.imgUrl
+                    : 'assets/images/blank profile.svg'
+                "
+                alt=""
+              />
+              @for (member of project.userProjects; track $index) {
+                <p class="text-capitalize">{{ member.role }}</p>
+                <p>{{ member }}</p>
+              }
+            </div>
+            <hr *ngIf="!last" />
+          </ng-container> -->
+          <!-- <h4 class="m-0 p-0">+5</h4> -->
+        </div>
+        <button class="btn" (click)="selectProject()">
+          View More
+          <i class="fa-solid fa-angles-right ps-1" style="color: #dcdfff"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

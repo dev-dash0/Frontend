@@ -54,7 +54,7 @@ export class SideMenuComponent {
     },
     {
       imagePath: 'assets/images/sidebar icons/Group of Projects.svg',
-      path: '',
+      path: '/MyDashboard/allProjects',
       title: 'Projects',
     },
     {
@@ -287,7 +287,7 @@ export class SideMenuComponent {
       next: (res) => {
         console.log('Companies API response:', res);
         if (res?.result && res.result.length > 0) {
-          this.companyNames = res.result.map((company : any) => ({
+          this.companyNames = res.result.map((company: any) => ({
             id: company.id,
             name: company.name,
           }));
@@ -323,7 +323,7 @@ export class SideMenuComponent {
           console.log(`Project API response for company ${company.id}:`, res);
 
           if (res && res.result && res.result.length > 0) {
-            this.companies[index].projects = res.result.map((project :any) => ({
+            this.companies[index].projects = res.result.map((project: any) => ({
               name: project.name,
               sprints: [{ name: 'Sprint 1' }, { name: 'Sprint 2' }],
             }));
