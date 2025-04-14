@@ -67,7 +67,7 @@ export const routes: Routes = [
             title: 'Dashboard',
           },
           {
-            path: 'Project',
+            path: 'Project/:id',
             component: ProjectViewComponent,
             title: 'Project',
           },

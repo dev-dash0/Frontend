@@ -30,6 +30,7 @@ import { UpdateCompanyComponent } from '../update-company/update-company.compone
 export class CompanyViewComponent implements OnInit {
   @Input() company!: Company;
   @Output() companySelected = new EventEmitter<any>();
+  @Output() projectSelected = new EventEmitter<number>();
   @Output() companyDeleted = new EventEmitter<void>();
   isOwner = false;
   userId!: any;
@@ -47,6 +48,8 @@ export class CompanyViewComponent implements OnInit {
   isSidebarCollapsed = true;
   Owner: Owner | null = null;
   CompanyId: number = 0;
+  SelectedProjectId: number = 0;
+  ProjectIds: number[] = [];
 
   // ----------------------------------------
   ngOnInit(): void {
@@ -370,6 +373,20 @@ export class CompanyViewComponent implements OnInit {
     });
   }
 
+
+  //  ! Need to put the right id here 
+  selectProject(projectId: any) {
+    this.SelectedProjectId = parseInt(projectId);
+    console.log('Selected Project ID:', this.SelectedProjectId);
+    this.projectSelected.emit(this.SelectedProjectId); // Emit it
+    this.router.navigate(['/MyDashboard/Project', projectId]);
+  }
+
+  onProjectSelected(projectId: number) {
+    console.log('Received Project ID from child:', projectId);
+    // You can now store it in a variable or act on it
+  }
+
   getProjectData() {
     this.projectService.getProjectData(this.CompanyId).subscribe({
       next: (res: Project) => {
@@ -396,6 +413,13 @@ export class CompanyViewComponent implements OnInit {
             }
           });
         }
+
+        res.result.forEach((project: any) => {
+          this.SelectedProjectId = project.id;
+          this.ProjectIds.push(project.id);
+        });
+
+        console.log(this.ProjectIds);
 
         this.projectStats = [
           {
