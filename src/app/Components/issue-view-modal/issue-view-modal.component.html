@@ -1,7 +1,374 @@
-<app-modal title="Create Issue" [modalContent]="issueContent" (close)="close()">
+<app-modal *ngIf="showModal" [title]="isEditMode ? 'Edit Issue' : 'Issue Details'" [formGroup]="issueUpdateForm"
+    [modalContent]="modalContent" [showSubmit]="isEditMode" [submitText]="'Confirm'"
+    [cancelText]="isEditMode ? 'Cancel' : 'Close'" (close)="handleModalClose()" (submit)="onSubmit()">
 </app-modal>
 
-<!-- Define the issue form inside an ng-template -->
-<ng-template #issueContent>
-    <h1>Hello </h1>
+<!-- The dynamic modal content -->
+
+<ng-template #modalContent>
+    <ng-container *ngIf="loading; else issueContent">
+        <div class="d-flex justify-content-center align-items-center p-5">
+            <!-- <mat-spinner></mat-spinner> -->
+            <i class="fa-solid fa-circle-notch fa-spin fa-2xl fw-lighter"></i>
+            <!-- <div class="placeholder w-100 h-25"></div> -->
+        </div>
+    </ng-container>
+    <ng-template #issueContent>
+        <ng-container *ngIf="!isEditMode; else editMode">
+
+            <div class="issue-details ">
+
+                <!-- Title -->
+                <h3 class="  fw-semibold mb-3 ">{{ issue?.title }}</h3>
+
+                <!-- Chips: Type | Priority | Status -->
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="badge bg-info-subtle text-dark px-3 py-2 rounded-pill">Type: {{ issue?.type }}</span>
+                    <span class="badge bg-warning-subtle text-dark px-3 py-2 rounded-pill">Priority: {{ issue?.priority
+                        }}</span>
+
+                    <span
+                        class="badge d-inline-flex bg-secondary-subtle align-items-center gap-2 px-3 py-2 rounded-pill"
+                        [ngClass]="getStatusBadgeClass(issue?.status)"
+                        *ngIf="getStatusConfig(issue?.status) as statusConfig">
+                        <img [src]="statusConfig.icon" alt="Status Icon" width="18" height="18" />
+                        {{ statusConfig.label }}
+                    </span>
+
+                </div>
+
+                <!-- Description Card -->
+                <div class="card-issue-view shadow-sm border-0 mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title fw-semibold  mb-2">Description</h6>
+                        <p class="card-text" *ngIf="issue?.description; else noDesc">{{ issue?.description }}</p>
+                        <ng-template #noDesc>
+                            <em class="text-muted">No description provided.</em>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <!-- Meta Info Card -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card-issue-view shadow-sm shadow border-0 h-100">
+                            <div class="card-body">
+                                <h6 class="fw-semibold  mb-3">Created By</h6>
+                                <div class="d-flex align-items-center gap-3">
+                                    <img [src]="issue?.createdBy?.imageUrl" alt="User" class="rounded-circle border"
+                                        width="50" height="50" />
+                                    <div>
+                                        <div><span class="text-capitalize">{{ issue?.createdBy?.firstName }} {{
+                                                issue?.createdBy?.lastName }}</span></div>
+                                        <small class="text-muted">{{ issue?.creationDate | date: 'medium' }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Assigned Users -->
+                    <div class="col-md-6">
+                        <div class="card-issue-view shadow-sm border-0 h-100">
+                            <div class="card-body">
+                                <h6 class="fw-semibold mb-3">Assigned Users</h6>
+                                <ng-container *ngIf="(issue?.assignedUsers?.length ?? 0) > 0; else noAssigned">
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <div class="d-flex align-items-center gap-2 bg-light rounded px-2 py-1"
+                                            *ngFor="let user of issue?.assignedUsers">
+                                            <img [src]="user.imageUrl" width="30" height="30" class="rounded-circle"
+                                                alt="user image" />
+                                            <span>{{ user.firstName }}</span>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-template #noAssigned>
+                                    <em class="text-muted">No users assigned.</em>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Date Section -->
+                <!-- <div class="date-section d-flex justify-content-between mt-4 flex-wrap small">
+                <div><span>Start:</span> {{ issue?.startDate | date: 'medium' }}</div>
+                <div><span>Deadline:</span> {{ issue?.deadline | date: 'medium' }}</div>
+                <div><span>Delivered:</span> {{ issue?.deliveredDate| date: 'medium' }}</div>
+            </div> -->
+                <!-- <div class="date-section d-flex justify-content-between mt-4 flex-wrap small">
+                <div>
+                    <span>Start Date:</span>
+                    {{ issue?.startDate ? (issue?.startDate | date: 'medium') : '—' }}
+                </div>
+                <div>
+                    <span>Deadline:</span>
+                    {{ issue?.deadline ? (issue?.deadline | date: 'medium') : '—' }}
+                </div>
+                <div>
+                    <span>Delivered Time:</span>
+                    {{ issue?.deliveredDate ? (issue?.deliveredDate | date: 'medium') : '—' }}
+                </div>
+                <div>
+                    <span>Last Update:</span>
+                    {{ issue?.deliveredDate ? (issue?.lastUpdate | date: 'medium') : '—' }}
+                </div>
+            </div> -->
+
+                <!-- <div class="date-section d-flex justify-content-between mt-4 flex-wrap small">
+                <div>
+                    <span>Start:</span>
+                    <ng-container *ngIf="issue?.startDate; else noStart">
+                        {{ issue?.startDate | date: 'medium' }}
+                    </ng-container>
+                    <ng-template #noStart><span class="text-muted">—</span></ng-template>
+                </div>
+
+                <div>
+                    <span>Deadline:</span>
+                    <ng-container *ngIf="issue?.deadline; else noDeadline">
+                        {{ issue?.deadline | date: 'medium' }}
+                    </ng-container>
+                    <ng-template #noDeadline><span class="text-muted">—</span></ng-template>
+                </div>
+
+                <div>
+                    <span>Delivered:</span>
+                    <ng-container *ngIf="issue?.deliveredDate; else noDelivered">
+                        {{ issue?.deliveredDate | date: 'medium' }}
+                    </ng-container>
+                    <ng-template #noDelivered><span class="text-muted">—</span></ng-template>
+                </div>
+            </div> -->
+
+                <div class="px-3  text-sm text-light mt-4 g-3">
+                    <div class="row">
+                        <!-- Start Date -->
+                        <div class="col-md-3 col-6 d-flex align-items-baseline gap-2">
+                            <i class="fa-solid fa-calendar-days text-info fa-sm"></i>
+                            <div>
+                                <div class="fw-semibold">Start Date</div>
+                                <div class="text-muted">
+                                    {{ issue?.startDate ? (issue?.startDate | date: 'mediumDate') : '—' }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Deadline -->
+                        <div class="col-md-3 col-6 d-flex align-items-baseline gap-2">
+                            <i class="fa-solid fa-hourglass-half text-danger fa-sm"></i>
+                            <div>
+                                <div class="fw-semibold">Deadline</div>
+                                <div class="text-muted">
+                                    {{ issue?.deadline ? (issue?.deadline | date: 'MMM d, y, h:mm a') : '—' }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Delivered -->
+                        <div class="col-md-3 col-6 d-flex align-items-baseline gap-2">
+                            <i class="fa-solid fa-circle-check text-success fa-sm"></i>
+                            <div>
+                                <div class="fw-semibold">Delivered</div>
+                                <div class="text-muted">
+                                    {{ issue?.deliveredDate ? (issue?.deliveredDate | date: 'MMM d, y, h:mm a') : '—' }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Last Update -->
+                        <div class="col-md-3 col-6 d-flex align-items-baseline gap-2">
+                            <i class="fa-solid fa-rotate-right text-primary fa-sm"></i>
+                            <div>
+                                <div class="fw-semibold ">Last Update</div>
+                                <div class="text-muted">
+                                    {{ issue?.lastUpdate ? (issue?.lastUpdate | date: 'mediumDate') : '—' }}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <div class="d-flex justify-content-end mt-3">
+                <button mat-flat-button type="submit" (click)="toggleEditMode()" class="confirm-btn fw-semibold">
+                    Update
+                </button>
+            </div>
+
+        </ng-container>
+
+    </ng-template>
+    <ng-template #editMode>
+        <form [formGroup]="issueUpdateForm">
+
+            <!-- Issue Title -->
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <label for="issueTitle">Issue Title *</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="issueTitle" type="text" formControlName="title" placeholder="e.g. Linear" required />
+                </div>
+            </div>
+            <!-- Description -->
+            <div class="row  align-items-center">
+                <div class="col-md-2">
+                    <label for="description">Description</label>
+                </div>
+                <div class="col-md-10">
+                    <textarea id="description" rows="2" formControlName="description"
+                        placeholder="Write a few sentences about the Issue..."></textarea>
+                </div>
+            </div>
+            <!-- Labels -->
+            <!-- <div class="row align-items-center">
+                        <div class="col-md-2">
+                            <label for="labels">Label</label>
+                        </div>
+                        <div class="col-md-10">
+                            <mat-form-field class="label-chip-list" appearance="outline">
+                                <mat-chip-grid #chipGrid aria-label="Enter Label">
+                                    @for (label of labels(); track label) {
+                                    <mat-chip-row (removed)="remove(label)" [editable]="true" (edited)="edit(label, $event)"
+                                        (keydown)="limitLabelLength($event, label)"
+                                        [aria-description]="'press enter to edit ' + label.name">
+                                        {{ label.name }}
+                                        <button matChipRemove [attr.aria-label]="'remove ' + label.name">
+                                            <mat-icon>&#x2715;</mat-icon>
+                                        </button>
+                                    </mat-chip-row>
+                                    }
+                                    <input placeholder="New Label..." [matChipInputFor]="chipGrid"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                                        (matChipInputTokenEnd)="add($event)" maxlength="100" />
+                                </mat-chip-grid>
+                            </mat-form-field>
+                        </div>
+                    </div> -->
+            <!-- 
+                    <div class="row align-items-center">
+                        <div class="col-md-2">
+                            <label for="labels">Label</label>
+                        </div>
+                        <div class="col-md-10">
+                            <mat-form-field class="label-chip-list" appearance="outline">
+                                <mat-chip-grid #chipGrid aria-label="Enter Label">
+                                    <mat-chip-row *ngFor="let label of issueForm.controls['labels'].value; let i = index"
+                                        (removed)="remove(i)" [editable]="true" (edited)="edit(i, $event.value)"
+                                        (keydown)="limitLabelLength($event, i)" [aria-description]="'Press enter to edit ' + label">
+                                        {{ label }}
+                                        <button matChipRemove [attr.aria-label]="'Remove ' + label">
+                                            <mat-icon>&#x2715;</mat-icon>
+                                        </button>
+                                    </mat-chip-row>
+                                    <input placeholder="New Label..." [matChipInputFor]="chipGrid"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                                        (matChipInputTokenEnd)="add($event)" maxlength="100" />
+                                </mat-chip-grid>
+                            </mat-form-field>
+                        </div>
+                    </div>
+             -->
+
+
+            <div class="divider"></div>
+            <!-- Dates -->
+            <div class="date-container">
+                <!-- Start Date -->
+                <div class="row align-items-center">
+                    <div class="col-md-2"><label>Start Date</label></div>
+                    <div class="col-md-10">
+                        <mat-form-field appearance="outline" class="custom-date-picker">
+                            <mat-icon matPrefix class="custom-calendar-icon" (click)="picker1.open()"><img
+                                    src="assets/images/uil_calender.svg" alt=""></mat-icon>
+                            <input matInput [matDatepicker]="picker1" formControlName="startDate"
+                                placeholder="Select Date">
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- Due Date -->
+                <div class="row align-items-center">
+                    <div class="col-md-2"><label>Due Date</label></div>
+                    <div class="col-md-10">
+                        <mat-form-field appearance="outline" class="custom-date-picker">
+                            <mat-icon matPrefix class="custom-calendar-icon" (click)="picker2.open()"><img
+                                    src="assets/images/uil_calender.svg" alt=""></mat-icon>
+                            <input matInput [matDatepicker]="picker2" formControlName="deadline"
+                                placeholder="Select Date">
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- Delivered Date -->
+                <div class="row align-items-center">
+                    <div class="col-md-2"><label>Delivered Date</label></div>
+                    <div class="col-md-10">
+                        <mat-form-field appearance="outline" class="custom-date-picker">
+                            <mat-icon matPrefix class="custom-calendar-icon" (click)="picker3.open()"><img
+                                    src="assets/images/uil_calender.svg" alt=""></mat-icon>
+                            <input matInput [matDatepicker]="picker3" formControlName="deliveredDate"
+                                placeholder="Select Date">
+                            <mat-datepicker #picker3></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <!-- Issue Type -->
+            <div class="row align-items-center">
+                <div class="col-md-2"><label for="issue-type">Issue Type *</label></div>
+                <div class="col-md-10">
+                    <mat-form-field appearance="outline" class="custom-dropdown">
+                        <mat-select formControlName="type" multiple="false" panelClass="custom-select-panel">
+                            <mat-option value="" disabled hidden>Select Issue Type</mat-option>
+                            <mat-option value="Bug">Bug</mat-option>
+                            <mat-option value="Feature">Feature</mat-option>
+                            <mat-option value="Task">Task</mat-option>
+                            <mat-option value="Epic">Epic</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <!-- Status -->
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <label for="issue-type">Status *</label>
+                </div>
+                <div class="col-md-10">
+                    <mat-button-toggle-group formControlName="status" aria-label="Issue Status" class="w-100">
+                        <mat-button-toggle *ngFor="let status of statuses" [value]="status.value">
+                            <img [src]="status.icon" alt="{{ status.label }} Icon" class="status-icon" />
+                            {{ status.label }}
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+            <!-- Priority -->
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <label for="issue-type">Priority *</label>
+                </div>
+                <div class="col-md-10">
+                    <mat-button-toggle-group formControlName="priority" aria-label="Issue Priority">
+                        <mat-button-toggle *ngFor="let priority of Priorities" [value]="priority.value"
+                            [class]="priority.value">
+                            <img [src]="priority.icon" alt="{{ priority.label }} Icon" class="priority-icon" />
+                            {{ priority.label }}
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+
+        </form>
+
+
+    </ng-template>
 </ng-template>

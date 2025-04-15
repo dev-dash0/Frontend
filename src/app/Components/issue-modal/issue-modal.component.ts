@@ -118,23 +118,10 @@ export class IssueModalComponent {
   }
   // ///////////////////////////////////////////////
   // status
-  statuses = [
-    { value: 'BackLog', label: 'Backlog', icon: 'assets/images/Issue Status/backlog.svg' },
-    { value: 'to do', label: 'To Do', icon: 'assets/images/Issue Status/todo.svg' },
-    { value: 'In Progress', label: 'In Progress', icon: 'assets/images/Issue Status/in-progress.svg' },
-    { value: 'Reviewing', label: 'Reviewing', icon: 'assets/images/Issue Status/reviewing.svg' },
-    { value: 'Completed', label: 'Completed', icon: '../../assets/images/Issue Status/Completed.svg' },
-    { value: 'Canceled', label: 'Canceled', icon: 'assets/images/Issue Status/canceled.svg' },
-    { value: 'Postponed', label: 'Postponed', icon: 'assets/images/Issue Status/postponed.svg' }
-  ];
+  statuses = this._IssueService.statuses;
 
   //Priority
-  Priorities = [
-    { value: 'Low', label: 'Low', icon: 'assets/images/Issue Priorities/low.svg' },
-    { value: 'Medium', label: 'Normal', icon: 'assets/images/Issue Priorities/normal.svg' },
-    { value: 'High', label: 'High', icon: 'assets/images/Issue Priorities/high.svg' },
-    { value: 'Critical', label: 'Urgent', icon: 'assets/images/Issue Priorities/urgent.svg' },
-  ];
+  Priorities = this._IssueService.Priorities;
 
   submitForm() {
     if (this.issueForm.valid) {

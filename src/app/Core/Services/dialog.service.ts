@@ -19,7 +19,7 @@ export class DialogService {
       width: 'auto',
       minWidth: '60vw',
       maxWidth: '70vw', // Limits width to 80% of viewport
-      minHeight: '60vh',
+      // minHeight: '60vh',
       maxHeight: '90vh',
       panelClass: 'custom-dialog-container', // Custom class for styling
       disableClose: true,

@@ -1,28 +1,15 @@
 <mat-sidenav-container class="bg-transparent my-3 rounded-3 position-fixed">
-  <mat-sidenav
-    #sidenav
-    mode="side"
-    opened
-    [style.width.px]="collapsed ? 70 : 220"
-  >
-    <div
-      class="side-menu-bg h-100 rounded-3 px-2 py-3"
-      [style.overflow-y]="collapsed ? 'hidden' : 'auto'"
-      [class.overflow-x-hidden]="!collapsed"
-      [class.overflow-y-auto]="!collapsed"
-    >
+  <mat-sidenav #sidenav mode="side" opened [style.width.px]="collapsed ? 70 : 220">
+    <div class="side-menu-bg h-100 rounded-3 px-2 py-3" [style.overflow-y]="collapsed ? 'hidden' : 'auto'"
+      [class.overflow-x-hidden]="!collapsed" [class.overflow-y-auto]="!collapsed">
       <div class="container">
         <div class="row g-3">
           <!-- logo -->
           <div class="col-md-12">
-            <div
-              class="side-logo"
-              [ngClass]="{
+            <div class="side-logo" [ngClass]="{
                 'justify-content-between': !collapsed,
                 'justify-content-center': collapsed
-              }"
-              (click)="toggleCollapse()"
-            >
+              }" (click)="toggleCollapse()">
               <h5 class="m-0 p-0" *ngIf="!collapsed">
                 <img src="assets/images/logo.png" class="Logo me-2" alt="" />
                 Dev Dash
@@ -38,11 +25,7 @@
           <!--main services-->
           <div class="col-md-12" *ngIf="!collapsed">
             <div class="side-menu-wrapper h-100">
-              <div
-                class="gap-2 main-service"
-                *ngFor="let service of mainServices; let i = index"
-                [class.mt-2]="i > 0"
-              >
+              <div class="gap-2 main-service" *ngFor="let service of mainServices; let i = index" [class.mt-2]="i > 0">
                 <img [src]="service.imagePath" alt="" />
                 <p class="m-0 p-0" [routerLink]="service.path">
                   {{ service.title }}
@@ -54,30 +37,18 @@
           <!--companies-->
           <div class="col-md-12" *ngIf="!collapsed">
             <div class="side-menu-wrapper h-100">
-              <div
-                class="gap-2 all-companies"
-                routerLink="/MyDashboard/allcompanies"
-              >
+              <div class="gap-2 all-companies" routerLink="/MyDashboard/allcompanies">
                 <img src="assets/images/sidebar icons/Company.svg" alt="" />
                 <p class="m-0 pe-1">Companies</p>
               </div>
 
               <div class="drop-menus mt-2">
-                <div
-                  *ngFor="let company of companyNames; let companyIndex = index"
-                  class="company d-flex flex-column"
-                >
-                  <div
-                    class="drop-button"
-                    (click)="
+                <div *ngFor="let company of companyNames; let companyIndex = index" class="company d-flex flex-column">
+                  <div class="drop-button" (click)="
                       toggleCollapseDropDown(getCollapseId(companyIndex));
                       selectCompany(company.id)
-                    "
-                    data-bs-toggle="collapse"
-                    [attr.data-bs-target]="'#' + getCollapseId(companyIndex)"
-                    aria-expanded="false"
-                    [attr.aria-controls]="getCollapseId(companyIndex)"
-                  >
+                    " data-bs-toggle="collapse" [attr.data-bs-target]="'#' + getCollapseId(companyIndex)"
+                    aria-expanded="false" [attr.aria-controls]="getCollapseId(companyIndex)">
                     <p class="text-capitalize">
                       {{ company.name }}
                     </p>
@@ -90,59 +61,34 @@
 
                   <div class="collapse" [id]="getCollapseId(companyIndex)">
                     <div class="projects ps-3">
-                      <div
-                        *ngFor="
+                      <div *ngFor="
                           let project of companies[companyIndex]?.projects;
                           let projectIndex = index
-                        "
-                        class="project"
-                      >
-                        <div
-                          class="drop-button"
-                          (click)="
+                        " class="project">
+                        <div class="drop-button" (click)="
                             toggleCollapseDropDown(
                               getCollapseId(companyIndex, projectIndex)
                             )
-                          "
-                          data-bs-toggle="collapse"
-                          [attr.data-bs-target]="
+                          " data-bs-toggle="collapse" [attr.data-bs-target]="
                             '#' + getCollapseId(companyIndex, projectIndex)
-                          "
-                          aria-expanded="false"
-                          [attr.aria-controls]="
+                          " aria-expanded="false" [attr.aria-controls]="
                             getCollapseId(companyIndex, projectIndex)
-                          "
-                        >
+                          ">
                           <p routerLink="/MyDashboard/Project">
                             {{ project.name }}
                           </p>
                           @if (!dropdownStates[getCollapseId(companyIndex,
                           projectIndex)]) {
-                          <span
-                            ><i class="fa-solid fa-chevron-down fa-xs"></i
-                          ></span>
+                          <span><i class="fa-solid fa-chevron-down fa-xs"></i></span>
                           } @else {
-                          <span
-                            ><i class="fa-solid fa-chevron-up fa-xs"></i
-                          ></span>
+                          <span><i class="fa-solid fa-chevron-up fa-xs"></i></span>
                           }
                         </div>
 
-                        <div
-                          class="collapse ps-3 collapse-teams"
-                          [id]="getCollapseId(companyIndex, projectIndex)"
-                        >
-                          <div
-                            *ngFor="let sprint of project.sprints"
-                            class="team"
-                          >
-                            <span
-                              ><i class="fa-regular fa-circle fa-2xs"></i
-                            ></span>
-                            <p
-                              class="ps-2 m-0"
-                              routerLink="/MyDashboard/Sprint"
-                            >
+                        <div class="collapse ps-3 collapse-teams" [id]="getCollapseId(companyIndex, projectIndex)">
+                          <div *ngFor="let sprint of project.sprints" class="team">
+                            <span><i class="fa-regular fa-circle fa-2xs"></i></span>
+                            <p class="ps-2 m-0" routerLink="/MyDashboard/Sprint">
                               {{ sprint.name }}
                             </p>
                           </div>
@@ -173,22 +119,14 @@
           <div class="col-md-12" *ngIf="!collapsed">
             <div class="side-menu-wrapper h-100">
               <div class="work-space gap-2">
-                <img
-                  src="assets/images/sidebar icons/Project Management.svg"
-                  alt=""
-                />
+                <img src="assets/images/sidebar icons/Project Management.svg" alt="" />
                 <p class="m-0 p-0">My Workspace</p>
               </div>
 
               <div class="projects ps-3 mt-2">
-                <div
-                  class="drop-button project"
-                  (click)="toggleCollapseDropDown('collapseWorkspace')"
-                  data-bs-toggle="collapse"
-                  [attr.data-bs-target]="'#collapseWorkspace'"
-                  aria-expanded="false"
-                  [attr.aria-controls]="'collapseWorkspace'"
-                >
+                <div class="drop-button project" (click)="toggleCollapseDropDown('collapseWorkspace')"
+                  data-bs-toggle="collapse" [attr.data-bs-target]="'#collapseWorkspace'" aria-expanded="false"
+                  [attr.aria-controls]="'collapseWorkspace'">
                   <p routerLink="/MyDashboard/Project">Project 1</p>
                   @if(!dropdownStates['collapseWorkspace']) {
                   <span>
@@ -201,15 +139,12 @@
                   }
                 </div>
 
-                <div
-                  class="collapse ps-3 collapse-teams"
-                  id="collapseWorkspace"
-                >
-                  <div *ngFor="let issue of workspaceIssues" class="team">
+                <div class="collapse ps-3 collapse-teams" id="collapseWorkspace">
+                  <div *ngFor="let issue of workspaceIssues" class="team" (click)="openIssueView()">
                     <span><i class="fa-regular fa-circle fa-2xs"></i></span>
                     <p class="ps-2 m-0">{{ issue }}</p>
                   </div>
-                  <div (click)="openIssue()" class="sprint add-sprint">
+                  <div (click)="openCreateIssue()" class="sprint add-sprint">
                     <span><i class="fa-solid fa-plus fa-xs"></i></span>
                     <p class="ps-2 m-0">Add Issue</p>
                   </div>
@@ -226,11 +161,8 @@
           <!-- other services -->
           <div class="col-md-12" *ngIf="!collapsed">
             <div class="side-menu-wrapper h-100">
-              <div
-                class="other-service gap-2"
-                *ngFor="let service of otherServices; let i = index"
-                [class.mt-2]="i > 0"
-              >
+              <div class="other-service gap-2" *ngFor="let service of otherServices; let i = index"
+                [class.mt-2]="i > 0">
                 <img [src]="service.imagePath" alt="" />
                 <p class="m-0 p-0">{{ service.text }}</p>
               </div>
@@ -240,12 +172,7 @@
           <!--collapsed icons-->
           <div class="col-md-12" *ngIf="collapsed">
             <div class="flex-column gap-3 mt-2 collapsed-icons">
-              <img
-                *ngFor="let icon of collapsedIcons"
-                [src]="icon.imagePath"
-                alt=""
-                [routerLink]="icon.path"
-              />
+              <img *ngFor="let icon of collapsedIcons" [src]="icon.imagePath" alt="" [routerLink]="icon.path" />
             </div>
           </div>
         </div>

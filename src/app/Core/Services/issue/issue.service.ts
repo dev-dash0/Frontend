@@ -119,4 +119,23 @@ export class IssueService {
       }
     );
   }
+
+  statuses = [
+    { value: 'BackLog', label: 'Backlog', icon: 'assets/images/Issue Status/backlog.svg', colorClass: 'text-muted' },
+    { value: 'to do', label: 'To Do', icon: 'assets/images/Issue Status/todo.svg', colorClass: 'text-primary' },
+    { value: 'In Progress', label: 'In Progress', icon: 'assets/images/Issue Status/in-progress.svg', colorClass: 'text-warning' },
+    { value: 'Reviewing', label: 'Reviewing', icon: 'assets/images/Issue Status/reviewing.svg', colorClass: 'text-info' },
+    { value: 'Completed', label: 'Completed', icon: '../../assets/images/Issue Status/Completed.svg', colorClass: 'text-success' },
+    { value: 'Canceled', label: 'Canceled', icon: 'assets/images/Issue Status/canceled.svg', colorClass: 'text-danger' },
+    { value: 'Postponed', label: 'Postponed', icon: 'assets/images/Issue Status/postponed.svg', colorClass: 'text-secondary' }
+  ];
+
+  //Priority
+  Priorities = [
+    { value: 'Low', label: 'Low', icon: 'assets/images/Issue Priorities/low.svg' },
+    { value: 'Medium', label: 'Normal', icon: 'assets/images/Issue Priorities/normal.svg' },
+    { value: 'High', label: 'High', icon: 'assets/images/Issue Priorities/high.svg' },
+    { value: 'Critical', label: 'Urgent', icon: 'assets/images/Issue Priorities/urgent.svg' },
+  ];
+
 }

@@ -13,5 +13,7 @@ export interface Issue {
     status: string;
     projectName: string;
     createdBy?: ProfileData;
+    creationDate: Date;
+    assignedUsers: ProfileData[]
 
 }

@@ -157,10 +157,13 @@ export class SideMenuComponent {
 
   // ! <------- Issue Modal ------->
 
-  openIssue() {
+  openCreateIssue() {
     this.dialogService.openIssueModal(6);
   }
 
+  openIssueView() {
+    this.dialogService.openIssueViewModal(345);
+  }
   // ! <------- Company Modal ------->
 
   openCompany() {

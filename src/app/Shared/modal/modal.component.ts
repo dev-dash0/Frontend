@@ -24,6 +24,8 @@ export class ModalComponent {
   @Input() submitText: string = 'Confirm';
   @Input() cancelText: string = 'Cancel';
   @Output() close = new EventEmitter<void>();
+  @Input() showSubmit: boolean = true;
+
   // @Output() submit = new EventEmitter<void>();
 
   @Input() modalContent!: TemplateRef<any>;

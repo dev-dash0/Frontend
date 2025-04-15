@@ -1,0 +1,125 @@
+.issue-details-container {
+    /* padding: 1rem; */
+    font-size: 0.95rem;
+}
+
+.issue-details-container strong {
+    font-weight: 600;
+}
+
+.issue-details-container img {
+    object-fit: cover;
+}
+
+.issue-details {
+    font-size: 0.95rem;
+}
+
+.card-title {
+    font-size: 1rem;
+}
+
+.badge {
+    font-size: 0.85rem;
+}
+
+/* //////////////////////// */
+/* Smooth dark container */
+/* Divider line */
+/* .divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 1rem 0;
+} */
+
+/* Cards (like description, created by, etc.) */
+.card {
+    background-color: rgba(13, 19, 44, 0.7);
+    color: #ddd;
+    border-radius: 1rem;
+    border: none;
+}
+
+.card-issue-view {
+    /* background-color: rgba(13, 19, 44, 0.75); */
+    background-color: rgba(255, 255, 255, 0.02);
+    /* color: #ddd; */
+    border-radius: 1rem;
+    /* border: none; */
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    /* border: 1px solid rgba(255, 255, 255, 0.08); */
+    font-size: 0.9rem;
+}
+
+/* Card titles */
+.card-title,
+.card-body h6 {
+    color: rgb(130, 175, 219);
+}
+
+/* Chips (badges) */
+.badge {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #eee;
+    font-weight: 500;
+}
+
+/* Status-specific badge tweaks */
+.badge.bg-info-subtle {
+    background-color: rgba(0, 184, 217, 0.15);
+    color: #00b8d9;
+}
+
+.badge.bg-warning-subtle {
+    background-color: rgba(172, 241, 226, 0.15);
+    color: #ffdd33;
+}
+
+.badge.bg-secondary-subtle {
+    background-color: rgba(148, 231, 246, 0.151) !important;
+    color: #ccc;
+}
+
+/* Text-muted override for dark */
+.text-muted {
+    color: #91a0b4 !important;
+}
+
+.date-section span {
+    font-weight: 600;
+    color: #cdc7ee;
+    padding-inline-end: 0.2rem;
+}
+
+.date-section {
+    /* background-color: rgba(255, 255, 255, 0.02); */
+    background-color: rgba(13, 19, 44, 0.7);
+
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    /* border: 1px solid rgba(255, 255, 255, 0.08); */
+    font-size: 0.9rem;
+}
+
+/* Footer buttons */
+/* .modal-footer button.confirm-btn {
+    background-color: #ff69b4;
+    color: #fff;
+    transition: background-color 0.2s ease;
+}
+
+.modal-footer button.confirm-btn:hover {
+    background-color: #ff85c1;
+} */
+
+/* Cancel button */
+/* .modal-footer .cancel-btn {
+    background-color: transparent;
+    color: #ccc;
+    border: 1px solid #555;
+}
+
+.modal-footer .cancel-btn:hover {
+    color: #fff;
+    border-color: #888;
+} */

@@ -12,13 +12,23 @@
             <ng-container *ngTemplateOutlet="modalContent"></ng-container>
         </div>
 
-        <div class="divider"></div>
+        <!-- <div class="divider"></div> -->
 
-        <div class="modal-footer">
+        <!-- <div class="modal-footer">
             <div class="buttons w-100 d-flex justify-content-center align-items-center gap-3">
                 <button mat-button type="button" class="cancel-btn w-50 fw-semibold" (click)="onClose()">Cancel</button>
                 <button mat-flat-button type="submit" [disabled]="formGroup.invalid"
                     class="confirm-btn w-50 fw-semibold">Confirm</button>
+            </div>
+        </div> -->
+        <div class="modal-footer" *ngIf="showSubmit">
+            <div class="buttons w-100 d-flex justify-content-center align-items-center gap-3">
+                <button mat-button type="button" class="cancel-btn w-50 fw-semibold" (click)="onClose()">{{ cancelText
+                    }}</button>
+                <button mat-flat-button type="submit" [disabled]="formGroup.invalid"
+                    class="confirm-btn w-50 fw-semibold">
+                    {{ submitText }}
+                </button>
             </div>
         </div>
 
