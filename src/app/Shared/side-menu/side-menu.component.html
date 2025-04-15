@@ -75,6 +75,10 @@
                             getCollapseId(companyIndex, projectIndex)
                           ">
                           <p routerLink="/MyDashboard/Project">
+                            "
+                            >
+                            <!-- routerLink="/MyDashboard/Project" -->
+                          <p (click)="selectProject(project.id)">
                             {{ project.name }}
                           </p>
                           @if (!dropdownStates[getCollapseId(companyIndex,

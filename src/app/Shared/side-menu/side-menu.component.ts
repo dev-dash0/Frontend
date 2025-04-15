@@ -34,11 +34,12 @@ export class SideMenuComponent {
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog
-  ) { }
+  ) {}
   companyData: Company[] = [];
   companyNames: { id: string; name: string }[] = [];
   projectsNames: { id: string; name: string }[] = [];
   SelectedCompanyId: number = 0;
+  SelectedProjectId: number = 0;
   projects: ProjectResult[] = [];
   // ---------------------------------------
   mainServices = [
@@ -184,6 +185,7 @@ export class SideMenuComponent {
       name: 'Company A',
       projects: [
         {
+          id: 0,
           name: 'Project 1',
           sprints: [{ name: 'Sprint 1' }, { name: 'Sprint 2' }],
         },
@@ -194,6 +196,7 @@ export class SideMenuComponent {
       name: 'Company B',
       projects: [
         {
+          id: 0,
           name: 'Project 1',
           sprints: [{ name: 'Sprint 1' }, { name: 'Sprint 2' }],
         },
@@ -319,6 +322,12 @@ export class SideMenuComponent {
     console.log(this.SelectedCompanyId);
   }
 
+  selectProject(projectId: any) {
+    this.router.navigate(['/MyDashboard/Project', projectId]);
+    this.SelectedProjectId = parseInt(projectId);
+    console.log(this.SelectedProjectId);
+  }
+
   fetchProjectsForAllCompanies() {
     this.companies.forEach((company, index) => {
       this._ProjectService.getProjectData(company.id).subscribe({
@@ -327,6 +336,7 @@ export class SideMenuComponent {
 
           if (res && res.result && res.result.length > 0) {
             this.companies[index].projects = res.result.map((project: any) => ({
+              id: project.id,
               name: project.name,
               sprints: [{ name: 'Sprint 1' }, { name: 'Sprint 2' }],
             }));
