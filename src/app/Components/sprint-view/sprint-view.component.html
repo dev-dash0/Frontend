@@ -9,13 +9,22 @@
                 <h2>Sprint Manager</h2>
               </div>
               <hr />
+              @if(sprintDetails) { @for(sprint of sprintDetails ; track
+              sprint.id) {
               <div class="profile gap-2">
                 <img
-                  src="assets/images/scrum master profile photo.svg"
+                  [src]="
+                    sprint.createdBy.imageUrl
+                      ? sprint.createdBy.imageUrl
+                      : 'assets/images/scrum master profile photo.svg'
+                  "
                   alt="scrum master profile icon"
                 />
                 <div class="scrum-master-header">
-                  <h3 class="mb-0">John Smith</h3>
+                  <h3 class="mb-0">
+                    {{ sprint.createdBy.firstName }}
+                    {{ sprint.createdBy.lastName }}
+                  </h3>
                   <p>Scrum Master</p>
                 </div>
               </div>
@@ -32,9 +41,10 @@
                 </div>
                 <div class="whatsapp gap-1 mb-2">
                   <img src="assets/images/WhatsApp.svg" alt="" />
-                  <p>WhatsApp: 01036411895</p>
+                  <p>WhatsApp: {{ sprint.createdBy.phoneNumber }}</p>
                 </div>
               </div>
+              } }
             </div>
           </div>
         </div>
@@ -45,6 +55,7 @@
                 <h2>Sprint Details</h2>
               </div>
               <hr />
+              @for (sprint of sprintDetails; track $index) {
               <div class="sprint-details">
                 <h5>
                   <div class="sprint-data">
@@ -54,7 +65,7 @@
                     />
                     <span>Sprint Title</span>
                   </div>
-                  <p>Sprint 1</p>
+                  <p>{{ sprint.title }}</p>
                 </h5>
                 <h5>
                   <div class="sprint-data">
@@ -64,7 +75,7 @@
                     />
                     <span>Start Date</span>
                   </div>
-                  <p>21-5-2025</p>
+                  <p>{{ sprint.startDate }}</p>
                 </h5>
                 <h5>
                   <div class="sprint-data">
@@ -74,7 +85,7 @@
                     />
                     <span>Due Date</span>
                   </div>
-                  <p>5-6-2025</p>
+                  <p>{{ sprint.endDate }}</p>
                 </h5>
                 <h5>
                   <div class="sprint-data">
@@ -84,7 +95,7 @@
                     />
                     <span>Status</span>
                   </div>
-                  <p>In Progress</p>
+                  <p>{{ sprint.status }}</p>
                 </h5>
                 <h5>
                   <div class="sprint-data">
@@ -94,9 +105,10 @@
                     />
                     <span>Description</span>
                   </div>
-                  <p>Lorem, ipsum dolor.</p>
+                  <p>{{ sprint.description }}</p>
                 </h5>
               </div>
+              }
             </div>
           </div>
         </div>

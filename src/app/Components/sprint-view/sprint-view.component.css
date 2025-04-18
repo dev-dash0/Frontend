@@ -41,7 +41,7 @@ h5 span {
 }
 
 h5 p {
-  font-size: var(--smallFontSize);
+  font-size: 16px;
   color: var(--lightGrayColor);
   font-weight: var(--middleFontWeight);
 }
@@ -193,6 +193,13 @@ h5 p {
 
 .header {
   text-align: center;
+}
+
+.profile img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px var(--mainLightBlueColor) solid;
 }
 /*-------------------------------------------*/
 /*issue status*/

@@ -72,7 +72,11 @@ export const routes: Routes = [
             title: 'Project',
           },
           { path: 'Setting', component: SettingComponent, title: 'Settings' },
-          { path: 'Sprint', component: SprintViewComponent, title: 'Sprint' },
+          {
+            path: 'Sprint/:id',
+            component: SprintViewComponent,
+            title: 'Sprint',
+          },
           {
             path: 'Company/:id',
             component: CompanyViewComponent,

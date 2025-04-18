@@ -1,3 +1,4 @@
+import { Sprint } from './../../Core/interfaces/sprint';
 import { DialogService } from './../../Core/Services/dialog.service';
 import { SidebarService } from './../../Core/Services/sidebar.service';
 import { CommonModule } from '@angular/common';
@@ -5,6 +6,8 @@ import { Component, inject } from '@angular/core';
 import { IssueModalComponent } from '../issue-modal/issue-modal.component';
 import { Issues } from '../../Core/interfaces/company/issues';
 import { IssueCategory } from '../../Core/interfaces/company/issue-category';
+import { SprintService } from '../../Core/Services/sprint.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-sprint-view',
@@ -17,6 +20,10 @@ export class SprintViewComponent {
   isSidebarCollapsed = true;
   private dialogService = inject(DialogService);
   private sidebarService = inject(SidebarService);
+  private _sprintService = inject(SprintService);
+  private route = inject(ActivatedRoute);
+
+  sprintDetails: Sprint[] = [];
 
   issueCategories: IssueCategory[] = [
     {
@@ -117,6 +124,28 @@ export class SprintViewComponent {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
       this.isSidebarCollapsed = collapsed;
     });
+    this.getSprintDetails();
+    this.route.paramMap.subscribe(() => {
+      this.getSprintDetails();
+    });
+  }
+
+  getSprintDetails() {
+    const sprintId = this.route.snapshot.paramMap.get('id');
+    this._sprintService.getSprintData(sprintId).subscribe({
+      next: (res) => {
+        const rawSprint = Array.isArray(res.result) ? res.result : [res.result];
+        this.sprintDetails = rawSprint.map((sprint: Sprint) => ({
+          ...sprint,
+          startDate: this.dateFormatter(sprint.startDate),
+          endDate: this.dateFormatter(sprint.endDate),
+        }));
+        console.log('Sprint Details:', res);
+      },
+      error: (err) => {
+        console.error('Error fetching sprint details:', err);
+      },
+    });
   }
 
   openIssue() {
@@ -147,5 +176,17 @@ export class SprintViewComponent {
       default:
         return '';
     }
+  }
+
+  dateFormatter(dateString: string | Date): string {
+    const dateFormat = new Date(dateString);
+    const formatted = `${String(dateFormat.getDate()).padStart(
+      2,
+      '0'
+    )}/${String(dateFormat.getMonth() + 1).padStart(
+      2,
+      '0'
+    )}/${dateFormat.getFullYear()}`;
+    return formatted;
   }
 }

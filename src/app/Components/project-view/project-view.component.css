@@ -47,11 +47,11 @@ button:hover {
   width: 300px;
 }
 
-.header {
+/* .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
+} */
 
 .issue-item {
   /* display: flex;
@@ -106,7 +106,7 @@ button:hover {
 
 .dates,
 .created-by {
-  font-size: 12px;
+  font-size: 14px;
   color: #948ad9;
   /* color: #7b86e8; */
 }
