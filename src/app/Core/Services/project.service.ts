@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { baseUrl } from '../environment/environment.local';
 
 @Injectable({
@@ -75,7 +75,13 @@ export class ProjectService {
     return this._HttpClient.post(
       baseUrl + `/api/UserProject`, // ✅ Remove query parameter from URL
       {}, // ✅ Empty body since it's a POST request with params
-      { headers, params } 
+      { headers, params }
     );
   };
+
+  getAllProjectIds(): Observable<string[]> {
+    return this.getAllProjects().pipe(
+      map((response: any) => response.result.map((project: any) => project.id))
+    );
+  }
 }

@@ -11,37 +11,53 @@ import { DeleteModalComponent } from '../deletemodal/deletemodal.component';
 import { IssueModalComponent } from '../issue-modal/issue-modal.component';
 import { SharedDeleteModalComponent } from '../../Shared/delete-modal/delete-modal.component';
 import { ToastrService } from 'ngx-toastr';
-import { of } from 'rxjs';
+import { SprintService } from '../../Core/Services/sprint.service';
+import { CompanyService } from '../../Core/Services/company.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Sprint } from '../../Core/interfaces/sprint';
+import { SprintModalComponent } from '../sprint-modal/sprint-modal.component';
 
 @Component({
   selector: 'app-project-view',
   standalone: true,
-  imports: [CommonModule, NgFor, SharedDeleteModalComponent],
+  imports: [CommonModule, NgFor],
   templateUrl: './project-view.component.html',
   styleUrl: './project-view.component.css',
 })
 export class ProjectViewComponent {
+  // imports
   private sidebarService = inject(SidebarService);
   private dialogService = inject(DialogService);
   private _IssueService = inject(IssueService);
   private dialog = inject(MatDialog);
   private toastr = inject(ToastrService);
-  private readonly _ProjectService = inject(ProjectService);
+  private readonly _projectService = inject(ProjectService);
+  private readonly _sprintService = inject(SprintService);
+  private readonly route = inject(ActivatedRoute);
+  private _router = inject(Router);
+  // -------------------------------------------------------
 
-
-
+  // variables
+  sprintDetails: Sprint[] = [];
   issue?: Issue;
   // showBacklog: boolean = true;
   backlogIssues: Issue[] = [];
-
   isSidebarCollapsed = true;
   ProjectsList: ProjectResult[] = [];
   priorityConfig: any = {
-    Critical: { icon: 'assets/images/Issue Priorities/urgent.svg', color: '#D02705' }, // Red
+    Critical: {
+      icon: 'assets/images/Issue Priorities/urgent.svg',
+      color: '#D02705',
+    }, // Red
     High: { icon: 'assets/images/Issue Priorities/high.svg', color: '#D07805' }, // Orange
-    Medium: { icon: 'assets/images/Issue Priorities/normal.svg', color: '#4854F1' }, // Yellow
+    Medium: {
+      icon: 'assets/images/Issue Priorities/normal.svg',
+      color: '#4854F1',
+    }, // Yellow
     Low: { icon: 'assets/images/Issue Priorities/low.svg', color: '#908F8F' }, // Green
   };
+
+  // ----------------------------------------------------------------------------
 
   ngOnInit(): void {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
@@ -54,14 +70,21 @@ export class ProjectViewComponent {
       console.log('New issue created! Refreshing backlog...');
       this.fetchBacklogIssues();
     });
+    this._sprintService.sprintCreated$.subscribe(() => {
+      console.log('New sprint created!');
+      this.getAllSprints();
+    });
   }
 
+  // modals
   openCreateIssue() {
     this.dialogService.openIssueModal(6);
   }
+
   openIssueView(issueId: number) {
     this.dialogService.openIssueViewModal(issueId);
   }
+
   openCreateIssueModal(issueId: number, event: Event) {
     event.stopPropagation(); // Prevent parent div click event
     this.dialog.open(IssueModalComponent, {
@@ -71,32 +94,16 @@ export class ProjectViewComponent {
   }
 
   openSprint() {
-    this.dialogService.openSprintModal();
-  }
-
-
-  fetchBacklogIssues(): void {
-    this._IssueService.getBacklogIssues(6, 0, 1).subscribe({
-      next: (res) => {
-        if (res.isSuccess) {
-          console.log(res);
-          this.backlogIssues = res.result;
-        }
-      },
-      error: (err) => {
-        console.error('Error fetching backlog issues:', err);
-      },
+    const projectId = this.route.snapshot.paramMap.get('id');
+    this.dialog.open(SprintModalComponent, {
+      width: 'auto',
+      minWidth: '60vw',
+      maxWidth: '70vw',
+      minHeight: '60vh',
+      maxHeight: '90vh',
+      data: { projectId },
     });
   }
-
-  getPriorityStyle(priority: string) {
-    return { color: this.priorityConfig[priority]?.color || 'white' };
-  }
-
-  getPriorityIcon(priority: string) {
-    return this.priorityConfig[priority]?.icon || 'assets/icons/default.svg'; // Default icon
-  }
-
 
   openDeleteIssueModal(issueId: number, issueTitle: string) {
     const hideConfirm = localStorage.getItem('hideDeleteConfirm');
@@ -122,10 +129,10 @@ export class ProjectViewComponent {
         cancelText: 'Cancel',
         itemId: issueId,
         deleteFunction: (id: number) => this._IssueService.RemoveIssue(id), // Pass function reference
-      }
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result === 'deleted') {
         console.log('Issue deleted successfully');
         // this.dialogService.showDeletionSuccess();  //Want to show toaster
@@ -139,19 +146,23 @@ export class ProjectViewComponent {
     });
   }
 
-  showSuccess() {
-    this.toastr.success(
-      'This issue has been removed',
-      'Removed Successfully',
-      {
-        toastClass: 'toast-pink',
-        timeOut: 5000, // Set to 5 seconds
-        closeButton: true,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-      }
-    );
+  // ---------------------------------------------------
+
+  // issues Api
+  fetchBacklogIssues(): void {
+    this._IssueService.getBacklogIssues(6, 0, 1).subscribe({
+      next: (res) => {
+        if (res.isSuccess) {
+          console.log(res);
+          this.backlogIssues = res.result;
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching backlog issues:', err);
+      },
+    });
   }
+
   loadIssue(issueId: number): void {
     this._IssueService.getIssueById(issueId).subscribe({
       next: (res) => {
@@ -165,11 +176,61 @@ export class ProjectViewComponent {
     });
   }
 
+  // ---------------------------------------------------
 
+  // Sprint Api
+  getAllSprints() {
+    const ProjectId = this.route.snapshot.paramMap.get('id');
+    this._projectService.getProject(ProjectId).subscribe({
+      next: (res) => {
+        console.log('Project fetched:', res);
+        this._sprintService.getAllSprints(res.result.id).subscribe({
+          next: (res) => {
+            console.log('Sprints fetched:', res);
+            this.sprintDetails = res.result.map((sprint: Sprint) => ({
+              ...sprint,
+              startDate: this.dateFormatter(sprint.startDate),
+              endDate: this.dateFormatter(sprint.endDate),
+            }));
+          },
+        });
+      },
+    });
+  }
 
+  viewSprint(sprintId: any): void {
+    this._router.navigate(['/MyDashboard/Sprint', sprintId]);
+  }
 
+  // ---------------------------------------------------
+  // normal functions
+  getPriorityStyle(priority: string) {
+    return { color: this.priorityConfig[priority]?.color || 'white' };
+  }
 
+  getPriorityIcon(priority: string) {
+    return this.priorityConfig[priority]?.icon || 'assets/icons/default.svg'; // Default icon
+  }
+
+  showSuccess() {
+    this.toastr.success('This issue has been removed', 'Removed Successfully', {
+      toastClass: 'toast-pink',
+      timeOut: 5000, // Set to 5 seconds
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+    });
+  }
+
+  dateFormatter(dateString: string | Date): string {
+    const dateFormat = new Date(dateString);
+    const formatted = `${String(dateFormat.getDate()).padStart(
+      2,
+      '0'
+    )}/${String(dateFormat.getMonth() + 1).padStart(
+      2,
+      '0'
+    )}/${dateFormat.getFullYear()}`;
+    return formatted;
+  }
 }
-
-
-
