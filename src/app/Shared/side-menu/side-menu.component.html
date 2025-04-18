@@ -70,15 +70,17 @@
                   <div
                     class="drop-button"
                     (click)="
-                      toggleCollapseDropDown(getCollapseId(companyIndex));
-                      selectCompany(company.id)
+                      toggleCollapseDropDown(getCollapseId(companyIndex))
                     "
                     data-bs-toggle="collapse"
                     [attr.data-bs-target]="'#' + getCollapseId(companyIndex)"
                     aria-expanded="false"
                     [attr.aria-controls]="getCollapseId(companyIndex)"
                   >
-                    <p class="text-capitalize">
+                    <p
+                      class="text-capitalize"
+                      (click)="selectCompany(company.id)"
+                    >
                       {{ company.name }}
                     </p>
                     @if (!dropdownStates[getCollapseId(companyIndex)]) {
@@ -92,7 +94,7 @@
                     <div class="projects ps-3">
                       <div
                         *ngFor="
-                          let project of companies[companyIndex]?.projects;
+                          let project of projectTest[company.id];
                           let projectIndex = index
                         "
                         class="project"
@@ -113,10 +115,8 @@
                             getCollapseId(companyIndex, projectIndex)
                           "
                         >
-                         <!-- routerLink="/MyDashboard/Project" -->
-                          <p 
-                          (click)="selectProject(project.id)"
-                          >
+                          <!-- routerLink="/MyDashboard/Project" -->
+                          <p (click)="selectProject(project.id)">
                             {{ project.name }}
                           </p>
                           @if (!dropdownStates[getCollapseId(companyIndex,
@@ -135,20 +135,20 @@
                           class="collapse ps-3 collapse-teams"
                           [id]="getCollapseId(companyIndex, projectIndex)"
                         >
-                          <div
-                            *ngFor="let sprint of project.sprints"
-                            class="team"
-                          >
+                          @for(sprint of showSprints[project.id]; track $index)
+                          {
+                          <div class="team">
                             <span
                               ><i class="fa-regular fa-circle fa-2xs"></i
                             ></span>
                             <p
                               class="ps-2 m-0"
-                              routerLink="/MyDashboard/Sprint"
+                              (click)="selectSprint(sprint.id)"
                             >
-                              {{ sprint.name }}
+                              {{ sprint.title }}
                             </p>
                           </div>
+                          }
                           <div class="sprint add-sprint" (click)="openSprint()">
                             <span><i class="fa-solid fa-plus fa-xs"></i></span>
                             <p class="ps-2 m-0">Create Sprint</p>

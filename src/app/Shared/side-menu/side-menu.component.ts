@@ -1,3 +1,4 @@
+import { Sprint } from './../../Core/interfaces/sprint';
 import {
   ActivatedRoute,
   Router,
@@ -16,6 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddCompanyModalComponent } from '../../Components/company-modal/company-modal.component';
 import { ProjectService } from '../../Core/Services/project.service';
 import { Project, ProjectResult } from '../../Core/interfaces/project';
+import { SprintService } from '../../Core/Services/sprint.service';
 
 @Component({
   selector: 'app-side-menu',
@@ -33,14 +35,18 @@ export class SideMenuComponent {
     private _ProjectService: ProjectService,
     private router: Router,
     private route: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _sprintService: SprintService
   ) {}
   companyData: Company[] = [];
   companyNames: { id: string; name: string }[] = [];
   projectsNames: { id: string; name: string }[] = [];
   SelectedCompanyId: number = 0;
   SelectedProjectId: number = 0;
-  projects: ProjectResult[] = [];
+  SelectedSprintId: number = 0;
+  projectTest: { [projectId: string]: any[] } = {};
+  // projects: ProjectResult[] = [];
+  showSprints: { [projectId: string]: any[] } = {};
   // ---------------------------------------
   mainServices = [
     {
@@ -125,11 +131,10 @@ export class SideMenuComponent {
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
     const width = window.innerWidth;
-    this.collapsed = width <= 992;
+    this.collapsed = width <= 1200;
   }
   toggleCollapseDropDown(id: string) {
     this.dropdownStates[id] = !this.dropdownStates[id];
-    // this.getCompanies();
   }
 
   collapsed = false;
@@ -137,7 +142,6 @@ export class SideMenuComponent {
   toggleCollapse(): void {
     this.collapsed = !this.collapsed;
     this.sidebarService.setSidebarState(this.collapsed); // Notify other components
-    // this.getCompanies();
   }
   // ----------- dropdown optimization ------------
 
@@ -184,32 +188,33 @@ export class SideMenuComponent {
         {
           id: 0,
           name: 'Project 1',
-          sprints: [{ name: 'Sprint 1' }, { name: 'Sprint 2' }],
         },
       ],
     },
-    {
-      id: 1,
-      name: 'Company B',
-      projects: [
-        {
-          id: 0,
-          name: 'Project 1',
-          sprints: [{ name: 'Sprint 1' }, { name: 'Sprint 2' }],
-        },
-      ],
-    },
+    // {
+    //   id: 1,
+    //   name: 'Company B',
+    //   projects: [
+    //     {
+    //       id: 0,
+    //       name: 'Project 1',
+    //     },
+    //   ],
+    // },
   ];
 
   ngOnInit() {
     this.getCompanies();
+    this.getSprints();
+    this.getProjects();
     this.sidebarService.companyCreated$.subscribe(() => {
-      console.log('Refreshing sidebar after company creation...');
       this.getCompanies();
     });
     this.sidebarService.companyDeleted$.subscribe(() => {
-      console.log('Refreshing sidebar after deletion...');
       this.getCompanies();
+    });
+    this._sprintService.sprintCreated$.subscribe(() => {
+      this.getSprints();
     });
   }
 
@@ -285,6 +290,7 @@ export class SideMenuComponent {
   //   });
   // }
 
+  // companies API
   getCompanies(): void {
     this._companyService.getAllCompanies(null).subscribe({
       next: (res) => {
@@ -297,22 +303,21 @@ export class SideMenuComponent {
           this.companyData = res.result;
 
           // Store companies and initialize projects as empty
-          this.companies = this.companyData.map((company) => ({
-            id: company.id,
-            name: company.name,
-            projects: [],
-          }));
-
-          console.log('Companies after processing:', this.companies);
-
-          // Fetch projects for each company
-          this.fetchProjectsForAllCompanies();
+          // this.companies = this.companyData.map((company) => ({
+          //   id: company.id,
+          //   name: company.name,
+          //   projects: [],
+          // }));
+          // console.log('Companies after processing:', this.companies);
+          // // Fetch projects for each company
+          // this.fetchProjectsForAllCompanies();
         }
       },
       error: (err) => console.error('Error fetching companies:', err),
     });
   }
 
+  // Routing to companies,projects,sprints
   selectCompany(companyId: string) {
     this.router.navigate(['/MyDashboard/Company', companyId]);
     this.SelectedCompanyId = parseInt(companyId);
@@ -325,28 +330,88 @@ export class SideMenuComponent {
     console.log(this.SelectedProjectId);
   }
 
-  fetchProjectsForAllCompanies() {
-    this.companies.forEach((company, index) => {
-      this._ProjectService.getProjectData(company.id).subscribe({
-        next: (res) => {
-          console.log(`Project API response for company ${company.id}:`, res);
+  selectSprint(sprintId: any) {
+    this.router.navigate(['/MyDashboard/Sprint', sprintId]);
+    this.SelectedSprintId = parseInt(sprintId);
+    console.log(this.SelectedSprintId);
+  }
 
-          if (res && res.result && res.result.length > 0) {
-            this.companies[index].projects = res.result.map((project: any) => ({
-              id: project.id,
-              name: project.name,
-              sprints: [{ name: 'Sprint 1' }, { name: 'Sprint 2' }],
-            }));
-          } else {
-            console.warn(`No projects found for company ID: ${company.id}`);
-          }
-        },
-        error: (err) =>
-          console.error(
-            `Error fetching project data for company ${company.id}:`,
-            err
-          ),
-      });
+  // fetchProjectsForAllCompanies() {
+  //   this.companies.forEach((company, index) => {
+  //     this._ProjectService.getProjectData(company.id).subscribe({
+  //       next: (res) => {
+  //         console.log(`Project API response for company ${company.id}:`, res);
+  //         if (res && res.result && res.result.length > 0) {
+  //           this.companies[index].projects = res.result.map((project: any) => ({
+  //             id: project.id,
+  //             name: project.name,
+  //           }));
+  //         } else {
+  //           console.warn(`No projects found for company ID: ${company.id}`);
+  //         }
+  //       },
+  //       error: (err) =>
+  //         console.error(
+  //           `Error fetching project data for company ${company.id}:`,
+  //           err
+  //         ),
+  //     });
+  //   });
+  // }
+
+  //Project API
+  getProjects() {
+    this._companyService.getAllCompanyIds().subscribe({
+      next: (companyIds) => {
+        companyIds.forEach((companyId) => {
+          this._ProjectService.getProjectData(companyId).subscribe({
+            next: (response) => {
+              const projects = response.result.map((project: any) => ({
+                id: project.id,
+                name: project.name,
+              }));
+              this.projectTest[companyId] = projects;
+            },
+            error: (err) => {
+              console.error(
+                `Error fetching projects for company ${companyId}:`,
+                err
+              );
+            },
+          });
+        });
+      },
+      error: (err) => console.error('Error fetching company IDs:', err),
+    });
+  }
+
+  // Sprint API
+  getSprints() {
+    this._companyService.getAllCompanyIds().subscribe({
+      next: (res) => {
+        res.forEach((companyId) => {
+          this._ProjectService.getProjectData(companyId).subscribe({
+            next: (project) => {
+              project.result.forEach((project: any) => {
+                this._sprintService.getAllSprints(project.id, null).subscribe({
+                  next: (sprint) => {
+                    const sprints = Array.isArray(sprint.result)
+                      ? sprint.result
+                      : [sprint.result];
+                    this.showSprints[project.id] = sprints;
+                  },
+                  error: (err) => {
+                    console.error(
+                      `Error fetching sprints for project ${project.id}:`,
+                      err
+                    );
+                  },
+                });
+              });
+            },
+          });
+        });
+      },
     });
   }
 
