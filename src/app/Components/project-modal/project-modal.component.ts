@@ -28,7 +28,7 @@ export interface Label {
   selector: 'app-project-modal',
   standalone: true,
   imports: [
-    MatFormFieldModule,
+  MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
@@ -191,25 +191,20 @@ export class ProjectModalComponent {
             window.location.reload();
           },
           error: (error) => {
+            this.showError('Error creating project');
+            if (error.status == 401) {
+              this.showError('You are not allowed to create a project duo to your Role');
+            }
             console.error('Error creating project:', error);
             console.log(this.ProjectForm.get('name'));
             console.log(this.ProjectForm.get('status'));
             console.log(this.ProjectForm.get('priority'));
             console.log(this.ProjectForm.get('startDate'));
             console.log(this.ProjectForm.get('endDate'));
-            this.showError('Error creating project');
           },
         });
     } else if (this.ProjectForm.get('name')?.invalid) {
       this.showError('Invalid Title');
-    } else if (this.ProjectForm.get('status')?.valid) {
-      this.showError('Invalid status');
-    } else if (this.ProjectForm.get('priority')?.valid) {
-      this.showError('Invalid priority');
-    } else if (this.ProjectForm.get('startDate')?.invalid) {
-      this.showError('Invalid startDate');
-    } else if (this.ProjectForm.get('endDate')?.invalid) {
-      this.showError('Invalid endDate');
     } else {
       // console.log(this.ProjectForm.errors);
       // console.log(this.ProjectForm.value);
