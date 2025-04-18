@@ -130,7 +130,7 @@ button {
   background-color: #ff4d4d !important; /* Red */
   color: #161d3e !important;
   font-weight: bold;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 .critical-priority:hover {
   background-color: #f74141 !important; /* Red */
@@ -140,7 +140,7 @@ button {
   background-color: #ff9800 !important; /* Orange */
   color: #161d3e !important;
   font-weight: bold;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 .high-priority:hover {
   background-color: #ff8400 !important; /* Orange */
@@ -150,7 +150,7 @@ button {
   background-color: #ffc107 !important; /* Yellow */
   color: #161d3e !important;
   font-weight: bold;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 .medium-priority:hover {
   background-color: #eeb200 !important; /* Yellow */
@@ -160,7 +160,7 @@ button {
   background-color: #4caf50 !important; /* Green */
   color: #161d3e !important;
   font-weight: bold;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 .low-priority:hover {
   background-color: #43a047 !important; /* Green */
@@ -170,7 +170,7 @@ button {
 /* Status Classes */
 .planning-status {
     background-color: #3498db !important; /* Blue */
-    transition: all 0.3s ease-in-out;
+    transition: all 0.2s ease-in-out;
 } 
 .planning-status:hover {
     background-color: #2a8fd2 !important; /* Blue */
@@ -181,26 +181,26 @@ button {
 } 
 .reviewing-status:hover {
     background-color: #a24ec4 !important; /* Purple */
-    transition: all 0.3s ease-in-out;
+    transition: all 0.2s ease-in-out;
 } 
 
 .working-on-status {
     background-color: #f39c12 !important; /* Dark Yellow */
-    transition: all 0.3s ease-in-out;
+    transition: all 0.2s ease-in-out;
 } 
 .working-on-status:hover {
     background-color: #e39311 !important; /* Dark Yellow */
 } 
 .completed-status {
     background-color: #2ecc71 !important; /* Green */
-    transition: all 0.3s ease-in-out;
+    transition: all 0.2s ease-in-out;
 } 
 .completed-status:hover {
     background-color: #1fbb60 !important; /* Green */
 } 
 .canceled-status {
     background-color: #e74c3c !important; /* Red */
-    transition: all 0.3s ease-in-out; 
+    transition: all 0.2s ease-in-out; 
 } 
 
 .canceled-status:hover {
@@ -208,11 +208,11 @@ button {
 } 
 .canceled-status {
     background-color: #e74c3c !important; /* Red */
-  transition: all 0.3s ease-in-out; 
+  transition: all 0.2s ease-in-out; 
 } 
 .postponed-status {
     background-color: #95a5a6 !important; /* Gray */
-    transition: all 0.3s ease-in-out;
+    transition: all 0.2s ease-in-out;
 } 
 
 .postponed-status:hover {
@@ -224,8 +224,8 @@ button {
 .medium-priority:hover,
 .low-priority:hover,
 .status-chip:hover {
-  transform: scale(1.2); /* Increase size on hover */
-  transition: transform 0.3s ease-in-out; /* Smooth animation */
+  transform: scale(1.1); /* Increase size on hover */
+  transition: transform 0.2s ease-in-out; /* Smooth animation */
   cursor: pointer; /* Changes the cursor to indicate interactivity */
 }
 

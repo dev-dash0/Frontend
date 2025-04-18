@@ -106,6 +106,7 @@ export class CompanyViewComponent implements OnInit {
       status: 'working on',
       issues: [
         {
+          id: 0,
           title: 'Project 3',
           startDate: '5-3',
           dueDate: '5-16',
@@ -114,6 +115,7 @@ export class CompanyViewComponent implements OnInit {
           category: 'backend',
         },
         {
+          id: 1,
           title: 'Project 4',
           startDate: '5-3',
           dueDate: '5-16',
@@ -130,6 +132,7 @@ export class CompanyViewComponent implements OnInit {
       status: 'completed',
       issues: [
         {
+          id: 0,
           title: 'Project 5',
           startDate: '5-5',
           dueDate: '5-18',
@@ -146,6 +149,7 @@ export class CompanyViewComponent implements OnInit {
       status: 'overdue',
       issues: [
         {
+          id: 0,
           title: 'Project 1',
           startDate: '5-1',
           dueDate: '5-12',
@@ -154,6 +158,7 @@ export class CompanyViewComponent implements OnInit {
           category: 'web',
         },
         {
+          id: 1,
           title: 'Project 2',
           startDate: '5-2',
           dueDate: '5-15',
@@ -170,6 +175,7 @@ export class CompanyViewComponent implements OnInit {
       status: 'canceled',
       issues: [
         {
+          id: 0,
           title: 'Project 1',
           startDate: '5-1',
           dueDate: '5-12',
@@ -178,6 +184,7 @@ export class CompanyViewComponent implements OnInit {
           category: 'web',
         },
         {
+          id: 1,
           title: 'Project 2',
           startDate: '5-2',
           dueDate: '5-15',
@@ -194,6 +201,7 @@ export class CompanyViewComponent implements OnInit {
       status: 'canceled',
       issues: [
         {
+          id: 0,
           title: 'Project 1',
           startDate: '5-1',
           dueDate: '5-12',
@@ -202,6 +210,7 @@ export class CompanyViewComponent implements OnInit {
           category: 'web',
         },
         {
+          id: 1,
           title: 'Project 2',
           startDate: '5-2',
           dueDate: '5-15',
@@ -373,18 +382,11 @@ export class CompanyViewComponent implements OnInit {
     });
   }
 
-
-  //  ! Need to put the right id here 
   selectProject(projectId: any) {
     this.SelectedProjectId = parseInt(projectId);
     console.log('Selected Project ID:', this.SelectedProjectId);
     this.projectSelected.emit(this.SelectedProjectId); // Emit it
     this.router.navigate(['/MyDashboard/Project', projectId]);
-  }
-
-  onProjectSelected(projectId: number) {
-    console.log('Received Project ID from child:', projectId);
-    // You can now store it in a variable or act on it
   }
 
   getProjectData() {
@@ -413,11 +415,6 @@ export class CompanyViewComponent implements OnInit {
             }
           });
         }
-
-        res.result.forEach((project: any) => {
-          this.SelectedProjectId = project.id;
-          this.ProjectIds.push(project.id);
-        });
 
         console.log(this.ProjectIds);
 
@@ -468,6 +465,7 @@ export class CompanyViewComponent implements OnInit {
             class: 'inprogress-tag',
             status: 'working on',
             issues: workingOnProjects.map((project) => ({
+              id: project.id,
               title: project.name,
               startDate: project.startDate,
               dueDate: project.endDate,
@@ -481,6 +479,7 @@ export class CompanyViewComponent implements OnInit {
             class: 'completed-tag',
             status: 'completed',
             issues: completedProjects.map((project) => ({
+              id: project.id,
               title: project.name,
               startDate: project.startDate,
               dueDate: project.endDate,
@@ -494,6 +493,7 @@ export class CompanyViewComponent implements OnInit {
             class: 'overdue-tag',
             status: 'overdue',
             issues: overdueProjects.map((project) => ({
+              id: project.id,
               title: project.name,
               startDate: project.startDate,
               dueDate: project.endDate,
@@ -507,6 +507,7 @@ export class CompanyViewComponent implements OnInit {
             class: 'planning-tag',
             status: 'planning',
             issues: planningProjects.map((project) => ({
+              id: project.id,
               title: project.name,
               startDate: project.startDate,
               dueDate: project.endDate,
@@ -520,6 +521,7 @@ export class CompanyViewComponent implements OnInit {
             class: 'canceled-tag',
             status: 'canceled',
             issues: canceledProjects.map((project) => ({
+              id: project.id,
               title: project.name,
               startDate: project.startDate,
               dueDate: project.endDate,

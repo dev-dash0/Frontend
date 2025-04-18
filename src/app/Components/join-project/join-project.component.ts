@@ -51,6 +51,7 @@ export class JoinProjectComponent {
         },
         error: (err) => {
           console.log(err);
+          this.showWarning();
         },
       });
     }
@@ -60,6 +61,20 @@ export class JoinProjectComponent {
     this.toastr.success(
       'You have joined to the project successfully',
       'Joined Successfully',
+      {
+        toastClass: 'toast-pink',
+        timeOut: 10000,
+        closeButton: true,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+      }
+    );
+  }
+
+  showWarning() {
+    this.toastr.warning(
+      'Please, Make sure you have the required permissions to join the project',
+      'Joined Failed',
       {
         toastClass: 'toast-pink',
         timeOut: 10000,

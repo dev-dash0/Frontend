@@ -23,19 +23,19 @@ export interface ProjectResult {
 }
 
 export interface ProjectTenant {
-    id: number;
-    name: string;
-    description: string;
-    tenantUrl: string;
-    tenantCode: string;
-    keywords: string;
-    image: string;
-    ownerID: number;
-    owner: Owner;
-    joinedUsers: any[];
+  id: number;
+  name: string;
+  description: string;
+  tenantUrl: string;
+  tenantCode: string;
+  keywords: string;
+  image: string;
+  ownerID: number;
+  owner: ProjectOwner;
+  joinedUsers: any[];
 }
 
-export interface Owner {
+export interface ProjectOwner {
     id: number;
     imageUrl: string;
     firstName: string;

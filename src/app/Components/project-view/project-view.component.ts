@@ -4,7 +4,7 @@ import { Component, inject, Input } from '@angular/core';
 import { SidebarService } from '../../Core/Services/sidebar.service';
 import { CommonModule, NgFor } from '@angular/common';
 import { ProjectService } from '../../Core/Services/project.service';
-import { ProjectResult, UserProject } from '../../Core/interfaces/project';
+import { ProjectOwner, ProjectResult, UserProject } from '../../Core/interfaces/project';
 import { MatDialog } from '@angular/material/dialog';
 import { IssueService } from '../../Core/Services/issue/issue.service';
 import { DeleteModalComponent } from '../deletemodal/deletemodal.component';
@@ -12,6 +12,7 @@ import { IssueModalComponent } from '../issue-modal/issue-modal.component';
 import { SharedDeleteModalComponent } from '../../Shared/delete-modal/delete-modal.component';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-project-view',
@@ -26,9 +27,11 @@ export class ProjectViewComponent {
   private _IssueService = inject(IssueService);
   private dialog = inject(MatDialog);
   private toastr = inject(ToastrService);
+  private route = inject(ActivatedRoute);
   private readonly _ProjectService = inject(ProjectService);
 
-
+  Owner: ProjectOwner | null = null;
+  ProjectId: string | null = null;
 
   issue?: Issue;
   // showBacklog: boolean = true;
@@ -36,10 +39,17 @@ export class ProjectViewComponent {
 
   isSidebarCollapsed = true;
   ProjectsList: ProjectResult[] = [];
+
   priorityConfig: any = {
-    Critical: { icon: 'assets/images/Issue Priorities/urgent.svg', color: '#D02705' }, // Red
+    Critical: {
+      icon: 'assets/images/Issue Priorities/urgent.svg',
+      color: '#D02705',
+    }, // Red
     High: { icon: 'assets/images/Issue Priorities/high.svg', color: '#D07805' }, // Orange
-    Medium: { icon: 'assets/images/Issue Priorities/normal.svg', color: '#4854F1' }, // Yellow
+    Medium: {
+      icon: 'assets/images/Issue Priorities/normal.svg',
+      color: '#4854F1',
+    }, // Yellow
     Low: { icon: 'assets/images/Issue Priorities/low.svg', color: '#908F8F' }, // Green
   };
 
@@ -49,11 +59,26 @@ export class ProjectViewComponent {
     });
     this.fetchBacklogIssues();
 
+    // Get The Id from the Path
+    this.ProjectId = this.route.snapshot.paramMap.get('id');
+
+    this.GetProjectData();
+
     // Listen for new issue events and refresh backlog
     this._IssueService.issueCreated$.subscribe(() => {
       console.log('New issue created! Refreshing backlog...');
       this.fetchBacklogIssues();
     });
+  }
+
+  GetProjectData(){
+    this._ProjectService.getProjectData(this.ProjectId).subscribe({
+      next: (res) => {
+        console.log(res)
+        this.ProjectsList = res.result;
+        this.Owner = res.result.owner;
+      }
+    })
   }
 
   openCreateIssue() {
@@ -73,7 +98,6 @@ export class ProjectViewComponent {
   openSprint() {
     this.dialogService.openSprintModal();
   }
-
 
   fetchBacklogIssues(): void {
     this._IssueService.getBacklogIssues(6, 0, 1).subscribe({
@@ -96,7 +120,6 @@ export class ProjectViewComponent {
   getPriorityIcon(priority: string) {
     return this.priorityConfig[priority]?.icon || 'assets/icons/default.svg'; // Default icon
   }
-
 
   openDeleteIssueModal(issueId: number, issueTitle: string) {
     const hideConfirm = localStorage.getItem('hideDeleteConfirm');
@@ -122,10 +145,10 @@ export class ProjectViewComponent {
         cancelText: 'Cancel',
         itemId: issueId,
         deleteFunction: (id: number) => this._IssueService.RemoveIssue(id), // Pass function reference
-      }
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result === 'deleted') {
         console.log('Issue deleted successfully');
         // this.dialogService.showDeletionSuccess();  //Want to show toaster
@@ -140,17 +163,13 @@ export class ProjectViewComponent {
   }
 
   showSuccess() {
-    this.toastr.success(
-      'This issue has been removed',
-      'Removed Successfully',
-      {
-        toastClass: 'toast-pink',
-        timeOut: 5000, // Set to 5 seconds
-        closeButton: true,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-      }
-    );
+    this.toastr.success('This issue has been removed', 'Removed Successfully', {
+      toastClass: 'toast-pink',
+      timeOut: 5000, // Set to 5 seconds
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+    });
   }
   loadIssue(issueId: number): void {
     this._IssueService.getIssueById(issueId).subscribe({
@@ -164,11 +183,6 @@ export class ProjectViewComponent {
       },
     });
   }
-
-
-
-
-
 }
 
 

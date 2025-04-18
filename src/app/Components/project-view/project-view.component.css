@@ -194,3 +194,125 @@ button:hover {
     box-shadow: 0 0 2px #2b79cc;
   }
 }
+
+/* ============================================================ */
+
+.hero-container {
+  padding: 3rem 2rem;
+  background: linear-gradient(to right, #0d1027, #1a1e3f);
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.hero-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.text-section {
+  flex: 1 1 50%;
+  max-width: 600px;
+}
+
+.text-section h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.text-section p {
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  color: #cfd3ff;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.btn-primary {
+  background-color: #247bff;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0056ff;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid #247bff;
+  color: #247bff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.features {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.feature-box {
+  background-color: #1f233c;
+  padding: 1rem 1.5rem;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(50, 150, 255, 0.1);
+}
+
+.feature-box h2 {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+  color: #ffffff;
+}
+
+.feature-box p {
+  font-size: 0.9rem;
+  color: #cfd3ff;
+}
+
+.image-section {
+  flex: 1 1 40%;
+  text-align: center;
+  position: relative;
+}
+
+.dj-image-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.dj-image-wrapper img {
+  width: 300px;
+  height: auto;
+  border-radius: 50%;
+  border: 6px solid #0a55ff;
+}
+
+.badge {
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  background: #0a55ff;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  text-align: center;
+  box-shadow: 0 0 12px rgba(10, 85, 255, 0.5);
+}
