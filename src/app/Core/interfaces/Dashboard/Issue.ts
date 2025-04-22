@@ -14,6 +14,8 @@ export interface Issue {
     projectName: string;
     createdBy?: ProfileData;
     creationDate: Date;
-    assignedUsers: ProfileData[]
+    assignedUsers: ProfileData[];
+    projectId: number;
+    sprintId: number;
 
 }

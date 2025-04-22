@@ -123,3 +123,9 @@
     color: #fff;
     border-color: #888;
 } */
+
+.assign-dropdown {
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 10;
+}

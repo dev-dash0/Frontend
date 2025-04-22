@@ -144,18 +144,19 @@ export class IssueModalComponent {
         },
       });
     }
-    else if (this.issueForm.get('name')?.invalid) {
+    else if (this.issueForm.get('title')?.invalid) {
       this.showError('Invalid Title');
-    } else if (this.issueForm.get('status')?.valid) {
+      console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+
+    } else if (this.issueForm.get('status')?.invalid) {
       this.showError('Invalid status');
-    } else if (this.issueForm.get('priority')?.valid) {
+    } else if (this.issueForm.get('priority')?.invalid) {
       this.showError('Invalid priority');
     } else if (this.issueForm.get('startDate')?.invalid) {
       this.showError('Invalid start Date');
-    } else if (this.issueForm.get('endDate')?.invalid) {
     } else if (this.issueForm.get('deliveredDate')?.invalid) {
       this.showError('Invalid Delivered Date');
-    } else if (this.issueForm.get('endDate')?.invalid) {
+    } else if (this.issueForm.get('deadline')?.invalid) {
       this.showError('Invalid End Date');
     } else {
       console.log(this.issueForm.errors);

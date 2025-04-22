@@ -120,6 +120,17 @@ export class IssueService {
     );
   }
 
+  showError(err: string) {
+    this.toastr.error(err, 'Error Message', {
+      toastClass: 'toast-pink',
+      timeOut: 5000,
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+    });
+  }
+
+
   statuses = [
     { value: 'BackLog', label: 'Backlog', icon: 'assets/images/Issue Status/backlog.svg', colorClass: 'text-muted' },
     { value: 'to do', label: 'To Do', icon: 'assets/images/Issue Status/todo.svg', colorClass: 'text-primary' },
@@ -137,5 +148,36 @@ export class IssueService {
     { value: 'High', label: 'High', icon: 'assets/images/Issue Priorities/high.svg' },
     { value: 'Critical', label: 'Urgent', icon: 'assets/images/Issue Priorities/urgent.svg' },
   ];
+
+
+
+  // **********************Assign Users**********************
+  assignUserToIssue(userId: number, issueId: number): Observable<any> {
+    const body = { userId, issueId };
+    return this._HttpClient.post(`${baseUrl}/api/IssueAssignedUser`, body, {
+      headers: this.headers,
+    });
+  }
+
+  removeUserFromIssue(userId: number, issueId: number): Observable<any> {
+    const body = { userId, issueId };
+    return this._HttpClient.delete(`${baseUrl}/api/IssueAssignedUser`, {
+      headers: this.headers,
+      body,
+    });
+  }
+
+  // assignUserToIssue(userId: number, issueId: number): void {
+  //   this._HttpClient.post(`${baseUrl}/api/IssueAssignedUser`, { userId, issueId }, {
+  //     headers: this.headers,
+  //   }).subscribe({
+  //     next: () => {
+  //       this.toastr.success('User assigned successfully');
+  //     },
+  //     error: () => {
+  //       this.toastr.error('Failed to assign user');
+  //     }
+  //   });
+  // }
 
 }

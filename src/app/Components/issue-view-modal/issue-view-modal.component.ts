@@ -1,3 +1,4 @@
+import { Issue } from './../../Core/interfaces/Dashboard/Issue';
 import { Component, inject, Inject, TemplateRef, ViewChild } from '@angular/core';
 import { ModalComponent } from "../../Shared/modal/modal.component";
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -12,8 +13,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { title } from 'process';
-import { Issue } from '../../Core/interfaces/Dashboard/Issue';
+import { ProfileData } from '../../Core/interfaces/profile';
+import { ProjectService } from '../../Core/Services/project.service';
 
 @Component({
   selector: 'app-issue-view-modal',
@@ -34,11 +35,13 @@ import { Issue } from '../../Core/interfaces/Dashboard/Issue';
     ReactiveFormsModule,
   ],
   templateUrl: './issue-view-modal.component.html',
-  styleUrl: './issue-view-modal.component.css'
+  styleUrl: './issue-view-modal.component.css',
+
 })
 export class IssueViewModalComponent {
 
   private readonly _IssueService = inject(IssueService);
+  private readonly _ProjectService = inject(ProjectService);
 
   constructor(
     public dialogRef: MatDialogRef<ModalComponent>,
@@ -54,9 +57,8 @@ export class IssueViewModalComponent {
   //Priority
   Priorities = this._IssueService.Priorities;
 
-  issue?: Issue;
-
-
+  issue!: Issue;
+  issueId?: number; //current issue id
   issueUpdateForm!: FormGroup;
   isEditMode = false;
   showModal = true;
@@ -78,10 +80,10 @@ export class IssueViewModalComponent {
     });
 
     this.loadIssue();
-
   }
   loadIssue(): void {
-    const issueId = this.data.issueId
+    const issueId = this.data.issueId;
+    this.issueId = issueId;
     this._IssueService.getIssueById(issueId).subscribe({
       next: (res) => {
         console.log('Issue fetched:', res);
@@ -99,6 +101,8 @@ export class IssueViewModalComponent {
           status: this.issue?.status,
           priority: this.issue?.priority
         });
+        this.getUserJoinedToTheProject(this.issue.projectId);
+
 
       },
       error: (err) => {
@@ -116,7 +120,7 @@ export class IssueViewModalComponent {
 
   onCancelEdit() {
     this.isEditMode = false;
-    this.issueUpdateForm.reset(this.issue); // Reset to original values
+    // this.issueUpdateForm.reset(this.issue); // Reset to original values
   }
 
 
@@ -124,11 +128,13 @@ export class IssueViewModalComponent {
     if (this.issueUpdateForm.valid) {
       this.issue = this.issueUpdateForm.value;
       this.isEditMode = false;
-    }
 
-    if (this.issueUpdateForm.valid) {
       const issueData = this.issueUpdateForm.value;
       const issueId = this.data?.issueId; // Get projectId from modal data
+
+      // Set sprintId manually based on current issue
+      issueData.sprintId = (this.issue.sprintId === 0) ? null : this.issue.sprintId;
+
 
       if (!issueId) {
         console.error('Project ID is missing!');
@@ -146,22 +152,21 @@ export class IssueViewModalComponent {
         },
       });
     }
-    else if (this.issueUpdateForm.get('name')?.invalid) {
-      // this.showError('Invalid Title');
+    else if (this.issueUpdateForm.get('title')?.invalid) {
+      this._IssueService.showError('Invalid Title');
       console.log('Invalid Title');
 
-    } else if (this.issueUpdateForm.get('status')?.valid) {
+    } else if (this.issueUpdateForm.get('status')?.invalid) {
       // this.showError('Invalid status');
-    } else if (this.issueUpdateForm.get('priority')?.valid) {
+    } else if (this.issueUpdateForm.get('priority')?.invalid) {
       // this.showError('Invalid priority');
     } else if (this.issueUpdateForm.get('startDate')?.invalid) {
       // this.showError('Invalid start Date');
-    } else if (this.issueUpdateForm.get('endDate')?.invalid) {
     } else if (this.issueUpdateForm.get('deliveredDate')?.invalid) {
       // this.showError('Invalid Delivered Date');
-    } else if (this.issueUpdateForm.get('endDate')?.invalid) {
+    } else if (this.issueUpdateForm.get('deadline')?.invalid) {
       // this.showError('Invalid End Date');
-    } else {
+    } else if (this.issueUpdateForm.invalid) {
       console.log(this.issueUpdateForm.errors);
       console.log('Form is invalid');
       // this.showError('Please fill all the fields');
@@ -190,4 +195,77 @@ export class IssueViewModalComponent {
     const config = this.getStatusConfig(status);
     return config?.colorClass ?? 'text-muted';
   }
+
+  ////Assigning users
+  showUserDropdown = false;
+  allUsers: ProfileData[] = []; // Load this from your user service
+
+  toggleUserDropdown() {
+    this.showUserDropdown = !this.showUserDropdown;
+  }
+
+  isUserAssigned(userId: number): boolean {
+    return this.issue.assignedUsers?.some((u: any) => u.id === userId) ?? false;
+  }
+
+  // toggleUserAssignment(user: any) {
+  //   if (this.isUserAssigned(user.id)) {
+  //     this._IssueService.removeUserFromIssue(user.id, this.issue.id).subscribe(() => {
+  //       this.issue.assignedUsers = this.issue.assignedUsers?.filter((u: any) => u.id !== user.id) ?? [];
+  //     });
+  //   } else {
+  //     this._IssueService.assignUserToIssue(user.id, this.issue.id).subscribe(() => {
+  //       this.issue.assignedUsers = this.issue.assignedUsers ?? [];
+  //       this.issue.assignedUsers.push(user);
+  //     });
+  //   }
+  // }
+  toggleUserAssignment(user: any) {
+    const isAssigned = this.isUserAssigned(user.id);
+
+    if (isAssigned) {
+      this.issue.assignedUsers = this.issue.assignedUsers?.filter(u => u.id !== user.id);
+      this._IssueService.removeUserFromIssue(user.id, this.issue.id).subscribe({
+        error: () => {
+          // rollback
+          this.issue.assignedUsers?.push(user);
+        }
+      });
+    } else {
+      this.issue.assignedUsers = this.issue.assignedUsers ?? [];
+      this.issue.assignedUsers.push(user);
+      this._IssueService.assignUserToIssue(user.id, this.issue.id).subscribe({
+        error: () => {
+          // rollback
+          this.issue.assignedUsers = this.issue.assignedUsers?.filter(u => u.id !== user.id);
+        }
+      });
+    }
+  }
+
+
+  searchUsersTerm: string = '';
+
+  get filteredUsers(): ProfileData[] {
+    if (!this.allUsers) return [];
+    return this.allUsers.filter(user =>
+      `${user.firstName} ${user.lastName}`.toLowerCase().includes(this.searchUsersTerm.toLowerCase())
+    );
+  }
+
+
+  //Get All joined users in the project the issue created in.
+  getUserJoinedToTheProject(issueProjectId: number) {
+    return this._ProjectService.getProject(issueProjectId).subscribe(
+      {
+        next: (res) => {
+          this.allUsers = res.result?.joinedUsers ?? [];
+        },
+        error: (err) => {
+          console.error("Error Assigning User", err);
+        }
+      }
+    )
+  }
+
 }

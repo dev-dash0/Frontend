@@ -12,6 +12,7 @@ import { IssueModalComponent } from '../issue-modal/issue-modal.component';
 import { SharedDeleteModalComponent } from '../../Shared/delete-modal/delete-modal.component';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-project-view',
@@ -27,9 +28,9 @@ export class ProjectViewComponent {
   private dialog = inject(MatDialog);
   private toastr = inject(ToastrService);
   private readonly _ProjectService = inject(ProjectService);
+  private route = inject(ActivatedRoute)
 
-
-
+  projectId!: number;
   issue?: Issue;
   // showBacklog: boolean = true;
   backlogIssues: Issue[] = [];
@@ -47,17 +48,33 @@ export class ProjectViewComponent {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
       this.isSidebarCollapsed = collapsed;
     });
-    this.fetchBacklogIssues();
+    // Listen for new issue events and refresh backlog
 
+    this.RefreshBacklogAfterAddingIssue();
+
+    // Get Project id from url
+    this.getProjectId()
+  }
+
+  getProjectId() {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.projectId = +id;
+        this.fetchBacklogIssues();
+      }
+    });
+  }
+
+  RefreshBacklogAfterAddingIssue() {
     // Listen for new issue events and refresh backlog
     this._IssueService.issueCreated$.subscribe(() => {
       console.log('New issue created! Refreshing backlog...');
       this.fetchBacklogIssues();
     });
   }
-
   openCreateIssue() {
-    this.dialogService.openIssueModal(6);
+    this.dialogService.openIssueModal(this.projectId);
   }
   openIssueView(issueId: number) {
     this.dialogService.openIssueViewModal(issueId);
@@ -76,7 +93,8 @@ export class ProjectViewComponent {
 
 
   fetchBacklogIssues(): void {
-    this._IssueService.getBacklogIssues(6, 0, 1).subscribe({
+    console.log('Fetching backlog issues for project ID:', this.projectId);
+    this._IssueService.getBacklogIssues(this.projectId, 0, 1).subscribe({
       next: (res) => {
         if (res.isSuccess) {
           console.log(res);
@@ -155,8 +173,8 @@ export class ProjectViewComponent {
   loadIssue(issueId: number): void {
     this._IssueService.getIssueById(issueId).subscribe({
       next: (res) => {
-        console.log('Issue fetched:', res);
-        this.issue = res;
+        // console.log('Issue fetched:', res);
+        // this.issue = res;
         this.openIssueView(issueId);
       },
       error: (err) => {
