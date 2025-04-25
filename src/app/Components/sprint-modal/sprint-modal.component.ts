@@ -61,7 +61,6 @@ export class SprintModalComponent {
     startDate: new FormControl(null, Validators.required),
     endDate: new FormControl(null, Validators.required),
     status: new FormControl('Planned', Validators.required),
-    // priority: new FormControl(null, Validators.required),
     summary: new FormControl(null),
   });
 
@@ -99,8 +98,6 @@ export class SprintModalComponent {
         });
     }
   }
-  // status
-  // selectedStatus = 'backlog'; // Default selected status
 
   statuses = [
     {
@@ -128,9 +125,9 @@ export class SprintModalComponent {
   }
 
   // Submit Form
-  submitForm() {
-    if (this.SprintForm.valid) {
-      console.log('Form submitted:', this.SprintForm.value);
-    }
-  }
+  // submitForm() {
+  //   if (this.SprintForm.valid) {
+  //     console.log('Form submitted:', this.SprintForm.value);
+  //   }
+  // }
 }

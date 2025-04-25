@@ -149,7 +149,10 @@
                             </p>
                           </div>
                           }
-                          <div class="sprint add-sprint" (click)="openSprint()">
+                          <div
+                            class="sprint add-sprint"
+                            (click)="openSprint(project.id)"
+                          >
                             <span><i class="fa-solid fa-plus fa-xs"></i></span>
                             <p class="ps-2 m-0">Create Sprint</p>
                           </div>
