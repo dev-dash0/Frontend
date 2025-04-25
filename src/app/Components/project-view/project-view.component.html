@@ -2,6 +2,52 @@
   <div class="BG" [ngClass]="{ expand: isSidebarCollapsed }">
     <div class="container">
       <div class="row ps-lg-1 g-3">
+        <div class="GanttChart mb-4">
+          <app-all-issues-dashboard></app-all-issues-dashboard>
+        </div>
+      </div>
+      <div class="row ps-lg-1 g-3">
+        <!-- Project Details -->
+        <div class="col-md-6">
+          <div class="card p-2 cardBottomRight">
+            <div class="card-body">
+              <div class="header text-center">
+                <h2>Project Details</h2>
+              </div>
+              <hr />
+              <div class="content">
+                <div class="profile d-flex align-items-center gap-2">
+                  <img
+                    src="assets/images/scrum master profile photo.svg"
+                    alt="scrum master profile icon"
+                  />
+                  <div class="scrum-master-headar">
+                    <h3 class="mb-0">John Smith</h3>
+                    <p class="m-0 p-0">Scrum Master</p>
+                  </div>
+                </div>
+                <div class="contact mt-2">
+                  <h4>Contact Info</h4>
+                  <div class="email d-flex align-items-center gap-1 mb-2">
+                    <img src="assets/images/Email.svg" alt="" />
+                    <p class="m-0 p-0">
+                      Email: John<span>&#64;</span>company.com
+                    </p>
+                  </div>
+                  <div class="linkedIn d-flex align-items-center gap-1 mb-2">
+                    <img src="assets/images/LinkedIn.svg" alt="" />
+                    <p class="m-0 p-0">LinkedIn: Profile</p>
+                    <img src="assets/images/External Link.svg" alt="" />
+                  </div>
+                  <div class="whatsapp d-flex align-items-center gap-1 mb-2">
+                    <img src="assets/images/WhatsApp.svg" alt="" />
+                    <p class="m-0 p-0">WhatsApp: 01036411895</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- Project Manager -->
         <div class="col-md-6">
           <div class="card p-2 cardBottomRight">
@@ -147,7 +193,7 @@
           </div>
         </div>
         <!-- Issues -->
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
           <div class="card p-2 cardTopLeft">
             <div class="card-body">
               <div class="header text-center">
@@ -176,7 +222,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- Project Backlog -->
         <div class="col-md-12">
           <div class="card dark-card p-4">

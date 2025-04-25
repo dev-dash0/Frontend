@@ -1,0 +1,60 @@
+
+<h4 class="mb-4 text-white">Issue Overview</h4>
+<div class="row text-center g-3">
+  <!-- Total Issues -->
+  <div class="col-sm-6 col-md-3 totalIssues d-flex justify-content-center align-items-center flex-column">
+    <h5>Total Issues</h5>
+    <div class="chart-card d-flex justify-content-center align-items-center">
+      <canvas id="totalIssuesChart" #totalIssuesChart></canvas>
+      <div class="chart-label">
+        <h3>{{ totalIssues }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Completed Issues -->
+  <div class="col-sm-6 col-md-3 completed d-flex justify-content-center align-items-center flex-column">
+    <h5>Completed Issues</h5>
+    <div class="chart-card d-flex justify-content-center align-items-center">
+      <canvas id="completedIssuesChart" #completedIssuesChart></canvas>
+      <div class="chart-label">
+        <h3>{{ completedIssues }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Issues In Progress -->
+  <div class="col-sm-6 col-md-3 inProgress d-flex justify-content-center align-items-center flex-column">
+    <h5>In Progress Issues</h5>
+    <div class="chart-card d-flex justify-content-center align-items-center">
+      <canvas id="issuesInProgressChart" #issuesInProgressChart></canvas>
+      <div class="chart-label">
+        <h3>{{ issuesInProgress }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overdue Issues -->
+  <div class="col-sm-6 col-md-3 overdue d-flex justify-content-center align-items-center flex-column">
+    <h5>Overdue Issues</h5>
+    <div class="chart-card d-flex justify-content-center align-items-center">
+      <canvas id="issuesOverdueChart" #issuesOverdueChart></canvas>
+      <div class="chart-label">
+        <h3>{{ issuesOverdue }}</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- <div class="row g-5 p-5"> -->
+   <!-- Line Chart for Issue Trends  -->
+  <!-- <div class="col-sm-12 col-md-8 lineChart-container"> -->
+    <!-- <canvas id="lineChart" #lineChart></canvas> -->
+  <!-- </div> -->
+
+   <!-- Doughnut Chart for Issue Summary  -->
+  <!-- <div class="col-sm-12 col-md-4 doughnutChart-container"> -->
+    <!-- <canvas id="doughnutChart" #doughnutChart></canvas> -->
+  <!-- </div> -->
+<!-- </div> -->

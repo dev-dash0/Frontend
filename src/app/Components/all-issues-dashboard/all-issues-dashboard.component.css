@@ -1,0 +1,79 @@
+.visualize_content h5 {
+  min-height: 48px;
+}
+
+/* === Total Issues === */
+.totalIssues h3,
+.totalIssues h5 {
+  font-weight: 600;
+  background: linear-gradient(180deg, #71A5FF 0%, #1347A3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+.totalIssues h3:hover {
+  background: linear-gradient(180deg, #eaff71 0%, #1347A3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+/* === Completed Issues === */
+.completed {
+  color: #0EEADE;
+  transition: all 1.5s;
+}
+
+.completed h3:hover {
+  color: #41c3eb;
+}
+
+/* === In Progress Issues === */
+.inProgress {
+  color: #B926E7;
+  transition: all 1.5s;
+}
+
+.inProgress h3:hover {
+  color: #c476d9;
+}
+
+/* === Overdue Issues === */
+.overdue {
+  color: #FF5154;
+  transition: all 1.5s;
+}
+
+.overdue h3:hover {
+  color: #7f83e9;
+}
+
+/* === Chart Card Styling === */
+.chart-card {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  text-align: center;
+}
+
+.chart-card canvas {
+  position: relative;
+  z-index: 1;
+}
+
+.chart-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+/* === Chart Containers === */
+.lineChart-container,
+.doughnutChart-container {
+  min-height: 250px;
+}

@@ -59,6 +59,7 @@ export class ProjectModalComponent {
   ngOnInit() {
     console.log(this.data); // ✅ Access the passed data
     this.CompanyId = localStorage.getItem('CompanyId');
+    console.log(this.CompanyId)
   }
 
   ProjectForm = new FormGroup({

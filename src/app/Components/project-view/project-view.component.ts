@@ -15,11 +15,14 @@ import { CompanyService } from '../../Core/Services/company.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sprint } from '../../Core/interfaces/sprint';
 import { SprintModalComponent } from '../sprint-modal/sprint-modal.component';
+import { VisualizationComponent } from "../visualization/visualization.component";
+import { AllProjectsDashboardComponent } from "../all-projects-dashboard/all-projects-dashboard.component";
+import { AllIssuesDashboardComponent } from "../all-issues-dashboard/all-issues-dashboard.component";
 
 @Component({
   selector: 'app-project-view',
   standalone: true,
-  imports: [CommonModule, NgFor],
+  imports: [CommonModule, NgFor, AllIssuesDashboardComponent],
   templateUrl: './project-view.component.html',
   styleUrl: './project-view.component.css',
 })

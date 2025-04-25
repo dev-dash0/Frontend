@@ -5,11 +5,10 @@ import { Observable, throwError } from 'rxjs';
 import { baseUrl } from '../../environment/environment.local';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DashboardService {
-
-  constructor(private _HttpClient: HttpClient) { }
+  constructor(private _HttpClient: HttpClient) {}
 
   token = localStorage.getItem('token');
   headers = new HttpHeaders({
@@ -19,17 +18,12 @@ export class DashboardService {
   });
 
   getDashboardData = (Tenantid: number): Observable<any> => {
-
-
     const params = new HttpParams().set('Tenantid', Tenantid.toString());
-    return this._HttpClient.get(baseUrl + '/api/DashBoard/Tenants',
-      {
-        headers: this.headers,
-        params
-      }
-    );
+    return this._HttpClient.get(baseUrl + '/api/DashBoard/Tenants', {
+      headers: this.headers,
+      params,
+    });
   };
-
 
   getDashboardAllProject = (): Observable<any> => {
     return this._HttpClient.get(baseUrl + '/api/DashBoard/allproject', {
@@ -57,12 +51,23 @@ export class DashboardService {
 
   getIssueById = (issueId: number): Observable<any> => {
     const params = new HttpParams().set('Tenantid', issueId.toString());
-    return this._HttpClient.get(baseUrl + '/api/Issue',
-      {
-        headers: this.headers,
-        params
-      }
-    );
+    return this._HttpClient.get(baseUrl + '/api/Issue', {
+      headers: this.headers,
+      params,
+    });
   };
 
+  GetDashboardForIssues = (projectId: number): Observable<any> => {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+
+    const params = new HttpParams().set('Projectid', projectId.toString());
+
+    return this._HttpClient.get(
+      baseUrl + `/api/DashBoard/Projects`,
+      { headers, params }
+    );
+  };
 }
