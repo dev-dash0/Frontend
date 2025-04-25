@@ -18,6 +18,8 @@ import { AddCompanyModalComponent } from '../../Components/company-modal/company
 import { ProjectService } from '../../Core/Services/project.service';
 import { Project, ProjectResult } from '../../Core/interfaces/project';
 import { SprintService } from '../../Core/Services/sprint.service';
+import { SprintModalComponent } from '../../Components/sprint-modal/sprint-modal.component';
+import { ProjectModalComponent } from '../../Components/project-modal/project-modal.component';
 
 @Component({
   selector: 'app-side-menu',
@@ -174,8 +176,15 @@ export class SideMenuComponent {
 
   // <!----- Sprint Modal ------>
 
-  openSprint() {
-    this.dialogService.openSprintModal();
+  openSprint(projectId: any) {
+    this.dialog.open(SprintModalComponent, {
+      width: 'auto',
+      minWidth: '60vw',
+      maxWidth: '70vw',
+      minHeight: '60vh',
+      maxHeight: '90vh',
+      data: { projectId },
+    });
   }
 
   //<!------ Company APi ------->
@@ -366,6 +375,10 @@ export class SideMenuComponent {
         companyIds.forEach((companyId) => {
           this._ProjectService.getProjectData(companyId).subscribe({
             next: (response) => {
+              console.log(
+                `Project API response for company ${companyId}:`,
+                response
+              );
               const projects = response.result.map((project: any) => ({
                 id: project.id,
                 name: project.name,
@@ -392,13 +405,13 @@ export class SideMenuComponent {
         res.forEach((companyId) => {
           this._ProjectService.getProjectData(companyId).subscribe({
             next: (project) => {
-              project.result.forEach((project: any) => {
-                this._sprintService.getAllSprints(project.id, null).subscribe({
+              project.result.forEach((proj: any) => {
+                this._sprintService.getAllSprints(proj.id, null).subscribe({
                   next: (sprint) => {
                     const sprints = Array.isArray(sprint.result)
                       ? sprint.result
                       : [sprint.result];
-                    this.showSprints[project.id] = sprints;
+                    this.showSprints[proj.id] = sprints;
                   },
                   error: (err) => {
                     console.error(
