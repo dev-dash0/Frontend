@@ -14,8 +14,12 @@ export interface Issue {
     projectName: string;
     createdBy?: ProfileData;
     creationDate: Date;
+    labels: string;
+    attachments: string;
     assignedUsers: ProfileData[];
     projectId: number;
     sprintId: number;
+    attachment: string;
+    attachmentPath: string;
 
 }

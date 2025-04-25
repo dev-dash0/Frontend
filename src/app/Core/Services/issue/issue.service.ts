@@ -51,11 +51,16 @@ export class IssueService {
     );
   }
 
-  createBacklogIssue(projectId: number, issueData: any): Observable<any> {
+  createBacklogIssue(projectId: number, issueData: FormData): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+      // Don't set 'Content-Type' header manually when using FormData
+    });
+
     return this._HttpClient.post(
       `${baseUrl}/api/Issue/backlog?projectId=${projectId}`,
       issueData,
-      { headers: this.headers }
+      { headers: headers }
     );
   }
 
@@ -88,9 +93,14 @@ export class IssueService {
     });
   }
 
-  updateIssue(issueId: number, issueData: any): Observable<any> {
+  updateIssue(issueId: number, issueData: FormData): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+      // Don't set 'Content-Type' header manually when using FormData
+    });
+
     return this._HttpClient.put(`${baseUrl}/api/Issue/${issueId}`, issueData, {
-      headers: this.headers,
+      headers: headers,
     });
   }
 

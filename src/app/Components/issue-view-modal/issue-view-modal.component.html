@@ -8,9 +8,7 @@
 <ng-template #modalContent>
     <ng-container *ngIf="loading; else issueContent">
         <div class="d-flex justify-content-center align-items-center p-5">
-            <!-- <mat-spinner></mat-spinner> -->
             <i class="fa-solid fa-circle-notch fa-spin fa-2xl fw-lighter"></i>
-            <!-- <div class="placeholder w-100 h-25"></div> -->
         </div>
     </ng-container>
     <ng-template #issueContent>
@@ -48,6 +46,145 @@
                     </div>
                 </div>
 
+                <!-- Labels -->
+                <!-- <div class="card-issue-view shadow-sm border-0 mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title fw-semibold mb-2">Labels</h6>
+                        <ng-container *ngIf="issue.labels; else noLabels">
+                            <div class="d-flex flex-wrap gap-2">
+                                <span class="label-badge bg-dark-subtle text-dark border rounded-pill px-3 py-1"
+                                    *ngFor="let label of issue.labels.split(',')">
+                                    {{ label.trim() }}
+                                </span>
+                            </div>
+                        </ng-container>
+                        <ng-template #noLabels>
+                            <em class="text-muted">No labels provided.</em>
+                        </ng-template>
+                    </div>
+                </div> -->
+
+                <!-- labels&attach -->
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <div class="card-issue-view shadow-sm border-0 mb-3">
+                            <div class="card-body">
+                                <h6 class="card-title fw-semibold mb-2">Labels</h6>
+                                <!-- <ng-container *ngIf="issue.labels; else noLabels">
+                                    <div class="d-flex flex-wrap gap-2 max-height-scroll">
+                                        <span class="badge px-3 py-2 text-capitalize"
+                                            *ngFor="let label of issue.labels.split(','); let i = index"
+                                            [ngClass]="'bg-label-' + (i % 5)">
+                                            {{ label.trim() }}
+                                        </span>
+                                    </div>
+                                </ng-container> -->
+                                <!-- <ng-container *ngIf="issue.labels && typeof issue.labels === 'string'; else noLabels">
+                                    <div class="d-flex flex-wrap gap-2 max-height-scroll">
+                                        <span class="badge px-3 py-2 text-capitalize"
+                                            *ngFor="let label of issue.labels.split(','); let i = index"
+                                            [ngClass]="'bg-label-' + (i % 5)">
+                                            {{ label.trim() }}
+                                        </span>
+                                    </div>
+                                </ng-container>
+                                <ng-template #noLabels>
+                                    <em class="text-muted">No labels provided.</em>
+                                </ng-template> -->
+                                <ng-container *ngIf="issueHasValidLabels; else noLabels">
+                                    <div class="d-flex flex-wrap gap-2 max-height-scroll">
+                                        <span class="badge px-3 py-2 text-capitalize"
+                                            *ngFor="let label of issue.labels.split(','); let i = index"
+                                            [ngClass]="'bg-label-' + (i % 5)">
+                                            {{ label.trim() }}
+                                        </span>
+                                    </div>
+                                </ng-container>
+
+                                <ng-template #noLabels>
+                                    <em class="text-muted">No labels provided.</em>
+                                </ng-template>
+
+                                <!-- <ng-template #noLabels>
+                                    <em class="text-muted">No labels provided.</em>
+                                </ng-template> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card-issue-view shadow-sm border-0 mb-3">
+                            <div class="card-body">
+                                <h6 class="card-title fw-semibold mb-2">Attachment</h6>
+
+                                <ng-container *ngIf="issue.attachmentPath; else noAttachment">
+                                    <a [href]="issue.attachmentPath" [download]="getFileName(issue.attachmentPath)"
+                                        class="attach d-flex align-items-center gap-3 text-decoration-none p-3  rounded  shadow-sm">
+
+                                        <i class="fa-solid" [ngClass]="getFileIcon(issue.attachmentPath)"
+                                            style="font-size: 2rem;"></i>
+
+                                        <div class="flex-grow-1">
+                                            <div class="fw-medium ">{{ getFileName(issue.attachmentPath) }}
+                                            </div>
+                                            <small class="text-muted">Click to download</small>
+                                        </div>
+                                    </a>
+                                </ng-container>
+
+                                <ng-template #noAttachment>
+                                    <em class="text-muted">No attachment available.</em>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Labels -->
+                <!-- <div class="card-issue-view shadow-sm border-0 mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title fw-semibold mb-2">Labels</h6>
+                        <ng-container *ngIf="issue.labels; else noLabels">
+                            <div class="d-flex flex-wrap gap-2 max-height-scroll">
+                                <span class="badge px-3 py-2 text-capitalize"
+                                    *ngFor="let label of issue.labels.split(','); let i = index"
+                                    [ngClass]="'bg-label-' + (i % 5)">
+                                    {{ label.trim() }}
+                                </span>
+                            </div>
+                        </ng-container>
+                        <ng-template #noLabels>
+                            <em class="text-muted">No labels provided.</em>
+                        </ng-template>
+                    </div>
+                </div> -->
+
+
+                <!-- Attachment -->
+                <!-- <div class="card-issue-view shadow-sm border-0 mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title fw-semibold mb-2">Attachment</h6>
+
+                        <ng-container *ngIf="issue.attachmentPath; else noAttachment">
+                            <a [href]="issue.attachmentPath" [download]="getFileName(issue.attachmentPath)"
+                                class="d-flex align-items-center gap-3 text-decoration-none p-3 border rounded bg-light-subtle shadow-sm">
+
+                                <i class="fa-solid" [ngClass]="getFileIcon(issue.attachmentPath)"
+                                    style="font-size: 2rem;"></i>
+
+                                <div class="flex-grow-1">
+                                    <div class="fw-medium text-dark">{{ getFileName(issue.attachmentPath) }}</div>
+                                    <small class="text-muted">Click to download</small>
+                                </div>
+                            </a>
+                        </ng-container>
+
+                        <ng-template #noAttachment>
+                            <em class="text-muted">No attachment available.</em>
+                        </ng-template>
+                    </div>
+                </div> -->
+
+
+
                 <!-- Meta Info Card -->
                 <div class="row g-3">
                     <div class="col-md-6">
@@ -68,7 +205,7 @@
                     </div>
 
                     <!-- Assigned Users -->
-                    <!-- <div class="col-md-6">
+                    <div class="col-md-6">
                         <div class="card-issue-view shadow-sm border-0 h-100">
                             <div class="card-body">
                                 <h6 class="fw-semibold mb-3">Assigned Users</h6>
@@ -88,12 +225,12 @@
 
                             </div>
                         </div>
-                    </div> -->
+                    </div>
 
 
 
                     <!-- Assigned Users -->
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <div class="card-issue-view shadow-sm border-0 h-100">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -105,27 +242,12 @@
                                     </button>
                                 </div>
 
-                                <!-- Assigned users list -->
-                                <!-- <ng-container *ngIf="(issue?.assignedUsers?.length ?? 0) > 0; else noAssigned">
-                                    <div class="d-flex flex-wrap gap-2">
-                                        <div class="d-flex align-items-center gap-2 bg-light rounded px-2 py-1"
-                                            *ngFor="let user of issue?.assignedUsers">
-                                            <img [src]="user.imageUrl" width="30" height="30" class="rounded-circle"
-                                                alt="user image" />
-                                            <span>{{ user.firstName }}</span>
-                                        </div>
-                                    </div>
-                                </ng-container>
-                                <ng-template #noAssigned>
-                                    <em class="text-muted">No users assigned.</em>
-                                </ng-template> -->
 
-
-                                <!-- Search bar -->
+                                Search bar
                                 <input type="text" [(ngModel)]="searchUsersTerm" placeholder="Search users..."
                                     class="form-control mb-2" />
 
-                                <!-- Dropdown list -->
+                                Dropdown list
                                 <div *ngIf="showUserDropdown &&!loading && allUsers?.length">
                                     <div *ngFor="let user of filteredUsers"
                                         class="d-flex align-items-center justify-content-between">
@@ -137,7 +259,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Assign Dropdown (can be modal too if you prefer) -->
+                                Assign Dropdown (can be modal too if you prefer)
                                 <div *ngIf="showUserDropdown"
                                     class="assign-dropdown mt-3 border rounded shadow-sm p-3 bg-white">
                                     <div class="fw-semibold mb-2">Assign or Unassign Users:</div>
@@ -161,7 +283,7 @@
 
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
 
@@ -242,13 +364,55 @@
                 </div>
             </div>
             <!-- Description -->
-            <div class="row  align-items-center">
+            <div class="row  align-items-center flex-nowrap">
                 <div class="col-md-2">
-                    <label for="description">Description</label>
+                    <label for="description">Description & Attachment</label>
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-6">
                     <textarea id="description" rows="2" formControlName="description"
                         placeholder="Write a few sentences about the Issue..."></textarea>
+                </div>
+
+                <!-- Attachment Upload -->
+                <div class=" align-items-center col-md-4 ">
+                    <!-- <div class="col-md-2">
+                        <label for="attachment">Attachment</label>
+                    </div> -->
+                    <div class="col-md-10 d-flex  justify-content-start align-items-center">
+                        <button mat-stroked-button type="button"
+                            class="btn d-flex justify-content-center align-items-center choose-file-btn"
+                            (click)="fileInput.click()" [ngClass]="{ 'file-selected': selectedFile }" [@pulseAnimation]>
+                            <img src="assets/images/issue view/Featured icon.svg" alt="Upload" width="35px"
+                                class="me-2" />
+                            <span>{{ selectedFile ? selectedFile.name : 'Choose File' }}</span>
+                        </button>
+
+                        <input type="file" #fileInput hidden (change)="onFileSelected($event)" />
+                    </div>
+                </div>
+            </div>
+            <!-- Labels -->
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <label for="labels">Label</label>
+                </div>
+                <div class="col-md-10">
+                    <mat-form-field class="label-chip-list" appearance="outline">
+                        <mat-chip-grid #chipGrid aria-label="Enter Label">
+                            <mat-chip-row *ngFor="let label of issueUpdateForm.controls['labels'].value; let i = index"
+                                (removed)="remove(i)" [editable]="true" (edited)="edit(i, $event.value)"
+                                (keydown)="limitLabelLength($event, i)"
+                                [aria-description]="'Press enter to edit ' + label">
+                                {{ label }}
+                                <button matChipRemove [attr.aria-label]="'Remove ' + label">
+                                    <mat-icon>&#x2715;</mat-icon>
+                                </button>
+                            </mat-chip-row>
+                            <input placeholder="New Label..." [matChipInputFor]="chipGrid"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                                (matChipInputTokenEnd)="add($event)" maxlength="100" />
+                        </mat-chip-grid>
+                    </mat-form-field>
                 </div>
             </div>
             <!-- Labels -->
