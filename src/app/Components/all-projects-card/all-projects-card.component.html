@@ -9,31 +9,65 @@
         alt="{{ company.name }}"
       />
     </div> -->
-    <div class="card-body">
-        <div class="header">
-            <div class="HeaderFirstPart">
-                <h2 class="text-capitalize">{{ project.name }}</h2>
-                <div class="Priority-Status d-flex gap-2">
-                    <mat-chip-set>
-                        <mat-chip [ngClass]="getPriorityClass(project.priority)">
-                            {{ project.priority }}
-                        </mat-chip>
-                    </mat-chip-set>
-                    <mat-chip-set>
-                        <mat-chip [ngClass]="{
-                            'planning-status': project.status === 'Planning',
-                            'reviewing-status': project.status === 'Reviewing',
-                            'working-on-status': project.status === 'Working on',
-                            'completed-status': project.status === 'Completed',
-                            'canceled-status': project.status === 'Canceled',
-                            'postponed-status': project.status === 'Postponed'
-                            }" class="status-chip">
-                            {{ project.status }}
-                        </mat-chip>
-                    </mat-chip-set>
-                </div>
-            </div>
-            <!-- <div class="icons gap-3">
+    <div class="card-body position-relative">
+      <!-- Red Pin Icon -->
+<!-- <img
+  *ngIf="isPinned"
+  (click)="onPinProject(project, $event)"
+  src="https://img.icons8.com/arcade/64/unpin.png"
+  alt="Unpin"
+  class="cursor-pointer Red-Pin position-absolute top-0 end-0"
+  width="32"
+  height="32"
+/>
+
+<img
+  *ngIf="!isPinned"
+  (click)="UnPinProject(project, $event)"
+  src="https://img.icons8.com/arcade/64/map-pin.png"
+  alt="Pin"
+  class="cursor-pointer Red-Pin position-absolute top-0 end-0"
+  width="32"
+  height="32"
+/> -->
+
+      <img
+        (click)="TogglePin(project, $event)"
+        [src]="isPinned ? 'https://img.icons8.com/arcade/64/unpin.png' : 'https://img.icons8.com/arcade/64/map-pin.png'"
+        [alt]="isPinned ? 'Unpin' : 'Pin'"
+        class="cursor-pointer Red-Pin position-absolute top-0 end-0"
+        width="32"
+        height="32"
+      />
+
+
+      <div class="header">
+        <div class="HeaderFirstPart">
+          <h2 class="text-capitalize">{{ project.name }}</h2>
+          <div class="Priority-Status d-flex gap-2">
+            <mat-chip-set>
+              <mat-chip [ngClass]="getPriorityClass(project.priority)">
+                {{ project.priority }}
+              </mat-chip>
+            </mat-chip-set>
+            <mat-chip-set>
+              <mat-chip
+                [ngClass]="{
+                  'planning-status': project.status === 'Planning',
+                  'reviewing-status': project.status === 'Reviewing',
+                  'working-on-status': project.status === 'Working on',
+                  'completed-status': project.status === 'Completed',
+                  'canceled-status': project.status === 'Canceled',
+                  'postponed-status': project.status === 'Postponed'
+                }"
+                class="status-chip"
+              >
+                {{ project.status }}
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+        </div>
+        <!-- <div class="icons gap-3">
             <a (click)="copyText('code')">
                 <span *ngIf="!copied.code">
                 <i
@@ -46,21 +80,25 @@
                 </span>
             </a>
             </div> -->
-            <p class="p-0 m-0">
-                Start {{ project.startDate }}<br />
-                Due {{ project.endDate }}
-            </p>
-        </div>
-      <p class="my-3 ">
+        <p class="p-0 m-0">
+          Start {{ project.startDate }}<br />
+          Due {{ project.endDate }}
+        </p>
+      </div>
+      <p class="my-3">
         {{ project.description }}
       </p>
       <div class="TenantDetails mb-3">
-        <h4>Company {{project.tenant.name}}</h4>
+        <h4>Company {{ project.tenant.name }}</h4>
       </div>
       <div class="members-details">
         <div class="people gap-1">
-            <img src="assets/images/blank profile.svg" class="member-img me-3" alt="">
-            <h4>{{ project.userProjects.length }}</h4>
+          <img
+            src="assets/images/blank profile.svg"
+            class="member-img me-3"
+            alt=""
+          />
+          <h4>{{ project.userProjects.length }}</h4>
           <!-- <ng-container
             *ngFor="let member of project.userProjects; let last = last"
           >
@@ -82,6 +120,11 @@
           </ng-container> -->
           <!-- <h4 class="m-0 p-0">+5</h4> -->
         </div>
+        <!-- <div>
+            <button class="btn btn-sm btn-light mt-2" (click)="onPinProject(project, $event)">
+              📌 Pin This Project
+            </button>
+        </div> -->
         <button class="btn" (click)="selectProject()">
           View More
           <i class="fa-solid fa-angles-right ps-1" style="color: #dcdfff"></i>

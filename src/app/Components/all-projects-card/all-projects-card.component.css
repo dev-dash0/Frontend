@@ -125,107 +125,14 @@ button {
   border: 2px var(--normalPurple) solid;
 }
 
-/* Priority Classes */
-.critical-priority {
-  background-color: #ff4d4d !important; /* Red */
-  color: #161d3e !important;
-  font-weight: bold;
-  transition: all 0.2s ease-in-out;
+.Red-Pin{
+  /* top:25px; */
+  /* right: 140px; */
+  z-index: 999;
+  transition: transform 0.3s ease;
 }
-.critical-priority:hover {
-  background-color: #f74141 !important; /* Red */
-}
-
-.high-priority {
-  background-color: #ff9800 !important; /* Orange */
-  color: #161d3e !important;
-  font-weight: bold;
-  transition: all 0.2s ease-in-out;
-}
-.high-priority:hover {
-  background-color: #ff8400 !important; /* Orange */
-}
-
-.medium-priority {
-  background-color: #ffc107 !important; /* Yellow */
-  color: #161d3e !important;
-  font-weight: bold;
-  transition: all 0.2s ease-in-out;
-}
-.medium-priority:hover {
-  background-color: #eeb200 !important; /* Yellow */
-}
-
-.low-priority {
-  background-color: #4caf50 !important; /* Green */
-  color: #161d3e !important;
-  font-weight: bold;
-  transition: all 0.2s ease-in-out;
-}
-.low-priority:hover {
-  background-color: #43a047 !important; /* Green */
-}
-
-
-/* Status Classes */
-.planning-status {
-    background-color: #3498db !important; /* Blue */
-    transition: all 0.2s ease-in-out;
-} 
-.planning-status:hover {
-    background-color: #2a8fd2 !important; /* Blue */
-} 
-
-.reviewing-status {
-    background-color: #9b59b6 !important; /* Purple */
-} 
-.reviewing-status:hover {
-    background-color: #a24ec4 !important; /* Purple */
-    transition: all 0.2s ease-in-out;
-} 
-
-.working-on-status {
-    background-color: #f39c12 !important; /* Dark Yellow */
-    transition: all 0.2s ease-in-out;
-} 
-.working-on-status:hover {
-    background-color: #e39311 !important; /* Dark Yellow */
-} 
-.completed-status {
-    background-color: #2ecc71 !important; /* Green */
-    transition: all 0.2s ease-in-out;
-} 
-.completed-status:hover {
-    background-color: #1fbb60 !important; /* Green */
-} 
-.canceled-status {
-    background-color: #e74c3c !important; /* Red */
-    transition: all 0.2s ease-in-out; 
-} 
-
-.canceled-status:hover {
-    background-color: #ce4636 !important; /* Red */
-} 
-.canceled-status {
-    background-color: #e74c3c !important; /* Red */
-  transition: all 0.2s ease-in-out; 
-} 
-.postponed-status {
-    background-color: #95a5a6 !important; /* Gray */
-    transition: all 0.2s ease-in-out;
-} 
-
-.postponed-status:hover {
-    background-color: #849394 !important; /* Gray */
-} 
-
-.critical-priority:hover,
-.high-priority:hover,
-.medium-priority:hover,
-.low-priority:hover,
-.status-chip:hover {
-  transform: scale(1.1); /* Increase size on hover */
-  transition: transform 0.2s ease-in-out; /* Smooth animation */
-  cursor: pointer; /* Changes the cursor to indicate interactivity */
+.Red-Pin:hover{
+  transform: translateY(-5px);
+  transition: transform 0.3s ease;
 }
 

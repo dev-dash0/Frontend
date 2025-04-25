@@ -66,7 +66,7 @@ export class AllProjectsComponent {
       this.getProjects();
     });
     this.getProjects();
-    // this.getCompaniesids();
+    // this.getCompaniesIds();
   }
 
   getProjects(): void {

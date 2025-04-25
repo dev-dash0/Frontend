@@ -19,6 +19,9 @@ import { ProjectCategory } from '../../Core/interfaces/company/project-category'
 import { ProjectService } from '../../Core/Services/project.service';
 import { Project, ProjectResult } from '../../Core/interfaces/project';
 import { UpdateCompanyComponent } from '../update-company/update-company.component';
+import { PinnedService } from '../../Core/Services/pinned.service';
+import { TenantResult } from '../../Core/interfaces/pinned';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-company-view',
@@ -43,7 +46,9 @@ export class CompanyViewComponent implements OnInit {
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private router: Router,
-    private _profile: ProfileService
+    private _profile: ProfileService,
+    private _PinnedService: PinnedService,
+    private _toaster: ToastrService
   ) {}
   isSidebarCollapsed = true;
   Owner: Owner | null = null;
@@ -532,6 +537,47 @@ export class CompanyViewComponent implements OnInit {
         ];
       },
       error: (err) => console.error('Error fetching project data:', err),
+    });
+  }
+
+  onPinTenant(event: MouseEvent) {
+    event.stopPropagation(); // prevent triggering card animation click
+
+    // const tenantId = tenant.id; // Or tenant.tenantId depending on your model
+    // const companyId = this.route.snapshot.paramMap.get('id');
+    this._PinnedService.PinItem('Tenant', this.CompanyId).subscribe({
+      next: (res) => {
+        console.log('Pinned successfully:', res);
+        this.showSuccess();
+      },
+      error: (err) => {
+        console.error('Pinning failed:', err);
+        this.showFail(err.error.message);
+      },
+    });
+  }
+
+  showSuccess() {
+    this._toaster.success(
+      'The Project has been Pinned',
+      'Pinned Successfully',
+      {
+        toastClass: 'toast-pink',
+        timeOut: 10000,
+        closeButton: true,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+      }
+    );
+  }
+
+  showFail(err : any) {
+    this._toaster.error( err, 'Pinned Failed', {
+      toastClass: 'toast-pink',
+      timeOut: 10000,
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing',
     });
   }
 }

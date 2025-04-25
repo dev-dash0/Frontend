@@ -22,6 +22,17 @@ mat-chip {
   background: var(--cardBottomRightGradient);
 }
 
+.Red-Pin{
+  /* top:25px; */
+  /* right: 140px; */
+  z-index: 999;
+  transition: transform 0.3s ease;
+}
+.Red-Pin:hover{
+  transform: translateY(-5px);
+  transition: transform 0.3s ease;
+}
+
 .col-md-8 h2 {
   font-family: var(--headerFontFamily);
   margin: 0;
