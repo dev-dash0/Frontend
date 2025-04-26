@@ -4,7 +4,12 @@ import { Component, inject, Input } from '@angular/core';
 import { SidebarService } from '../../Core/Services/sidebar.service';
 import { CommonModule, NgFor } from '@angular/common';
 import { ProjectService } from '../../Core/Services/project.service';
-import { ProjectOwner, ProjectResult, UserProject } from '../../Core/interfaces/project';
+import {
+  fetchedProjectDetails,
+  ProjectOwner,
+  ProjectResult,
+  UserProject,
+} from '../../Core/interfaces/project';
 import { MatDialog } from '@angular/material/dialog';
 import { IssueService } from '../../Core/Services/issue/issue.service';
 import { IssueModalComponent } from '../issue-modal/issue-modal.component';
@@ -15,9 +20,9 @@ import { CompanyService } from '../../Core/Services/company.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sprint } from '../../Core/interfaces/sprint';
 import { SprintModalComponent } from '../sprint-modal/sprint-modal.component';
-import { VisualizationComponent } from "../visualization/visualization.component";
-import { AllProjectsDashboardComponent } from "../all-projects-dashboard/all-projects-dashboard.component";
-import { AllIssuesDashboardComponent } from "../all-issues-dashboard/all-issues-dashboard.component";
+import { VisualizationComponent } from '../visualization/visualization.component';
+import { AllProjectsDashboardComponent } from '../all-projects-dashboard/all-projects-dashboard.component';
+import { AllIssuesDashboardComponent } from '../all-issues-dashboard/all-issues-dashboard.component';
 
 @Component({
   selector: 'app-project-view',
@@ -48,7 +53,8 @@ export class ProjectViewComponent {
   // showBacklog: boolean = true;
   backlogIssues: Issue[] = [];
   isSidebarCollapsed = true;
-  ProjectsList: ProjectResult[] = [];
+  ProjectsList: any = '';
+  ProjectDetails?: fetchedProjectDetails;
 
   priorityConfig: any = {
     Critical: {
@@ -164,12 +170,14 @@ export class ProjectViewComponent {
 
   // Projects Api
   GetProjectData() {
-    this._ProjectService.getProjectData(this.ProjectId).subscribe({
+    const ProjectId = this.route.snapshot.paramMap.get('id');
+    this._projectService.getProject(ProjectId).subscribe({
       next: (res) => {
-        console.log(res);
-        this.ProjectsList = res.result;
-        this.Owner = res.result.owner;
-      },
+        console.log('Project fetched:', res);
+        this.ProjectDetails = res.result;
+      }, error: (err)=> {
+        console.log(err)
+      }
     });
   }
 
@@ -261,5 +269,4 @@ export class ProjectViewComponent {
     )}/${dateFormat.getFullYear()}`;
     return formatted;
   }
-
 }
