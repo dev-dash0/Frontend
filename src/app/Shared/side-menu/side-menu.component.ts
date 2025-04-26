@@ -5,7 +5,7 @@ import {
   RouterLink,
   RouterOutlet,
 } from '@angular/router';
-import { Component, EventEmitter, HostListener, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, inject, Output } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
 import { SidebarService } from '../../Core/Services/sidebar.service';
@@ -38,8 +38,9 @@ export class SideMenuComponent {
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private _sprintService: SprintService
-  ) {}
+  ) { }
+  private _sprintService = inject(SprintService)
+
   companyData: Company[] = [];
   companyNames: { id: string; name: string }[] = [];
   projectsNames: { id: string; name: string }[] = [];
