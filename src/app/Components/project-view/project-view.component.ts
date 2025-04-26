@@ -16,7 +16,6 @@ import { IssueModalComponent } from '../issue-modal/issue-modal.component';
 import { SharedDeleteModalComponent } from '../../Shared/delete-modal/delete-modal.component';
 import { ToastrService } from 'ngx-toastr';
 import { SprintService } from '../../Core/Services/sprint.service';
-import { CompanyService } from '../../Core/Services/company.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sprint } from '../../Core/interfaces/sprint';
 import { SprintModalComponent } from '../sprint-modal/sprint-modal.component';
@@ -89,7 +88,6 @@ export class ProjectViewComponent {
     });
 
     this._sprintService.sprintCreated$.subscribe(() => {
-      console.log('New sprint created!');
       this.getAllSprints();
     });
   }
@@ -218,10 +216,8 @@ export class ProjectViewComponent {
     const ProjectId = this.route.snapshot.paramMap.get('id');
     this._projectService.getProject(ProjectId).subscribe({
       next: (res) => {
-        console.log('Project fetched:', res);
         this._sprintService.getAllSprints(res.result.id).subscribe({
           next: (res) => {
-            console.log('Sprints fetched:', res);
             this.sprintDetails = res.result.map((sprint: Sprint) => ({
               ...sprint,
               startDate: this.dateFormatter(sprint.startDate),
