@@ -35,7 +35,7 @@ import { AssignUsersToIssueComponent } from "../assign-users-to-issue/assign-use
     MatOptionModule,
     MatChipsModule,
     MatButtonToggleModule,
-    ReactiveFormsModule, SigninSignupNavbarComponent, AssignUsersToIssueComponent],
+    ReactiveFormsModule, AssignUsersToIssueComponent],
   templateUrl: './issue-view-modal.component.html',
   styleUrl: './issue-view-modal.component.css',
   animations: [
@@ -346,5 +346,6 @@ export class IssueViewModalComponent {
     return typeof this.issue?.labels === 'string' && this.issue.labels.trim() !== '';
   }
   // ////////////////////////////////////////////////////////////////
+
 
 }

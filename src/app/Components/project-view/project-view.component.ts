@@ -1,17 +1,14 @@
 import { Issue } from './../../Core/interfaces/Dashboard/Issue';
 import { DialogService } from './../../Core/Services/dialog.service';
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { SidebarService } from '../../Core/Services/sidebar.service';
 import { CommonModule, NgFor } from '@angular/common';
-import { ProjectService } from '../../Core/Services/project.service';
-import { ProjectResult, UserProject } from '../../Core/interfaces/project';
+import { ProjectResult } from '../../Core/interfaces/project';
 import { MatDialog } from '@angular/material/dialog';
 import { IssueService } from '../../Core/Services/issue/issue.service';
-import { DeleteModalComponent } from '../deletemodal/deletemodal.component';
 import { IssueModalComponent } from '../issue-modal/issue-modal.component';
 import { SharedDeleteModalComponent } from '../../Shared/delete-modal/delete-modal.component';
 import { ToastrService } from 'ngx-toastr';
-import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -27,7 +24,6 @@ export class ProjectViewComponent {
   private _IssueService = inject(IssueService);
   private dialog = inject(MatDialog);
   private toastr = inject(ToastrService);
-  private readonly _ProjectService = inject(ProjectService);
   private route = inject(ActivatedRoute)
 
   projectId!: number;

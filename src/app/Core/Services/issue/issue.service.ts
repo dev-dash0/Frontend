@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { baseUrl } from '../../environment/environment.local';
 import { ToastrService } from 'ngx-toastr';
+import { User } from '../../interfaces/User';
 
 @Injectable({
   providedIn: 'root'
@@ -162,19 +163,61 @@ export class IssueService {
 
 
   // **********************Assign Users**********************
+  // assignUserToIssue(userId: number, issueId: number): Observable<any> {
+  //   const body = { userId, issueId };
+  //   return this._HttpClient.post(`${baseUrl}/api/IssueAssignedUser`, body, {
+  //     headers: this.headers,
+  //   });
+  // }
+
+  // removeUserFromIssue(userId: number, issueId: number): Observable<any> {
+  //   const body = { userId, issueId };
+  //   return this._HttpClient.delete(`${baseUrl}/api/IssueAssignedUser`, {
+  //     headers: this.headers,
+  //     body,
+  //   });
+  // }
+
+
   assignUserToIssue(userId: number, issueId: number): Observable<any> {
     const body = { userId, issueId };
-    return this._HttpClient.post(`${baseUrl}/api/IssueAssignedUser`, body, {
-      headers: this.headers,
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.token}`,
+      Accept: 'text/plain',
+
+
+      // add Authorization or other headers here if needed
     });
+    console.log('Assign user body:', body); // Add this to debug
+    return this._HttpClient.post(`${baseUrl}/api/IssueAssignedUser`, body, { headers });
   }
 
   removeUserFromIssue(userId: number, issueId: number): Observable<any> {
     const body = { userId, issueId };
-    return this._HttpClient.delete(`${baseUrl}/api/IssueAssignedUser`, {
-      headers: this.headers,
-      body,
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.token}`,
+      Accept: 'text/plain',
+
     });
+    console.log('Assign user body:', body); // Add this to debug
+    return this._HttpClient.request('delete', `${baseUrl}/api/IssueAssignedUser`, {
+      body,
+      headers
+    });
+  }
+
+  private assignedUsersMap = new Map<number, User[]>();
+
+  getAssignedUsers(issueId: number): User[] {
+    return this.assignedUsersMap.get(issueId) || [];
+  }
+
+  setAssignedUsers(issueId: number, users: User[]) {
+    this.assignedUsersMap.set(issueId, users);
   }
 
   // assignUserToIssue(userId: number, issueId: number): void {

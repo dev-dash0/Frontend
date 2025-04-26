@@ -41,28 +41,10 @@
                         <h6 class="card-title fw-semibold  mb-2">Description</h6>
                         <p class="card-text" *ngIf="issue?.description; else noDesc">{{ issue.description }}</p>
                         <ng-template #noDesc>
-                            <em class="text-muted">No description provided.</em>
+                            <em class="dev-text-muted">No description provided.</em>
                         </ng-template>
                     </div>
                 </div>
-
-                <!-- Labels -->
-                <!-- <div class="card-issue-view shadow-sm border-0 mb-3">
-                    <div class="card-body">
-                        <h6 class="card-title fw-semibold mb-2">Labels</h6>
-                        <ng-container *ngIf="issue.labels; else noLabels">
-                            <div class="d-flex flex-wrap gap-2">
-                                <span class="label-badge bg-dark-subtle text-dark border rounded-pill px-3 py-1"
-                                    *ngFor="let label of issue.labels.split(',')">
-                                    {{ label.trim() }}
-                                </span>
-                            </div>
-                        </ng-container>
-                        <ng-template #noLabels>
-                            <em class="text-muted">No labels provided.</em>
-                        </ng-template>
-                    </div>
-                </div> -->
 
                 <!-- labels&attach -->
                 <div class="row g-3">
@@ -70,27 +52,6 @@
                         <div class="card-issue-view shadow-sm border-0 mb-3">
                             <div class="card-body">
                                 <h6 class="card-title fw-semibold mb-2">Labels</h6>
-                                <!-- <ng-container *ngIf="issue.labels; else noLabels">
-                                    <div class="d-flex flex-wrap gap-2 max-height-scroll">
-                                        <span class="badge px-3 py-2 text-capitalize"
-                                            *ngFor="let label of issue.labels.split(','); let i = index"
-                                            [ngClass]="'bg-label-' + (i % 5)">
-                                            {{ label.trim() }}
-                                        </span>
-                                    </div>
-                                </ng-container> -->
-                                <!-- <ng-container *ngIf="issue.labels && typeof issue.labels === 'string'; else noLabels">
-                                    <div class="d-flex flex-wrap gap-2 max-height-scroll">
-                                        <span class="badge px-3 py-2 text-capitalize"
-                                            *ngFor="let label of issue.labels.split(','); let i = index"
-                                            [ngClass]="'bg-label-' + (i % 5)">
-                                            {{ label.trim() }}
-                                        </span>
-                                    </div>
-                                </ng-container>
-                                <ng-template #noLabels>
-                                    <em class="text-muted">No labels provided.</em>
-                                </ng-template> -->
                                 <ng-container *ngIf="issueHasValidLabels; else noLabels">
                                     <div class="d-flex flex-wrap gap-2 max-height-scroll">
                                         <span class="badge px-3 py-2 text-capitalize"
@@ -102,12 +63,8 @@
                                 </ng-container>
 
                                 <ng-template #noLabels>
-                                    <em class="text-muted">No labels provided.</em>
+                                    <em class="dev-text-muted">No labels provided.</em>
                                 </ng-template>
-
-                                <!-- <ng-template #noLabels>
-                                    <em class="text-muted">No labels provided.</em>
-                                </ng-template> -->
                             </div>
                         </div>
                     </div>
@@ -126,13 +83,13 @@
                                         <div class="flex-grow-1">
                                             <div class="fw-medium ">{{ getFileName(issue.attachmentPath) }}
                                             </div>
-                                            <small class="text-muted">Click to download</small>
+                                            <small class="dev-text-muted">Click to download</small>
                                         </div>
                                     </a>
                                 </ng-container>
 
                                 <ng-template #noAttachment>
-                                    <em class="text-muted">No attachment available.</em>
+                                    <em class="dev-text-muted">No attachment available.</em>
                                 </ng-template>
                             </div>
                         </div>
@@ -197,7 +154,7 @@
                                     <div>
                                         <div><span class="text-capitalize">{{ issue.createdBy?.firstName }} {{
                                                 issue.createdBy?.lastName }}</span></div>
-                                        <small class="text-muted">{{ issue.creationDate | date: 'medium' }}</small>
+                                        <small class="dev-text-muted">{{ issue.creationDate | date: 'medium' }}</small>
                                     </div>
                                 </div>
                             </div>
@@ -205,7 +162,7 @@
                     </div>
 
                     <!-- Assigned Users -->
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <div class="card-issue-view shadow-sm border-0 h-100">
                             <div class="card-body">
                                 <h6 class="fw-semibold mb-3">Assigned Users</h6>
@@ -225,7 +182,7 @@
 
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
 
 
@@ -284,7 +241,17 @@
                             </div>
                         </div>
                     </div> -->
-
+                    <div class="col-md-6">
+                        <div class="card-issue-view shadow-sm border-0 h-100">
+                            <div class="card-body">
+                                <h6 class="fw-semibold mb-3">Assigned Users</h6>
+                                <app-assign-users-to-issue [issueId]="issue.id"
+                                    [issueProjectId]="issue.projectId"></app-assign-users-to-issue>
+                            </div>
+                            <!-- <i class="fas fa-user-minus text-sm"></i> -->
+                            <!-- <i class="fas fa-user-plus"></i> -->
+                        </div>
+                    </div>
                 </div>
 
 
@@ -296,7 +263,7 @@
                             <i class="fa-solid fa-calendar-days text-info fa-sm"></i>
                             <div>
                                 <div class="fw-semibold">Start Date</div>
-                                <div class="text-muted">
+                                <div class="dev-text-muted">
                                     {{ issue.startDate ? (issue.startDate | date: 'mediumDate') : '—' }}
                                 </div>
                             </div>
@@ -307,7 +274,7 @@
                             <i class="fa-solid fa-hourglass-half text-danger fa-sm"></i>
                             <div>
                                 <div class="fw-semibold">Deadline</div>
-                                <div class="text-muted">
+                                <div class="dev-text-muted">
                                     {{ issue.deadline ? (issue.deadline | date: 'MMM d, y, h:mm a') : '—' }}
                                 </div>
                             </div>
@@ -318,7 +285,7 @@
                             <i class="fa-solid fa-circle-check text-success fa-sm"></i>
                             <div>
                                 <div class="fw-semibold">Delivered</div>
-                                <div class="text-muted">
+                                <div class="dev-text-muted">
                                     {{ issue.deliveredDate ? (issue.deliveredDate | date: 'MMM d, y, h:mm a') : '—' }}
                                 </div>
                             </div>
@@ -329,7 +296,7 @@
                             <i class="fa-solid fa-rotate-right text-primary fa-sm"></i>
                             <div>
                                 <div class="fw-semibold ">Last Update</div>
-                                <div class="text-muted">
+                                <div class="dev-text-muted">
                                     {{ issue.lastUpdate ? (issue.lastUpdate | date: 'mediumDate') : '—' }}
                                 </div>
                             </div>
@@ -415,56 +382,6 @@
                     </mat-form-field>
                 </div>
             </div>
-            <!-- Labels -->
-            <!-- <div class="row align-items-center">
-                        <div class="col-md-2">
-                            <label for="labels">Label</label>
-                        </div>
-                        <div class="col-md-10">
-                            <mat-form-field class="label-chip-list" appearance="outline">
-                                <mat-chip-grid #chipGrid aria-label="Enter Label">
-                                    @for (label of labels(); track label) {
-                                    <mat-chip-row (removed)="remove(label)" [editable]="true" (edited)="edit(label, $event)"
-                                        (keydown)="limitLabelLength($event, label)"
-                                        [aria-description]="'press enter to edit ' + label.name">
-                                        {{ label.name }}
-                                        <button matChipRemove [attr.aria-label]="'remove ' + label.name">
-                                            <mat-icon>&#x2715;</mat-icon>
-                                        </button>
-                                    </mat-chip-row>
-                                    }
-                                    <input placeholder="New Label..." [matChipInputFor]="chipGrid"
-                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                                        (matChipInputTokenEnd)="add($event)" maxlength="100" />
-                                </mat-chip-grid>
-                            </mat-form-field>
-                        </div>
-                    </div> -->
-            <!-- 
-                    <div class="row align-items-center">
-                        <div class="col-md-2">
-                            <label for="labels">Label</label>
-                        </div>
-                        <div class="col-md-10">
-                            <mat-form-field class="label-chip-list" appearance="outline">
-                                <mat-chip-grid #chipGrid aria-label="Enter Label">
-                                    <mat-chip-row *ngFor="let label of issueForm.controls['labels'].value; let i = index"
-                                        (removed)="remove(i)" [editable]="true" (edited)="edit(i, $event.value)"
-                                        (keydown)="limitLabelLength($event, i)" [aria-description]="'Press enter to edit ' + label">
-                                        {{ label }}
-                                        <button matChipRemove [attr.aria-label]="'Remove ' + label">
-                                            <mat-icon>&#x2715;</mat-icon>
-                                        </button>
-                                    </mat-chip-row>
-                                    <input placeholder="New Label..." [matChipInputFor]="chipGrid"
-                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-                                        (matChipInputTokenEnd)="add($event)" maxlength="100" />
-                                </mat-chip-grid>
-                            </mat-form-field>
-                        </div>
-                    </div>
-             -->
-
 
             <div class="divider"></div>
             <!-- Dates -->

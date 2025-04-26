@@ -34,7 +34,7 @@ export class SideMenuComponent {
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog
-  ) {}
+  ) { }
   companyData: Company[] = [];
   companyNames: { id: string; name: string }[] = [];
   projectsNames: { id: string; name: string }[] = [];
