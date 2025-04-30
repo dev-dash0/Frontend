@@ -47,11 +47,11 @@ button:hover {
   width: 300px;
 }
 
-/* .header {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-} */
+}
 
 .issue-item {
   /* display: flex;

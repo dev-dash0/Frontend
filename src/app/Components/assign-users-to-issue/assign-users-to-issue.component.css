@@ -1,0 +1,71 @@
+.assignment-dropdown {
+    background-color: rgb(149, 168, 240);
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1060;
+    /* فوق المودال */
+    max-height: 400px;
+    /* overflow-y: auto; */
+    animation: fadeIn 0.5s 1;
+    transition: all 0.2s ease-in-out;
+}
+
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+/* ////////////////////////////////////////////////// */
+
+/*  */
+.members {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.member {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-inline-start: -15px;
+}
+
+.member:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+}
+
+/* New Sexy Assign Button */
+.assign-btn-outline {
+    width: 40px;
+    height: 40px;
+    border: 2px dashed #007bff;
+    border-radius: 50%;
+    background: transparent;
+    color: #007bff;
+    font-size: 18px;
+    transition: background 0.3s, transform 0.3s, border-color 0.3s;
+    cursor: pointer;
+}
+
+.assign-btn-outline:hover {
+    background-color: #007bff;
+    color: white;
+    border-style: solid;
+    transform: rotate(90deg) scale(1.02);
+}

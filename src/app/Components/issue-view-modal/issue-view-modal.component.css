@@ -1,0 +1,210 @@
+.issue-details-container {
+    /* padding: 1rem; */
+    font-size: 0.95rem;
+}
+
+.issue-details-container strong {
+    font-weight: 600;
+}
+
+.issue-details-container img {
+    object-fit: cover;
+}
+
+.issue-details {
+    font-size: 0.95rem;
+}
+
+.card-title {
+    font-size: 1rem;
+}
+
+.badge {
+    font-size: 0.85rem;
+}
+
+/* //////////////////////// */
+/* Smooth dark container */
+/* Divider line */
+/* .divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 1rem 0;
+} */
+
+/* Cards (like description, created by, etc.) */
+.card {
+    background-color: rgba(13, 19, 44, 0.7);
+    color: #ddd;
+    border-radius: 1rem;
+    border: none;
+}
+
+.card-issue-view {
+    /* background-color: rgba(13, 19, 44, 0.75); */
+    background-color: rgba(255, 255, 255, 0.02);
+    /* color: #ddd; */
+    border-radius: 1rem;
+    /* border: none; */
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    /* border: 1px solid rgba(255, 255, 255, 0.08); */
+    font-size: 0.9rem;
+}
+
+/* Card titles */
+.card-title,
+.card-body h6 {
+    color: rgb(130, 175, 219);
+}
+
+/* Chips (badges) */
+.badge {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #eee;
+    font-weight: 500;
+}
+
+/* Status-specific badge tweaks */
+.badge.bg-info-subtle {
+    background-color: rgba(0, 184, 217, 0.15);
+    color: #00b8d9;
+}
+
+.badge.bg-warning-subtle {
+    background-color: rgba(172, 241, 226, 0.15);
+    color: #ffdd33;
+}
+
+.badge.bg-secondary-subtle {
+    background-color: rgba(148, 231, 246, 0.151) !important;
+    color: #ccc;
+}
+
+/* Text-muted override for dark */
+
+.date-section span {
+    font-weight: 600;
+    color: #cdc7ee;
+    padding-inline-end: 0.2rem;
+}
+
+.date-section {
+    /* background-color: rgba(255, 255, 255, 0.02); */
+    background-color: rgba(13, 19, 44, 0.7);
+
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    /* border: 1px solid rgba(255, 255, 255, 0.08); */
+    font-size: 0.9rem;
+}
+
+/* Footer buttons */
+/* .modal-footer button.confirm-btn {
+    background-color: #ff69b4;
+    color: #fff;
+    transition: background-color 0.2s ease;
+}
+
+.modal-footer button.confirm-btn:hover {
+    background-color: #ff85c1;
+} */
+
+/* Cancel button */
+/* .modal-footer .cancel-btn {
+    background-color: transparent;
+    color: #ccc;
+    border: 1px solid #555;
+}
+
+.modal-footer .cancel-btn:hover {
+    color: #fff;
+    border-color: #888;
+} */
+
+.assign-dropdown {
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+/* ///////////////// */
+/* UPload */
+.choose-file-btn {
+    transition: all 0.3s ease;
+    /* border: 2px dashed #6c63ff; */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    /* background-color: #252748; */
+    color: white;
+
+    &:hover {
+        /* background-color: #4949d0; */
+        /* transform: scale(1.03); */
+        /* box-shadow: 0 0 10px #6c63ff66; */
+    }
+
+    &.file-selected {
+        border-color: #4c78af;
+        background-color: #191b362b;
+        color: #4c78af;
+    }
+
+    img {
+        transition: transform 0.3s ease;
+    }
+
+    &:hover img {
+        transform: rotate(10deg) scale(1.1);
+    }
+}
+
+/* //////// */
+.label-badge {
+    border: 2px solid #252748 !important;
+    background-color: #06092fe8 !important;
+    color: #fbbeef !important;
+
+}
+
+.label-badge:hover {
+    background-color: #252748c7 !important;
+
+}
+
+.bg-label-0 {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+}
+
+.bg-label-1 {
+    background-color: #fce4ec;
+    color: #880e4f;
+}
+
+.bg-label-2 {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+}
+
+.bg-label-3 {
+    background-color: #fff3e0;
+    color: #ef6c00;
+}
+
+.bg-label-4 {
+    background-color: #ede7f6;
+    color: #4527a0;
+}
+
+.max-height-scroll {
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+/* ////////////////////////// */
+.attach {
+    background-color: #060d29;
+    /* color: #4c78af; */
+    color: rgb(130, 175, 219);
+}

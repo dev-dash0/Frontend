@@ -1,6 +1,6 @@
 import { Issue } from './../../Core/interfaces/Dashboard/Issue';
 import { DialogService } from './../../Core/Services/dialog.service';
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, ViewChild } from '@angular/core';
 import { SidebarService } from '../../Core/Services/sidebar.service';
 import { CommonModule, NgFor } from '@angular/common';
 import { ProjectService } from '../../Core/Services/project.service';
@@ -21,6 +21,7 @@ import { SprintModalComponent } from '../sprint-modal/sprint-modal.component';
 import { VisualizationComponent } from "../visualization/visualization.component";
 import { AllProjectsDashboardComponent } from "../all-projects-dashboard/all-projects-dashboard.component";
 import { AllIssuesDashboardComponent } from "../all-issues-dashboard/all-issues-dashboard.component";
+import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-users-to-issue.component';
 
 @Component({
   selector: 'app-project-view',
@@ -47,6 +48,7 @@ export class ProjectViewComponent {
   sprintDetails: Sprint[] = [];
   Owner: ProjectOwner | null = null;
   ProjectId: string | null = null;
+  projectIdNum!: number;//for issue-apis usage
   issue?: Issue;
   // showBacklog: boolean = true;
   backlogIssues: Issue[] = [];
@@ -72,19 +74,19 @@ export class ProjectViewComponent {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
       this.isSidebarCollapsed = collapsed;
     });
-    this.fetchBacklogIssues();
+    // Listen for new issue events and refresh backlog
 
+    this.RefreshBacklogAfterAddingIssue();
+
+    // Get Project id from url
+    this.getProjectId()
     // Get The Id from the Path
     this.ProjectId = this.route.snapshot.paramMap.get('id');
 
     this.GetProjectData();
 
-    // Listen for new issue events and refresh backlog
-    this._IssueService.issueCreated$.subscribe(() => {
-      console.log('New issue created! Refreshing backlog...');
-      this.fetchBacklogIssues();
-    });
 
+    // Listen for new Sprint events and refresh backlog
     this._sprintService.sprintCreated$.subscribe(() => {
       this.getAllSprints();
     });
@@ -92,7 +94,7 @@ export class ProjectViewComponent {
 
   // modals
   openCreateIssue() {
-    this.dialogService.openIssueModal(6);
+    this.dialogService.openIssueModal(this.projectIdNum);
   }
   openIssueView(issueId: number) {
     this.dialogService.openIssueViewModal(issueId);
@@ -179,7 +181,8 @@ export class ProjectViewComponent {
 
   // issues Api
   fetchBacklogIssues(): void {
-    this._IssueService.getBacklogIssues(6, 0, 1).subscribe({
+    console.log('Fetching backlog issues for project ID:', this.projectIdNum);
+    this._IssueService.getBacklogIssues(this.projectIdNum, 0, 1).subscribe({
       next: (res) => {
         if (res.isSuccess) {
           console.log(res);
@@ -195,16 +198,39 @@ export class ProjectViewComponent {
   loadIssue(issueId: number): void {
     this._IssueService.getIssueById(issueId).subscribe({
       next: (res) => {
-        console.log('Issue fetched:', res);
-        this.issue = res;
+        // console.log('Issue fetched:', res);
+        // this.issue = res;
         this.openIssueView(issueId);
+        this.isModalOpen = true;
+
+        // بعد ما المودال يفتح (يمكن تستخدم setTimeout لتأخير بسيط لو حصل تأخير في انشاء الـ ViewChild)
+        setTimeout(() => {
+          if (this.assignUsersComp) {
+            this.assignUsersComp.loadAssignedUsers();
+          }
+        }, 0);
       },
       error: (err) => {
         console.error('Error fetching issue:', err);
       },
     });
   }
+  @ViewChild(AssignUsersToIssueComponent) assignUsersComp!: AssignUsersToIssueComponent;
+  isModalOpen: boolean = false;
 
+  // *************Issue From issue-api**********************
+  getProjectId() {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.projectIdNum = +id;
+        this.fetchBacklogIssues();
+      }
+    });
+  }
+
+  RefreshBacklogAfterAddingIssue() {
+  }
   // ---------------------------------------------------
 
   // Sprint Api
@@ -261,4 +287,5 @@ export class ProjectViewComponent {
     )}/${dateFormat.getFullYear()}`;
     return formatted;
   }
+  // //////////////////////////////////////////////////////
 }

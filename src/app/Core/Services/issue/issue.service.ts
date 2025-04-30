@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { baseUrl } from '../../environment/environment.local';
 import { ToastrService } from 'ngx-toastr';
+import { User } from '../../interfaces/User';
 
 @Injectable({
   providedIn: 'root'
@@ -51,11 +52,16 @@ export class IssueService {
     );
   }
 
-  createBacklogIssue(projectId: number, issueData: any): Observable<any> {
+  createBacklogIssue(projectId: number, issueData: FormData): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+      // Don't set 'Content-Type' header manually when using FormData
+    });
+
     return this._HttpClient.post(
       `${baseUrl}/api/Issue/backlog?projectId=${projectId}`,
       issueData,
-      { headers: this.headers }
+      { headers: headers }
     );
   }
 
@@ -88,9 +94,14 @@ export class IssueService {
     });
   }
 
-  updateIssue(issueId: number, issueData: any): Observable<any> {
+  updateIssue(issueId: number, issueData: FormData): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+      // Don't set 'Content-Type' header manually when using FormData
+    });
+
     return this._HttpClient.put(`${baseUrl}/api/Issue/${issueId}`, issueData, {
-      headers: this.headers,
+      headers: headers,
     });
   }
 
@@ -119,4 +130,108 @@ export class IssueService {
       }
     );
   }
+
+  showError(err: string) {
+    this.toastr.error(err, 'Error Message', {
+      toastClass: 'toast-pink',
+      timeOut: 5000,
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+    });
+  }
+
+
+  statuses = [
+    { value: 'BackLog', label: 'Backlog', icon: 'assets/images/Issue Status/backlog.svg', colorClass: 'text-muted' },
+    { value: 'to do', label: 'To Do', icon: 'assets/images/Issue Status/todo.svg', colorClass: 'text-primary' },
+    { value: 'In Progress', label: 'In Progress', icon: 'assets/images/Issue Status/in-progress.svg', colorClass: 'text-warning' },
+    { value: 'Reviewing', label: 'Reviewing', icon: 'assets/images/Issue Status/reviewing.svg', colorClass: 'text-info' },
+    { value: 'Completed', label: 'Completed', icon: '../../assets/images/Issue Status/Completed.svg', colorClass: 'text-success' },
+    { value: 'Canceled', label: 'Canceled', icon: 'assets/images/Issue Status/canceled.svg', colorClass: 'text-danger' },
+    { value: 'Postponed', label: 'Postponed', icon: 'assets/images/Issue Status/postponed.svg', colorClass: 'text-secondary' }
+  ];
+
+  //Priority
+  Priorities = [
+    { value: 'Low', label: 'Low', icon: 'assets/images/Issue Priorities/low.svg' },
+    { value: 'Medium', label: 'Normal', icon: 'assets/images/Issue Priorities/normal.svg' },
+    { value: 'High', label: 'High', icon: 'assets/images/Issue Priorities/high.svg' },
+    { value: 'Critical', label: 'Urgent', icon: 'assets/images/Issue Priorities/urgent.svg' },
+  ];
+
+
+
+  // **********************Assign Users**********************
+  // assignUserToIssue(userId: number, issueId: number): Observable<any> {
+  //   const body = { userId, issueId };
+  //   return this._HttpClient.post(`${baseUrl}/api/IssueAssignedUser`, body, {
+  //     headers: this.headers,
+  //   });
+  // }
+
+  // removeUserFromIssue(userId: number, issueId: number): Observable<any> {
+  //   const body = { userId, issueId };
+  //   return this._HttpClient.delete(`${baseUrl}/api/IssueAssignedUser`, {
+  //     headers: this.headers,
+  //     body,
+  //   });
+  // }
+
+
+  assignUserToIssue(userId: number, issueId: number): Observable<any> {
+    const body = { userId, issueId };
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.token}`,
+      Accept: 'text/plain',
+
+
+      // add Authorization or other headers here if needed
+    });
+    console.log('Assign user body:', body); // Add this to debug
+    return this._HttpClient.post(`${baseUrl}/api/IssueAssignedUser`, body, { headers });
+  }
+
+  removeUserFromIssue(userId: number, issueId: number): Observable<any> {
+    const body = { userId, issueId };
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.token}`,
+      Accept: 'text/plain',
+
+    });
+    console.log('Assign user body:', body); // Add this to debug
+    return this._HttpClient.request('delete', `${baseUrl}/api/IssueAssignedUser`, {
+      body,
+      headers
+    });
+  }
+
+  private assignedUsersMap = new Map<number, User[]>();
+
+  getAssignedUsers(issueId: number): User[] {
+    return this.assignedUsersMap.get(issueId) || [];
+  }
+
+  setAssignedUsers(issueId: number, users: User[]) {
+    this.assignedUsersMap.set(issueId, users);
+  }
+
+  // assignUserToIssue(userId: number, issueId: number): void {
+  //   this._HttpClient.post(`${baseUrl}/api/IssueAssignedUser`, { userId, issueId }, {
+  //     headers: this.headers,
+  //   }).subscribe({
+  //     next: () => {
+  //       this.toastr.success('User assigned successfully');
+  //     },
+  //     error: () => {
+  //       this.toastr.error('Failed to assign user');
+  //     }
+  //   });
+  // }
+  // ///////////////////////////
+
 }
