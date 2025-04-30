@@ -19,7 +19,7 @@ export class CompanyService {
     const searchParam = search ? `search=${encodeURIComponent(search)}` : '';
 
     return this._HttpClient.get(
-      baseUrl + `/api/Tenant?${searchParam}&pageSize=0&pageNumber=1`,
+      baseUrl + `/api/Tenant/tenants?${searchParam}&pageSize=0&pageNumber=1`,
       { headers: this.headers }
     );
   }

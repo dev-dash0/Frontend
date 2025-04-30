@@ -1,0 +1,19 @@
+<div class="stack-container">
+  <div 
+  class="glass-card" 
+  *ngFor="let chart of miniCharts; let i = index" 
+  [style.zIndex]="miniCharts.length - i"
+  [style.top.px]="i * 10"   
+  [style.left.px]="i * 10" 
+  (click)="moveCardToBack(i)"
+  >
+  <div class="chart-card">
+      <!-- <h4 class="mb-4 text- position-absolute top-0 start-0">Issue Overview</h4> -->
+      <canvas #chartCanvas [id]="chart.id"></canvas>
+      <div class="chart-label">
+        <h3>{{ chart.label }}</h3>
+        <p>{{ chart.value }}</p>
+      </div>
+    </div>
+  </div>
+</div>

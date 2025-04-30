@@ -16,7 +16,7 @@ import { IssueModalComponent } from '../issue-modal/issue-modal.component';
 import { SharedDeleteModalComponent } from '../../Shared/delete-modal/delete-modal.component';
 import { ToastrService } from 'ngx-toastr';
 import { SprintService } from '../../Core/Services/sprint.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Sprint } from '../../Core/interfaces/sprint';
 import { SprintModalComponent } from '../sprint-modal/sprint-modal.component';
 import { VisualizationComponent } from '../visualization/visualization.component';
@@ -26,15 +26,15 @@ import { AllIssuesDashboardComponent } from '../all-issues-dashboard/all-issues-
 @Component({
   selector: 'app-project-view',
   standalone: true,
-  imports: [CommonModule, NgFor, AllIssuesDashboardComponent],
+  imports: [CommonModule, NgFor, AllIssuesDashboardComponent, RouterLink],
   templateUrl: './project-view.component.html',
   styleUrl: './project-view.component.css',
 })
 export class ProjectViewComponent {
-  private sidebarService = inject(SidebarService);
   private dialogService = inject(DialogService);
-  private _IssueService = inject(IssueService);
   private dialog = inject(MatDialog);
+  private sidebarService = inject(SidebarService);
+  private _IssueService = inject(IssueService);
   private toastr = inject(ToastrService);
   private readonly _ProjectService = inject(ProjectService);
   private readonly _projectService = inject(ProjectService);

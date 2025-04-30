@@ -18,6 +18,8 @@ import { AllcompaniesComponent } from './Components/allcompanies/allcompanies.co
 import { ErrorpageComponent } from './Components/errorpage/errorpage.component';
 import { PinnedComponent } from './Components/pinned/pinned.component';
 import { AllProjectsComponent } from './Components/all-projects/all-projects.component';
+import { ProjectOverViewComponent } from './Components/project-over-view/project-over-view.component';
+import { AllIssuesDashboardComponent } from './Components/all-issues-dashboard/all-issues-dashboard.component';
 
 export const routes: Routes = [
   { path: 'welcome', component: WelcomePageComponent, title: 'Welcome' },
@@ -50,49 +52,77 @@ export const routes: Routes = [
     component: MainLayoutComponent,
     canActivate: [authGuardGuard],
     children: [
+      //   {
+      //     path: 'MyDashboard',
+      //     component: ProjectOverViewComponent,
+      //     title: 'My Dashboard',
+      //   },
+      //   {
+      //     path: 'Issues',
+      //     component: AllIssuesDashboardComponent,
+      //     title: 'My Dashboard',
+      //   },
+      // ],
+      // },
       {
-        path: 'MyDashboard',
-        component: MyDashboardComponent,
-        title: 'My Dashboard',
+        path: '',
+        component: MainLayoutComponent,
+        canActivate: [authGuardGuard],
         children: [
           {
-            path: '',
-            component: DashboardComponent,
-            pathMatch: 'full',
-            title: 'Dashboard',
+            path: 'MyDashboard',
+            component: MyDashboardComponent,
+            title: 'My Dashboard',
+            children: [
+              {
+                path: '',
+                component: DashboardComponent,
+                pathMatch: 'full',
+                title: 'Dashboard',
+              },
+              {
+                path: 'Dashboard',
+                component: DashboardComponent,
+                title: 'Dashboard',
+              },
+              // {
+              //   path: 'Project/:id',
+              //   component: ProjectViewComponent,
+              //   title: 'Project',
+              // },
+              {
+                path: 'Project/:id',
+                component: ProjectOverViewComponent,
+                title: 'Project',
+              },
+              {
+                path: 'Setting',
+                component: SettingComponent,
+                title: 'Settings',
+              },
+              {
+                path: 'Sprint/:id',
+                component: SprintViewComponent,
+                title: 'Sprint',
+              },
+              {
+                path: 'Company/:id',
+                component: CompanyViewComponent,
+                title: 'Company',
+              },
+              {
+                path: 'allcompanies',
+                component: AllcompaniesComponent,
+                title: 'All Companies',
+              },
+              {
+                path: 'allProjects',
+                component: AllProjectsComponent,
+                title: 'All Projects',
+              },
+              { path: 'Pinned', component: PinnedComponent, title: 'Pinned' },
+            ],
           },
-          {
-            path: 'Dashboard',
-            component: DashboardComponent,
-            title: 'Dashboard',
-          },
-          {
-            path: 'Project/:id',
-            component: ProjectViewComponent,
-            title: 'Project',
-          },
-          { path: 'Setting', component: SettingComponent, title: 'Settings' },
-          {
-            path: 'Sprint/:id',
-            component: SprintViewComponent,
-            title: 'Sprint',
-          },
-          {
-            path: 'Company/:id',
-            component: CompanyViewComponent,
-            title: 'Company',
-          },
-          {
-            path: 'allcompanies',
-            component: AllcompaniesComponent,
-            title: 'All Companies',
-          },
-          {
-            path: 'allProjects',
-            component: AllProjectsComponent,
-            title: 'All Projects',
-          },
-          { path: 'Pinned', component: PinnedComponent, title: 'Pinned' },
         ],
       },
     ],
