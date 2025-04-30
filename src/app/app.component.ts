@@ -16,6 +16,7 @@ import { SigninComponent } from './Components/signin/signin.component';
 import { SignupComponent } from './Components/signup/signup.component';
 import { UpdateInfoComponent } from './Components/update-info/update-info.component';
 import { WelcomePageComponent } from './Components/welcome-page/welcome-page.component';
+import { ProjectOverViewComponent } from "./Components/project-over-view/project-over-view.component";
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,8 @@ import { WelcomePageComponent } from './Components/welcome-page/welcome-page.com
     MatButtonModule,
     MatDividerModule,
     MatIconModule,
-  ],
+    ProjectOverViewComponent
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

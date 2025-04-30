@@ -47,6 +47,14 @@ export class PinnedComponent {
   private readonly _toaster = inject(ToastrService);
   private readonly _router = inject(Router);
 
+  ngOnInit(): void {
+    this.sidebarService.isCollapsed$.subscribe((collapsed) => {
+      this.isSidebarCollapsed = collapsed;
+    });
+    this.GetPinnedProjects();
+    this.getPinnedTenants();
+  }
+
   showSuccess() {
     this._toaster.success(
       'The Project has been Pinned',
@@ -136,7 +144,7 @@ export class PinnedComponent {
   NavigateProject(ProjectId: number) {
     this._router.navigate(['/MyDashboard/Project', ProjectId]);
   }
-  NavigateTenant(TenantId : number) {
+  NavigateTenant(TenantId: number) {
     this._router.navigate(['/MyDashboard/Company', TenantId]);
   }
 
@@ -149,14 +157,6 @@ export class PinnedComponent {
         this.IssueCurrentIndex = 0;
       },
     });
-  }
-
-  ngOnInit(): void {
-    this.sidebarService.isCollapsed$.subscribe((collapsed) => {
-      this.isSidebarCollapsed = collapsed;
-    });
-    this.GetPinnedProjects();
-    this.getPinnedTenants();
   }
 
   //---------- project details

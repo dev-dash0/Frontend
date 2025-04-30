@@ -16,14 +16,17 @@
               </div>
               <hr />
               <div class="content">
-                <div class="profile d-flex align-items-center gap-2">
-                  <img src="assets/images/scrum master profile photo.svg" alt="scrum master profile icon" />
-                  <div class="scrum-master-headar">
-                    <h3 class="mb-0">John Smith</h3>
-                    <p class="m-0 p-0">Scrum Master</p>
+                <div class="project-details d-flex align-items-center gap-2">
+                  <!-- <div class="header">
+                     <div class="d-flex justify-content-between align-items-center">
+                      <h3 class="mb-0">{{ ProjectDetails?.name }} <small class="text-muted">({{ ProjectDetails?.projectCode }})</small></h3>
+                      <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">{{ ProjectDetails?.status }}</span>
+                    </div>
+                  </div> -->
+                  <div class="btn btn-outline-light" routerLink="/MyDashboard/projectOverView">Go to ProjectOver View
                   </div>
                 </div>
-                <div class="contact mt-2">
+                <!-- <div class="contact mt-2">
                   <h4>Contact Info</h4>
                   <div class="email d-flex align-items-center gap-1 mb-2">
                     <img src="assets/images/Email.svg" alt="" />
@@ -40,7 +43,7 @@
                     <img src="assets/images/WhatsApp.svg" alt="" />
                     <p class="m-0 p-0">WhatsApp: 01036411895</p>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>

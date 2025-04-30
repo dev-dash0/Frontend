@@ -3,6 +3,10 @@
 }
 
 /* === Total Issues === */
+.totalIssues{
+  transition: all 1s;
+}
+
 .totalIssues h3,
 .totalIssues h5 {
   font-weight: 600;
@@ -10,7 +14,6 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-fill-color: transparent;
 }
 
 .totalIssues h3:hover {
@@ -18,13 +21,12 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-fill-color: transparent;
 }
 
 /* === Completed Issues === */
 .completed {
   color: #0EEADE;
-  transition: all 1.5s;
+  transition: all 1s;
 }
 
 .completed h3:hover {
@@ -34,7 +36,7 @@
 /* === In Progress Issues === */
 .inProgress {
   color: #B926E7;
-  transition: all 1.5s;
+  transition: all 1s;
 }
 
 .inProgress h3:hover {
@@ -44,11 +46,18 @@
 /* === Overdue Issues === */
 .overdue {
   color: #FF5154;
-  transition: all 1.5s;
+  transition: all 1s;
 }
 
 .overdue h3:hover {
   color: #7f83e9;
+}
+
+.totalIssues:hover,
+.completed:hover,
+.inProgress:hover,
+.overdue:hover{
+  transform: translateY(-10px);
 }
 
 /* === Chart Card Styling === */

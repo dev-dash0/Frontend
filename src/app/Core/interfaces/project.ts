@@ -63,3 +63,31 @@ export interface UserProject {
     role: string;
     joinedDate: string;
 }
+
+
+export interface fetchedProject {
+  statusCode: number;
+  isSuccess: boolean;
+  errorMessages: any[];
+  result: fetchedProjectDetails;
+}
+
+export interface fetchedProjectDetails {
+  id: number;
+  name: string;
+  description: string;
+  projectCode: string;
+  startDate: string;
+  endDate: string;
+  creationDate: string;
+  priority: string;
+  status: string;
+  tenantId: number;
+  creatorId: number;
+  tenant: ProjectTenant;
+  creator: Creator;
+  userProjects: UserProject[];
+  role: string;
+}
+
+

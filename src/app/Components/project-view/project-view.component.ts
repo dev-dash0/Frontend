@@ -5,6 +5,7 @@ import { SidebarService } from '../../Core/Services/sidebar.service';
 import { CommonModule, NgFor } from '@angular/common';
 import { ProjectService } from '../../Core/Services/project.service';
 import {
+  fetchedProjectDetails,
   ProjectOwner,
   ProjectResult,
   UserProject,
@@ -15,26 +16,26 @@ import { IssueModalComponent } from '../issue-modal/issue-modal.component';
 import { SharedDeleteModalComponent } from '../../Shared/delete-modal/delete-modal.component';
 import { ToastrService } from 'ngx-toastr';
 import { SprintService } from '../../Core/Services/sprint.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Sprint } from '../../Core/interfaces/sprint';
 import { SprintModalComponent } from '../sprint-modal/sprint-modal.component';
-import { VisualizationComponent } from "../visualization/visualization.component";
-import { AllProjectsDashboardComponent } from "../all-projects-dashboard/all-projects-dashboard.component";
-import { AllIssuesDashboardComponent } from "../all-issues-dashboard/all-issues-dashboard.component";
+import { VisualizationComponent } from '../visualization/visualization.component';
+import { AllProjectsDashboardComponent } from '../all-projects-dashboard/all-projects-dashboard.component';
+import { AllIssuesDashboardComponent } from '../all-issues-dashboard/all-issues-dashboard.component';
 import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-users-to-issue.component';
 
 @Component({
   selector: 'app-project-view',
   standalone: true,
-  imports: [CommonModule, NgFor, AllIssuesDashboardComponent],
+  imports: [CommonModule, NgFor, AllIssuesDashboardComponent, RouterLink],
   templateUrl: './project-view.component.html',
   styleUrl: './project-view.component.css',
 })
 export class ProjectViewComponent {
-  private sidebarService = inject(SidebarService);
   private dialogService = inject(DialogService);
-  private _IssueService = inject(IssueService);
   private dialog = inject(MatDialog);
+  private sidebarService = inject(SidebarService);
+  private _IssueService = inject(IssueService);
   private toastr = inject(ToastrService);
   private readonly _ProjectService = inject(ProjectService);
   private readonly _projectService = inject(ProjectService);
@@ -53,7 +54,8 @@ export class ProjectViewComponent {
   // showBacklog: boolean = true;
   backlogIssues: Issue[] = [];
   isSidebarCollapsed = true;
-  ProjectsList: ProjectResult[] = [];
+  ProjectsList: any = '';
+  ProjectDetails?: fetchedProjectDetails;
 
   priorityConfig: any = {
     Critical: {
@@ -168,12 +170,14 @@ export class ProjectViewComponent {
 
   // Projects Api
   GetProjectData() {
-    this._ProjectService.getProjectData(this.ProjectId).subscribe({
+    const ProjectId = this.route.snapshot.paramMap.get('id');
+    this._projectService.getProject(ProjectId).subscribe({
       next: (res) => {
-        console.log(res);
-        this.ProjectsList = res.result;
-        this.Owner = res.result.owner;
-      },
+        console.log('Project fetched:', res);
+        this.ProjectDetails = res.result;
+      }, error: (err) => {
+        console.log(err)
+      }
     });
   }
 
