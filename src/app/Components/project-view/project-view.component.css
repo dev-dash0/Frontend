@@ -47,11 +47,11 @@ button:hover {
   width: 300px;
 }
 
-/* .header {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-} */
+}
 
 .issue-item {
   /* display: flex;
@@ -316,11 +316,3 @@ button:hover {
   text-align: center;
   box-shadow: 0 0 12px rgba(10, 85, 255, 0.5);
 }
-
-
-
-
-
-
-
-

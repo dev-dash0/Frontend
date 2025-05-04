@@ -1,108 +1,108 @@
 <!-- <div class="project-view-container w-100"> -->
 
-  <!-- Main Content -->
-  <main class="project-main-content w-100 BG" [ngClass]="{ expand: isSidebarCollapsed }">
-    <!-- Project Header Section -->
-    <section class="project-header mt-2 mb-5">
-      <div class="project-meta">
-        <h1 class="project-title mt-3 mb-4 display-3">{{ProjectDetails?.name}}</h1>
-        <p class="text-white-50">{{ProjectDetails?.description}}</p>
-        <div class="project-details">
-          <span class="company-badge tenant-badge">Company: {{ProjectDetails?.tenant?.name}}</span>
-          <span class="status-badge status-active">Status: {{ProjectDetails?.status}}</span>
-          <span class="priority-badge priority-high">Priority: {{ProjectDetails?.priority}}</span>
-        </div>
-        <div class="project-timeline">
-          <span class="date-badge">Start: {{ProjectDetails?.startDate}}</span>
-          <span class="date-badge">End: {{ProjectDetails?.endDate}}</span>
-          <!-- <span class="tenant-badge">Tenant: North America</span> -->
+<!-- Main Content -->
+<main class="project-main-content w-100 BG" [ngClass]="{ expand: isSidebarCollapsed }">
+  <!-- Project Header Section -->
+  <section class="project-header mt-2 mb-5">
+    <div class="project-meta">
+      <h1 class="project-title mt-3 mb-4 display-3">{{ProjectDetails?.name}}</h1>
+      <p class="text-white-50">{{ProjectDetails?.description}}</p>
+      <div class="project-details">
+        <span class="company-badge tenant-badge">Company: {{ProjectDetails?.tenant?.name}}</span>
+        <span class="status-badge status-active">Status: {{ProjectDetails?.status}}</span>
+        <span class="priority-badge priority-high">Priority: {{ProjectDetails?.priority}}</span>
+      </div>
+      <div class="project-timeline">
+        <span class="date-badge" *ngIf="ProjectDetails?.startDate">Start: {{ProjectDetails?.startDate}}</span>
+        <span class="date-badge" *ngIf="ProjectDetails?.endDate">End: {{ProjectDetails?.endDate}}</span>
+        <!-- <span class="tenant-badge">Tenant: North America</span> -->
+      </div>
+    </div>
+    @if (isOwner) {
+    <div class="project-actions mt-3">
+      <button class="action-btn pin-btn" (click)="TogglePin(ProjectDetails!, $event)">
+        @if (isPinned) {
+        UnPin
+        }
+        Pin
+      </button>
+      <button class="action-btn edit-btn">Edit Project</button>
+      <button class="action-btn archive-btn">Archive</button>
+    </div>
+    }
+  </section>
+
+  <!-- Dashboard Cards -->
+  <section class="project-dashboard">
+    <!-- Members Card -->
+    <div class="dashboard-card members-card ">
+      <div class="card-header">
+        <h3>Team Members</h3>
+        <!-- <button class="card-action-btn ">+ Add</button> -->
+        <div class="add-issue-btn ms-1">
+          <span class="plus-icon"> <img src="/assets/images/Plus.svg" alt="plus" />
+          </span> Add
         </div>
       </div>
-      @if (isOwner) {
-        <div class="project-actions mt-3">
-          <button class="action-btn pin-btn" (click)="TogglePin(ProjectDetails!, $event)">
-            @if (isPinned) {
-              UnPin
-            }
-            Pin
-          </button>
-          <button class="action-btn edit-btn">Edit Project</button>
-          <button class="action-btn archive-btn">Archive</button>
-        </div>
-      }
-    </section>
-
-    <!-- Dashboard Cards -->
-    <section class="project-dashboard">
-      <!-- Members Card -->
-      <div class="dashboard-card members-card ">
-        <div class="card-header">
-          <h3>Team Members</h3>
-          <button class="card-action-btn">+ Add</button>
-        </div>
-        <div class="card-content">
-          <!-- Member list would go here -->
-          @for (item of ProjectDetails?.userProjects; track $index) {
-            <div class="member-item">
-              <img src="assets/user1.jpg" alt="Member" class="member-avatar" />
-              <!-- <span>{{item.}}</span> -->
-            </div>
+      <div class="card-content">
+        <!-- Member list would go here -->
+        @for (item of ProjectDetails?.tenant?.joinedUsers; track $index) {
+        <div class="member-item me-4 p-2 my-0">
+          @if (item.imageUrl) {
+          <img [src]="item.imageUrl" alt="Member" class="member-avatar" />
+          }@else {
+          <img src="assets/images/user-img-not-found.jpg" class="member-avatar" alt="user image not found">
           }
-          <div class="member-item">
-            <img src="assets/user2.jpg" alt="Member" class="member-avatar" />
-            <span>Jane Smith</span>
-          </div>
+          <span class="text-capitalize">{{item.firstName}} {{item.lastName}}</span>
+        </div>
+        <!-- <div class="divider my-0"></div> -->
+        }
+      </div>
+    </div>
+
+    <!-- Sprint Card -->
+    <div class="dashboard-card sprint-card">
+      <div class="card-header">
+        <h3>Sprints</h3>
+        <!-- <button class="card-action-btn" (click)="openSprint()">Create</button> -->
+        <div class="add-issue-btn ms-1" (click)="openSprint()">
+          <span class="plus-icon"> <img src="/assets/images/Plus.svg" alt="plus" />
+          </span> Create
         </div>
       </div>
-
-      <!-- Sprint Card -->
-      <div class="dashboard-card sprint-card">
-        <div class="card-header">
-          <h3>Sprints</h3>
-          <button class="card-action-btn" (click)="openSprint()">Create</button>
-        </div>
-        <div class="card-content">
-            @for(sprint of sprintDetails ; track sprint.id) {
-              <div class="sprint d-flex justify-content-center flex-column">
-                <div class="Name d-flex justify-content-between align-items-center" (click)="viewSprint(sprint.id)" >
-                  <h3 (click)="viewSprint(sprint.id)">{{ sprint.title }}</h3>
-                  <i class="fa fa-solid-arrow fs-5 px-3"></i>
-                </div>
-                <div class="sprint-progress">
-                  <div class="progress-bar" style="width: 65%"></div>
-                  <!-- [ngClass]="{ width: issuesCompleted }" -->
-                </div>
-                <div class="sprint-details d-flex justify-content-between">
-                  <div class="dates">
-                    <p class="p-0 m-0 sprint-dates">Starts at {{ sprint.startDate }}</p>
-                    <p class="p-0 m-0 sprint-dates">Ends at {{ sprint.endDate }}</p>
-                  </div>
-                  <div class="sprint-stats d-flex flex-column">
-                    <span>{{ sprint.issues.length }} Tasks</span>
-                    <span>8 Completed</span>
-                  </div>
-                  <!-- <p>{{ sprint.issues.length }} Issues</p> -->
-                </div>
-              </div>
-              <hr />
-            }
+      <div class="card-content">
+        @for(sprint of sprintDetails ; track sprint.id) {
+        <div class="sprint d-flex justify-content-center flex-column me-4 p-2 my-1">
+          <div class="Name d-flex justify-content-between align-items-center" (click)="viewSprint(sprint.id)">
+            <h3 (click)="viewSprint(sprint.id)">{{ sprint.title }}</h3>
+            <i class="fa fa-solid-arrow fs-5 px-3"></i>
+          </div>
           <div class="sprint-progress">
             <div class="progress-bar" style="width: 65%"></div>
+            <!-- [ngClass]="{ width: issuesCompleted }" -->
           </div>
-          <div class="sprint-dates">Apr 15 - Apr 29, 2025</div>
-          <div class="sprint-stats">
-            <span>12 Tasks</span>
-            <span>8 Completed</span>
+          <div class="sprint-details d-flex justify-content-between">
+            <div class="dates">
+              <p class="p-0 m-0 sprint-dates">Starts at {{ sprint.startDate }}</p>
+              <p class="p-0 m-0 sprint-dates">Ends at {{ sprint.endDate }}</p>
+            </div>
+            <div class="sprint-stats d-flex flex-column">
+              <span>{{ sprint.issues.length }} Tasks</span>
+              <span>8 Completed</span>
+            </div>
+            <!-- <p>{{ sprint.issues.length }} Issues</p> -->
           </div>
         </div>
+        <!-- <hr /> -->
+        <!-- <div class="divider my-1"></div> -->
+        }
       </div>
-      <div class="charts dashboard-card">        
-        <app-all-issues-dashboard
-        [projectId]="ProjectId"
-        ></app-all-issues-dashboard>
-      </div>
+    </div>
+    <div class="charts dashboard-card">
+      <app-all-issues-dashboard [projectId]="ProjectId"></app-all-issues-dashboard>
+    </div>
 
-      <!-- <div class="stack-container mb-3">
+    <!-- <div class="stack-container mb-3">
         <div
           class="glass-card"
           *ngFor="let card of cards; let i = index"
@@ -117,94 +117,51 @@
         </div>
       </div> -->
 
-      <div class="dashboard-card backlog-card">
-        <div class="card-header">
-          <h3>Backlog</h3>
-          <div class="card-actions">
-            <button class="card-action-btn">Filter</button>
-            <button class="card-action-btn" (click)="openCreateIssue()">+ Create Issue</button>
-          </div>
-        </div>
-        <div class="card-content">
-          <!-- Backlog items would go here -->
-            <div
-            *ngFor="let issue of backlogIssues"
-            class="issue-item"
-            (dblclick)="loadIssue(issue.id)"
-          >
-            <div class="issue-details">
-              <div class="issue-details">
-                <h4
-                  class="text-capitalize cursor-pointer backlog-issue-title"
-                  (click)="loadIssue(issue.id)"
-                >
-                  {{ issue.title }}
-                </h4>
-                <span class="label">Label</span>
-                <span class="label">Label</span>
-              </div>
-              <div class="">
-                <div class="delete d-flex justify-content-end">
-                  <span
-                    class="px-3 py-2 cursor-pointer"
-                    (click)="openDeleteIssueModal(issue.id, issue.title)"
-                  >
-                    <i
-                      class="fa-solid fa-trash"
-                      style="color: #d02705"
-                    ></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div
-              class="d-flex justify-content-between align-items-center"
-            >
-              <div class="priority">
-                <i class="icon-flag"></i>
-                <div class="priority">
-                  <img
-                    [src]="getPriorityIcon(issue.priority)"
-                    alt="Priority Icon"
-                    class="priority-icon"
-                  />
-                  <span [ngStyle]="getPriorityStyle(issue.priority)">{{
-                    issue.priority
-                  }}</span>
-                </div>
-              </div>
-              <div class="issue-meta">
-                <!-- <div class="avatars">
-                  <img *ngFor="let user of issue.createdBy?.imageUrl" [src]="user.avatarUrl" class="avatar" />
-                </div> -->
-                <span class="created-by">Created by : </span>
-
-                <img
-                  src="{{ issue.createdBy?.imageUrl }}"
-                  class="avatar"
-                  alt="Created by"
-                />
-
-                <span class="dates"
-                  >{{ issue.startDate | date : "d MMM" }} |
-                  {{ issue.deadline | date : "d MMM" }}</span
-                >
-              </div>
-            </div>
-          </div>
-          <div class="backlog-item high-priority-backlog">
-            <span>[BUG] Login page not loading</span>
-            <span>Due: Today</span>
-          </div>
-          <div class="backlog-item medium-priority-backlog">
-            <span>[FEATURE] Dark mode toggle</span>
-            <span>Due: May 10</span>
+    <div class="dashboard-card backlog-card">
+      <div class="card-header">
+        <h3>Backlog</h3>
+        <div class="card-actions d-flex justify-content-end">
+          <button class=" add-issue-btn">Filter</button>
+          <div class="add-issue-btn ms-1" (click)="openCreateIssue()">
+            <span class="plus-icon"> <img src="/assets/images/Plus.svg" alt="plus" />
+            </span> Add Issue
           </div>
         </div>
       </div>
-    </section>
+      <div class="card-content ">
+        <!-- Backlog items would go here -->
+        <div *ngFor="let issue of backlogIssues" class="backlog-item" [ngStyle]="getPriorityBorderStyle(issue.priority)"
+          (dblclick)="loadIssue(issue.id)">
+          <div class="issue-details">
+            <div class="issue-details">
+              <p class="text-capitalize cursor-pointer backlog-issue-title m-0 " (click)="loadIssue(issue.id)">{{
+                issue.title }}</p>
+              <span class="dates text-uppercase">[ {{issue.type}} ]</span>
+              <!-- <span class="label">Label</span> -->
+            </div>
+            <div class="d-flex justify-content-end ">
+              @if (issue.deadline) {
+              <div class="issue-meta">
+                <span class="dates">Due : {{ issue.deadline | date: 'MMM d'
+                  }}</span>
+              </div>
+              }
 
-    <!-- Gradient Fade -->
-    <div class="gradient-fade"></div>
-  </main>
+              <div class="delete d-flex justify-content-end">
+                <span class="px-3  cursor-pointer" (click)="openDeleteIssueModal(issue.id,issue.title)">
+                  <i class="fa-solid fa-trash " style="color: #D02705"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Gradient Fade -->
+  <div class="gradient-fade"></div>
+</main>
 <!-- </div> -->
