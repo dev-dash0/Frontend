@@ -11,9 +11,9 @@
         <span class="position-relative">
           <i class="fa-regular fa-comment-dots fa-lg"></i>
         </span>
-        <span class="position-relative">
-          <i class="fa-regular fa-bell fa-lg"></i>
-          <span class="badge">1</span>
+        <span class="position-relative notification-wrapper" (click)="togglePanel()">
+          <i class="fa-regular fa-bell fa-lg notification-icon"></i>
+          <span class="badge">{{notifications.length}}</span>
         </span>
 
         <div class="profile">
@@ -52,6 +52,26 @@
         } @else {
         <img src="assets/images/tdesign_mode-dark.svg" alt="" /> }
       </button>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div class="notification-panel" [class.visible]="showPanel">
+    <div class="notification-arrow"></div>
+
+    <div class="notification" *ngFor="let notify of notifications">
+      <div class="notify-header">
+          <!-- <h4>{{ notify.title }}</h4> -->
+          <p>{{ notify.message }}</p>
+        </div>
+
+        <div class="notify-footer">
+          <div class="sender-info">
+            <img [src]="NotifyUser.imageUrl" alt="User" />
+            <span>{{ NotifyUser.firstName }}</span>
+          </div>
+          <span class="notify-date">{{ notify.createdAt }}</span>
+        </div>
     </div>
   </div>
 </div>
