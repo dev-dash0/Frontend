@@ -20,11 +20,13 @@ import { SharedDeleteModalComponent } from '../../Shared/delete-modal/delete-mod
 import { Sprint } from '../../Core/interfaces/sprint';
 import { Issue } from '../../Core/interfaces/Dashboard/Issue';
 import { PinnedService } from '../../Core/Services/pinned.service';
+import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-users-to-issue.component';
+import { SigninSignupNavbarComponent } from "../../Shared/signin-signup-navbar/signin-signup-navbar.component";
 
 @Component({
   selector: 'app-project-over-view',
   standalone: true,
-  imports: [AllIssuesDashboardComponent, CommonModule],
+  imports: [AllIssuesDashboardComponent, CommonModule, SigninSignupNavbarComponent, AssignUsersToIssueComponent],
   templateUrl: './project-over-view.component.html',
   styleUrl: './project-over-view.component.css',
 })
@@ -33,6 +35,7 @@ export class ProjectOverViewComponent {
   isSidebarCollapsed = true;
   isMenuOpen = true;
   parentActiveCard: number = 0;
+  projectIdNum!: number;//for issue-apis usage
   ProjectId: any = 0;
   ProjectDetails?: fetchedProjectDetails;
   ProjectMembers: ProfileData[] = [];
@@ -42,13 +45,13 @@ export class ProjectOverViewComponent {
   backlogIssues: Issue[] = [];
   issuesCompleted: string | number = '';
   isPinned = false;
-
+  issueLabelsList = [];
   priorityConfig: any = {
     Critical: {
       icon: 'assets/images/Issue Priorities/urgent.svg',
-      color: '#D02705',
+      color: '#F44336',
     }, // Red
-    High: { icon: 'assets/images/Issue Priorities/high.svg', color: '#D07805' }, // Orange
+    High: { icon: 'assets/images/Issue Priorities/high.svg', color: '#FFC107' }, // Orange
     Medium: {
       icon: 'assets/images/Issue Priorities/normal.svg',
       color: '#4854F1',
@@ -81,10 +84,9 @@ export class ProjectOverViewComponent {
     this.getPinnedProjects();
 
     // Listen for new issue events and refresh backlog
-    this._IssueService.issueCreated$.subscribe(() => {
-      console.log('New issue created! Refreshing backlog...');
-      this.fetchBacklogIssues();
-    });
+    this.RefreshBacklogAfterAddingIssue();
+    // Get Project id from url
+    this.getProjectId()  //for issue 
 
     this._sprintService.sprintCreated$.subscribe(() => {
       this.getAllSprints();
@@ -116,7 +118,7 @@ export class ProjectOverViewComponent {
   // --------------------------------------------------
   // modals
   openCreateIssue() {
-    this.dialogService.openIssueModal(6);
+    this.dialogService.openIssueModal(this.projectIdNum);
   }
   openIssueView(issueId: number) {
     this.dialogService.openIssueViewModal(issueId);
@@ -221,9 +223,12 @@ export class ProjectOverViewComponent {
 
   // ---------------------------------------------------
 
+  // ---------------------------------------------------
+
   // issues Api
   fetchBacklogIssues(): void {
-    this._IssueService.getBacklogIssues(6, 0, 1).subscribe({
+    console.log('Fetching backlog issues for project ID:', this.projectIdNum);
+    this._IssueService.getBacklogIssues(this.projectIdNum, 0, 1).subscribe({
       next: (res) => {
         if (res.isSuccess) {
           console.log(res);
@@ -239,17 +244,41 @@ export class ProjectOverViewComponent {
   loadIssue(issueId: number): void {
     this._IssueService.getIssueById(issueId).subscribe({
       next: (res) => {
-        console.log('Issue fetched:', res);
-        this.issue = res;
+        // console.log('Issue fetched:', res);
+        // this.issue = res;
         this.openIssueView(issueId);
+        this.isModalOpen = true;
+
+        // بعد ما المودال يفتح (يمكن تستخدم setTimeout لتأخير بسيط لو حصل تأخير في انشاء الـ ViewChild)
+        setTimeout(() => {
+          if (this.assignUsersComp) {
+            this.assignUsersComp.loadAssignedUsers();
+          }
+        }, 0);
       },
       error: (err) => {
         console.error('Error fetching issue:', err);
       },
     });
   }
+  @ViewChild(AssignUsersToIssueComponent) assignUsersComp!: AssignUsersToIssueComponent;
+  isModalOpen: boolean = false;
 
+  // *************Issue From issue-api**********************
+  getProjectId() {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.projectIdNum = +id;
+        this.fetchBacklogIssues();
+      }
+    });
+  }
+
+  RefreshBacklogAfterAddingIssue() {
+  }
   // ---------------------------------------------------
+
 
   // Sprints Api
   getAllSprints() {
@@ -306,6 +335,13 @@ export class ProjectOverViewComponent {
   getPriorityIcon(priority: string) {
     return this.priorityConfig[priority]?.icon || 'assets/icons/default.svg'; // Default icon
   }
+  getPriorityBorderStyle(priority: string) {
+    const color = this.priorityConfig[priority]?.color || 'transparent';
+    return {
+      borderLeft: `6px solid ${color}`,
+    };
+  }
+
 
   // -----------------------------------------------------------
   // pin & unpin

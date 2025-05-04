@@ -41,3 +41,36 @@
     padding: 0 10px !important;
     color: #91A0C0 !important;
 }
+
+/* UPload */
+.choose-file-btn {
+    transition: all 0.3s ease;
+    /* border: 2px dashed #6c63ff; */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    /* background-color: #252748; */
+    color: white;
+
+    &:hover {
+        /* background-color: #4949d0; */
+        /* transform: scale(1.03); */
+        /* box-shadow: 0 0 10px #6c63ff66; */
+    }
+
+    &.file-selected {
+        border-color: #4c78af;
+        background-color: #191b362b;
+        color: #4c78af;
+    }
+
+    img {
+        transition: transform 0.3s ease;
+    }
+
+    &:hover img {
+        transform: rotate(10deg) scale(1.1);
+    }
+}
+
+/* //////// */

@@ -28,15 +28,19 @@
   font-weight: 600;
 }
 
-.project-details, .project-timeline {
+.project-details,
+.project-timeline {
   display: flex;
   gap: 1rem;
   margin: 0.5rem 0;
   flex-wrap: wrap;
 }
 
-.company-badge, .status-badge, .priority-badge, 
-.date-badge, .tenant-badge {
+.company-badge,
+.status-badge,
+.priority-badge,
+.date-badge,
+.tenant-badge {
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.9rem;
@@ -74,7 +78,7 @@
 .company-badge:hover,
 .status-active:hover,
 .priority-high:hover,
-.date-badge:hover{
+.date-badge:hover {
   transform: translateY(-10px);
 }
 
@@ -108,7 +112,9 @@
   transition: all 0.3s ease;
 }
 
-.edit-btn:hover,.pin-btn:hover,.archive-btn:hover{
+.edit-btn:hover,
+.pin-btn:hover,
+.archive-btn:hover {
   transform: translateY(-10px);
   transform: scale(1.1);
 }
@@ -123,7 +129,10 @@
 }
 
 .dashboard-card {
-  background: rgba(255, 255, 255, 0.1);
+  /* background: rgba(255, 255, 255, 0.1); */
+  background: rgba(90, 115, 195, 0.1);
+  /* background: var(--glassGradient); */
+  /* border-radius: var(--secondRoundness); */
   backdrop-filter: blur(10px);
   border-radius: 15px;
   padding: 1.5rem;
@@ -135,7 +144,7 @@
 
 .dashboard-card:hover {
   transform: translateY(-5px);
-  box-shadow:12px 12px 28px 0 #4a314c;
+  box-shadow: 12px 12px 28px 0 #4a314c;
 }
 
 .card-header {
@@ -152,7 +161,8 @@
 
 .card-content {
   max-height: 300px;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
+  overflow-x: hidden;
 }
 
 .card-action-btn {
@@ -190,11 +200,11 @@
   align-items: center;
   gap: 1rem;
   padding: 0.75rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(180, 189, 213, 0.1);
   transition: all 0.3s ease;
 }
 
-.member-item :hover{
+.member-item :hover {
   background-color: #4a314c76;
 }
 
@@ -205,14 +215,15 @@
   object-fit: cover;
 }
 
-.sprint{
+.sprint {
+  border-bottom: 1px solid rgba(180, 189, 213, 0.1);
   transition: all 0.3s ease;
 }
 
-.sprint:hover{
-    background-color: #4a314c76;
-    border-radius: 15px;
-    transform: translateY(-5px);
+.sprint:hover {
+  background-color: #4a314c76;
+  border-radius: 15px;
+  transform: translateY(-5px);
 }
 
 .sprint-progress {
@@ -241,9 +252,9 @@
 }
 
 .backlog-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem;
+  /* display: flex; */
+  /* justify-content: space-between; */
+  padding: 0.5rem;
   margin: 0.5rem 0;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
@@ -254,7 +265,11 @@
   /* background: rgba(255, 255, 255, 0.1); */
   background-color: #4a314c76;
   transform: translateY(-5px);
-  transform: scale(1.01);
+  transform: scale(1.005);
+  border-radius: 16px;
+  border-left: 10px;
+
+
 }
 
 .high-priority-backlog {
@@ -279,8 +294,15 @@
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Responsive Adjustments */
@@ -288,8 +310,9 @@
   .project-dashboard {
     grid-template-columns: 1fr;
   }
-  
-  .members-card, .sprint-card {
+
+  .members-card,
+  .sprint-card {
     grid-column: span 1;
   }
 
@@ -299,36 +322,59 @@
 
 
 
-.stack-container {
-  position: relative;
-  width: 400px; /* Adjust size */
-  height: 500px; /* Adjust size */
-  margin: auto;
+  .stack-container {
+    position: relative;
+    width: 400px;
+    /* Adjust size */
+    height: 500px;
+    /* Adjust size */
+    margin: auto;
+  }
+
+  .glass-card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.5s ease;
+  }
+
+  .glass-card:hover {
+    transform: scale(1.02);
+  }
+
+
 }
 
-.glass-card {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+/* ////////////////////////////////////// */
+.backlog-container {
+  background: #0b1522;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  width: 300px;
+}
+
+.header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  cursor: pointer;
-  transition: all 0.5s ease;
 }
-
-.glass-card:hover {
-  transform: scale(1.02);
-}
-
 
 .issue-item {
+  /* display: flex;
+  justify-content: space-between;
+  align-items: center; */
+
   background-color: rgba(57, 73, 118, 0.1);
   padding: 8px;
   margin-top: 8px;
@@ -341,6 +387,14 @@
   justify-content: space-between;
   gap: 8px;
 }
+
+/* .label {
+  background: #7979a3;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-size: 12px;
+} */
 
 .priority {
   display: flex;
@@ -369,7 +423,7 @@
 
 .dates,
 .created-by {
-  font-size: 14px;
+  /* font-size: 14px; */
   color: #948ad9;
   /* color: #7b86e8; */
 }
@@ -404,5 +458,47 @@
 }
 
 /* ////////////////////////// */
+/* add button */
+.add-issue-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #2286f1, #0056b3);
+  /* background: linear-gradient(135deg, #2d4e9c, #162571); */
+  /* background: linear-gradient(135deg, #4a314cdc, #43164776); */
 
+
+  color: rgb(201, 221, 251);
+  border: none;
+  padding: 6px 12px;
+  margin-block: 15px;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  width: fit-content;
+  -webkit-user-select: none;
+  user-select: none;
 }
+
+.add-issue-btn .plus-icon {
+  display: inline-block;
+  font-size: 14px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.add-issue-btn:hover .plus-icon {
+  transform: rotate(90deg);
+}
+
+.add-issue-btn:hover {
+  transform: scale(1.02);
+  animation: glow 1.5s infinite alternate;
+  /* box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1); */
+}
+
+
+
+/* ============================================================ */
