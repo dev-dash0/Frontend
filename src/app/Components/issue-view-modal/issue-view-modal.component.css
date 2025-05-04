@@ -20,7 +20,12 @@
 }
 
 .badge {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
+}
+
+.priority-icon {
+    height: 18px;
+    width: 18px;
 }
 
 /* //////////////////////// */
@@ -75,8 +80,9 @@
     color: #ffdd33;
 }
 
-.badge.bg-secondary-subtle {
-    background-color: rgba(148, 231, 246, 0.151) !important;
+.badge .issue-status-badge {
+    background: rgba(90, 115, 195, 0.1);
+
     color: #ccc;
 }
 

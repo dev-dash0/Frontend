@@ -31,12 +31,14 @@
 
 /*  */
 .members {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.member {
+.member,
+.assigned-member {
     width: 42px;
     height: 42px;
     border-radius: 50%;
@@ -45,7 +47,7 @@
     margin-inline-start: -15px;
 }
 
-.member:hover {
+.assigned-member:hover {
     transform: scale(1.2);
     box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
 }

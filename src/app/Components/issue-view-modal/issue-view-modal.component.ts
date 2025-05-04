@@ -56,7 +56,6 @@ import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-use
 
 })
 export class IssueViewModalComponent {
-  @ViewChild(AssignUsersToIssueComponent) assignUsersComp!: AssignUsersToIssueComponent;
   // isModalOpen: boolean = false;
 
   private readonly _IssueService = inject(IssueService);
@@ -82,7 +81,18 @@ export class IssueViewModalComponent {
   isEditMode = false;
   showModal = true;
   allUsers: ProfileData[] = []; // Load this from your user service
-
+  priorityConfig: any = {
+    Critical: {
+      icon: 'assets/images/Issue Priorities/urgent.svg',
+      color: '#F44336',
+    }, // Red
+    High: { icon: 'assets/images/Issue Priorities/high.svg', color: '#FFC107' }, // Orange
+    Medium: {
+      icon: 'assets/images/Issue Priorities/normal.svg',
+      color: '#4854F1',
+    }, // Yellow
+    Low: { icon: 'assets/images/Issue Priorities/low.svg', color: '#908F8F' }, // Green
+  };
 
   @ViewChild('modalContent') modalContent!: TemplateRef<any>;
 
@@ -103,7 +113,6 @@ export class IssueViewModalComponent {
     });
 
     this.loadIssue();
-    this.assignUsersComp.loadAssignedUsers();
 
     // this._renderer.listen('window', 'click', () => {
     //   this.showUserDropdown = false;
@@ -350,6 +359,12 @@ export class IssueViewModalComponent {
     return typeof this.issue?.labels === 'string' && this.issue.labels.trim() !== '';
   }
   // ////////////////////////////////////////////////////////////////
+  getPriorityStyle(priority: string) {
+    return { color: this.priorityConfig[priority]?.color || 'white' };
+  }
 
+  getPriorityIcon(priority: string) {
+    return this.priorityConfig[priority]?.icon || 'assets/icons/default.svg'; // Default icon
+  }
 
 }

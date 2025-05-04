@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { catchError, Observable, Subject, throwError } from 'rxjs';
 import { baseUrl } from '../../environment/environment.local';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../../interfaces/User';
+import { error } from 'console';
 
 @Injectable({
   providedIn: 'root'
@@ -163,20 +164,6 @@ export class IssueService {
 
 
   // **********************Assign Users**********************
-  // assignUserToIssue(userId: number, issueId: number): Observable<any> {
-  //   const body = { userId, issueId };
-  //   return this._HttpClient.post(`${baseUrl}/api/IssueAssignedUser`, body, {
-  //     headers: this.headers,
-  //   });
-  // }
-
-  // removeUserFromIssue(userId: number, issueId: number): Observable<any> {
-  //   const body = { userId, issueId };
-  //   return this._HttpClient.delete(`${baseUrl}/api/IssueAssignedUser`, {
-  //     headers: this.headers,
-  //     body,
-  //   });
-  // }
 
 
   assignUserToIssue(userId: number, issueId: number): Observable<any> {
@@ -195,21 +182,30 @@ export class IssueService {
   }
 
   removeUserFromIssue(userId: number, issueId: number): Observable<any> {
+    if (!userId || !issueId) {
+      console.error('Invalid parameters - userId:', userId, 'issueId:', issueId);
+      return throwError(() => new Error('Invalid parameters'));
+    }
+
     const body = { userId, issueId };
+    console.log('Sending delete request with body:', body);
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${this.token}`,
       Accept: 'text/plain',
-
     });
-    console.log('Assign user body:', body); // Add this to debug
+
     return this._HttpClient.request('delete', `${baseUrl}/api/IssueAssignedUser`, {
       body,
       headers
-    });
+    }).pipe(
+      catchError(error => {
+        console.error('API Error:', error);
+        return throwError(() => error);
+      })
+    );
   }
-
   private assignedUsersMap = new Map<number, User[]>();
 
   getAssignedUsers(issueId: number): User[] {
@@ -219,19 +215,5 @@ export class IssueService {
   setAssignedUsers(issueId: number, users: User[]) {
     this.assignedUsersMap.set(issueId, users);
   }
-
-  // assignUserToIssue(userId: number, issueId: number): void {
-  //   this._HttpClient.post(`${baseUrl}/api/IssueAssignedUser`, { userId, issueId }, {
-  //     headers: this.headers,
-  //   }).subscribe({
-  //     next: () => {
-  //       this.toastr.success('User assigned successfully');
-  //     },
-  //     error: () => {
-  //       this.toastr.error('Failed to assign user');
-  //     }
-  //   });
-  // }
-  // ///////////////////////////
 
 }

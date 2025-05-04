@@ -1,19 +1,13 @@
-import { Component, ElementRef, HostListener, Input, OnInit, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProjectService } from '../../Core/Services/project.service';
 import { IssueService } from '../../Core/Services/issue/issue.service';
-import { HttpClient } from '@angular/common/http';
-import { ProfileData } from '../../Core/interfaces/profile';
+import { User } from '../../Core/interfaces/User';
+
 declare var bootstrap: any;
 
-interface User {
-  userId: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  imageUrl: string;
-}
+
 @Component({
   selector: 'app-assign-users-to-issue',
   standalone: true,
@@ -27,68 +21,101 @@ export class AssignUsersToIssueComponent {
   @Input() issueProjectId!: number; // <-- accept ProjectId from parent
 
   @ViewChild('assignButton') assignButton!: ElementRef;
+  @ViewChildren('tooltipRef') tooltipElements!: QueryList<ElementRef>;
 
   projectUsers: User[] = [];
   assignedUsers: User[] = [];
   dropdownVisible = false;
   searchTerm = '';
+  isLoadingAssignedUsers: boolean = true;
+  isLoadingProjectUsers: boolean = true;
+
 
   constructor(
     private eRef: ElementRef,
-    private _HttpClient: HttpClient,
     private _ProjectService: ProjectService,
     private _IssueService: IssueService
   ) { }
 
   ngOnInit(): void {
-    this.loadProjectUsers();
     this.loadAssignedUsers();
+    this.loadProjectUsers();
   }
 
-  ngAfterViewInit() {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['issueId'] && !changes['issueId'].firstChange) {
+      this.loadAssignedUsers();
+      this.loadProjectUsers();
+    }
+  }
+  // /***********************Tooltip****************************** *//
+  ngAfterViewInit(): void {
+    this.tooltipElements.changes.subscribe(() => {
+      this.initializeTooltips();
+    });
+  }
+
+  initializeTooltips() {
     setTimeout(() => {
-      const tooltipTriggerList = [].slice.call(
-        document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      );
-      tooltipTriggerList.forEach((tooltipTriggerEl: any) => {
-        new bootstrap.Tooltip(tooltipTriggerEl, {
+      this.tooltipElements.forEach((elRef) => {
+        new bootstrap.Tooltip(elRef.nativeElement, {
           boundary: 'window',
           customClass: 'my-custom-tooltip',
           html: true,
           sanitize: false,
         });
       });
-    }, 0);
+    });
+  }
+  getTooltipHtml(user: User): string {
+    return `<i class="fas fa-user me-1"></i> ${user.firstName} ${user.lastName}`;
+  }
+  // ///////////////////////////////////////////////////////////////////////////////
+  loadAssignedUsers() {
+    this._IssueService.getIssueById(this.issueId).subscribe({
+      next: (res) => {
+        // توحيد هيكل البيانات مع projectUsers
+        this.assignedUsers = res.result.assignedUsers.map((user: any) => ({
+          id: user.id || user.userId,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          imageUrl: user.imageUrl
+        }));
+        this.isLoadingAssignedUsers = false;
+        console.log('Assigned users after load:', this.assignedUsers);
+      },
+      error: (err) => {
+        console.error('Error Loading assigned users', err);
+        this.isLoadingAssignedUsers = false;
+      }
+    });
   }
 
   loadProjectUsers() {
     this._ProjectService.getProject(this.issueProjectId).subscribe({
       next: (res) => {
-        this.projectUsers = res.result?.joinedUsers ?? [];
+        this.projectUsers = res.result?.tenant.joinedUsers?.map((user: any) => ({
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          imageUrl: user.imageUrl
+        })) || [];
+        console.log('Project users:', this.projectUsers);
+        this.isLoadingProjectUsers = false;
       },
       error: (err) => {
         console.error('Error loading project users', err);
+        this.isLoadingProjectUsers = false;
+
       }
     });
   }
-
-  // loadAssignedUsers() {
-  //   // this.assignedUsers = this._IssueService.getAssignedUsers(this.issueId);
-
-  //   // You'll need an API to get assigned users for the issue
-  //   this._IssueService.getIssueById(this.issueId).subscribe({
-  //     next: (res) => {
-  //       this.assignedUsers = res.result.assignedUsers ?? [];
-  //     },
-  //     error: (err) => {
-  //       console.error('Error loading assigned users', err);
-  //     }
-  //   });
-  // }
-
-  getTooltipHtml(user: User): string {
-    return `<i class="fas fa-user me-1"></i> ${user.firstName} ${user.lastName}`;
+  trackByUserId(index: number, user: User): number {
+    return user.id;
   }
+
 
   get filteredUsers(): User[] {
     if (!this.searchTerm.trim()) return this.projectUsers;
@@ -99,59 +126,9 @@ export class AssignUsersToIssueComponent {
     );
   }
 
-  isAssigned(user: User): boolean {
-    return this.assignedUsers.some(u => u.userId === user.userId);
+  isAssigned(id: number): boolean {
+    return this.assignedUsers.some(u => u.id === id);
   }
-
-  // toggleUserAssignment(user: User) {
-  //   if (this.isAssigned(user)) {
-  //     this._IssueService.removeUserFromIssue(user.userId, this.issueId).subscribe({
-  //       next: () => {
-  //         this.assignedUsers = this.assignedUsers.filter(u => u.userId !== user.userId);
-  //         console.log(`Unassigned user ${user.userId} from issue ${this.issueId}`);
-  //       },
-  //       error: (err) => {
-  //         console.error('Error unassigning user', err);
-  //       }
-  //     });
-  //   } else {
-  //     this._IssueService.assignUserToIssue(user.userId, this.issueId).subscribe({
-  //       next: (res) => {
-  //         console.log('Response:', res);
-  //         this.assignedUsers.push(user);
-  //         console.log(`Assigned user ${user.userId} to issue ${this.issueId}`);
-  //       },
-  //       error: (err) => {
-  //         console.error('Error assigning user', err);
-  //       }
-  //     });
-  //   }
-  // }
-
-  // toggleUserAssignment(user: User) {
-  //   if (this.isAssigned(user)) {
-  //     this._IssueService.removeUserFromIssue(user.userId, this.issueId).subscribe({
-  //       next: () => {
-  //         this.assignedUsers = this.assignedUsers.filter(u => u.userId !== user.userId);
-  //         this._IssueService.setAssignedUsers(this.issueId, this.assignedUsers);
-  //       },
-  //       error: (err) => {
-  //         console.error('Error unassigning user', err);
-  //       }
-  //     });
-  //   } else {
-  //     this._IssueService.assignUserToIssue(user.userId, this.issueId).subscribe({
-  //       next: () => {
-  //         this.assignedUsers.push(user);
-  //         this._IssueService.setAssignedUsers(this.issueId, this.assignedUsers);
-  //       },
-  //       error: (err) => {
-  //         console.error('Error assigning user', err);
-  //       }
-  //     });
-  //   }
-  // }
-
   toggleDropdown() {
     this.dropdownVisible = !this.dropdownVisible;
     if (this.dropdownVisible) {
@@ -214,27 +191,44 @@ export class AssignUsersToIssueComponent {
       this.closeDropdown();
     }
   }
-  // ////////////////////////////////////////////
-  loadAssignedUsers() {
-    this.assignedUsers = this._IssueService.getAssignedUsers(this.issueId);
-  }
+
+
 
   toggleUserAssignment(user: User) {
-    if (this.isAssigned(user)) {
-      this._IssueService.removeUserFromIssue(user.userId, this.issueId).subscribe({
+    if (!user || !user.id) {
+      console.error('Invalid user object or missing id', user);
+      return;
+    }
+
+    console.log('Current assigned users:', this.assignedUsers);
+    console.log('Toggling user:', user);
+
+    if (this.isAssigned(user.id)) {
+      this._IssueService.removeUserFromIssue(user.id, this.issueId).subscribe({
         next: () => {
-          this.assignedUsers = this.assignedUsers.filter(u => u.userId !== user.userId);
+          this.assignedUsers = this.assignedUsers.filter(u => u.id !== user.id);
+          console.log('After unassign:', this.assignedUsers);
           this._IssueService.setAssignedUsers(this.issueId, this.assignedUsers);
+          //Refresh Assigned,project users
+          this.loadAssignedUsers();
+          this.loadProjectUsers();
         },
         error: (err) => {
           console.error('Error unassigning user', err);
         }
       });
     } else {
-      this._IssueService.assignUserToIssue(user.userId, this.issueId).subscribe({
+      this._IssueService.assignUserToIssue(user.id, this.issueId).subscribe({
         next: () => {
-          this.assignedUsers.push(user);
+          // التأكد من عدم وجود تكرار قبل الإضافة
+          if (!this.assignedUsers.some(u => u.id === user.id)) {
+            this.assignedUsers.push(user);
+          }
+          console.log('After assign:', this.assignedUsers);
           this._IssueService.setAssignedUsers(this.issueId, this.assignedUsers);
+          //Refresh Assigned,project users
+          this.loadAssignedUsers();
+          this.loadProjectUsers();
         },
         error: (err) => {
           console.error('Error assigning user', err);
@@ -244,9 +238,4 @@ export class AssignUsersToIssueComponent {
   }
 
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['issueId'] && !changes['issueId'].firstChange) {
-      this.loadAssignedUsers();
-    }
-  }
 }

@@ -16,22 +16,36 @@
 
             <div class="issue-details ">
 
-                <!-- Title -->
-                <h3 class="  fw-semibold mb-3 ">{{ issue.title }}</h3>
+                <div class="issue-details-header d-flex justify-content-between align-items-center">
+                    <!-- Title -->
+                    <h3 class="  fw-semibold mb-3 ">{{ issue.title }}</h3>
 
-                <!-- Chips: Type | Priority | Status -->
-                <div class="d-flex flex-wrap gap-2 mb-3">
-                    <span class="badge bg-info-subtle text-dark px-3 py-2 rounded-pill">Type: {{ issue.type }}</span>
-                    <span class="badge bg-warning-subtle text-dark px-3 py-2 rounded-pill">Priority: {{ issue.priority
-                        }}</span>
+                    <!-- Chips: Type | Priority | Status -->
+                    <div class="d-flex flex-wrap  gap-2 mb-3">
+                        <div
+                            class="d-flex align-items-center badge bg-primary-subtle text-dark px-3 py-2 rounded-pill text-primary-emphasis">
+                            Priority :
+                            <div class=" ms-1 d-flex justify-content-between align-items-center gap-1">
+                                <div class="priority">
+                                    <img [src]="getPriorityIcon(issue.priority)" alt="Priority Icon"
+                                        class="priority-icon" />
+                                    <span [ngStyle]="getPriorityStyle(issue.priority)">{{ issue.priority }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span
+                            class="d-flex align-items-center badge bg-info-subtle text-primary-emphasis px-3 py-2 rounded-pill">Type:
+                            {{ issue.type }}</span>
 
-                    <span
-                        class="badge d-inline-flex bg-secondary-subtle align-items-center gap-2 px-3 py-2 rounded-pill"
-                        [ngClass]="getStatusBadgeClass(issue.status)"
-                        *ngIf="getStatusConfig(issue?.status) as statusConfig">
-                        <img [src]="statusConfig.icon" alt="Status Icon" width="18" height="18" />
-                        {{ statusConfig.label }}
-                    </span>
+                        <!-- [ngClass]="getStatusBadgeClass(issue.status)"   gor make status colored -->
+                        <span
+                            class="badge d-inline-flex issue-status-badge align-items-center gap-2 px-3 py-2 rounded-pill "
+                            *ngIf="getStatusConfig(issue?.status) as statusConfig">
+                            <img [src]="statusConfig.icon" alt="Status Icon" width="18" height="18" />
+                            {{ statusConfig.label }}
+                        </span>
+
+                    </div>
 
                 </div>
 
@@ -95,52 +109,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Labels -->
-                <!-- <div class="card-issue-view shadow-sm border-0 mb-3">
-                    <div class="card-body">
-                        <h6 class="card-title fw-semibold mb-2">Labels</h6>
-                        <ng-container *ngIf="issue.labels; else noLabels">
-                            <div class="d-flex flex-wrap gap-2 max-height-scroll">
-                                <span class="badge px-3 py-2 text-capitalize"
-                                    *ngFor="let label of issue.labels.split(','); let i = index"
-                                    [ngClass]="'bg-label-' + (i % 5)">
-                                    {{ label.trim() }}
-                                </span>
-                            </div>
-                        </ng-container>
-                        <ng-template #noLabels>
-                            <em class="text-muted">No labels provided.</em>
-                        </ng-template>
-                    </div>
-                </div> -->
-
-
-                <!-- Attachment -->
-                <!-- <div class="card-issue-view shadow-sm border-0 mb-3">
-                    <div class="card-body">
-                        <h6 class="card-title fw-semibold mb-2">Attachment</h6>
-
-                        <ng-container *ngIf="issue.attachmentPath; else noAttachment">
-                            <a [href]="issue.attachmentPath" [download]="getFileName(issue.attachmentPath)"
-                                class="d-flex align-items-center gap-3 text-decoration-none p-3 border rounded bg-light-subtle shadow-sm">
-
-                                <i class="fa-solid" [ngClass]="getFileIcon(issue.attachmentPath)"
-                                    style="font-size: 2rem;"></i>
-
-                                <div class="flex-grow-1">
-                                    <div class="fw-medium text-dark">{{ getFileName(issue.attachmentPath) }}</div>
-                                    <small class="text-muted">Click to download</small>
-                                </div>
-                            </a>
-                        </ng-container>
-
-                        <ng-template #noAttachment>
-                            <em class="text-muted">No attachment available.</em>
-                        </ng-template>
-                    </div>
-                </div> -->
-
-
 
                 <!-- Meta Info Card -->
                 <div class="row g-3">
@@ -161,86 +129,10 @@
                         </div>
                     </div>
 
-                    <!-- Assigned Users -->
-                    <!-- <div class="col-md-6">
-                        <div class="card-issue-view shadow-sm border-0 h-100">
-                            <div class="card-body">
-                                <h6 class="fw-semibold mb-3">Assigned Users</h6>
-                                <ng-container *ngIf="(issue?.assignedUsers?.length ?? 0) > 0; else noAssigned">
-                                    <div class="d-flex flex-wrap gap-2">
-                                        <div class="d-flex align-items-center gap-2 bg-light rounded px-2 py-1"
-                                            *ngFor="let user of issue?.assignedUsers">
-                                            <img [src]="user.imageUrl" width="30" height="30" class="rounded-circle"
-                                                alt="user image" />
-                                            <span>{{ user.firstName }}</span>
-                                        </div>
-                                    </div>
-                                </ng-container>
-                                <ng-template #noAssigned>
-                                    <em class="text-muted">No users assigned.</em>
-                                </ng-template>
-
-                            </div>
-                        </div>
-                    </div> -->
 
 
 
-                    <!-- Assigned Users -->
-                    <!-- <div class="col-md-6">
-                        <div class="card-issue-view shadow-sm border-0 h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h6 class="fw-semibold mb-0">Assigned Users</h6>
-                                    <button *ngIf="!loading"
-                                        class="btn btn-sm btn-outline-primary px-2 py-0 rounded-pill"
-                                        (click)="toggleUserDropdown(); $event.stopPropagation()">
-                                        <i class="fa-solid fa-user-plus me-1"></i> Assign Users
-                                    </button>
-                                </div>
 
-
-                                Search bar
-                                <input type="text" [(ngModel)]="searchUsersTerm" placeholder="Search users..."
-                                    class="form-control mb-2" />
-
-                                Dropdown list
-                                <div *ngIf="showUserDropdown &&!loading && allUsers?.length">
-                                    <div *ngFor="let user of filteredUsers"
-                                        class="d-flex align-items-center justify-content-between">
-                                        <span>{{ user.firstName + user.lastName }}</span>
-                                        <button (click)="toggleUserAssignment(user)" class="btn btn-sm"
-                                            [ngClass]="isUserAssigned(user.id) ? 'btn-danger' : 'btn-primary'">
-                                            {{ isUserAssigned(user.id) ? 'Unassign' : 'Assign' }}
-                                        </button>
-                                    </div>
-                                </div>
-
-                                Assign Dropdown (can be modal too if you prefer)
-                                <div *ngIf="showUserDropdown"
-                                    class="assign-dropdown mt-3 border rounded shadow-sm p-3 bg-white">
-                                    <div class="fw-semibold mb-2">Assign or Unassign Users:</div>
-                                    <div class="list-group small">
-                                        <div class="list-group-item d-flex justify-content-between align-items-center"
-                                            *ngFor="let user of allUsers">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <img [src]="user.imageUrl" width="30" height="30" class="rounded-circle"
-                                                    alt="user image" />
-                                                <span>{{ user.firstName }} {{ user.lastName }}</span>
-                                            </div>
-                                            <button class="btn btn-sm"
-                                                [ngClass]="isUserAssigned(user.id) ? 'btn-danger' : 'btn-outline-success'"
-                                                (click)="toggleUserAssignment(user)">
-                                                <i class="fa"
-                                                    [ngClass]="isUserAssigned(user.id) ? 'fa-user-minus' : 'fa-user-plus'"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="col-md-6">
                         <div class="card-issue-view shadow-sm border-0 h-100">
                             <div class="card-body">
@@ -248,8 +140,6 @@
                                 <app-assign-users-to-issue [issueId]="issue.id"
                                     [issueProjectId]="issue.projectId"></app-assign-users-to-issue>
                             </div>
-                            <!-- <i class="fas fa-user-minus text-sm"></i> -->
-                            <!-- <i class="fas fa-user-plus"></i> -->
                         </div>
                     </div>
                 </div>
