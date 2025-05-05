@@ -35,7 +35,7 @@ export class SearchBarComponent {
   showPanel = false;
   projects: ProjectResult[] = [];
   allUsers: User[] = [];
-  NotifyUser:any = {}
+  NotifyUser: any = {};
 
   joinedUsers: any[] = [];
 
@@ -116,7 +116,7 @@ export class SearchBarComponent {
               if (matchedUser) {
                 notification.userId = matchedUser; // Attach full user object
                 console.log('Matched Notification with User:', notification);
-                this.NotifyUser = notification.userId
+                this.NotifyUser = notification.userId;
               }
             }
           }
@@ -125,5 +125,17 @@ export class SearchBarComponent {
           console.error('Error in fetching notifications or users:', err);
         },
       });
+  }
+
+  markAsRead(notify: Notification, id:number) {
+    if (!notify.isRead) {
+      notify.isRead = true;
+      // Optionally, send update to backend here.
+      this._NotificationService.markAsRead(id).subscribe({
+        next: (res) => {
+          console.log('Notification marked as read:', res);
+        }
+      })
+    }
   }
 }

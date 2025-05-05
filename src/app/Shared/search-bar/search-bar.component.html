@@ -57,21 +57,27 @@
 
   <!-- Notification -->
   <div class="notification-panel" [class.visible]="showPanel">
-    <div class="notification-arrow"></div>
+  <div class="notification-arrow"></div>
 
-    <div class="notification" *ngFor="let notify of notifications">
-      <div class="notify-header">
-          <!-- <h4>{{ notify.title }}</h4> -->
-          <p>{{ notify.message }}</p>
-        </div>
-
-        <div class="notify-footer">
-          <div class="sender-info">
-            <img [src]="NotifyUser.imageUrl" alt="User" />
-            <span>{{ NotifyUser.firstName }}</span>
-          </div>
-          <span class="notify-date">{{ notify.createdAt }}</span>
-        </div>
+  <div class="notification"
+       *ngFor="let notify of notifications"
+       [class.unread]="!notify.isRead"
+       (click)="markAsRead(notify, notify.id)">
+    
+    <div class="notify-header">
+      <p>{{ notify.message }}</p>
     </div>
+
+    <div class="notify-footer">
+      <div class="sender-info">
+        <img [src]="NotifyUser.imageUrl" alt="User" />
+        <span>{{ NotifyUser.firstName }}</span>
+      </div>
+      <span class="notify-date">{{ notify.createdAt | date:'short' }}</span>
+    </div>
+
+    <div class="checkmark" *ngIf="notify.isRead">✅</div>
   </div>
+</div>
+
 </div>
