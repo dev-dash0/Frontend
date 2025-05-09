@@ -1,18 +1,25 @@
-<section id="visualization" class="d-flex flex-column justify-content-center align-items-center">
-  <mat-tab-group dynamicHeight mat-stretch-tabs="false" class="mat-tab-body-content" [color]="''">
-    <div class="cont">
-      <!-- <mat-tab [label]="'All Projects'" labelClass="mat-tab-label"> -->
-      <!-- <div class="visualize_content visualize_allProject p-4"> -->
-      <!-- <app-all-projects-dashboard></app-all-projects-dashboard> -->
-      <!-- </div> -->
-      <!-- </mat-tab> -->
-      @for (tab of lotsOfTabs; track tab) {
-      <mat-tab [label]="tab" labelClass="mat-tab-label">
-        <div class="visualize_content visualize_allProject p-4">
-          <app-all-projects-dashboard></app-all-projects-dashboard>
-        </div>
-      </mat-tab>
-      }
+<section id="visualization"
+  class="d-flex flex-column justify-content-center align-items-center w-100 mat-tab-body-content "
+  style="min-height: 500px; position: relative;">
+  <ng-container *ngIf="isLoading; else showTabs">
+    <div
+      class="loader-wrapper  d-flex justify-content-center align-items-center position-absolute top-0 start-0 w-100 h-100"
+      style="z-index: 10; background: rgba(0, 0, 0, 0.1);">
+      <app-dashboard-loader [size]="150"></app-dashboard-loader>
     </div>
-  </mat-tab-group>
+  </ng-container>
+
+  <ng-template #showTabs>
+    <mat-tab-group dynamicHeight mat-stretch-tabs="false" class="w-100" [color]="''">
+      <div class="cont">
+        @for (tab of lotsOfTabs; track tab) {
+        <mat-tab [label]="tab.name" labelClass="mat-tab-label">
+          <div class="visualize_content visualize_allProject p-4">
+            <app-all-projects-dashboard [tenantId]="tab.id"></app-all-projects-dashboard>
+          </div>
+        </mat-tab>
+        }
+      </div>
+    </mat-tab-group>
+  </ng-template>
 </section>

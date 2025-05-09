@@ -2,54 +2,112 @@
 <div class="row text-center mb-3 g-3 ">
     <div class=" col-sm-6 col-md-3 totalProject d-flex justify-content-center align-items-center flex-column">
         <h5>Total Projects</h5>
-        <div class="chart-card d-flex justify-content-center align-items-center">
+        <div class="chart-wrapper d-flex justify-content-center align-items-center">
+            <ng-container *ngIf="isLoading; else showTotalProjectsChart">
+                <app-chart-loader [size]="90"></app-chart-loader>
+            </ng-container>
+            <ng-template #showTotalProjectsChart>
+                <div class="chart-card d-flex justify-content-center align-items-center">
+
+                    <canvas #totalProjectsChart></canvas>
+                    <div class="chart-label">
+                        <h3>{{ totalProjects }}</h3>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+
+        <!-- <div class="chart-card d-flex justify-content-center align-items-center">
             <canvas id="totalProjectsChart" #totalProjectsChart></canvas>
             <div class="chart-label">
                 <h3>{{totalProjects}}</h3>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <!-- Total Completed Projects Chart -->
     <div class=" col-sm-6  col-md-3 Completed d-flex justify-content-center align-items-center flex-column">
         <h5>Total Completed Projects</h5>
-        <div class="chart-card">
-            <canvas id="totalCompletedIssuesChart" #totalCompletedProjectsChart></canvas>
-            <div class="chart-label">
-                <h3>{{completedProjects}}</h3>
-            </div>
+        <div class="chart-wrapper d-flex justify-content-center align-items-center">
+            <ng-container *ngIf="isLoading; else showTotalCompletedProjectsChart">
+                <app-chart-loader [size]="90"></app-chart-loader>
+            </ng-container>
+            <ng-template #showTotalCompletedProjectsChart>
+                <div class="chart-card d-flex justify-content-center align-items-center">
+                    <canvas id="totalCompletedIssuesChart" #totalCompletedProjectsChart></canvas>
+                    <div class="chart-label">
+                        <h3>{{completedProjects}}</h3>
+                    </div>
+                </div>
+            </ng-template>
         </div>
+
     </div>
 
     <!-- Projects in Progress Chart -->
     <div class=" col-sm-6  col-md-3 inProgress d-flex justify-content-center align-items-center flex-column">
         <h5>Total Projects in Progress</h5>
-        <div class="chart-card">
-            <canvas id="projectsInProgressChart" #projectsInProgressChart></canvas>
-            <div class="chart-label">
-                <h3>{{projectsInProgress}}</h3>
-            </div>
+        <div class="chart-wrapper d-flex justify-content-center align-items-center">
+            <ng-container *ngIf="isLoading; else showProjectsInProgressChart">
+                <app-chart-loader [size]="90"></app-chart-loader>
+            </ng-container>
+            <ng-template #showProjectsInProgressChart>
+                <div class="chart-card d-flex justify-content-center align-items-center">
+
+                    <canvas id="projectsInProgressChart" #projectsInProgressChart></canvas>
+                    <div class="chart-label">
+                        <h3>{{projectsInProgress}}</h3>
+                    </div>
+                </div>
+            </ng-template>
         </div>
+
     </div>
 
     <!-- Projects Overdue Chart -->
     <div class=" col-sm-6  col-md-3 overdue d-flex justify-content-center align-items-center flex-column">
         <h5>Total Projects Overdue</h5>
-        <div class="chart-card">
-            <canvas id="projectsOverdueChart" #projectsOverdueChart></canvas>
-            <div class="chart-label">
-                <h3>{{projectsOverdue}}</h3>
-            </div>
+        <div class="chart-wrapper d-flex justify-content-center align-items-center">
+            <ng-container *ngIf="isLoading; else showProjectsOverdueChart">
+                <app-chart-loader [size]="90"></app-chart-loader>
+            </ng-container>
+            <ng-template #showProjectsOverdueChart>
+                <div class="chart-card d-flex justify-content-center align-items-center">
+                    <canvas id="projectsOverdueChart" #projectsOverdueChart></canvas>
+                    <div class="chart-label">
+                        <h3>{{projectsOverdue}}</h3>
+                    </div>
+                </div>
+            </ng-template>
         </div>
     </div>
 </div>
 
 
 <div class="row g-5">
+
     <div class="col-sm-12 col-md-8 lineChart-Container">
-        <canvas id="lineChart " #lineChart></canvas>
+        <div class="wavy-chart-wrapper w-100 h-100 d-flex justify-content-center align-items-center">
+            <ng-container *ngIf="isLoading; else showWavy">
+                <app-chart-loader [fullSize]="true" type="wavyLinesChart"></app-chart-loader>
+            </ng-container>
+            <ng-template #showWavy>
+                <canvas id="lineChart " #lineChart></canvas>
+            </ng-template>
+        </div>
+
     </div>
+
     <div class="col-sm-12 col-md-4 doughnutChart-container  ">
-        <canvas id="doughnutChart" #doughnutChart></canvas>
+        <div class="wavy-chart-wrapper d-flex justify-content-center align-items-center">
+            <ng-container *ngIf="isLoading; else showBigDoughnut">
+                <app-chart-loader [size]="190"></app-chart-loader>
+            </ng-container>
+            <ng-template #showBigDoughnut>
+                <canvas id="doughnutChart" #doughnutChart></canvas>
+            </ng-template>
+        </div>
     </div>
+
+
 </div>

@@ -1,43 +1,60 @@
-import { isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   Component,
   ElementRef,
   inject,
   Inject,
+  Input,
+  OnChanges,
+  OnInit,
   PLATFORM_ID,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { DashboardService } from '../../Core/Services/dashboard/dashboard.service';
+import { ChartLoaderComponent } from "../../Shared/chart-loader/chart-loader.component";
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-all-projects-dashboard',
   standalone: true,
-  imports: [],
+  imports: [ChartLoaderComponent, CommonModule],
   templateUrl: './all-projects-dashboard.component.html',
   styleUrl: './all-projects-dashboard.component.css',
 })
-export class AllProjectsDashboardComponent {
+export class AllProjectsDashboardComponent implements OnInit, OnChanges {
   completedProjects: any;
   projectsInProgress: any;
   totalProjects: any;
   projectsOverdue: any;
+  isLoading: boolean = true;
+
 
   private readonly _DashboardService = inject(DashboardService);
+
+  @Input() tenantId!: number;
 
   @ViewChild('doughnutChart') doughnutChart!: ElementRef<HTMLCanvasElement>;
   @ViewChild('lineChart') lineChart!: ElementRef<HTMLCanvasElement>;
   @ViewChild('totalProjectsChart') totalProjectsChart!: ElementRef;
-  @ViewChild('totalCompletedProjectsChart')
-  totalCompletedProjectsChart!: ElementRef;
+  @ViewChild('totalCompletedProjectsChart') totalCompletedProjectsChart!: ElementRef;
   @ViewChild('projectsInProgressChart') projectsInProgressChart!: ElementRef;
   @ViewChild('projectsOverdueChart') projectsOverdueChart!: ElementRef;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    this.getTenantDashboard(8);
+  ngOnInit(): void {
+    console.log('AllProjectsDashboardComponent initialized');
   }
+
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['tenantId'] && this.tenantId) {
+      this.getTenantDashboard(this.tenantId);
+    }
+  }
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
   initCharts() {
     if (isPlatformBrowser(this.platformId)) {
       this.initLineChart();
@@ -46,8 +63,8 @@ export class AllProjectsDashboardComponent {
     }
   }
 
-  getTenantDashboard(tenentId: number) {
-    this._DashboardService.getDashboardData(tenentId).subscribe({
+  getTenantDashboard(tenantId: number) {
+    this._DashboardService.getDashboardData(tenantId).subscribe({
       next: (res) => {
         // console.log(res);
         this.completedProjects = res.result.completedProjects;
@@ -55,11 +72,15 @@ export class AllProjectsDashboardComponent {
         this.totalProjects = res.result.totalProjects;
         this.projectsOverdue = res.result.projectsOverdue;
 
-        this.initCharts();
+        this.isLoading = false;
+        // this.initCharts();
+        setTimeout(() => {
+          this.initCharts();
+        }, 0);
       },
       error: (err) => {
-        console.log(err);
         console.error(err);
+        this.isLoading = false;
       },
     });
   }
@@ -151,6 +172,7 @@ export class AllProjectsDashboardComponent {
 
   initDoughnutChart() {
     const ctx = this.doughnutChart.nativeElement.getContext('2d');
+    const allZero = this.completedProjects === 0 && this.projectsInProgress === 0 && this.projectsOverdue === 0;
 
     const gradient_purple = ctx!.createRadialGradient(
       100,
@@ -187,82 +209,150 @@ export class AllProjectsDashboardComponent {
     gradient_pink.addColorStop(0, 'rgba(219, 131, 241, 1)');
     gradient_pink.addColorStop(1, 'rgb(249, 223, 255)');
 
-    const doughnutChart = new Chart(ctx!, {
-      type: 'doughnut',
-      data: {
-        labels: ['Completed', 'In Progress', 'Overdue'],
-        datasets: [
-          {
-            label: '# of Votes',
-            // data: [50, 30, 20],
-            data: [
-              this.completedProjects,
-              this.projectsInProgress,
-              this.projectsOverdue,
-            ],
-            backgroundColor: [gradient_purple, gradient_blueSky, gradient_pink],
+    const doughnutChart = allZero
+      ? new Chart(ctx!, {
+        type: 'doughnut',
+        data: {
+          labels: ['No Data'],
+          datasets: [{
+            data: [1], // value 1 just to render
+            backgroundColor: ['#0C1E3D'], // gray color
             borderColor: [gradient_purple, gradient_blueSky, gradient_pink],
             borderWidth: 1,
             borderRadius: 3.5,
-          },
-        ],
-      },
-      options: {
-        responsive: true, // Ensures the chart resizes with the window
-        maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
-        cutout: '55%',
-        plugins: {
-          legend: {
-            display: true, // Optional: Hide legend
-            position: 'bottom', // Set legend position to bottom
-            labels: {
-              padding: 35, // Optional: Add some spacing
-              color: '#7d92ca', // Optional: Set text color
-              font: {
-                size: 10, // Reduce the font size
+          }]
+        },
+        options: {
+          responsive: true, // Ensures the chart resizes with the window
+          maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
+          cutout: '55%',
+          plugins: {
+            legend: {
+              display: true, // Optional: Hide legend
+              position: 'bottom', // Set legend position to bottom
+              labels: {
+                padding: 35, // Optional: Add some spacing
+                color: '#7d92ca', // Optional: Set text color
+                font: {
+                  size: 10, // Reduce the font size
+                },
+                boxWidth: 10, // Reduce the size of color indicator boxes
               },
-              boxWidth: 10, // Reduce the size of color indicator boxes
             },
           },
         },
-      },
-    });
+      })
+      : new Chart(ctx!, {
+        type: 'doughnut',
+        data: {
+          labels: ['Completed', 'In Progress', 'Overdue'],
+          datasets: [
+            {
+              label: '# of Votes',
+              // data: [50, 30, 20],
+              data: [
+                this.completedProjects,
+                this.projectsInProgress,
+                this.projectsOverdue,
+              ],
+              backgroundColor: [gradient_purple, gradient_blueSky, gradient_pink],
+              borderColor: [gradient_purple, gradient_blueSky, gradient_pink],
+              borderWidth: 1,
+              borderRadius: 3.5,
+            },
+          ],
+        },
+        options: {
+          responsive: true, // Ensures the chart resizes with the window
+          maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
+          cutout: '55%',
+          plugins: {
+            legend: {
+              display: true, // Optional: Hide legend
+              position: 'bottom', // Set legend position to bottom
+              labels: {
+                padding: 35, // Optional: Add some spacing
+                color: '#7d92ca', // Optional: Set text color
+                font: {
+                  size: 10, // Reduce the font size
+                },
+                boxWidth: 10, // Reduce the size of color indicator boxes
+              },
+            },
+          },
+        },
+      });
   }
 
   initSmallCharts() {
+    const zeroTotalProjects = this.totalProjects === 0;
+
     // Total Projects Chart
-    new Chart(this.totalProjectsChart.nativeElement.getContext('2d'), {
-      type: 'doughnut',
-      data: {
-        datasets: [
-          {
-            data: [10, 0], // Completed vs Remaining
-            backgroundColor: function (context) {
-              const chart = context.chart;
-              const ctx = chart.ctx;
-              const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
-              gradient.addColorStop(0, 'rgba(113,165,255,1)'); // Start color
-              gradient.addColorStop(1, 'rgba(19,71,163,1)'); // End color
-              if (context.dataIndex === 0) {
-                return gradient; // Apply gradient to the first slice
-              } else {
-                return '#F5F5F5'; // Solid color for the second slice
-              }
+    const totalProjects = zeroTotalProjects ?
+      new Chart(this.totalProjectsChart.nativeElement.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          datasets: [
+            {
+              data: [0, 0], // Completed vs Remaining
+              backgroundColor: function (context) {
+                const chart = context.chart;
+                const ctx = chart.ctx;
+                const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
+                gradient.addColorStop(0, 'rgba(113,165,255,1)'); // Start color
+                gradient.addColorStop(1, 'rgba(19,71,163,1)'); // End color
+                if (context.dataIndex === 0) {
+                  return gradient; // Apply gradient to the first slice
+                } else {
+                  return '#F5F5F5'; // Solid color for the second slice
+                }
+              },
+              borderWidth: 0,
             },
-            borderWidth: 0,
-          },
-        ],
-      },
-      options: {
-        responsive: true, // Ensures the chart resizes with the window
-        maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
-        cutout: '80%',
-        plugins: {
-          tooltip: { enabled: false },
-          legend: { display: false },
+          ],
         },
-      },
-    });
+        options: {
+          responsive: true, // Ensures the chart resizes with the window
+          maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
+          cutout: '80%',
+          plugins: {
+            tooltip: { enabled: false },
+            legend: { display: false },
+          },
+        },
+      })
+      : new Chart(this.totalProjectsChart.nativeElement.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          datasets: [
+            {
+              data: [10, 0], // Completed vs Remaining
+              backgroundColor: function (context) {
+                const chart = context.chart;
+                const ctx = chart.ctx;
+                const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
+                gradient.addColorStop(0, 'rgba(113,165,255,1)'); // Start color
+                gradient.addColorStop(1, 'rgba(19,71,163,1)'); // End color
+                if (context.dataIndex === 0) {
+                  return gradient; // Apply gradient to the first slice
+                } else {
+                  return '#F5F5F5'; // Solid color for the second slice
+                }
+              },
+              borderWidth: 0,
+            },
+          ],
+        },
+        options: {
+          responsive: true, // Ensures the chart resizes with the window
+          maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
+          cutout: '80%',
+          plugins: {
+            tooltip: { enabled: false },
+            legend: { display: false },
+          },
+        },
+      });
 
     // Total Completed Issues Chart
     new Chart(this.totalCompletedProjectsChart.nativeElement.getContext('2d'), {
