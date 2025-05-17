@@ -11,5 +11,5 @@ export interface ProjectCategory {
     | 'planning'
     | 'canceled'
     | 'postponed';
-  issues: Projects[];
+  projects: Projects[];
 }

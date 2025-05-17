@@ -1,3 +1,4 @@
+import { Tenant } from './../../Core/interfaces/pinned';
 import { SidebarService } from './../../Core/Services/sidebar.service';
 import { CompanyService } from './../../Core/Services/company.service';
 import { CommonModule } from '@angular/common';
@@ -17,18 +18,37 @@ import { DeleteModalComponent } from '../deletemodal/deletemodal.component';
 import { ProfileService } from '../../Core/Services/profile.service';
 import { ProjectCategory } from '../../Core/interfaces/company/project-category';
 import { ProjectService } from '../../Core/Services/project.service';
-import { Project, ProjectResult } from '../../Core/interfaces/project';
+import { ProjectResult } from '../../Core/interfaces/project';
 import { UpdateCompanyComponent } from '../update-company/update-company.component';
 import { PinnedService } from '../../Core/Services/pinned.service';
-import { TenantResult } from '../../Core/interfaces/pinned';
 import { ToastrService } from 'ngx-toastr';
+import { AllCompanyProjectsDashboardComponent } from '../all-company-projects-dashboard/all-company-projects-dashboard.component';
+import { Projectstats } from '../../Core/interfaces/company/projectstats';
+import { DashboardLoaderComponent } from '../../Shared/dashboard-loader/dashboard-loader.component';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-company-view',
   standalone: true,
-  imports: [CommonModule, MatChipsModule],
+  imports: [
+    CommonModule,
+    MatChipsModule,
+    AllCompanyProjectsDashboardComponent,
+    DashboardLoaderComponent,
+  ],
   templateUrl: './company-view.component.html',
   styleUrl: './company-view.component.css',
+  animations: [
+    trigger('slideInUp', [
+      transition(':enter', [
+        style({ transform: 'translateY(20px)', opacity: 0 }),
+        animate(
+          '700ms ease-out',
+          style({ transform: 'translateY(0)', opacity: 1 })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class CompanyViewComponent implements OnInit {
   @Input() company!: Company;
@@ -37,6 +57,7 @@ export class CompanyViewComponent implements OnInit {
   @Output() companyDeleted = new EventEmitter<void>();
   isOwner = false;
   userId!: any;
+  showCompany = false;
   // variables
   constructor(
     private cdr: ChangeDetectorRef,
@@ -46,7 +67,7 @@ export class CompanyViewComponent implements OnInit {
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private router: Router,
-    private _profile: ProfileService,
+    private profileService: ProfileService,
     private _PinnedService: PinnedService,
     private _toaster: ToastrService
   ) {}
@@ -55,11 +76,19 @@ export class CompanyViewComponent implements OnInit {
   CompanyId: number = 0;
   SelectedProjectId: number = 0;
   ProjectIds: number[] = [];
+  hover: boolean = false;
+  projectStats: Projectstats[] = [];
+  ProjectCategories: ProjectCategory[] = [];
+  loading = true;
+  projectLoading = true;
 
   // ----------------------------------------
   ngOnInit(): void {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
       this.isSidebarCollapsed = collapsed;
+    });
+    this.sidebarService.companyUpdated$.subscribe(() => {
+      this.getCompany();
     });
     this.route.paramMap.subscribe(() => {
       this.getCompany();
@@ -69,6 +98,12 @@ export class CompanyViewComponent implements OnInit {
   selectCompany() {
     this.companySelected.emit(this.company.id);
     this.CompanyId = parseInt(this.CompanyId as unknown as string);
+  }
+  selectProject(projectId: any) {
+    this.SelectedProjectId = parseInt(projectId);
+    console.log('Selected Project ID:', this.SelectedProjectId);
+    this.projectSelected.emit(this.SelectedProjectId); // Emit it
+    this.router.navigate(['/MyDashboard/Project', projectId]);
   }
 
   contactInfo: any = [
@@ -89,142 +124,11 @@ export class CompanyViewComponent implements OnInit {
     },
   ];
 
-  projectStats = [
-    { title: 'Total Projects', count: 10, class: 'total-projects' },
-    { title: 'Completed Projects', count: 5, class: 'completed-projects' },
-    { title: 'Projects In Progress', count: 3, class: 'projects-inprogress' },
-    { title: 'Projects Overdue', count: 4, class: 'overdue-projects' },
-  ];
-
   cardClasses = [
     'cardBottomRight',
     'cardBottomLeft',
     'cardTopRight',
     'cardTopLeft',
-  ];
-
-  ProjectCategories: ProjectCategory[] = [
-    {
-      name: 'In Progress',
-      icon: 'assets/images/Issue Status/in-progress.svg',
-      class: 'inprogress-tag',
-      status: 'working on',
-      issues: [
-        {
-          id: 0,
-          title: 'Project 3',
-          startDate: '5-3',
-          dueDate: '5-16',
-          description:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-          category: 'backend',
-        },
-        {
-          id: 1,
-          title: 'Project 4',
-          startDate: '5-3',
-          dueDate: '5-16',
-          description:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-          category: 'frontend',
-        },
-      ],
-    },
-    {
-      name: 'Completed',
-      icon: 'assets/images/Issue Status/Completed.svg',
-      class: 'completed-tag',
-      status: 'completed',
-      issues: [
-        {
-          id: 0,
-          title: 'Project 5',
-          startDate: '5-5',
-          dueDate: '5-18',
-          description:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-          category: 'frontend',
-        },
-      ],
-    },
-    {
-      name: 'Overdue',
-      icon: 'assets/images/Issue Status/Important Time.svg',
-      class: 'overdue-tag',
-      status: 'overdue',
-      issues: [
-        {
-          id: 0,
-          title: 'Project 1',
-          startDate: '5-1',
-          dueDate: '5-12',
-          description:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-          category: 'web',
-        },
-        {
-          id: 1,
-          title: 'Project 2',
-          startDate: '5-2',
-          dueDate: '5-15',
-          description:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-          category: 'mobile',
-        },
-      ],
-    },
-    {
-      name: 'Planning',
-      icon: 'assets/images/Issue Status/Important Time.svg',
-      class: 'canceled-tag',
-      status: 'canceled',
-      issues: [
-        {
-          id: 0,
-          title: 'Project 1',
-          startDate: '5-1',
-          dueDate: '5-12',
-          description:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-          category: 'web',
-        },
-        {
-          id: 1,
-          title: 'Project 2',
-          startDate: '5-2',
-          dueDate: '5-15',
-          description:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-          category: 'mobile',
-        },
-      ],
-    },
-    {
-      name: 'Canceled',
-      icon: 'assets/images/Issue Status/Important Time.svg',
-      class: 'canceled-tag',
-      status: 'canceled',
-      issues: [
-        {
-          id: 0,
-          title: 'Project 1',
-          startDate: '5-1',
-          dueDate: '5-12',
-          description:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-          category: 'web',
-        },
-        {
-          id: 1,
-          title: 'Project 2',
-          startDate: '5-2',
-          dueDate: '5-15',
-          description:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-          category: 'mobile',
-        },
-      ],
-    },
   ];
 
   projectStatus = [
@@ -245,17 +149,15 @@ export class CompanyViewComponent implements OnInit {
 
   // get tenant data
   getCompany(): void {
-    this._profile.getProfileData().subscribe({
+    this.profileService.getProfileData().subscribe({
       next: (user) => {
         this.userId = user.id;
         const companyId = this.route.snapshot.paramMap.get('id');
         if (companyId) {
           this.companyService.getCompanyData(companyId).subscribe({
             next: (res) => {
-              // console.log(res);
               this.company = res.result;
               this.Owner = res.result.owner;
-              // console.log(this.Owner);
               this.CompanyId = res.result.id; // ✅ Set CompanyId here
               localStorage.setItem('CompanyId', this.CompanyId.toString());
               this.getProjectData(); // ✅ Fetch project data after setting ID
@@ -281,14 +183,15 @@ export class CompanyViewComponent implements OnInit {
               // ✅ Trigger change detection (if needed)
               this.cdr.detectChanges();
 
-              if (this.company.owner.id !== this.userId) {
+              if (this.Owner?.id !== this.userId) {
                 this.isOwner = false; // hide delete button
               } else {
                 this.isOwner = true; // show delete button
               }
+              this.showCompany = true;
+              this.loading = false;
             },
-            error: (err) =>
-              console.error('Error fetching company details:', err),
+            error: (err) => console.log('Error fetching company details:', err),
           });
         }
       },
@@ -312,6 +215,7 @@ export class CompanyViewComponent implements OnInit {
       });
   }
 
+  // wrappers
   getWrapperClass(status: string): string {
     switch (status) {
       case 'working on':
@@ -328,7 +232,32 @@ export class CompanyViewComponent implements OnInit {
         return '';
     }
   }
-
+  getPriorityClass(priority: string): string {
+    switch (priority.toLowerCase()) {
+      case 'low':
+        return 'low-tag';
+      case 'medium':
+        return 'medium-tag';
+      case 'high':
+        return 'high-tag';
+      case 'critical':
+        return 'critical-tag';
+      default:
+        return '';
+    }
+  }
+  getPriorityImage(priority: string): string {
+    switch (priority.toLowerCase()) {
+      case 'high':
+        return 'assets/images/Issue Priorities/urgent.svg';
+      case 'medium':
+        return 'assets/images/Issue Priorities/high.svg';
+      case 'low':
+        return 'assets/images/Issue Priorities/low.svg';
+      default:
+        return 'assets/images/Issue Status/backlog.svg';
+    }
+  }
   getSpanStatus(status: string): string {
     switch (status) {
       case 'working on':
@@ -346,10 +275,12 @@ export class CompanyViewComponent implements OnInit {
     }
   }
 
+  // url validation
   isValidUrl(url: any): boolean {
     return !!(url && url !== 'string' && url.trim() !== '');
   }
 
+  // modals
   delete() {
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       width: 'auto',
@@ -368,7 +299,6 @@ export class CompanyViewComponent implements OnInit {
       }
     });
   }
-
   update() {
     const dialogRef = this.dialog.open(UpdateCompanyComponent, {
       width: 'auto',
@@ -387,16 +317,10 @@ export class CompanyViewComponent implements OnInit {
     });
   }
 
-  selectProject(projectId: any) {
-    this.SelectedProjectId = parseInt(projectId);
-    console.log('Selected Project ID:', this.SelectedProjectId);
-    this.projectSelected.emit(this.SelectedProjectId); // Emit it
-    this.router.navigate(['/MyDashboard/Project', projectId]);
-  }
-
+  // get project data
   getProjectData() {
     this.projectService.getProjectData(this.CompanyId).subscribe({
-      next: (res: Project) => {
+      next: (res) => {
         console.log(res);
         let totalProjectsCounter = 0;
         let completedProjectsCounter = 0;
@@ -405,7 +329,6 @@ export class CompanyViewComponent implements OnInit {
 
         if (res.isSuccess && res.result) {
           totalProjectsCounter = res.result.length;
-
           res.result.forEach((project: any) => {
             switch (project.status) {
               case 'Completed':
@@ -469,13 +392,14 @@ export class CompanyViewComponent implements OnInit {
             icon: 'assets/images/Issue Status/in-progress.svg',
             class: 'inprogress-tag',
             status: 'working on',
-            issues: workingOnProjects.map((project) => ({
+            projects: workingOnProjects.map((project) => ({
               id: project.id,
               title: project.name,
               startDate: project.startDate,
               dueDate: project.endDate,
               description: project.description,
-              category: project.priority,
+              priority: project.priority,
+              members: this.getProjectMembers(project),
             })),
           },
           {
@@ -483,13 +407,14 @@ export class CompanyViewComponent implements OnInit {
             icon: 'assets/images/Issue Status/Completed.svg',
             class: 'completed-tag',
             status: 'completed',
-            issues: completedProjects.map((project) => ({
+            projects: completedProjects.map((project) => ({
               id: project.id,
               title: project.name,
               startDate: project.startDate,
               dueDate: project.endDate,
               description: project.description,
-              category: project.priority,
+              priority: project.priority,
+              members: this.getProjectMembers(project),
             })),
           },
           {
@@ -497,13 +422,14 @@ export class CompanyViewComponent implements OnInit {
             icon: 'assets/images/Issue Status/Important Time.svg',
             class: 'overdue-tag',
             status: 'overdue',
-            issues: overdueProjects.map((project) => ({
+            projects: overdueProjects.map((project) => ({
               id: project.id,
               title: project.name,
               startDate: project.startDate,
               dueDate: project.endDate,
               description: project.description,
-              category: project.priority,
+              priority: project.priority,
+              members: this.getProjectMembers(project),
             })),
           },
           {
@@ -511,13 +437,14 @@ export class CompanyViewComponent implements OnInit {
             icon: 'assets/images/Issue Status/Important Time.svg',
             class: 'planning-tag',
             status: 'planning',
-            issues: planningProjects.map((project) => ({
+            projects: planningProjects.map((project) => ({
               id: project.id,
               title: project.name,
               startDate: project.startDate,
               dueDate: project.endDate,
               description: project.description,
-              category: project.priority,
+              priority: project.priority,
+              members: this.getProjectMembers(project),
             })),
           },
           {
@@ -525,26 +452,36 @@ export class CompanyViewComponent implements OnInit {
             icon: 'assets/images/Issue Status/Important Time.svg',
             class: 'canceled-tag',
             status: 'canceled',
-            issues: canceledProjects.map((project) => ({
+            projects: canceledProjects.map((project) => ({
               id: project.id,
               title: project.name,
               startDate: project.startDate,
               dueDate: project.endDate,
               description: project.description,
-              category: project.priority,
+              priority: project.priority,
+              members: this.getProjectMembers(project),
             })),
           },
         ];
+        this.projectLoading = false;
       },
       error: (err) => console.error('Error fetching project data:', err),
     });
   }
+  getProjectMembers(project: any) {
+    return project.userProjects.map((userProject: any) => {
+      const user = project.tenant.joinedUsers.find(
+        (u: any) => u.id === userProject.userId
+      );
+      return {
+        ...user,
+      };
+    });
+  }
 
+  // pin tenant
   onPinTenant(event: MouseEvent) {
     event.stopPropagation(); // prevent triggering card animation click
-
-    // const tenantId = tenant.id; // Or tenant.tenantId depending on your model
-    // const companyId = this.route.snapshot.paramMap.get('id');
     this._PinnedService.PinItem('Tenant', this.CompanyId).subscribe({
       next: (res) => {
         console.log('Pinned successfully:', res);
@@ -557,6 +494,7 @@ export class CompanyViewComponent implements OnInit {
     });
   }
 
+  // show successful and failed pinned toastr
   showSuccess() {
     this._toaster.success(
       'The Project has been Pinned',
@@ -571,8 +509,8 @@ export class CompanyViewComponent implements OnInit {
     );
   }
 
-  showFail(err : any) {
-    this._toaster.error( err, 'Pinned Failed', {
+  showFail(err: any) {
+    this._toaster.error(err, 'Pinned Failed', {
       toastClass: 'toast-pink',
       timeOut: 10000,
       closeButton: true,

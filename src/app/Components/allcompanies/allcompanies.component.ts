@@ -8,12 +8,10 @@ import { MatChipsModule } from '@angular/material/chips';
 import { AllcompaniescardComponent } from '../allcompaniescard/allcompaniescard.component';
 import { CompanyService } from '../../Core/Services/company.service';
 import { ProfileService } from '../../Core/Services/profile.service';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { JoinCompanyComponent } from '../join-company/join-company.component';
+import { transition, trigger, style, animate } from '@angular/animations';
+import { DashboardLoaderComponent } from '../../Shared/dashboard-loader/dashboard-loader.component';
 
 @Component({
   selector: 'app-allcompanies',
@@ -23,9 +21,21 @@ import { JoinCompanyComponent } from '../join-company/join-company.component';
     MatTabsModule,
     MatChipsModule,
     AllcompaniescardComponent,
+    DashboardLoaderComponent,
   ],
   templateUrl: './allcompanies.component.html',
   styleUrl: './allcompanies.component.css',
+  animations: [
+    trigger('slideInUp', [
+      transition(':enter', [
+        style({ transform: 'translateY(20px)', opacity: 0 }),
+        animate(
+          '700ms ease-out',
+          style({ transform: 'translateY(0)', opacity: 1 })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class AllcompaniesComponent {
   constructor(
@@ -43,6 +53,8 @@ export class AllcompaniesComponent {
   userId!: any;
   companyId!: any;
   isSidebarCollapsed = true;
+  showCompanies = false;
+  loading = true;
   //---------------------------------
   ngOnInit(): void {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
@@ -69,9 +81,13 @@ export class AllcompaniesComponent {
               this.ownedCompanies = this.joinedCompanies.filter(
                 (company) => company.owner.id === this.userId
               );
+              this.showCompanies = true;
+              this.loading = false;
             }
           },
-          error: (err) => console.error(err),
+          error: (err) => {
+            console.error(err);
+          },
         });
       },
     });
@@ -99,12 +115,5 @@ export class AllcompaniesComponent {
       disableClose: true,
       // data: { companyId: this.company.id }, // ✅ Pass company id to modal
     });
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   if (result === 'deleted') {
-    //     console.log('Company deleted successfully');
-    //     this.sidebarService.notifyCompanyDeleted();
-    //     this.router.navigate(['/MyDashboard/allcompanies']);
-    //   }
-    // });
   }
 }
