@@ -1,198 +1,265 @@
 <div class="my-4 min-vh-100">
   <div class="BG" [ngClass]="{ expand: isSidebarCollapsed }">
-    <div class="container">
-      <div class="row g-3">
-        <div class="col-md-8">
-          <div class="card cardBottomRight position-relative">
-            <!-- Red Pin Icon -->
-            <!-- <img (click)="onPinTenant($event)"
-              class="cursor-pointer Red-Pin position-absolute"
-              width="32" height="32"
-              src="https://img.icons8.com/arcade/64/map-pin.png" alt="map-pin"/> -->
-            <div class="card-body">
-              <div class="header">
-                <div
-                  class="company-header-data d-flex align-items-center gap-2"
-                >
-                  <img
-                    src="assets/images/sidebar icons/Company.svg"
-                    alt="Company Logo"
-                  />
-                  <h2>{{ company.name }}</h2>
+    <app-dashboard-loader *ngIf="loading"></app-dashboard-loader>
+    <div class="container" *ngIf="company && !loading && showCompany">
+      <div class="row g-3" [@slideInUp]>
+        <div class="col-12 mx-auto">
+          <div class="card cardBottomRight position-relative p-0 company-div">
+            <div class="image-gradient">
+              <img
+                class="company-img"
+                [src]="
+                  isValidUrl(company.image)
+                    ? company.image
+                    : 'assets/images/cover.jpg'
+                "
+                alt="Company Cover"
+              />
+              <div class="shine"></div>
+            </div>
+            <div class="company-name">
+              <h2>{{ company.name }}</h2>
+              <p class="m-0 p-0">
+                {{
+                  company.description
+                    ? company.description
+                    : "No Description Available"
+                }}
+              </p>
+            </div>
+            <div class="company-actions gap-2">
+              @if (isOwner) {
+              <div class="header-buttons gap-2">
+                <div class="btn auth-form-container" (click)="update()">
+                  <i
+                    class="fa-solid fa-pen edit-icon"
+                    style="color: var(--mainLightBlueColor)"
+                  ></i>
                 </div>
-                <div class="Icons d-flex align-items-center gap-2">
-                @if (isOwner) {
-                <div class="header-buttons d-flex align-items-center gap-2">
-                  <button
-                    class="btn card px-3 py-2 edit-icon"
-                    (click)="update()"
-                  >
-                    <i class="fa-solid fa-pen" style="color: #ffd43b"></i>
-                  </button>
-                  <button
-                    class="btn card px-3 py-2 trash-icon"
-                    (click)="delete()"
-                  >
-                    <i class="fa-solid fa-trash" style="color: red"></i>
-                  </button>
-                </div>
-                }
-                <!-- Red Pin Icon -->
-                  <img (click)="onPinTenant($event)"
-                class="cursor-pointer Red-Pin"
-                width="32" height="32"
-                src="https://img.icons8.com/arcade/64/map-pin.png" alt="map-pin"/>
+                <div class="btn auth-form-container" (click)="delete()">
+                  <i
+                    class="fa-solid fa-trash trash-icon"
+                    style="color: var(--mainLightBlueColor)"
+                  ></i>
                 </div>
               </div>
-              <div class="content mt-3">
-                <div class="row g-4 h-50">
-                  <div class="col-md-6">
-                    <!--image-->
-                    <img
-                      class="company-img"
-                      [src]="
-                        isValidUrl(company.image)
-                          ? company.image
-                          : 'assets/images/cover.jpg'
+              }
+              <div
+                class="btn auth-form-container"
+                (click)="onPinTenant($event)"
+              >
+                <!-- <img
+                  class="cursor-pointer Red-Pin"
+                  width="32"
+                  height="32"
+                  src="https://img.icons8.com/arcade/64/map-pin.png"
+                  alt="map-pin"
+                /> -->
+                <i
+                  class="fa-solid fa-map-pin fa-rotate-by pin-icon"
+                  style="
+                    --fa-rotate-angle: 45deg;
+                    color: var(--mainLightBlueColor);
+                  "
+                ></i>
+              </div>
+            </div>
+            <div class="auth-form-container content d-none d-md-block">
+              <div class="card-body">
+                @if(isOwner) {
+                <div class="code">
+                  <h5>
+                    <i
+                      class="fa-regular fa-file-lines pe-1"
+                      style="color: var(--mainLightBlueColor)"
+                    ></i>
+                    Company Code
+                  </h5>
+                  <div class="copy-text d-flex align-items-center gap-2">
+                    <p>{{ company.tenantCode }}</p>
+                    <div (click)="copyText('code')">
+                      <span *ngIf="!copied.code">
+                        <i
+                          class="fa-clipboard fa-regular"
+                          style="color: #2459fffc"
+                        ></i>
+                      </span>
+                      <span *ngIf="copied.code">
+                        <i class="fa-check fa-solid" style="color: #28a745"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                }
+                <div class="url">
+                  <h5>
+                    <i
+                      class="fa-solid fa-link pe-1"
+                      style="color: var(--mainLightBlueColor)"
+                    ></i>
+                    Company URL
+                  </h5>
+                  <div class="copy-text d-flex align-items-center gap-2">
+                    <p>
+                      {{
+                        isValidUrl(company.tenantUrl)
+                          ? company.tenantUrl
+                          : "No Company URL Available"
+                      }}
+                    </p>
+                    <div
+                      [style.display]="
+                        isValidUrl(company.tenantUrl) ? 'block' : 'none'
                       "
-                      alt="Company Cover"
-                    />
-                  </div>
-                  <div class="col-md-6">
-                    @if(isOwner) {
-                    <div class="code">
-                      <h5>
+                      (click)="copyText('url')"
+                    >
+                      <span *ngIf="!copied.url">
                         <i
-                          class="fa-regular fa-file-lines pe-1"
-                          style="color: var(--mainLightBlueColor)"
+                          class="fa-clipboard fa-regular"
+                          style="color: #2459fffc"
                         ></i>
-                        <!--code-->
-                        Company Code
-                      </h5>
-                      <div class="copy-text d-flex align-items-center gap-2">
-                        <p>{{ company.tenantCode }}</p>
-                        <div (click)="copyText('code')">
-                          <span *ngIf="!copied.code">
-                            <i
-                              class="fa-clipboard fa-regular"
-                              style="color: #2459fffc"
-                            ></i>
-                          </span>
-                          <span *ngIf="copied.code">
-                            <i
-                              class="fa-check fa-solid"
-                              style="color: #28a745"
-                            ></i>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    }
-                    <div class="url">
-                      <h5>
-                        <i
-                          class="fa-solid fa-link pe-1"
-                          style="color: var(--mainLightBlueColor)"
-                        ></i>
-                        <!--url-->
-                        Company URL
-                      </h5>
-                      <div class="copy-text d-flex align-items-center gap-2">
-                        <p>
-                          {{
-                            isValidUrl(company.tenantUrl)
-                              ? company.tenantUrl
-                              : "No Company URL Available"
-                          }}
-                        </p>
-                        <div
-                          [style.display]="
-                            isValidUrl(company.tenantUrl) ? 'block' : 'none'
-                          "
-                          (click)="copyText('url')"
-                        >
-                          <span *ngIf="!copied.url">
-                            <i
-                              class="fa-clipboard fa-regular"
-                              style="color: #2459fffc"
-                            ></i>
-                          </span>
-                          <span *ngIf="copied.url">
-                            <i
-                              class="fa-check fa-solid"
-                              style="color: #28a745"
-                            ></i>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="description">
-                      <h5>
-                        <img
-                          src="assets/images/issue view/sprint details/Playlist.svg"
-                          alt=""
-                          class="pe-1 pb-1"
-                        />
-                        Description
-                      </h5>
-                      <!--description-->
-                      <p>
-                        {{
-                          company.description
-                            ? company.description
-                            : "No Description Available"
-                        }}
-                      </p>
-                    </div>
-
-                    <div class="tags">
-                      <h5>
-                        <i
-                          class="fa-solid fa-hashtag pe-1"
-                          style="color: var(--mainLightBlueColor)"
-                        ></i>
-                        Tags
-                      </h5>
-                      @if(company.keywords) {
-                      <mat-chip-set>
-                        <!--tags-->
-                        <mat-chip
-                          *ngFor="
-                            let tag of company?.keywords
-                              ? company?.keywords?.split(' ')
-                              : []
-                          "
-                          >{{ tag }}</mat-chip
-                        >
-                      </mat-chip-set>
-                      } @else {
-                      <p>No Tags Available</p>
-                      }
+                      </span>
+                      <span *ngIf="copied.url">
+                        <i class="fa-check fa-solid" style="color: #28a745"></i>
+                      </span>
                     </div>
                   </div>
+                </div>
+
+                <div class="tags">
+                  <h5>
+                    <i
+                      class="fa-solid fa-hashtag pe-1"
+                      style="color: var(--mainLightBlueColor)"
+                    ></i>
+                    Tags
+                  </h5>
+                  @if(company.keywords) {
+                  <mat-chip-set>
+                    <mat-chip
+                      class="tag-chip"
+                      *ngFor="
+                        let tag of company?.keywords
+                          ? company?.keywords?.split(' ')
+                          : []
+                      "
+                      >{{ tag }}</mat-chip
+                    >
+                  </mat-chip-set>
+                  } @else {
+                  <p>No Tags Available</p>
+                  }
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="row g-2 h-100">
-            <div
-              class="col-md-6"
-              *ngFor="let stat of projectStats; let i = index"
-            >
-              <div class="card h-100" [ngClass]="[stat.class, cardClasses[i]]">
-                <div class="card-body">
-                  <h4>{{ stat.title }}</h4>
-                  <h3>{{ stat.count }}</h3>
+        <div class="auth-form-container content d-block d-md-none">
+          <div class="card-body">
+            @if(isOwner) {
+            <div class="code">
+              <h5>
+                <i
+                  class="fa-regular fa-file-lines pe-1"
+                  style="color: var(--mainLightBlueColor)"
+                ></i>
+                Company Code
+              </h5>
+              <div class="copy-text d-flex align-items-center gap-2">
+                <p>{{ company.tenantCode }}</p>
+                <div (click)="copyText('code')">
+                  <span *ngIf="!copied.code">
+                    <i
+                      class="fa-clipboard fa-regular"
+                      style="color: #2459fffc"
+                    ></i>
+                  </span>
+                  <span *ngIf="copied.code">
+                    <i class="fa-check fa-solid" style="color: #720e88"></i>
+                  </span>
                 </div>
+              </div>
+            </div>
+            }
+            <div class="url">
+              <h5>
+                <i
+                  class="fa-solid fa-link pe-1"
+                  style="color: var(--mainLightBlueColor)"
+                ></i>
+                Company URL
+              </h5>
+              <div class="copy-text d-flex align-items-center gap-2">
+                <p>
+                  {{
+                    isValidUrl(company.tenantUrl)
+                      ? company.tenantUrl
+                      : "No Company URL Available"
+                  }}
+                </p>
+                <div
+                  [style.display]="
+                    isValidUrl(company.tenantUrl) ? 'block' : 'none'
+                  "
+                  (click)="copyText('url')"
+                >
+                  <span *ngIf="!copied.url">
+                    <i
+                      class="fa-clipboard fa-regular"
+                      style="color: #2459fffc"
+                    ></i>
+                  </span>
+                  <span *ngIf="copied.url">
+                    <i class="fa-check fa-solid" style="color: #28a745"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="tags">
+              <h5>
+                <i
+                  class="fa-solid fa-hashtag pe-1"
+                  style="color: var(--mainLightBlueColor)"
+                ></i>
+                Tags
+              </h5>
+              @if(company.keywords) {
+              <mat-chip-set>
+                <mat-chip
+                  class="tag-chip"
+                  *ngFor="
+                    let tag of company?.keywords
+                      ? company?.keywords?.split(' ')
+                      : []
+                  "
+                  >{{ tag }}</mat-chip
+                >
+              </mat-chip-set>
+              } @else {
+              <p>No Tags Available</p>
+              }
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="card cardBottomRight">
+            <div class="card-body">
+              <div class="header">
+                <h4 style="font-family: var(--headerFontFamily)">
+                  Project Overview
+                </h4>
+              </div>
+              <div class="dashboard">
+                <app-all-company-projects-dashboard
+                  [companyId]="company.id"
+                ></app-all-company-projects-dashboard>
               </div>
             </div>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="card cardBottomRight">
+          <div class="card cardBottomRight card-owner">
             <div class="card-body">
               <div class="owner-header">
                 <h4 style="font-family: var(--headerFontFamily)">
@@ -224,7 +291,7 @@
                   </p>
                 </div>
               </div>
-              <div class="contact mt-2">
+              <div class="contact mt-4">
                 <h4>Contact Info</h4>
                 <div
                   *ngFor="let contact of contactInfo"
@@ -240,17 +307,23 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div class="card p-2 cardBottomLeft project-members">
+          <div class="card p-2 cardBottomLeft company-members">
             <div class="card-body">
-              <div class="header text-center">
-                <h2>Company Members</h2>
+              <div class="header">
+                <h2 class="h4 m-0">
+                  <img
+                    src="assets/images/sidebar icons/People Working Together.svg"
+                  />
+                  Company Members
+                </h2>
+                <a class="custom-btn text-center btn">Add Members</a>
               </div>
               <hr />
               <div class="members">
                 <ng-container
                   *ngFor="let member of company.joinedUsers; let last = last"
                 >
-                  <div class="gap-2 member">
+                  <div class="gap-3 member">
                     <img
                       [src]="
                         isValidUrl(member.imageUrl)
@@ -259,23 +332,26 @@
                       "
                       alt=""
                     />
-                    <p class="m-0 p-0 text-capitalize">
-                      {{ member?.firstName }} {{ member?.lastName }}
-                    </p>
+                    <div class="d-flex flex-column">
+                      <p class="m-0 p-0 text-capitalize name">
+                        {{ member?.firstName }} {{ member?.lastName }}
+                      </p>
+                      <p class="m-0 p-0 username">{{ member?.userName }}</p>
+                    </div>
                   </div>
                   <hr *ngIf="!last" />
                 </ng-container>
-                <hr />
-                <div class="add-members gap-2">
+
+                <!-- <div class="add-members gap-2">
                   <img src="./assets/images/Plus.svg" alt="" />
                   <p class="m-0 p-0">Add Members</p>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
         </div>
         <div class="col-md-12">
-          <div class="card cardBottomRight h-100">
+          <div class="card cardBottomRight project-card h-100">
             <div class="card-body">
               <div class="project-header">
                 <h2 class="gap-2">
@@ -286,79 +362,145 @@
                   <span>Projects</span>
                 </h2>
               </div>
-
-              <div class="row flex-nowrap overflow-x-scroll g-3 mt-1">
+              <div class="row flex-nowrap overflow-x-scroll g-3 mt-3">
+                <div
+                  class="d-flex justify-content-center align-items-center w-100"
+                  style="min-height: 300px"
+                  *ngIf="projectLoading"
+                >
+                  <app-dashboard-loader></app-dashboard-loader>
+                </div>
+                @if(!projectLoading) {
                 <div
                   class="col-md-4"
                   *ngFor="let category of ProjectCategories"
                 >
-                  <div class="tag-box" [ngClass]="category.class">
-                    <div class="tag-name">
-                      <img [src]="category.icon" alt="" />
-                      <p>{{ category.name }}</p>
-                    </div>
-                    <span [ngClass]="getSpanStatus(category.status)">{{
-                      category.issues.length
-                    }}</span>
-                  </div>
-
                   <div
                     class="wrapper gap-3"
                     [ngClass]="getWrapperClass(category.status)"
                   >
-                    <div
-                      class="col-md-12"
-                      *ngFor="let issue of category.issues"
-                    >
-                      <div class="card p-1">
-                        <div class="card-body">
-                          <div class="issue-name-date">
-                            <h3>{{ issue.title }}</h3>
-                            <p class="p-0 m-0">
-                              Start {{ issue.startDate }}<br />
-                              Due {{ issue.dueDate }}
-                            </p>
-                          </div>
-                          <div class="issue-description">
-                            <p>{{ issue.description }}</p>
-                          </div>
-                          <div class="field-tag mt-4">
-                            <p class="p-0 m-0 text-capitalize">
-                              {{ issue.category }}
-                            </p>
-                          </div>
-                          <div class="button-options d-flex align-items-end">
-                            <button (click)="selectProject(issue.id)" class="btn mt-3">
-                              <i
-                                class="fa-regular fa-keyboard fa-lg pe-1"
-                                style="color: #dcdfff"
-                              ></i>
-                              View Details
-                            </button>
-                            <div class="options-imgs gap-2">
-                              <img
-                                src="assets/images/issue view/Add File.svg"
-                                alt=""
-                              />
-                              <img
-                                src="assets/images/issue view/Edit Chat History.svg"
-                                alt=""
-                              />
+                    <div class="tag-box" [ngClass]="category.class">
+                      <div class="tag-name">
+                        <img [src]="category.icon" alt="" />
+                        <p>{{ category.name }}</p>
+                      </div>
+                      <span [ngClass]="getSpanStatus(category.status)">{{
+                        category.projects.length
+                      }}</span>
+                    </div>
+                    <div class="project-body">
+                      <div
+                        class="col-md-12"
+                        *ngFor="let project of category.projects"
+                      >
+                        <div class="card p-1">
+                          <div class="card-body">
+                            <div
+                              class="priority-tag mb-2"
+                              [ngClass]="getPriorityClass(project.priority)"
+                            >
+                              <p class="p-0 m-0 gap-1">
+                                <img
+                                  [src]="getPriorityImage(project.priority)"
+                                  alt=""
+                                />
+                                {{ project.priority }}
+                              </p>
                             </div>
+                            <div class="project-name">
+                              <h3>{{ project.title }}</h3>
+                            </div>
+                            <div class="project-description">
+                              <p>{{ project.description }}</p>
+                            </div>
+                            <div class="project-date">
+                              <p class="p-0 m-0">
+                                <i class="fa-solid fa-calendar-days pe-2"></i
+                                >Start
+                                {{ project.startDate | date : "d MMM YYYY"
+                                }}<br />
+                              </p>
+                              <p class="p-0 m-0">
+                                <i class="fa-solid fa-calendar-days pe-2"></i
+                                >Due
+                                {{ project.dueDate | date : "d MMM YYYY" }}
+                              </p>
+                            </div>
+                            <a
+                              class="custom-btn text-center btn mt-3"
+                              (click)="selectProject(project.id)"
+                              >View Details</a
+                            >
+                            <div class="button-options mt-3">
+                              <div class="project-members">
+                                <div
+                                  class="member-stack"
+                                  (mouseenter)="hover = true"
+                                  (mouseleave)="hover = false"
+                                >
+                                  <ng-container
+                                    *ngFor="
+                                      let member of project?.members;
+                                      let i = index
+                                    "
+                                  >
+                                    <img
+                                      [src]="
+                                        isValidUrl(member.imageUrl)
+                                          ? member.imageUrl
+                                          : 'assets/images/blank profile.svg'
+                                      "
+                                      [ngStyle]="{
+                                        left: hover
+                                          ? i * 30 + 'px'
+                                          : i * 16 + 'px',
+                                        zIndex: 10 - i
+                                      }"
+                                      class="member-avatar"
+                                      alt="member"
+                                    />
+                                  </ng-container>
+
+                                  <span
+                                    *ngIf="project.members?.length ?? 0 > 3"
+                                    class="extra-count"
+                                  >
+                                    @if (project.members.length > 3) { +{{
+                                      project.members.length - 3
+                                    }}
+                                    }
+                                  </span>
+                                </div>
+                              </div>
+                              <div class="options-imgs gap-2">
+                                <img
+                                  src="assets/images/issue view/Add File.svg"
+                                  alt=""
+                                />
+                                <img
+                                  src="assets/images/issue view/Edit Chat History.svg"
+                                  alt=""
+                                />
+                              </div>
+                            </div>
+                            <div class="project-progress">
+                              <div
+                                class="progress-bar"
+                                style="width: 65%"
+                              ></div>
+                            </div>
+                            <p class="p-0 mt-2 m-0 progress-percent">
+                              Progress 65%
+                            </p>
                           </div>
+                          <div class="shine"></div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+                }
               </div>
-              <button class="btn mt-4">
-                View More
-                <i
-                  class="fa-solid fa-angles-right ps-1"
-                  style="color: #dcdfff"
-                ></i>
-              </button>
             </div>
           </div>
         </div>

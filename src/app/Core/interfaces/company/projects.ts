@@ -4,5 +4,6 @@ export interface Projects {
   startDate: string;
   dueDate: string;
   description: string;
-  category: string;
+  priority: string;
+  members: any[];
 }

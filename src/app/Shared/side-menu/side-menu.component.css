@@ -61,6 +61,7 @@ mat-sidenav-container {
   border-radius: var(--secondRoundness);
   z-index: -1;
   padding: 0.5px;
+  mask: linear-gradient(black, black) content-box, linear-gradient(black, black);
   -webkit-mask: linear-gradient(black, black) content-box,
     linear-gradient(black, black);
   -webkit-mask-composite: destination-in;
