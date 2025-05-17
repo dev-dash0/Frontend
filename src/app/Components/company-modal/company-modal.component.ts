@@ -50,7 +50,6 @@ export class AddCompanyModalComponent {
     }
   }
 
-  
   createNewCompany() {
     if (this.companyForm.valid) {
       const companyData = this.companyForm.value;

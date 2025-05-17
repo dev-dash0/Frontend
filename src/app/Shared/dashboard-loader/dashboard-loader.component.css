@@ -1,0 +1,48 @@
+/* ******************* Dots Loader************************* */
+
+/* .loader-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+} */
+
+
+
+/* *******************Charts/Pulse Loader************************* */
+.chart-loader {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 16px;
+    height: 80px;
+    width: 120px;
+    margin: auto;
+}
+
+.bar {
+    width: 8px;
+    height: 30px;
+    background: linear-gradient(180deg, #C977D6, #602EA6);
+    border-radius: 6px;
+    animation: pulse 0.9s ease-in-out infinite;
+    animation-delay: calc(0.1s * var(--i));
+    box-shadow: 0 0 8px #773db09e;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        height: 30px;
+        transform: scaleY(1);
+        opacity: 0.8;
+    }
+
+    50% {
+        height: 70px;
+        transform: scaleY(1.4);
+        opacity: 1;
+    }
+}
