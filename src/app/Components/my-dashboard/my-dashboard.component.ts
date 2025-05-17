@@ -12,10 +12,12 @@ import { AllProjectsDashboardComponent } from '../all-projects-dashboard/all-pro
 import { CommonModule } from '@angular/common';
 import { DeleteModalComponent } from '../deletemodal/deletemodal.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AiChatPopupComponent } from '../../Shared/ai-chat-popup/ai-chat-popup.component';
 @Component({
   selector: 'app-my-dashboard',
   standalone: true,
   imports: [
+    AiChatPopupComponent,
     SearchBarComponent,
     SideMenuComponent,
     MatSidenavModule,
@@ -33,4 +35,12 @@ import { ReactiveFormsModule } from '@angular/forms';
   templateUrl: './my-dashboard.component.html',
   styleUrl: './my-dashboard.component.css',
 })
-export class MyDashboardComponent {}
+export class MyDashboardComponent {
+  showChatPopup = false;
+  iframeInteractive = false;
+
+  onIframeClick() {
+    this.showChatPopup = true;
+    console.log("ouch")
+  }
+}
