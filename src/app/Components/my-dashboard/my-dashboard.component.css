@@ -15,30 +15,6 @@
   }
 }
 
-.booty{
-  position: fixed;
-  width: 800px;
-  height: 800px;
-  /* top: 0; */
-  top: 250px;
-  right: -250px;
-  /* left: 0; */
-  /* border-radius: 50%; */
-  transform: scale(0.25);
-}
-
-iframe{
-  /* position: fixed; */
-  /* height: 200px;
-  width: 200px; */
-  /* background: transparent; */
-  width: 100%;
-  height: 100%;
-  /* bottom: 0; */
-  /* right: 0; */
-  /* overflow: hidden; */
-  /* z-index: 100; */
-}
 
 .booty {
   position: fixed;
@@ -46,15 +22,31 @@ iframe{
   height: 800px;
   top: 250px;
   right: -300px;
-  transform: scale(1);
-   z-index: 1;  /*keep behind the popup */
+  z-index: 0;
+  pointer-events: none;  /* IMPORTANT: allows mouse events to pass through */
 }
+
 
 iframe {
   width: 100%;
   height: 100%;
-  pointer-events: none; 
 }
+
+.chat-trigger {
+  position: fixed;
+  top: 550px;
+  right: 60px;
+  font-size: 20px;
+  z-index: 100;
+  cursor: pointer;
+  background-color: #21264f;
+  padding: 10px;
+  border-radius: 50%;
+  color: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+
 .chat-popup {
   position: fixed;
   top: 500px;
@@ -69,6 +61,15 @@ iframe {
   animation: dropTiltBounce 1.8s ease-out forwards;
   transform-origin: bottom center;
 }
+
+
+/* .ai-model {
+  transition: transform 0.15s ease-out;
+  transform-origin: center;
+  will-change: transform;
+  
+} */
+
 
 @keyframes dropTiltBounce {
   0% {

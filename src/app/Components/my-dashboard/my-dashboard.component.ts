@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { SearchBarComponent } from '../../Shared/search-bar/search-bar.component';
 import { SideMenuComponent } from '../../Shared/side-menu/side-menu.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -39,8 +39,62 @@ export class MyDashboardComponent {
   showChatPopup = false;
   iframeInteractive = false;
 
+  @HostListener('document:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    const booty = document.querySelector('.chat-trigger') as HTMLElement;
+
+    // simple effect: slight parallax movement
+    booty.style.transform = `translate(${event.clientX * 0.02}px, ${
+      event.clientY * 0.02
+    }px) scale(1)`;
+
+    // const chat = document.querySelector('.chat-trigger') as HTMLElement;
+
+    // // simple effect: slight parallax movement
+    // chat.style.transform = `translate(${event.clientX * 0.02}px, ${
+    //   event.clientY * 0.02
+    // }px) scale(1)`;
+  }
+
+
+  // @HostListener('document:mousemove', ['$event'])
+  // onMouseMove(event: MouseEvent) {
+  //   const modelWrapper = document.getElementById(
+  //     'eyeModelWrapper'
+  //   ) as HTMLElement;
+  //   if (!modelWrapper) return;
+
+  //   const rect = modelWrapper.getBoundingClientRect();
+
+  //   const centerX = rect.left + rect.width / 2;
+  //   const centerY = rect.top + rect.height / 2;
+
+  //   const deltaX = event.clientX - centerX;
+  //   const deltaY = event.clientY - centerY;
+
+  //   const rotateX = (deltaY / rect.height) * -10; // Invert Y
+  //   const rotateY = (deltaX / rect.width) * 10;
+
+  //   modelWrapper.style.transform = `
+  //   perspective(600px)
+  //   rotateX(${rotateX}deg)
+  //   rotateY(${rotateY}deg)
+  //   scale(1.05)
+  // `;
+  // }
+
   onIframeClick() {
     this.showChatPopup = true;
-    console.log("ouch")
+    console.log('ouch');
   }
+
+  // enableIframe() {
+  //   const iframe = document.getElementById('splineIframe') as HTMLElement;
+  //   iframe.style.pointerEvents = 'auto';
+  // }
+
+  // disableIframe() {
+  //   const iframe = document.getElementById('splineIframe') as HTMLElement;
+  //   iframe.style.pointerEvents = 'none';
+  // }
 }

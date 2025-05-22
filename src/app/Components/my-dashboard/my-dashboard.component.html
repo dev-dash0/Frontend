@@ -20,13 +20,32 @@
   <!-- </div> -->
   <!-- <app-ai-chat-popup *ngIf="showChat"></app-ai-chat-popup> -->
 
-  <div class="booty" (click)="onIframeClick()">
+  <div class="booty" >
     <iframe
       src="https://my.spline.design/rememberallrobot-VehUYJ8Ymkr2IAUzLSa8wCPr/"
       allowfullscreen
       frameborder="0"
+      (click)="onIframeClick()"
     ></iframe>
   </div>
-  
-  <app-ai-chat-popup *ngIf="showChatPopup" class="chat-popup" (close)="showChatPopup = false"></app-ai-chat-popup>
+  <div class="chat-trigger" 
+     (click)="onIframeClick()">
+  💬
+</div>
+
+<!-- <div class="ai-model" id="eyeModelWrapper" (click)="onIframeClick()">
+  <iframe
+      src="https://my.spline.design/rememberallrobot-VehUYJ8Ymkr2IAUzLSa8wCPr/"
+      allowfullscreen
+      frameborder="0"
+      (click)="onIframeClick()"
+    ></iframe>
+</div> -->
+
+<app-ai-chat-popup 
+  *ngIf="showChatPopup" 
+  class="chat-popup"
+  (close)="showChatPopup = false"
+></app-ai-chat-popup>
+  <!-- <app-ai-chat-popup *ngIf="showChatPopup" class="chat-popup" (close)="showChatPopup = false"></app-ai-chat-popup> -->
 </div>
