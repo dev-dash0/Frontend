@@ -49,7 +49,7 @@ export class ProjectViewComponent {
   sprintDetails: Sprint[] = [];
   Owner: ProjectOwner | null = null;
   ProjectId: string | null = null;
-  projectIdNum!: number;//for issue-apis usage
+  projectIdNum!: number; //for issue-apis usage
   issue?: Issue;
   // showBacklog: boolean = true;
   backlogIssues: Issue[] = [];
@@ -81,12 +81,11 @@ export class ProjectViewComponent {
     this.RefreshBacklogAfterAddingIssue();
 
     // Get Project id from url
-    this.getProjectId()
+    this.getProjectId();
     // Get The Id from the Path
     this.ProjectId = this.route.snapshot.paramMap.get('id');
 
     this.GetProjectData();
-
 
     // Listen for new Sprint events and refresh backlog
     this._sprintService.sprintCreated$.subscribe(() => {
@@ -175,9 +174,10 @@ export class ProjectViewComponent {
       next: (res) => {
         console.log('Project fetched:', res);
         this.ProjectDetails = res.result;
-      }, error: (err) => {
-        console.log(err)
-      }
+      },
+      error: (err) => {
+        console.log(err);
+      },
     });
   }
 
@@ -219,12 +219,13 @@ export class ProjectViewComponent {
       },
     });
   }
-  @ViewChild(AssignUsersToIssueComponent) assignUsersComp!: AssignUsersToIssueComponent;
+  @ViewChild(AssignUsersToIssueComponent)
+  assignUsersComp!: AssignUsersToIssueComponent;
   isModalOpen: boolean = false;
 
   // *************Issue From issue-api**********************
   getProjectId() {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
         this.projectIdNum = +id;
@@ -233,8 +234,7 @@ export class ProjectViewComponent {
     });
   }
 
-  RefreshBacklogAfterAddingIssue() {
-  }
+  RefreshBacklogAfterAddingIssue() {}
   // ---------------------------------------------------
 
   // Sprint Api

@@ -22,11 +22,17 @@ import { Issue } from '../../Core/interfaces/Dashboard/Issue';
 import { PinnedService } from '../../Core/Services/pinned.service';
 import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-users-to-issue.component';
 import { SigninSignupNavbarComponent } from "../../Shared/signin-signup-navbar/signin-signup-navbar.component";
+import { UpdateProjectComponent } from '../update-project/update-project.component';
 
 @Component({
   selector: 'app-project-over-view',
   standalone: true,
-  imports: [AllIssuesDashboardComponent, CommonModule, SigninSignupNavbarComponent, AssignUsersToIssueComponent],
+  imports: [
+    AllIssuesDashboardComponent,
+    CommonModule,
+    SigninSignupNavbarComponent,
+    AssignUsersToIssueComponent,
+  ],
   templateUrl: './project-over-view.component.html',
   styleUrl: './project-over-view.component.css',
 })
@@ -35,7 +41,7 @@ export class ProjectOverViewComponent {
   isSidebarCollapsed = true;
   isMenuOpen = true;
   parentActiveCard: number = 0;
-  projectIdNum!: number;//for issue-apis usage
+  projectIdNum!: number; //for issue-apis usage
   ProjectId: any = 0;
   ProjectDetails?: fetchedProjectDetails;
   ProjectMembers: ProfileData[] = [];
@@ -86,7 +92,7 @@ export class ProjectOverViewComponent {
     // Listen for new issue events and refresh backlog
     this.RefreshBacklogAfterAddingIssue();
     // Get Project id from url
-    this.getProjectId()  //for issue 
+    this.getProjectId(); //for issue
 
     this._sprintService.sprintCreated$.subscribe(() => {
       this.getAllSprints();
@@ -185,6 +191,24 @@ export class ProjectOverViewComponent {
     });
   }
 
+  openDeleteProjectModal(projectId: number, projectTitle: string) {
+    const dialogRef = this.dialog.open(SharedDeleteModalComponent, {
+      width: '450px',
+      data: {
+        title: 'Delete Project',
+        message: `Are you sure you want to delete ${projectTitle}Project? `,
+        confirmText: 'Confirm',
+        cancelText: 'Cancel',
+        itemId: projectId,
+        deleteFunction: () => this.deleteProject(), // Pass function reference
+      },
+    });
+  }
+
+  openUpdateProject(){
+    this.dialogService.openUpdateProjModal(this.projectIdNum);
+  }
+
   // ---------------------------------------------------
 
   // Projects Api
@@ -219,6 +243,27 @@ export class ProjectOverViewComponent {
         console.log(err);
       },
     });
+  }
+
+  updateProject() {}
+
+  deleteProject() {
+    // this.openDeleteProjectModal(
+    //   Number(this.ProjectId),
+    //   this.ProjectDetails!.name
+    // );
+    this._projectService.deleteProject(this.ProjectId).subscribe({
+      next: (res) => {  
+        this._router.navigate(['MyDashboard/Company', this.ProjectDetails?.tenantId]);
+        console.log('Project deleted:', res);
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000); 
+      },
+      error(err) {
+          console.log(err);
+      },
+    })
   }
 
   // ---------------------------------------------------
@@ -261,12 +306,13 @@ export class ProjectOverViewComponent {
       },
     });
   }
-  @ViewChild(AssignUsersToIssueComponent) assignUsersComp!: AssignUsersToIssueComponent;
+  @ViewChild(AssignUsersToIssueComponent)
+  assignUsersComp!: AssignUsersToIssueComponent;
   isModalOpen: boolean = false;
 
   // *************Issue From issue-api**********************
   getProjectId() {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
         this.projectIdNum = +id;
@@ -275,10 +321,8 @@ export class ProjectOverViewComponent {
     });
   }
 
-  RefreshBacklogAfterAddingIssue() {
-  }
+  RefreshBacklogAfterAddingIssue() {}
   // ---------------------------------------------------
-
 
   // Sprints Api
   getAllSprints() {
@@ -341,7 +385,6 @@ export class ProjectOverViewComponent {
       borderLeft: `6px solid ${color}`,
     };
   }
-
 
   // -----------------------------------------------------------
   // pin & unpin

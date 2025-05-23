@@ -1,4 +1,107 @@
-<p>update-project works!</p>
+<app-modal *ngIf="showModal" 
+[title]="'Edit Project'" 
+[formGroup]="ProjectForm"
+[modalContent]="projectModalTemplate" 
+(close)="handleModalClose()" 
+(submit)="onSubmit()"></app-modal>
+
+<ng-template #projectModalTemplate>
+    <div class="modal-container">
+        <form [formGroup]="ProjectForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <!-- Project Name -->
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <label for="projectName">Project Name*</label>
+                    </div>
+                    <div class="col-md-10">
+                        <input id="projectName" type="text" formControlName="name" 
+                            placeholder="e.g. Linear" required />
+                    </div>
+                </div>
+                
+                <!-- Description -->
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <label for="description">Description</label>
+                    </div>
+                    <div class="col-md-10">
+                        <textarea id="description" rows="2" formControlName="description"
+                            placeholder="Write about the project..."></textarea>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+                
+                <!-- Dates -->
+                <div class="date-container">
+                    <div class="row align-items-center">
+                        <div class="col-md-2">
+                            <label>Start Date</label>
+                        </div>
+                        <div class="col-md-10">
+                            <mat-form-field appearance="outline">
+                                <input matInput [matDatepicker]="startDatePicker" 
+                                       formControlName="startDate"
+                                       (dateChange)="onDateChange1($event)">
+                                <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                                <mat-datepicker #startDatePicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-md-2">
+                            <label>Due Date</label>
+                        </div>
+                        <div class="col-md-10">
+                            <mat-form-field appearance="outline">
+                                <input matInput [matDatepicker]="endDatePicker" 
+                                       formControlName="endDate"
+                                       (dateChange)="onDateChange2($event)">
+                                <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                                <mat-datepicker #endDatePicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+                
+                <!-- Status -->
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <label>Status*</label>
+                    </div>
+                    <div class="col-md-10">
+                        <mat-button-toggle-group formControlName="status" aria-label="Project Status" class="w-100">
+                            <mat-button-toggle *ngFor="let status of statuses" [value]="status.value">
+                                <img [src]="status.icon" [alt]="status.label" class="status-icon">
+                                {{ status.label }}
+                            </mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </div>
+                </div>
+                
+                <!-- Priority -->
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <label>Priority*</label>
+                    </div>
+                    <div class="col-md-10">
+                        <mat-button-toggle-group formControlName="priority" aria-label="Project Priority">
+                            <mat-button-toggle *ngFor="let priority of Priorities" [value]="priority.value">
+                                <img [src]="priority.icon" [alt]="priority.label" class="priority-icon">
+                                {{ priority.label }}
+                            </mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
 
 <!-- <div class="modal-container"> -->
     <!-- Header -->
@@ -7,7 +110,7 @@
         <button class="close-btn" (click)="close()">&#x2715;</button>
     </div> -->
 
-    <div class="divider"></div>
+    <!-- <div class="divider"></div> -->
     <!-- Form -->
     <!-- <form [formGroup]="ProjectForm" (ngSubmit)="sendData()" (submit)="onSubmit($event)">
         <div class="form-group"> -->
@@ -31,7 +134,7 @@
                 </div>
             </div> -->
 
-            <div class="divider"></div>
+            <!-- <div class="divider"></div> -->
             <!-- Dates -->
             <!-- <div class="date-container">
                 <div class="row justify-content-center align-items-center">
@@ -63,7 +166,7 @@
                 </div>
             </div> -->
 
-            <div class="divider"></div>
+            <!-- <div class="divider"></div> -->
             <!-- Status -->
             <!-- <div class="row align-items-center">
                 <div class="col-md-2">

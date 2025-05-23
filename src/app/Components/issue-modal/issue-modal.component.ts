@@ -221,7 +221,8 @@ export class IssueModalComponent {
       },
       error: (err) => {
         console.error('Error creating issue:', err);
-        this.showError('Error creating issue. Please try again.');
+        // this.showError('Error creating issue. Please try again.');
+        this.showError(err.error.message);
       }
     });
   }
