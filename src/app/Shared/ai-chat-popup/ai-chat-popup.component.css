@@ -58,6 +58,18 @@
     font-size: 16px;
     transition: background 0.3s ease;
   }
+
+  .chat-messages {
+    display: flex;
+    flex-direction: column-reverse; /* ❤️ هنا السحر */
+    overflow-y: auto;
+    max-height: 280px;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
   
   .send-btn:hover {
     background: #a78bfa;
