@@ -1,5 +1,5 @@
 h3,
-h5 {
+h6 {
   font-family: var(--headerFontFamily);
 }
 .col-sm-6 {
@@ -10,7 +10,7 @@ h5 {
   transition: all 0.3s ease-in-out;
 }
 .totalProject h3,
-.totalProject h5 {
+.totalProject h6 {
   font-weight: 600;
   background: linear-gradient(180deg, #71a5ff 0%, #1347a3 100%);
   -webkit-background-clip: text;
@@ -26,35 +26,35 @@ h5 {
 }
 
 .Completed h3,
-.Completed h5 {
+.Completed h6 {
   color: #0eeade;
   transition: all 0.3s;
 }
 
 .Completed h3:hover,
-.Completed h5:hover {
+.Completed h6:hover {
   color: #41c3eb !important;
 }
 
 .inProgress h3,
-.inProgress h5 {
+.inProgress h6 {
   color: #b926e7 !important;
   transition: all 0.3s;
 }
 
 .inProgress h3:hover,
-.inProgress h5:hover {
+.inProgress h6:hover {
   color: #c476d9 !important;
 }
 
 .overdue h3,
-.overdue h5 {
+.overdue h6 {
   color: #ff5154 !important;
   transition: all 0.3s;
 }
 
 .overdue h3:hover,
-.overdue h5:hover {
+.overdue h6:hover {
   color: #7f83e9 !important;
 }
 

@@ -2,9 +2,9 @@
   <div class="BG" [ngClass]="{ expand: isSidebarCollapsed }">
     <app-dashboard-loader *ngIf="loading"></app-dashboard-loader>
     <div class="container" *ngIf="company && !loading && showCompany">
-      <div class="row g-3" [@slideInUp]>
+      <div class="row g-4" [@slideInUp]>
         <div class="col-12 mx-auto">
-          <div class="card cardBottomRight position-relative p-0 company-div">
+          <div class="card position-relative p-0 company-div">
             <div class="image-gradient">
               <img
                 class="company-img"
@@ -48,20 +48,7 @@
                 class="btn auth-form-container"
                 (click)="onPinTenant($event)"
               >
-                <!-- <img
-                  class="cursor-pointer Red-Pin"
-                  width="32"
-                  height="32"
-                  src="https://img.icons8.com/arcade/64/map-pin.png"
-                  alt="map-pin"
-                /> -->
-                <i
-                  class="fa-solid fa-map-pin fa-rotate-by pin-icon"
-                  style="
-                    --fa-rotate-angle: 45deg;
-                    color: var(--mainLightBlueColor);
-                  "
-                ></i>
+                <i class="fa-solid fa-map-pin pin-icon"></i>
               </div>
             </div>
             <div class="auth-form-container content d-none d-md-block">
@@ -81,7 +68,7 @@
                       <span *ngIf="!copied.code">
                         <i
                           class="fa-clipboard fa-regular"
-                          style="color: #2459fffc"
+                          style="color: rgba(36, 89, 255, 0.988)"
                         ></i>
                       </span>
                       <span *ngIf="copied.code">
@@ -242,24 +229,8 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12">
-          <div class="card cardBottomRight">
-            <div class="card-body">
-              <div class="header">
-                <h4 style="font-family: var(--headerFontFamily)">
-                  Project Overview
-                </h4>
-              </div>
-              <div class="dashboard">
-                <app-all-company-projects-dashboard
-                  [companyId]="company.id"
-                ></app-all-company-projects-dashboard>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="card cardBottomRight card-owner">
+        <div class="col-md-4 responsive">
+          <div class="card card-owner">
             <div class="card-body">
               <div class="owner-header">
                 <h4 style="font-family: var(--headerFontFamily)">
@@ -291,7 +262,7 @@
                   </p>
                 </div>
               </div>
-              <div class="contact mt-4">
+              <div class="contact mt-5">
                 <h4>Contact Info</h4>
                 <div
                   *ngFor="let contact of contactInfo"
@@ -306,11 +277,11 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="card p-2 cardBottomLeft company-members">
+        <div class="col-md-4">
+          <div class="card p-2 company-members">
             <div class="card-body">
               <div class="header">
-                <h2 class="h4 m-0">
+                <h2 class="h6 m-0">
                   <img
                     src="assets/images/sidebar icons/People Working Together.svg"
                   />
@@ -341,17 +312,28 @@
                   </div>
                   <hr *ngIf="!last" />
                 </ng-container>
-
-                <!-- <div class="add-members gap-2">
-                  <img src="./assets/images/Plus.svg" alt="" />
-                  <p class="m-0 p-0">Add Members</p>
-                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 responsive">
+          <div class="card h-100 projects-dashboard">
+            <div class="card-body">
+              <div class="header">
+                <h4 style="font-family: var(--headerFontFamily)">
+                  Project Overview
+                </h4>
+              </div>
+              <div class="dashboard mt-3">
+                <app-all-company-projects-dashboard
+                  [companyId]="company.id"
+                ></app-all-company-projects-dashboard>
               </div>
             </div>
           </div>
         </div>
         <div class="col-md-12">
-          <div class="card cardBottomRight project-card h-100">
+          <div class="card project-card h-100">
             <div class="card-body">
               <div class="project-header">
                 <h2 class="gap-2">

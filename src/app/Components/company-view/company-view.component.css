@@ -18,17 +18,41 @@ mat-chip {
   min-height: 75vh;
 }
 
-.card {
+.card-owner,
+.company-members,
+.projects-dashboard,
+.project-card {
   transform: translateY(0rem);
   transition: all 0.3s ease-in-out;
-  /* box-shadow: 0 3px 10px #4a314c; */
+  background: #5a73c31a !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 3px 10px #4a314c;
+}
+
+.company-div {
+  transform: translateY(0rem);
+  transition: all 0.3s ease-in-out;
+  background: rgba(90, 115, 195, 0.1) !important;
+  box-shadow: 0 3px 10px #4a314c;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  border-radius: var(--standardRoundness);
+  background: none;
+  inset: 0px;
+  z-index: 1;
+  padding: 0.5px;
+  mask: none;
 }
 
 .company-div:hover,
 .card-owner:hover,
 .company-members:hover {
   transform: translateY(-5px);
-  box-shadow: 12px 12px 28px 0 #4a314c;
+  box-shadow: 10px 10px 22px 0 #4a314c;
 }
 
 .project-card .card:hover .shine {
@@ -40,6 +64,11 @@ mat-chip {
   gap: 10px;
   text-align: center;
   justify-content: space-between;
+}
+
+.pin-icon {
+  color: var(--mainLightBlueColor);
+  transform: rotate(45deg);
 }
 
 .trash-icon,
@@ -56,8 +85,14 @@ mat-chip {
 .edit-icon:hover {
   color: #ffd43b !important;
 }
+
 .pin-icon:hover {
   color: #ff90e8 !important;
+}
+
+.active-pin {
+  color: #ff90e8 !important;
+  transform: rotate(0deg) !important;
 }
 
 .Red-Pin {
@@ -107,8 +142,8 @@ hr {
   color: var(--lightGrayColor);
 }
 
-.col-md-6 {
-  height: 320px;
+.col-md-4 {
+  height: 340px;
 }
 
 .company-members,
@@ -577,10 +612,10 @@ p {
   font-family: var(--headerFontFamily);
   color: var(--mainLightBlueColor);
   cursor: pointer;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: var(--middleFontWeight);
-  width: 100px;
-  max-width: 150px;
+  width: 50xp;
+  max-width: 120px;
   position: relative;
   width: 100%;
   box-shadow: inset 0 0 20px rgba(255, 255, 255, 0);
@@ -637,5 +672,9 @@ p {
 
   .btn i {
     font-size: 16px;
+  }
+
+  .responsive {
+    height: 100%;
   }
 }

@@ -1,4 +1,4 @@
-import { Tenant } from './../../Core/interfaces/pinned';
+import { Tenant, TenantResult } from './../../Core/interfaces/pinned';
 import { SidebarService } from './../../Core/Services/sidebar.service';
 import { CompanyService } from './../../Core/Services/company.service';
 import { CommonModule } from '@angular/common';
@@ -69,7 +69,7 @@ export class CompanyViewComponent implements OnInit {
     private router: Router,
     private profileService: ProfileService,
     private _PinnedService: PinnedService,
-    private _toaster: ToastrService
+    private _toastr: ToastrService
   ) {}
   isSidebarCollapsed = true;
   Owner: Owner | null = null;
@@ -81,7 +81,7 @@ export class CompanyViewComponent implements OnInit {
   ProjectCategories: ProjectCategory[] = [];
   loading = true;
   projectLoading = true;
-
+  isPinned = false;
   // ----------------------------------------
   ngOnInit(): void {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
@@ -496,7 +496,7 @@ export class CompanyViewComponent implements OnInit {
 
   // show successful and failed pinned toastr
   showSuccess() {
-    this._toaster.success(
+    this._toastr.success(
       'The Project has been Pinned',
       'Pinned Successfully',
       {
@@ -510,7 +510,7 @@ export class CompanyViewComponent implements OnInit {
   }
 
   showFail(err: any) {
-    this._toaster.error(err, 'Pinned Failed', {
+    this._toastr.error(err, 'Pinned Failed', {
       toastClass: 'toast-pink',
       timeOut: 10000,
       closeButton: true,

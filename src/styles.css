@@ -88,11 +88,7 @@
   --modalGradient: radial-gradient(circle at 2% 99%, #4a314c, #141a4b 67%);
 
   /*search Gradients*/
-  --searchBlueGradient: linear-gradient(
-    to right,
-    #161d3e 63%,
-    rgba(65, 76, 179, 0.2)
-  );
+  --searchBlueGradient: linear-gradient(to right, #161d3e 63%, #414cb333);
 
   --searchButtonGradient: linear-gradient(122deg, #c120e6 19%, #5b6eef 77%);
 
@@ -298,10 +294,10 @@ p:hover {
   margin-block: 10px;
   background: linear-gradient(
     144.98deg,
-    rgba(58, 73, 98, 0.5) 1.37%,
-    rgba(255, 144, 232, 0.5) 43.67%,
-    rgba(116, 202, 255, 0.5) 70.8%,
-    rgba(41, 47, 101, 0.5) 91.44%
+    #3a496280 1.37%,
+    #ff90e880 43.67%,
+    #74caff80 70.8%,
+    #292f6580 91.44%
   );
 }
 
