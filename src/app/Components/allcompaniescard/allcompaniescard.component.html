@@ -15,6 +15,15 @@
         <h3 class="text-capitalize">{{ company.name }}</h3>
       </div>
       <div class="icons gap-3">
+        <div class="icon-shadow">
+          <div class="pin-icon" (click)="togglePin(company, $event)">
+            @if(isPinned) {
+            <a><i class="fa-solid fa-map-pin active-pin"></i></a>
+            } @else {
+            <a><i class="fa-solid fa-map-pin pin"></i></a>
+            }
+          </div>
+        </div>
         @if(isOwner) {
         <div class="icon-shadow">
           <div class="code-icon">
@@ -32,12 +41,9 @@
           </div>
         </div>
         }
-        <div class="icon-shadow">
+        <div class="icon-shadow" *ngIf="isValidUrl(company.tenantUrl)">
           <div class="link-icon">
-            <a
-              [href]="isValidUrl(company.tenantUrl) ? company.tenantUrl : ''"
-              target="_blank"
-            >
+            <a [href]="company.tenantUrl" target="_blank">
               <i
                 class="fa-solid fa-link"
                 style="color: var(--mainLightBlueColor)"
@@ -115,67 +121,5 @@
         </div>
       </div>
     </div>
-    <!-- <div class="card-body">
-      <div class="header">
-        <h2 class="text-capitalize">{{ company.name }}</h2>
-        <div class="icons gap-3">
-          <a (click)="copyText('code')">
-            <span *ngIf="!copied.code">
-              <i
-                class="fa-regular fa-file-lines fa-xl"
-                style="color: var(--mainLightBlueColor)"
-              ></i>
-            </span>
-            <span *ngIf="copied.code">
-              <i class="fa-check fa-solid fa-xl" style="color: #28a745"></i>
-            </span>
-          </a>
-          <a
-            [href]="isValidUrl(company.tenantUrl) ? company.tenantUrl : ''"
-            target="_blank"
-          >
-            <i
-              class="fa-solid fa-link fa-xl"
-              style="color: var(--mainLightBlueColor)"
-            ></i>
-          </a>
-        </div>
-      </div>
-      <mat-chip-set>
-        <mat-chip
-          *ngFor="
-            let tag of company.keywords ? company.keywords.split(' ') : []
-          "
-          >{{ tag }}</mat-chip
-        >
-      </mat-chip-set>
-      <p class="mt-2">
-        {{ company.description }}
-      </p>
-      <div class="members-details">
-        <div class="people gap-1">
-          <ng-container
-            *ngFor="let member of company.joinedUsers; let last = last"
-          >
-            <div class="gap-1 member">
-              <img
-                [src]="
-                  isValidUrl(member.imageUrl)
-                    ? member?.imageUrl
-                    : 'assets/images/blank profile.svg'
-                "
-                alt=""
-              />
-            </div>
-            <hr *ngIf="!last" />
-          </ng-container>
-          <h4 class="m-0 p-0">+5</h4>
-        </div>
-        <button class="btn" (click)="selectCompany()">
-          View More
-          <i class="fa-solid fa-angles-right ps-1" style="color: #dcdfff"></i>
-        </button>
-      </div>
-    </div> -->
   </div>
 </div>
