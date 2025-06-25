@@ -18,6 +18,12 @@ import { ProjectService } from '../../Core/Services/project.service';
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { SigninSignupNavbarComponent } from "../../Shared/signin-signup-navbar/signin-signup-navbar.component";
 import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-users-to-issue.component';
+import { SprintService } from '../../Core/Services/sprint.service';
+import { ActivatedRoute } from '@angular/router';
+import { Sprint } from '../../Core/interfaces/sprint';
+import { ToastrService } from 'ngx-toastr';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 
 @Component({
@@ -36,7 +42,9 @@ import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-use
     MatOptionModule,
     MatChipsModule,
     MatButtonToggleModule,
-    ReactiveFormsModule, AssignUsersToIssueComponent],
+    ReactiveFormsModule, 
+    AssignUsersToIssueComponent,
+    MatTooltipModule],
   templateUrl: './issue-view-modal.component.html',
   styleUrl: './issue-view-modal.component.css',
   animations: [
@@ -61,6 +69,9 @@ export class IssueViewModalComponent {
   private readonly _IssueService = inject(IssueService);
   private readonly _ProjectService = inject(ProjectService);
   private readonly _renderer = inject(Renderer2);
+  private _sprintService = inject(SprintService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly toaster = inject(ToastrService);
   constructor(
     public dialogRef: MatDialogRef<ModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -77,6 +88,7 @@ export class IssueViewModalComponent {
 
   issue!: Issue;
   issueId?: number; //current issue id
+  sprintId?:number |null;
   issueUpdateForm!: FormGroup;
   isEditMode = false;
   showModal = true;
@@ -93,6 +105,8 @@ export class IssueViewModalComponent {
     }, // Yellow
     Low: { icon: 'assets/images/Issue Priorities/low.svg', color: '#908F8F' }, // Green
   };
+  sprintsList: Sprint[] = [];
+  selectedSprintId: number | null = null;
 
   @ViewChild('modalContent') modalContent!: TemplateRef<any>;
 
@@ -114,18 +128,39 @@ export class IssueViewModalComponent {
 
     this.loadIssue();
 
+    this._IssueService.issueUpdated$.subscribe(() => {
+      this.loadIssue(); // أو أي ميثود بتعمل refresh للبيانات
+    });
+
+    this._IssueService.assignedUsersUpdated$.subscribe((updatedIssueId) => {
+      if (updatedIssueId === this.issueId) {
+        this.loadIssue(); // أو أي function تعمل refresh
+      }
+    });
+    
     // this._renderer.listen('window', 'click', () => {
     //   this.showUserDropdown = false;
     // });
   }
   loadIssue(): void {
     const issueId = this.data.issueId;
+
+    
     this.issueId = issueId;
     this._IssueService.getIssueById(issueId).subscribe({
       next: (res) => {
         console.log('Issue fetched:', res);
         this.issue = res.result;
+        this.sprintId = res.result.sprintId;      
+        this.selectedSprintId = this.data.issue?.sprintId ?? null;
+        console.log('Sprint Id',this.sprintId);
         this.loading = false;
+        if (this.issue.isBacklog) {
+          this.selectedSprintId = null;
+        } else {
+          this.selectedSprintId = this.issue.sprintId;
+        }
+        
 
         // ✅ Populate the form after the issue is fetched
         this.issueUpdateForm.patchValue({
@@ -138,11 +173,12 @@ export class IssueViewModalComponent {
           status: this.issue?.status,
           priority: this.issue?.priority,
           attachment: this.issue.attachment,
-          // labels: this.issue?.labels,
           labels: this.issue?.labels ? this.issue.labels.split(',').map(l => l.trim()) : [],
-
+          // sprintId: res.result.sprintId,
         });
         this.getUserJoinedToTheProject(this.issue.projectId);
+
+        this.getAllSprints(this.issue.projectId); // for sprint dropdown in the modal 
 
 
       },
@@ -154,6 +190,8 @@ export class IssueViewModalComponent {
 
 
 
+
+  // 
   toggleEditMode() {
     this.isEditMode = true;
 
@@ -165,62 +203,138 @@ export class IssueViewModalComponent {
   }
 
 
-  onSubmit() {
-    if (this.issueUpdateForm.valid) {
-      this.issue = this.issueUpdateForm.value;
-      this.isEditMode = false;
+//   onSubmit() {
+//     if (this.issueUpdateForm.valid) {
+//       this.issue = this.issueUpdateForm.value;
+//       this.isEditMode = false;
 
-      const issueId = this.data?.issueId; // Get projectId from modal data
-      // const issueData = this.issueUpdateForm.value;
-      const issueData = new FormData();
-      const values = this.issueUpdateForm.value;
+//       const issueId = this.data?.issueId; // Get projectId from modal data
+//       // const issueData = this.issueUpdateForm.value;
+//       const issueData = new FormData();
+//       const values = this.issueUpdateForm.value;
 
-      // Append fields manually with PascalCase keys
-      issueData.append("Title", values.title);
-      issueData.append("Description", values.description ?? "");
-      issueData.append("StartDate", values.startDate ?? "");
-      issueData.append("Deadline", values.deadline ?? "");
-      issueData.append("DeliveredDate", values.deliveredDate ?? "");
-      issueData.append("Type", values.type ?? "");
-      issueData.append("Status", values.status ?? "");
-      issueData.append("Priority", values.priority ?? "");
+//       // Append fields manually with PascalCase keys
+//       issueData.append("Title", values.title);
+//       issueData.append("Description", values.description ?? "");
+//       issueData.append("StartDate", values.startDate ?? "");
+//       issueData.append("Deadline", values.deadline ?? "");
+//       issueData.append("DeliveredDate", values.deliveredDate ?? "");
+//       issueData.append("Type", values.type ?? "");
+//       issueData.append("Status", values.status ?? "");
+//       issueData.append("Priority", values.priority ?? "");
 
-      // Append labels
-      // Clean up labels: trim + remove duplicates + filter out empty
-      // instead of: values.labels.forEach(...)
-      const cleanedLabels = (values.labels as string[])
-        .map(label => label.trim())
-        .filter(l => !!l)
-        .filter((l, i, arr) => arr.indexOf(l) === i);
+//       // Append labels
+//       // Clean up labels: trim + remove duplicates + filter out empty
+//       // instead of: values.labels.forEach(...)
+//       const cleanedLabels = (values.labels as string[])
+//         .map(label => label.trim())
+//         .filter(l => !!l)
+//         .filter((l, i, arr) => arr.indexOf(l) === i);
 
-      issueData.append('Labels', cleanedLabels.join(','));
+//       issueData.append('Labels', cleanedLabels.join(','));
 
-      // Append file if selected
-      if (this.selectedFile) {
-        issueData.append("Attachment", this.selectedFile);
-      }
+//       // Append file if selected
+//       if (this.selectedFile) {
+//         issueData.append("Attachment", this.selectedFile);
+//       }
 
-      // Set sprintId manually based on current issue
-      // issueData.sprintId = (this.issue.sprintId === 0) ? null : this.issue.sprintId;
+//       // Set sprintId manually based on current issue
+//       // issueData.sprintId = (this.issue.sprintId === 0) ? null : this.issue.sprintId;
 
 
-      if (!issueId) {
-        console.error('Project ID is missing!');
-        return;
-      }
-      this._IssueService.updateIssue(issueId, issueData).subscribe({
-        next: () => {
-          console.log('Issue updated successfully:');
-          this._IssueService.notifyIssueCreated();
-          this.dialogRef.close('created'); // Close modal and return status
-        },
-        error: (err) => {
-          console.error('Error creating issue:', err);
-          // this.showError('Error creating Issue');
-        },
-      });
+//       if (!issueId) {
+//         console.error('Issue ID is missing!');
+//         return;
+//       }
+//       // Append SprintId and IsBacklog
+// const isBacklog = this.issue.isBacklog ?? true;  // fallback to true if undefined
+// const sprintId = this.issue.sprintId ?? null;
+
+// issueData.append("IsBacklog", isBacklog.toString());
+// if (sprintId !== null) {
+//   issueData.append("SprintId", sprintId.toString());
+// } else {
+//   issueData.append("SprintId", ""); // or omit this line if your API handles null correctly
+// }
+
+//       this._IssueService.updateIssue(issueId, issueData).subscribe({
+//         next: () => {
+//           console.log('Issue updated successfully:');
+//           this._IssueService.notifyIssueUpdated();
+//           this.dialogRef.close('created'); // Close modal and return status
+//         },
+//         error: (err) => {
+//           console.error('Error creating issue:', err);
+//           // this.showError('Error creating Issue');
+//         },
+//       });
+//     }
+//   }
+
+onSubmit() {
+  if (this.issueUpdateForm.valid) {
+    this.issue = this.issueUpdateForm.value;
+    this.isEditMode = false;
+
+    const issueId = this.data?.issueId;
+    const issueData = new FormData();
+    const values = this.issueUpdateForm.value;
+
+    // Append basic fields
+    issueData.append("Title", values.title);
+    issueData.append("Description", values.description ?? "");
+    issueData.append("StartDate", values.startDate ?? "");
+    issueData.append("Deadline", values.deadline ?? "");
+    issueData.append("DeliveredDate", values.deliveredDate ?? "");
+    issueData.append("Type", values.type ?? "");
+    issueData.append("Status", values.status ?? "");
+    issueData.append("Priority", values.priority ?? "");
+
+    // Clean and append labels
+    const cleanedLabels = (values.labels as string[])
+      .map(label => label.trim())
+      .filter(l => !!l)
+      .filter((l, i, arr) => arr.indexOf(l) === i);
+
+    issueData.append('Labels', cleanedLabels.join(','));
+
+    // Append file if selected
+    if (this.selectedFile) {
+      issueData.append("Attachment", this.selectedFile);
     }
+
+    // ✅ Append SprintId and IsBacklog based on selectedSprintId
+    if (this.selectedSprintId === null) {
+      issueData.append("IsBacklog", "true");
+      issueData.append("SprintId", ""); // optional: you can skip this if your API handles it
+    } else {
+      issueData.append("IsBacklog", "false");
+      issueData.append("SprintId", this.selectedSprintId.toString());
+    }
+
+    // Append optional last update date
+    issueData.append("LastUpdate", new Date().toISOString());
+
+    // Send the update request
+    if (!issueId) {
+      console.error('Issue ID is missing!');
+      return;
+    }
+
+    this._IssueService.updateIssue(issueId, issueData).subscribe({
+      next: () => {
+        console.log('Issue updated successfully');
+        this._IssueService.notifyIssueUpdated();
+        this.dialogRef.close('created');
+      },
+      error: (err) => {
+        console.error('Error updating issue:', err);
+        this.showError('Error updating issue');
+      },
+    });
   }
+}
+
 
   close(): void {
     this.dialogRef.close();
@@ -366,5 +480,126 @@ export class IssueViewModalComponent {
   getPriorityIcon(priority: string) {
     return this.priorityConfig[priority]?.icon || 'assets/icons/default.svg'; // Default icon
   }
+// /////////////////////////////////////////////////////////////////////
+// **********Assign Issue to Sprint **********
+
+getAllSprints(projectId: number) {
+  console.log('Getting sprints for project:', projectId);
+
+  this._ProjectService.getProject(projectId).subscribe({
+    next: (res) => {
+      this._sprintService.getAllSprints(res.result.id).subscribe({
+        next: (res) => {
+          this.sprintsList = res.result.map((sprint: Sprint) => ({
+            ...sprint,
+            startDate: this.dateFormatter(sprint.startDate),
+            endDate: this.dateFormatter(sprint.endDate),
+          }));
+        },
+        error: (err) => {
+          console.error('Failed to load sprints:', err);
+        }
+      });
+    },
+    error: (err) => {
+      console.error('Failed to load project:', err);
+    }
+  });
+}
+
+
+onSprintChange() {
+  const issueId = this.data.issueId;
+
+  const issueData = new FormData();
+
+  // بيانات أساسية مطلوبة دائمًا
+  issueData.append("Title", this.issue.title ?? '');
+  issueData.append("Description", this.issue.description ?? '');
+  issueData.append("StartDate", this.issue.startDate ?? '');
+  issueData.append("Deadline", this.issue.deadline ?? '');
+  // issueData.append("DeliveredDate", this.issue.deliveredDate ?? '');
+  issueData.append("Type", this.issue.type ?? '');
+  issueData.append("Status", this.issue.status ?? '');
+  issueData.append("Priority", this.issue.priority ?? '');
+  issueData.append("Labels", this.issue.labels ?? '');
+
+  // 🟢 SprintId & isBacklog
+  if (this.selectedSprintId === null) {
+    issueData.append("IsBacklog", "true");   // Send to backlog
+    issueData.append("SprintId", "");        // SprintId should be empty
+  } else {
+    issueData.append("IsBacklog", "false");  // Assigned to a sprint
+    issueData.append("SprintId", this.selectedSprintId.toString());
+  }
+
+  // مرفق اختياري
+  if (this.selectedFile) {
+    issueData.append("Attachment", this.selectedFile);
+  }
+
+  // تاريخ التعديل (لو متاح عندك)
+  issueData.append("LastUpdate", new Date().toISOString());
+
+  this._IssueService.updateIssue(issueId, issueData).subscribe({
+    next: () => {
+      this.showSuccess('Issue moved successfully');
+      this.dialogRef.close('updated');
+      this._IssueService.notifyIssueMoved();
+
+    },
+    error: (err) => {
+      this.showError(err);
+    }
+  });
+}
+
+
+
+dateFormatter(dateString: string | Date): string {
+  const dateFormat = new Date(dateString);
+  const formatted = `${String(dateFormat.getDate()).padStart(
+    2,
+    '0'
+  )}/${String(dateFormat.getMonth() + 1).padStart(
+    2,
+    '0'
+  )}/${dateFormat.getFullYear()}`;
+  return formatted;
+}
+getSprintNameById(id: number): string {
+  const sprint = this.sprintsList.find(s => s.id === id);
+  return sprint ? sprint.title : 'Unknown Sprint';
+}
+
+getSprintTooltip(id: number): string {
+  const sprint = this.sprintsList.find(s => s.id === id);
+  if (sprint) {
+    return `${sprint.title}: ${sprint.startDate} → ${sprint.endDate}`;
+  }
+  return '';
+}
+
+////////////////////////////////////////////////
+/***************Toaster******************** */
+
+showError(err: string) {
+  this.toaster.error(err, 'Error Message', {
+    toastClass: 'toast-pink',
+    timeOut: 5000,
+    closeButton: true,
+    progressBar: true,
+    progressAnimation: 'decreasing',
+  });
+}
+showSuccess(Message:string){
+this.toaster.success(Message, 'Success Message', {
+  toastClass: 'toast-pink',
+  timeOut: 5000,
+  closeButton: true,
+  progressBar: true,
+  progressAnimation: 'decreasing',
+});
+}
 
 }

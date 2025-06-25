@@ -50,19 +50,40 @@
                 </div>
 
                 <!-- Description Card -->
-                <div class="card-issue-view shadow-sm border-0 mb-3">
-                    <div class="card-body">
-                        <h6 class="card-title fw-semibold  mb-2">Description</h6>
-                        <p class="card-text" *ngIf="issue?.description; else noDesc">{{ issue.description }}</p>
-                        <ng-template #noDesc>
-                            <em class="dev-text-muted">No description provided.</em>
-                        </ng-template>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="card-issue-view shadow-sm shadow border-0">
+                            <div class="card-body">
+                                <h6 class="fw-semibold  mb-3">Created By</h6>
+                                <div class="d-flex align-items-center gap-3">
+                                    <img [src]="issue.createdBy?.imageUrl" alt="User" class="rounded-circle border"
+                                        width="50" height="50" />
+                                    <div>
+                                        <div><span class="text-capitalize">{{ issue.createdBy?.firstName }} {{
+                                                issue.createdBy?.lastName }}</span></div>
+                                        <small class="dev-text-muted">{{ issue.creationDate | date: 'medium' }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-issue-view shadow-sm border-0 mb-3">
+                            <div class="card-body">
+                                <h6 class="card-title fw-semibold  mb-2">Description</h6>
+                                <p class="card-text" *ngIf="issue?.description; else noDesc">{{ issue.description }}</p>
+                                <ng-template #noDesc>
+                                    <em class="dev-text-muted">No description provided.</em>
+                                </ng-template>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
                 <!-- labels&attach -->
                 <div class="row g-3">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="card-issue-view shadow-sm border-0 mb-3">
                             <div class="card-body">
                                 <h6 class="card-title fw-semibold mb-2">Labels</h6>
@@ -82,7 +103,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-8">
                         <div class="card-issue-view shadow-sm border-0 mb-3">
                             <div class="card-body">
                                 <h6 class="card-title fw-semibold mb-2">Attachment</h6>
@@ -112,25 +133,82 @@
 
                 <!-- Meta Info Card -->
                 <div class="row g-3">
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <div class="card-issue-view shadow-sm shadow border-0 h-100">
                             <div class="card-body">
-                                <h6 class="fw-semibold  mb-3">Created By</h6>
-                                <div class="d-flex align-items-center gap-3">
-                                    <img [src]="issue.createdBy?.imageUrl" alt="User" class="rounded-circle border"
-                                        width="50" height="50" />
-                                    <div>
-                                        <div><span class="text-capitalize">{{ issue.createdBy?.firstName }} {{
-                                                issue.createdBy?.lastName }}</span></div>
-                                        <small class="dev-text-muted">{{ issue.creationDate | date: 'medium' }}</small>
+                                <h6 class="fw-semibold  mb-3" (click)="getAllSprints(issue.projectId)">Sprint</h6>
+                                <div class="">
+                                    <div class="form-group">
+                                        <label for="sprintSelect">Assign to Sprint:</label>
+                                        <select id="sprintSelect" class="form-control" [(ngModel)]="selectedSprintId"
+                                            (change)="onSprintChange()">
+                                            <option [ngValue]="null">Backlog</option>
+                                            <option *ngFor="let sprint of sprintsList" [ngValue]="sprint.id">
+                                                {{ sprint.title }}
+                                            </option>
+                                        </select>
                                     </div>
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>Assign to Sprint</mat-label>
+                                        <mat-select [(ngModel)]="selectedSprintId" (selectionChange)="onSprintChange()">
+                                            <mat-option [value]="null">Backlog</mat-option>
+                                            <mat-option *ngFor="let sprint of sprintsList" [value]="sprint.id">
+                                                {{ sprint.title }} ({{ sprint.startDate }} - {{ sprint.endDate }})
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+
                                 </div>
                             </div>
                         </div>
+                    </div> -->
+
+                    <!-- Sprint Assignment Card -->
+                    <div class="col-md-6">
+                        <div class="card-issue-view shadow-sm border-0 ">
+                            <div class="card-body h-100">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="fw-semibold mb-0">Sprint Assignment</h6>
+                                    <span class="badge burble-tag text-white rounded-pill"
+                                        [matTooltip]="selectedSprintId ? getSprintTooltip(selectedSprintId) : ''"
+                                        matTooltipPosition="above" matTooltipClass="sprint-tooltip-class">
+                                        {{ selectedSprintId ? getSprintNameById(selectedSprintId) : 'Backlog' }}
+                                    </span>
+                                </div>
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <div class="p-2">
+                                        <mat-label>Move Issue To</mat-label>
+                                        <mat-select class [(ngModel)]="selectedSprintId"
+                                            (selectionChange)="onSprintChange()">
+                                            <mat-option [value]="null">
+                                                <div class="d-flex justify-content-between align-items-center gap-2">
+                                                    <div class="backlogOrSprint-logo"><img
+                                                            src="assets/images/Issue Status/backlog.svg" alt="">
+                                                    </div>
+
+                                                    Backlog
+                                                </div>
+                                            </mat-option>
+                                            <mat-option *ngFor="let sprint of sprintsList" [value]="sprint.id" class="d-flex justify-content-between align-items-center gap-2
+                ">
+                                                <div class="d-flex justify-content-between align-items-center gap-2">
+                                                    <div class="backlogOrSprint-logo"> <img
+                                                            src="assets/images/issue view/sprint details/Sprint Iteration.svg"
+                                                            alt=""></div> {{ sprint.title }}
+                                                </div>
+                                                <small class="dropdown-sprints-dates d-block">
+                                                    {{ sprint.startDate }} → {{ sprint.endDate }}
+                                                </small>
+                                            </mat-option>
+                                        </mat-select>
+
+                                    </div>
+                                </mat-form-field>
+
+                            </div>
+                        </div>
                     </div>
-
-
-
 
 
                     <div class="col-md-6">

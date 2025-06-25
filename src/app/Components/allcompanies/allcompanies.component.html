@@ -6,14 +6,8 @@
         <h2>Your Companies</h2>
       </div>
       <span class="btn join-btn" (click)="join()">
-        <a class="custom-btn text-center btn"
-          ><img
-            src="assets/images/sidebar icons/Plus.svg"
-            class="pe-2"
-            alt=""
-          />
-          Join Company</a
-        >
+        <a class="custom-btn text-center btn"><img src="assets/images/sidebar icons/Plus.svg" class="pe-2" alt="" />
+          Join Company</a>
       </span>
     </header>
     <mat-tab-group>
@@ -23,10 +17,8 @@
           <div class="container" [@slideInUp] *ngIf="showCompanies && !loading">
             <div class="row g-3">
               <div class="col-md-6" *ngFor="let company of joinedCompanies">
-                <app-allcompaniescard
-                  [company]="company"
-                  (companySelected)="viewCompany($event)"
-                ></app-allcompaniescard>
+                <app-allcompaniescard [company]="company"
+                  (companySelected)="viewCompany($event)"></app-allcompaniescard>
               </div>
             </div>
           </div>
@@ -39,10 +31,8 @@
           <div class="container" [@slideInUp] *ngIf="showCompanies && !loading">
             <div class="row g-3">
               <div class="col-md-6" *ngFor="let company of ownedCompanies">
-                <app-allcompaniescard
-                  [company]="company"
-                  (companySelected)="viewCompany($event)"
-                ></app-allcompaniescard>
+                <app-allcompaniescard [company]="company"
+                  (companySelected)="viewCompany($event)"></app-allcompaniescard>
               </div>
             </div>
           </div>
