@@ -108,16 +108,17 @@ h3 {
   position: absolute;
   padding: var(--standardPadding);
   border-radius: var(--standardRoundness);
+  /* border: 1px solid rgba(255, 255, 255, 0.062); */
   bottom: 0;
   left: 0;
   width: 100%;
   background: linear-gradient(
     180deg,
-    rgba(49, 58, 91, 0) -1.11%,
-    rgba(49, 58, 91, 0.44) 15%,
+    #303a5c00 -1.11%,
+    #313a5b70 15%,
     #313a5b 99.56%
   );
-  backdrop-filter: blur(2px); /* very important*/
+  backdrop-filter: blur(10px); /* very important*/
 }
 
 .icons {
@@ -131,7 +132,8 @@ h3 {
 }
 
 .icons .link-icon,
-.icons .code-icon {
+.icons .code-icon,
+.icon .pin-icon {
   width: 40px;
   height: 40px;
   clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
@@ -156,9 +158,26 @@ h3 {
   );
 }
 
+.pin-icon .pin {
+  color: var(--mainLightBlueColor) !important;
+  transform: rotate(45deg) !important;
+  display: inline-block !important;
+  transition: all 0.3s ease-in-out;
+}
+
 .icons .icon-shadow:hover {
   transform: translateY(-5px);
   filter: drop-shadow(2px 4px 6px #ff8de87a);
+}
+
+.icons .icon-shadow:hover .pin-icon .pin {
+  transform: rotate(0) !important;
+  color: #720e88 !important;
+}
+
+.active-pin {
+  transform: rotate(0) !important;
+  color: #720e88 !important;
 }
 
 .divider {

@@ -1,9 +1,12 @@
-<mat-sidenav-container class="bg-transparent my-3 rounded-3 position-fixed">
+<mat-sidenav-container
+  class="bg-transparent my-3 rounded-3 position-fixed"
+  autosize
+>
   <mat-sidenav
     #sidenav
     mode="side"
     opened
-    [style.width.px]="collapsed ? 70 : 220"
+    [ngClass]="collapsed ? 'collapsed-sidenav' : 'expanded-sidenav'"
   >
     <div
       class="side-menu-bg h-100 rounded-3 px-2 py-3"
@@ -21,7 +24,8 @@
                 'justify-content-between': !collapsed,
                 'justify-content-center': collapsed
               }"
-              (click)="toggleCollapse()"
+              (click)="toggleCollapseSmall()"
+              [style.cursor]="isSmallScreen ? 'default' : 'pointer'"
             >
               <h5 class="m-0 p-0" *ngIf="!collapsed">
                 <img src="assets/images/logo.png" class="Logo me-2" alt="" />
@@ -36,7 +40,7 @@
           </div>
 
           <!--main services-->
-          <div class="col-md-12" *ngIf="!collapsed">
+          <div class="col-md-12" [class.hidden]="collapsed">
             <div class="side-menu-wrapper h-100">
               <div
                 class="gap-2 main-service"
@@ -63,6 +67,8 @@
               </div>
 
               <div class="drop-menus mt-2">
+                <span class="loader" *ngIf="loadedCompanies"></span>
+                @if(!loadedCompanies) {
                 <div
                   *ngFor="let company of companyNames; let companyIndex = index"
                   class="company d-flex flex-column"
@@ -166,6 +172,7 @@
                     </div>
                   </div>
                 </div>
+                }
 
                 <div (click)="openCompany()" class="add-company">
                   <span><i class="fa-solid fa-plus fa-xs"></i></span>

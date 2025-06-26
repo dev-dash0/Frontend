@@ -1,0 +1,76 @@
+.chat-popup-container {
+    background: linear-gradient(145deg, #1f1a3c, #32264c);
+    border: 1px solid #4e3e75;
+    box-shadow: 0 10px 30px rgba(140, 80, 255, 0.5);
+    border-radius: 18px;
+    padding: 20px;
+    width: 300px;
+    position: relative;
+    animation: popupIn 0.4s ease;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .close-btn:hover {
+    color: #fff;
+  }
+  
+  .chat-input {
+    display: flex;
+    align-items: center;
+    background: #271f45;
+    border: 1px solid #594d80;
+    border-radius: 12px;
+    padding: 8px 12px;
+  }
+  
+  .chat-input input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #fff;
+    font-size: 14px;
+  }
+  
+  .send-btn {
+    background: #8b5cf6;
+    border: none;
+    color: white;
+    padding: 6px 10px;
+    margin-left: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+  }
+  
+  .send-btn:hover {
+    background: #a78bfa;
+  }
+  
+  @keyframes popupIn {
+    0% {
+      transform: scale(0.8) translateY(20px);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+  }
+  

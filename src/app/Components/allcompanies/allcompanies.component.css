@@ -46,8 +46,6 @@
   padding: 1.5rem var(--standardPadding);
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh;
 }
 
 header {
@@ -73,12 +71,6 @@ header {
   font-family: var(--headerFontFamily);
   margin: 0;
 }
-
-/* button {
-  color: var(--mainLightBlueColor);
-  font-weight: var(--middleFontWeight);
-  background: var(--lightPinkGradient);
-} */
 
 .join-btn {
   display: flex;

@@ -1,11 +1,10 @@
-import { Sprint } from './../../Core/interfaces/sprint';
+import { Router, RouterLink } from '@angular/router';
 import {
-  ActivatedRoute,
-  Router,
-  RouterLink,
-  RouterOutlet,
-} from '@angular/router';
-import { Component, EventEmitter, HostListener, inject, Output } from '@angular/core';
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  inject,
+} from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
 import { SidebarService } from '../../Core/Services/sidebar.service';
@@ -14,12 +13,11 @@ import { DialogService } from '../../Core/Services/dialog.service';
 import { Company } from '../../Core/interfaces/company/company';
 import { CompanyService } from '../../Core/Services/company.service';
 import { MatDialog } from '@angular/material/dialog';
-import { AddCompanyModalComponent } from '../../Components/company-modal/company-modal.component';
 import { ProjectService } from '../../Core/Services/project.service';
-import { Project, ProjectResult } from '../../Core/interfaces/project';
 import { SprintService } from '../../Core/Services/sprint.service';
 import { SprintModalComponent } from '../../Components/sprint-modal/sprint-modal.component';
-import { ProjectModalComponent } from '../../Components/project-modal/project-modal.component';
+import { ProfileService } from '../../Core/Services/profile.service';
+import { Projects } from '../../Core/interfaces/company/projects';
 
 @Component({
   selector: 'app-side-menu',
@@ -33,13 +31,14 @@ export class SideMenuComponent {
   constructor(
     private sidebarService: SidebarService,
     private dialogService: DialogService,
-    private _companyService: CompanyService,
-    private _ProjectService: ProjectService,
+    private companyService: CompanyService,
+    private projectService: ProjectService,
     private router: Router,
-    private route: ActivatedRoute,
+    private profileService: ProfileService,
     private dialog: MatDialog,
-  ) { }
-  private _sprintService = inject(SprintService)
+    private cdRef: ChangeDetectorRef
+  ) {}
+  private _sprintService = inject(SprintService);
 
   companyData: Company[] = [];
   companyNames: { id: string; name: string }[] = [];
@@ -50,6 +49,14 @@ export class SideMenuComponent {
   projectTest: { [projectId: string]: any[] } = {};
   // projects: ProjectResult[] = [];
   showSprints: { [projectId: string]: any[] } = {};
+  loadedCompanies = true;
+  loadedProjects = true;
+  loadedSprints = true;
+
+  collapsed = false;
+  isTransitioning = false;
+  isSmallScreen = false;
+
   // ---------------------------------------
   mainServices = [
     {
@@ -132,20 +139,41 @@ export class SideMenuComponent {
   ];
   // -------------- collapse ------------------
   @HostListener('window:resize', ['$event'])
-  onResize(event: Event): void {
-    const width = window.innerWidth;
-    this.collapsed = width <= 1200;
+  onResize(event: Event) {
+    this.checkScreenSize();
   }
+
+  checkScreenSize() {
+    this.isSmallScreen = window.innerWidth < 768;
+    if (this.isSmallScreen) {
+      this.collapsed = true;
+    } else {
+      this.collapsed = false;
+      this.sidebarService.setSidebarState(false);
+    }
+  }
+
+  toggleCollapseSmall() {
+    this.sidebarService.setSidebarState(!this.collapsed);
+    if (!this.isSmallScreen) {
+      this.collapsed = !this.collapsed;
+    }
+  }
+
   toggleCollapseDropDown(id: string) {
     this.dropdownStates[id] = !this.dropdownStates[id];
   }
 
-  collapsed = false;
-
-  toggleCollapse(): void {
-    this.collapsed = !this.collapsed;
-    this.sidebarService.setSidebarState(this.collapsed); // Notify other components
-  }
+  // toggleCollapse(): void {
+  //   if (this.isTransitioning) return;
+  //   this.isTransitioning = true;
+  //   this.collapsed = !this.collapsed;
+  //   this.sidebarService.setSidebarState(this.collapsed);
+  //   this.cdRef.markForCheck();
+  //   setTimeout(() => {
+  //     this.isTransitioning = false;
+  //   }, 300);
+  // }
   // ----------- dropdown optimization ------------
 
   workspaceIssues = ['Issue 1', 'Issue 2'];
@@ -217,12 +245,16 @@ export class SideMenuComponent {
     this.getCompanies();
     this.getSprints();
     this.getProjects();
+    this.checkScreenSize();
+
     this.sidebarService.companyCreated$.subscribe(() => {
       this.getCompanies();
     });
+
     this.sidebarService.companyDeleted$.subscribe(() => {
       this.getCompanies();
     });
+
     this._sprintService.sprintCreated$.subscribe(() => {
       this.getSprints();
     });
@@ -302,7 +334,7 @@ export class SideMenuComponent {
 
   // companies API
   getCompanies(): void {
-    this._companyService.getAllCompanies(null).subscribe({
+    this.companyService.getAllCompanies(null).subscribe({
       next: (res) => {
         console.log('Companies API response:', res);
         if (res?.result && res.result.length > 0) {
@@ -311,7 +343,7 @@ export class SideMenuComponent {
             name: company.name,
           }));
           this.companyData = res.result;
-
+          this.loadedCompanies = false;
           // Store companies and initialize projects as empty
           // this.companies = this.companyData.map((company) => ({
           //   id: company.id,
@@ -371,10 +403,10 @@ export class SideMenuComponent {
 
   //Project API
   getProjects() {
-    this._companyService.getAllCompanyIds().subscribe({
+    this.companyService.getAllCompanyIds().subscribe({
       next: (companyIds) => {
         companyIds.forEach((companyId) => {
-          this._ProjectService.getProjectData(companyId).subscribe({
+          this.projectService.getProjectData(companyId).subscribe({
             next: (response) => {
               console.log(
                 `Project API response for company ${companyId}:`,
@@ -401,31 +433,53 @@ export class SideMenuComponent {
 
   // Sprint API
   getSprints() {
-    this._companyService.getAllCompanyIds().subscribe({
-      next: (res) => {
-        res.forEach((companyId) => {
-          this._ProjectService.getProjectData(companyId).subscribe({
-            next: (project) => {
-              project.result.forEach((proj: any) => {
-                this._sprintService.getAllSprints(proj.id, null).subscribe({
-                  next: (sprint) => {
-                    const sprints = Array.isArray(sprint.result)
-                      ? sprint.result
-                      : [sprint.result];
-                    this.showSprints[proj.id] = sprints;
-                  },
-                  error: (err) => {
-                    console.error(
-                      `Error fetching sprints for project ${project.id}:`,
-                      err
+    this.profileService.getProfileData().subscribe({
+      next: (user) => {
+        const userId = user.id;
+        this.companyService.getAllCompanyIds().subscribe({
+          next: (res) => {
+            res.forEach((companyId) => {
+              this.projectService.getProjectData(companyId).subscribe({
+                next: (project) => {
+                  project.result.forEach((proj: Projects) => {
+                    const members = this.getProjectMembers(proj);
+                    console.log(`Project ${proj.id} members:`, members);
+                    const userIsMember = members.some(
+                      (member: any) => member.id === userId
                     );
-                  },
-                });
+                    if (!userIsMember) return;
+                    this._sprintService.getAllSprints(proj.id, null).subscribe({
+                      next: (sprint) => {
+                        const sprints = Array.isArray(sprint.result)
+                          ? sprint.result
+                          : [sprint.result];
+                        this.showSprints[proj.id] = sprints;
+                      },
+                      error: (err) => {
+                        console.error(
+                          `Error fetching sprints for project ${project.id}:`,
+                          err
+                        );
+                      },
+                    });
+                  });
+                },
               });
-            },
-          });
+            });
+          },
         });
       },
+    });
+  }
+
+  getProjectMembers(project: any) {
+    return project.userProjects.map((userProject: any) => {
+      const user = project.tenant.joinedUsers.find(
+        (u: any) => u.id === userProject.userId
+      );
+      return {
+        ...user,
+      };
     });
   }
 

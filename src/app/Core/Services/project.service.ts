@@ -25,18 +25,6 @@ export class ProjectService {
     );
   };
 
-  getProject = (projectId: any): Observable<any> => {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + localStorage.getItem('token'),
-    });
-    const params = new HttpParams().set('projectId', projectId.toString());
-    return this._HttpClient.get(baseUrl + `/api/Project/${projectId}`, {
-      headers,
-      params,
-    });
-  };
-
   CreateProject = (Tenantid: any, user: any): Observable<any> => {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -51,6 +39,43 @@ export class ProjectService {
         params,
       }
     );
+  };
+
+  getProject = (projectId: any): Observable<any> => {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+    const params = new HttpParams().set('projectId', projectId.toString());
+    return this._HttpClient.get(baseUrl + `/api/Project/${projectId}`, {
+      headers,
+      params,
+    });
+  };
+
+  updateProject(projectId: number, projectData: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    });
+
+    return this._HttpClient.put(
+      `${baseUrl}/api/Project/${projectId}`,
+      projectData, // Send the data directly as the request body
+      { headers }
+    );
+  }
+
+  deleteProject = (projectId: any): Observable<any> => {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+    const params = new HttpParams().set('projectId', projectId.toString());
+    return this._HttpClient.delete(baseUrl + `/api/Project/${projectId}`, {
+      headers,
+      params,
+    });
   };
 
   getAllProjects(search: string | null = null): Observable<any> {
