@@ -12,11 +12,12 @@ import { DashboardLoaderComponent } from "../../Shared/dashboard-loader/dashboar
 import { MatDialog } from '@angular/material/dialog';
 import { Issue } from '../../Core/interfaces/Dashboard/Issue';
 import { IssueService } from '../../Core/Services/issue/issue.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-sprint-view',
   standalone: true,
-  imports: [CommonModule, DashboardLoaderComponent],
+  imports: [CommonModule, DashboardLoaderComponent,MatTooltipModule],
   templateUrl: './sprint-view.component.html',
   styleUrl: './sprint-view.component.css',
 })

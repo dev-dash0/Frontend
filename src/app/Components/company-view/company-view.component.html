@@ -6,24 +6,20 @@
         <div class="col-12 mx-auto">
           <div class="card position-relative p-0 company-div">
             <div class="image-gradient">
-              <img
-                class="company-img"
-                [src]="
+              <img class="company-img" [src]="
                   isValidUrl(company.image)
                     ? company.image
                     : 'assets/images/cover.jpg'
-                "
-                alt="Company Cover"
-              />
+                " alt="Company Cover" />
               <div class="shine"></div>
             </div>
             <div class="company-name">
               <h2>{{ company.name }}</h2>
               <p class="m-0 p-0">
                 {{
-                  company.description
-                    ? company.description
-                    : "No Description Available"
+                company.description
+                ? company.description
+                : "No Description Available"
                 }}
               </p>
             </div>
@@ -31,23 +27,14 @@
               @if (isOwner) {
               <div class="header-buttons gap-2">
                 <div class="btn auth-form-container" (click)="update()">
-                  <i
-                    class="fa-solid fa-pen edit-icon"
-                    style="color: var(--mainLightBlueColor)"
-                  ></i>
+                  <i class="fa-solid fa-pen edit-icon" style="color: var(--mainLightBlueColor)"></i>
                 </div>
                 <div class="btn auth-form-container" (click)="delete()">
-                  <i
-                    class="fa-solid fa-trash trash-icon"
-                    style="color: var(--mainLightBlueColor)"
-                  ></i>
+                  <i class="fa-solid fa-trash trash-icon" style="color: var(--mainLightBlueColor)"></i>
                 </div>
               </div>
               }
-              <div
-                class="btn auth-form-container"
-                (click)="onPinTenant($event)"
-              >
+              <div class="btn auth-form-container" (click)="onPinTenant($event)">
                 <i class="fa-solid fa-map-pin pin-icon"></i>
               </div>
             </div>
@@ -56,20 +43,14 @@
                 @if(isOwner) {
                 <div class="code">
                   <h5>
-                    <i
-                      class="fa-regular fa-file-lines pe-1"
-                      style="color: var(--mainLightBlueColor)"
-                    ></i>
+                    <i class="fa-regular fa-file-lines pe-1" style="color: var(--mainLightBlueColor)"></i>
                     Company Code
                   </h5>
                   <div class="copy-text d-flex align-items-center gap-2">
                     <p>{{ company.tenantCode }}</p>
                     <div (click)="copyText('code')">
                       <span *ngIf="!copied.code">
-                        <i
-                          class="fa-clipboard fa-regular"
-                          style="color: rgba(36, 89, 255, 0.988)"
-                        ></i>
+                        <i class="fa-clipboard fa-regular" style="color: rgba(36, 89, 255, 0.988)"></i>
                       </span>
                       <span *ngIf="copied.code">
                         <i class="fa-check fa-solid" style="color: #28a745"></i>
@@ -80,31 +61,22 @@
                 }
                 <div class="url">
                   <h5>
-                    <i
-                      class="fa-solid fa-link pe-1"
-                      style="color: var(--mainLightBlueColor)"
-                    ></i>
+                    <i class="fa-solid fa-link pe-1" style="color: var(--mainLightBlueColor)"></i>
                     Company URL
                   </h5>
                   <div class="copy-text d-flex align-items-center gap-2">
                     <p>
                       {{
-                        isValidUrl(company.tenantUrl)
-                          ? company.tenantUrl
-                          : "No Company URL Available"
+                      isValidUrl(company.tenantUrl)
+                      ? company.tenantUrl
+                      : "No Company URL Available"
                       }}
                     </p>
-                    <div
-                      [style.display]="
+                    <div [style.display]="
                         isValidUrl(company.tenantUrl) ? 'block' : 'none'
-                      "
-                      (click)="copyText('url')"
-                    >
+                      " (click)="copyText('url')">
                       <span *ngIf="!copied.url">
-                        <i
-                          class="fa-clipboard fa-regular"
-                          style="color: #2459fffc"
-                        ></i>
+                        <i class="fa-clipboard fa-regular" style="color: #2459fffc"></i>
                       </span>
                       <span *ngIf="copied.url">
                         <i class="fa-check fa-solid" style="color: #28a745"></i>
@@ -115,23 +87,16 @@
 
                 <div class="tags">
                   <h5>
-                    <i
-                      class="fa-solid fa-hashtag pe-1"
-                      style="color: var(--mainLightBlueColor)"
-                    ></i>
+                    <i class="fa-solid fa-hashtag pe-1" style="color: var(--mainLightBlueColor)"></i>
                     Tags
                   </h5>
                   @if(company.keywords) {
                   <mat-chip-set>
-                    <mat-chip
-                      class="tag-chip"
-                      *ngFor="
+                    <mat-chip class="tag-chip" *ngFor="
                         let tag of company?.keywords
                           ? company?.keywords?.split(' ')
                           : []
-                      "
-                      >{{ tag }}</mat-chip
-                    >
+                      ">{{ tag }}</mat-chip>
                   </mat-chip-set>
                   } @else {
                   <p>No Tags Available</p>
@@ -146,20 +111,14 @@
             @if(isOwner) {
             <div class="code">
               <h5>
-                <i
-                  class="fa-regular fa-file-lines pe-1"
-                  style="color: var(--mainLightBlueColor)"
-                ></i>
+                <i class="fa-regular fa-file-lines pe-1" style="color: var(--mainLightBlueColor)"></i>
                 Company Code
               </h5>
               <div class="copy-text d-flex align-items-center gap-2">
                 <p>{{ company.tenantCode }}</p>
                 <div (click)="copyText('code')">
                   <span *ngIf="!copied.code">
-                    <i
-                      class="fa-clipboard fa-regular"
-                      style="color: #2459fffc"
-                    ></i>
+                    <i class="fa-clipboard fa-regular" style="color: #2459fffc"></i>
                   </span>
                   <span *ngIf="copied.code">
                     <i class="fa-check fa-solid" style="color: #720e88"></i>
@@ -170,31 +129,22 @@
             }
             <div class="url">
               <h5>
-                <i
-                  class="fa-solid fa-link pe-1"
-                  style="color: var(--mainLightBlueColor)"
-                ></i>
+                <i class="fa-solid fa-link pe-1" style="color: var(--mainLightBlueColor)"></i>
                 Company URL
               </h5>
               <div class="copy-text d-flex align-items-center gap-2">
                 <p>
                   {{
-                    isValidUrl(company.tenantUrl)
-                      ? company.tenantUrl
-                      : "No Company URL Available"
+                  isValidUrl(company.tenantUrl)
+                  ? company.tenantUrl
+                  : "No Company URL Available"
                   }}
                 </p>
-                <div
-                  [style.display]="
+                <div [style.display]="
                     isValidUrl(company.tenantUrl) ? 'block' : 'none'
-                  "
-                  (click)="copyText('url')"
-                >
+                  " (click)="copyText('url')">
                   <span *ngIf="!copied.url">
-                    <i
-                      class="fa-clipboard fa-regular"
-                      style="color: #2459fffc"
-                    ></i>
+                    <i class="fa-clipboard fa-regular" style="color: #2459fffc"></i>
                   </span>
                   <span *ngIf="copied.url">
                     <i class="fa-check fa-solid" style="color: #28a745"></i>
@@ -205,23 +155,16 @@
 
             <div class="tags">
               <h5>
-                <i
-                  class="fa-solid fa-hashtag pe-1"
-                  style="color: var(--mainLightBlueColor)"
-                ></i>
+                <i class="fa-solid fa-hashtag pe-1" style="color: var(--mainLightBlueColor)"></i>
                 Tags
               </h5>
               @if(company.keywords) {
               <mat-chip-set>
-                <mat-chip
-                  class="tag-chip"
-                  *ngFor="
+                <mat-chip class="tag-chip" *ngFor="
                     let tag of company?.keywords
                       ? company?.keywords?.split(' ')
                       : []
-                  "
-                  >{{ tag }}</mat-chip
-                >
+                  ">{{ tag }}</mat-chip>
               </mat-chip-set>
               } @else {
               <p>No Tags Available</p>
@@ -234,24 +177,17 @@
             <div class="card-body">
               <div class="owner-header">
                 <h4 style="font-family: var(--headerFontFamily)">
-                  <i
-                    class="fa-regular fa-address-card pe-1 fa-lg"
-                    style="color: var(--mainLightBlueColor)"
-                  ></i>
+                  <i class="fa-regular fa-address-card pe-1 fa-lg" style="color: var(--mainLightBlueColor)"></i>
                   Owner Details
                 </h4>
               </div>
               <div class="d-flex align-items-center gap-2 mt-3">
                 <!--owner image-->
-                <img
-                  class="owner-img"
-                  [src]="
+                <img class="owner-img" [src]="
                     isValidUrl(company.owner.imageUrl)
                       ? company.owner.imageUrl
                       : 'assets/images/blank profile.svg'
-                  "
-                  alt="Owner Image"
-                />
+                  " alt="Owner Image" />
                 <div class="owner">
                   <h5 class="mb-0 text-capitalize">
                     {{ company.owner.firstName }}
@@ -264,10 +200,7 @@
               </div>
               <div class="contact mt-5">
                 <h4>Contact Info</h4>
-                <div
-                  *ngFor="let contact of contactInfo"
-                  class="d-flex align-items-center gap-1 mb-2"
-                >
+                <div *ngFor="let contact of contactInfo" class="d-flex align-items-center gap-1 mb-2">
                   <img [src]="contact.icon" alt="{{ contact.label }}" />
                   <p class="m-0 p-0">
                     {{ contact.label }}: {{ contact.value }}
@@ -282,27 +215,20 @@
             <div class="card-body">
               <div class="header">
                 <h2 class="h6 m-0">
-                  <img
-                    src="assets/images/sidebar icons/People Working Together.svg"
-                  />
+                  <img src="assets/images/sidebar icons/People Working Together.svg" />
                   Company Members
                 </h2>
                 <a class="custom-btn text-center btn">Add Members</a>
               </div>
               <hr />
-              <div class="members">
-                <ng-container
-                  *ngFor="let member of company.joinedUsers; let last = last"
-                >
-                  <div class="gap-3 member">
-                    <img
-                      [src]="
+              <div class="members-class">
+                <ng-container *ngFor="let member of company.joinedUsers; let last = last">
+                  <div class="gap-3 company-member">
+                    <img [src]="
                         isValidUrl(member.imageUrl)
                           ? member?.imageUrl
                           : 'assets/images/blank profile.svg'
-                      "
-                      alt=""
-                    />
+                      " alt="" />
                     <div class="d-flex flex-column">
                       <p class="m-0 p-0 text-capitalize name">
                         {{ member?.firstName }} {{ member?.lastName }}
@@ -325,9 +251,7 @@
                 </h4>
               </div>
               <div class="dashboard mt-3">
-                <app-all-company-projects-dashboard
-                  [companyId]="company.id"
-                ></app-all-company-projects-dashboard>
+                <app-all-company-projects-dashboard [companyId]="company.id"></app-all-company-projects-dashboard>
               </div>
             </div>
           </div>
@@ -337,30 +261,18 @@
             <div class="card-body">
               <div class="project-header">
                 <h2 class="gap-2">
-                  <img
-                    src="assets/images/dashboard icons/Group of Projects.svg"
-                    alt=""
-                  />
+                  <img src="assets/images/dashboard icons/Group of Projects.svg" alt="" />
                   <span>Projects</span>
                 </h2>
               </div>
               <div class="row flex-nowrap overflow-x-scroll g-3 mt-3">
-                <div
-                  class="d-flex justify-content-center align-items-center w-100"
-                  style="min-height: 300px"
-                  *ngIf="projectLoading"
-                >
+                <div class="d-flex justify-content-center align-items-center w-100" style="min-height: 300px"
+                  *ngIf="projectLoading">
                   <app-dashboard-loader></app-dashboard-loader>
                 </div>
                 @if(!projectLoading) {
-                <div
-                  class="col-md-4"
-                  *ngFor="let category of ProjectCategories"
-                >
-                  <div
-                    class="wrapper gap-3"
-                    [ngClass]="getWrapperClass(category.status)"
-                  >
+                <div class="col-md-4" *ngFor="let category of ProjectCategories">
+                  <div class="wrapper gap-3" [ngClass]="getWrapperClass(category.status)">
                     <div class="tag-box" [ngClass]="category.class">
                       <div class="tag-name">
                         <img [src]="category.icon" alt="" />
@@ -368,24 +280,15 @@
                       </div>
                       <span [ngClass]="getSpanStatus(category.status)">{{
                         category.projects.length
-                      }}</span>
+                        }}</span>
                     </div>
                     <div class="project-body">
-                      <div
-                        class="col-md-12"
-                        *ngFor="let project of category.projects"
-                      >
+                      <div class="col-md-12" *ngFor="let project of category.projects">
                         <div class="card p-1">
                           <div class="card-body">
-                            <div
-                              class="priority-tag mb-2"
-                              [ngClass]="getPriorityClass(project.priority)"
-                            >
+                            <div class="priority-tag mb-2" [ngClass]="getPriorityClass(project.priority)">
                               <p class="p-0 m-0 gap-1">
-                                <img
-                                  [src]="getPriorityImage(project.priority)"
-                                  alt=""
-                                />
+                                <img [src]="getPriorityImage(project.priority)" alt="" />
                                 {{ project.priority }}
                               </p>
                             </div>
@@ -397,79 +300,51 @@
                             </div>
                             <div class="project-date">
                               <p class="p-0 m-0">
-                                <i class="fa-solid fa-calendar-days pe-2"></i
-                                >Start
+                                <i class="fa-solid fa-calendar-days pe-2"></i>Start
                                 {{ project.startDate | date : "d MMM YYYY"
                                 }}<br />
                               </p>
                               <p class="p-0 m-0">
-                                <i class="fa-solid fa-calendar-days pe-2"></i
-                                >Due
+                                <i class="fa-solid fa-calendar-days pe-2"></i>Due
                                 {{ project.dueDate | date : "d MMM YYYY" }}
                               </p>
                             </div>
-                            <a
-                              class="custom-btn text-center btn mt-3"
-                              (click)="selectProject(project.id)"
-                              >View Details</a
-                            >
+                            <a class="custom-btn text-center btn mt-3" (click)="selectProject(project.id)">View
+                              Details</a>
                             <div class="button-options mt-3">
                               <div class="project-members">
-                                <div
-                                  class="member-stack"
-                                  (mouseenter)="hover = true"
-                                  (mouseleave)="hover = false"
-                                >
-                                  <ng-container
-                                    *ngFor="
+                                <div class="member-stack" (mouseenter)="hover = true" (mouseleave)="hover = false">
+                                  <ng-container *ngFor="
                                       let member of project?.members;
                                       let i = index
-                                    "
-                                  >
-                                    <img
-                                      [src]="
+                                    ">
+                                    <img [src]="
                                         isValidUrl(member.imageUrl)
                                           ? member.imageUrl
                                           : 'assets/images/blank profile.svg'
-                                      "
-                                      [ngStyle]="{
+                                      " [ngStyle]="{
                                         left: hover
                                           ? i * 30 + 'px'
                                           : i * 16 + 'px',
                                         zIndex: 10 - i
-                                      }"
-                                      class="member-avatar"
-                                      alt="member"
-                                    />
+                                      }" class="member-avatar" alt="member" />
                                   </ng-container>
 
-                                  <span
-                                    *ngIf="project.members?.length ?? 0 > 3"
-                                    class="extra-count"
-                                  >
+                                  <span *ngIf="project.members?.length ?? 0 > 3" class="extra-count">
                                     @if (project.members.length > 3) { +{{
-                                      project.members.length - 3
+                                    project.members.length - 3
                                     }}
                                     }
                                   </span>
                                 </div>
                               </div>
                               <div class="options-imgs gap-2">
-                                <img
-                                  src="assets/images/issue view/Add File.svg"
-                                  alt=""
-                                />
-                                <img
-                                  src="assets/images/issue view/Edit Chat History.svg"
-                                  alt=""
-                                />
+                                <img src="assets/images/issue view/Add File.svg" alt="" />
+                                <img src="assets/images/issue view/Edit Chat History.svg" alt="" />
                               </div>
                             </div>
                             <div class="project-progress">
-                              <div
-                                class="progress-bar"
-                                style="width: 65%"
-                              ></div>
+                              <div class="progress-bar" style="width: 65%"></div>
                             </div>
                             <p class="p-0 mt-2 m-0 progress-percent">
                               Progress 65%

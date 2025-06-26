@@ -100,7 +100,7 @@
               <div class="issue-header">
                 <h2 class="gap-2">
                   <img src="assets/images/issue view/To Do.svg" alt="" />
-                  <span>Issues</span>
+                  <span class="text-light">Issues</span>
                 </h2>
 
                 <span class="add-issues-btn" (click)="openCreateIssue()">
@@ -195,7 +195,7 @@
                       <div class="wrapper-card" *ngFor="let issue of category.issues">
                         <div class="row">
                           <div class="col-md-2 d-flex justify-content-center  align-items-center">
-                            <div class="wrapper-card-icon">
+                            <div class="priority-circle-container glass-circle-container">
                               <img [src]="getPriorityImage(issue.priority)" alt="" />
                             </div>
                           </div>
@@ -233,7 +233,9 @@
                               <div class="wrapper-card-footer wrapper-card-meta d-flex justify-content-between mt-2">
                                 <div class="card-wrapper-labels d-flex align-items-center gap-2">
                                   <span class="burble-tag"
-                                    *ngFor="let label of (issue.labels?.split(',') || []); let i = index">
+                                    *ngFor="let label of (issue.labels?.split(',')?.slice(0, 3)  || []); let i = index"
+                                    [matTooltip]="label.trim().length > 15 ? label.trim() : ''"
+                                    [matTooltipDisabled]="label.trim().length <= 15" matTooltipPosition="above">
                                     {{ label.trim() }}
                                   </span>
 

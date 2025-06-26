@@ -567,7 +567,7 @@ button.toast-close-button {
 
 /* https://github.com/FortAwesome/Font-Awesome-Pro/blob/master/advanced-options/raw-svg/regular/times-circle.svg */
 .toast-error {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA1MTIgNTEyJyB3aWR0aD0nNTEyJyBoZWlnaHQ9JzUxMic+PHBhdGggZmlsbD0ncmdiKDI1NSwyNTUsMjU1KScgZD0nTTI1NiA4QzExOSA4IDggMTE5IDggMjU2czExMSAyNDggMjQ4IDI0OCAyNDgtMTExIDI0OC0yNDhTMzkzIDggMjU2IDh6bTEyMS42IDMxMy4xYzQuNyA0LjcgNC43IDEyLjMgMCAxN0wzMzggMzc3LjZjLTQuNyA0LjctMTIuMyA0LjctMTcgMEwyNTYgMzEybC02NS4xIDY1LjZjLTQuNyA0LjctMTIuMyA0LjctMTcgMEwxMzQuNCAzMzhjLTQuNy00LjctNC43LTEyLjMgMC0xN2w2NS42LTY1LTY1LjYtNjUuMWMtNC43LTQuNy00LjctMTIuMyAwLTE3bDM5LjYtMzkuNmM0LjctNC43IDEyLjMtNC43IDE3IDBsNjUgNjUuNyA2NS4xLTY1LjZjNC43LTQuNyAxMi4zLTQuNyAxNyAwbDM5LjYgMzkuNmM0LjcgNC43IDQuNyAxMi4zIDAgMTdMMzEyIDI1Nmw2NS42IDY1LjF6Jy8+PC9zdmc+");
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA1MTIgNTEyJyB3aWR0aD0nNTEyJyBoZWlnaHQ9JzUxMic+PHBhdGggZmlsbD0ncmdiKDI1NSwyNTUsMjU1KScgZD0nTTI1NiA4QzExOSA4IDggMTE5IDggMjU2czExMSAyNDggMjQ4IDI0OCAyNDgtMTExIDI0OC0yNDhTMzkzIDggMjU2IDh6bTEyMS42IDMxMy4xYzQuNyA0LjcgNC43IDEyLjMgMCAxN0wzMzggMzc3LjZjLTQuNyA0LjctMTIuMyA0LjctMTcgMEwyNTYgMzEybC02NS4xIDY1LjZjLTQuNyA0LjctMTIuMyA0LjctMTcgMEwxMzQuNCAzMzhjLTQuNy00LjctNC43LTEyLjMgMC0xN2w2NS42LTY1LjYtNjUuNmMtNC43LTQuNy00LjctMTIuMyAwLTE3bDM5LjYtMzkuNmM0LjcgNC43IDEyLjMtNC43IDE3IDBsNjUgNjUuNyA2NS4xLTY1LjZjNC43LTQuNyAxMi4zLTQuNyAxNyAwbDM5LjYgMzkuNmM0LjcgNC43IDQuNyAxMi4zIDAgMTdMMzEyIDI1Nmw2NS42IDY1LjF6Jy8+PC9zdmc+");
 }
 
 /* https://github.com/FortAwesome/Font-Awesome-Pro/blob/master/advanced-options/raw-svg/regular/check.svg */
@@ -746,6 +746,85 @@ li {
   letter-spacing: 0.2px;
 }
 
+/* Lamp Burble Button */
+.custom-btn {
+  font-family: var(--headerFontFamily);
+  color: var(--mainLightBlueColor);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: var(--middleFontWeight);
+  width: 50xp;
+  max-width: 120px;
+  position: relative;
+  width: 100%;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0);
+  outline: 1px solid;
+  outline-color: rgba(255, 255, 255, 0.5);
+  outline-offset: 0px;
+  text-shadow: none;
+  transition: all 1250ms cubic-bezier(0.19, 1, 0.22, 1);
+  background: rgba(255, 255, 255, 0);
+  padding: 5px 12px;
+  text-decoration: none;
+  border-radius: 0.35rem;
+}
+
+.custom-btn:hover {
+  text-decoration: none;
+  border: 1px solid;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5),
+    0 0 20px rgba(255, 255, 255, 0.2);
+  outline-color: rgba(255, 255, 255, 0);
+  outline-offset: 15px;
+  text-shadow: 2px 2px 6px #ff8de87a;
+  background: var(--normalPurple);
+}
+
+/* Main Transparent Card */
+.dashboard-card {
+  background: rgba(90, 115, 195, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 3px 10px #4a314c;
+  color: white;
+  transition: transform 0.3s ease, box-shadow 0.5s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 12px 12px 28px 0 #4a314c;
+}
+
+/* Priority Circle Container with it's effects */
+.glass-circle-container {
+
+  background: linear-gradient(135deg, rgba(155, 97, 149, 0.18) 0%, rgba(27, 51, 81, 0.18) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease-in-out;
+  border-radius: 50%;
+
+}
+
+.priority-circle-container {
+  width: 40px;
+  height: 40px;
+}
+
+.priority-circle-container img {
+  width: 26px;
+  height: 26px;
+}
+
+.glass-circle-container:hover {
+  transform: translateY(-5px);
+  filter: drop-shadow(2px 4px 6px #ff8de87a);
+}
+
 /* =========================================================================================================== */
 /*********************** Global Animations**************************************************************** */
 @keyframes glow {
@@ -766,7 +845,7 @@ li {
 /*********************** Global Modal**************************************************************** */
 /*  */
 .modal-container .row {
-  margin-block: 10px;
+  margin-block: 5px;
 }
 
 /*********************** Global Modal Content Styling************************** */
@@ -1005,17 +1084,16 @@ li {
 
 .modal-container .confirm-btn,
 .modal-container .btn-delete {
-  background-color: #ff90e8;
+  /* background-color: #ff90e8; */
+  background: radial-gradient(109.99% 253.12% at 76.68% 66.67%,
+      #db83f1 0%,
+      #8051b1 100%);
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   color: #fff;
   cursor: pointer;
   transition: all 0.2s;
-}
-
-.modal-container .confirm-btn {
-  background-color: #ff90e8;
 }
 
 .modal-container .btn-delete {

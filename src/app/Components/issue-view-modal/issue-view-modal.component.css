@@ -63,29 +63,7 @@
     color: rgb(130, 175, 219);
 }
 
-/* Chips (badges) */
-.badge {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #eee;
-    font-weight: 500;
-}
 
-/* Status-specific badge tweaks */
-.badge.bg-info-subtle {
-    background-color: rgba(0, 184, 217, 0.15);
-    color: #00b8d9;
-}
-
-.badge.bg-warning-subtle {
-    background-color: rgba(172, 241, 226, 0.15);
-    color: #ffdd33;
-}
-
-.badge .issue-status-badge {
-    background: rgba(90, 115, 195, 0.1);
-
-    color: #ccc;
-}
 
 /* Text-muted override for dark */
 
@@ -168,41 +146,43 @@
 
 /* //////// */
 .label-badge {
-    border: 2px solid #252748 !important;
-    background-color: #06092fe8 !important;
-    color: #fbbeef !important;
-
+    border: 1px solid rgba(204, 153, 255, 0.3);
+    background-color: rgba(110, 52, 146, 0.575);
+    color: #eecaff !important;
+    transition: background-color 0.3s ease;
 }
 
 .label-badge:hover {
-    background-color: #252748c7 !important;
-
+    background-color: rgba(110, 52, 146, 0.3);
 }
 
+/* Label gradients/backgrounds with transparency */
 .bg-label-0 {
-    background-color: #e3f2fd;
-    color: #0d47a1;
+    background-color: rgba(169, 124, 209, 0.2);
+    color: #d69eff;
 }
 
 .bg-label-1 {
-    background-color: #fce4ec;
-    color: #880e4f;
+    background-color: rgba(220, 149, 231, 0.15);
+    color: #f2b4ff;
 }
 
 .bg-label-2 {
-    background-color: #e8f5e9;
-    color: #1b5e20;
+    background-color: rgba(184, 128, 212, 0.12);
+    color: #cbaaff;
 }
 
 .bg-label-3 {
-    background-color: #fff3e0;
-    color: #ef6c00;
+    background-color: rgba(179, 103, 223, 0.18);
+    color: #e5c6ff;
 }
 
 .bg-label-4 {
-    background-color: #ede7f6;
-    color: #4527a0;
+    background-color: rgba(174, 94, 249, 0.15);
+    color: #d4b3ff;
 }
+
+
 
 .max-height-scroll {
     max-height: 120px;
