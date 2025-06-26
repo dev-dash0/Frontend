@@ -17,16 +17,13 @@
             *ngIf="loading"></app-dashboard-loader>
           <div class="container" [@slideInUp] *ngIf="showCompanies && !loading">
             <div class="row g-3">
-              <div class="col-md-6" *ngFor="let company of joinedCompanies">
-                <app-allcompaniescard [company]="company"
-                  (companySelected)="viewCompany($event)"></app-allcompaniescard>
-                <div class="col-md-6" *ngFor="let company of ownedCompanies">
-                  <app-allcompaniescard [company]="company" [isPinned]="pinnedTenantIds.has(company.id)"
-                    (pinChanged)="onPinChanged($event)" (companySelected)="viewCompany($event)"></app-allcompaniescard>
-                </div>
+              <div class="col-md-6" *ngFor="let company of ownedCompanies">
+                <app-allcompaniescard [company]="company" [isPinned]="pinnedTenantIds.has(company.id)"
+                  (pinChanged)="onPinChanged($event)" (companySelected)="viewCompany($event)"></app-allcompaniescard>
               </div>
             </div>
           </div>
+        </div>
       </mat-tab>
 
       <mat-tab label="Joined Companies">
@@ -35,16 +32,13 @@
             *ngIf="loading"></app-dashboard-loader>
           <div class="container" [@slideInUp] *ngIf="showCompanies && !loading">
             <div class="row g-3">
-              <div class="col-md-6" *ngFor="let company of ownedCompanies">
-                <app-allcompaniescard [company]="company"
-                  (companySelected)="viewCompany($event)"></app-allcompaniescard>
-                <div class="col-md-6" *ngFor="let company of joinedCompanies">
-                  <app-allcompaniescard [company]="company" [isPinned]="pinnedTenantIds.has(company.id)"
-                    (pinChanged)="onPinChanged($event)" (companySelected)="viewCompany($event)"></app-allcompaniescard>
-                </div>
+              <div class="col-md-6" *ngFor="let company of joinedCompanies">
+                <app-allcompaniescard [company]="company" [isPinned]="pinnedTenantIds.has(company.id)"
+                  (pinChanged)="onPinChanged($event)" (companySelected)="viewCompany($event)"></app-allcompaniescard>
               </div>
             </div>
           </div>
+        </div>
       </mat-tab>
     </mat-tab-group>
   </div>
