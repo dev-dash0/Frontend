@@ -1,0 +1,37 @@
+<!-- Iframe part  -->
+
+<!-- <div class="w-100 overflow-hidden">
+    <div class="animated-bg-wrapper">
+        <iframe
+          src="https://my.spline.design/squarechipsfallinginplace-1gAzRg6kd59YcY91wVzWfxl8/"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+    </div>
+    <div class="content-overlay bg-danger">
+        <h1 class="text-warning">Hi</h1>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias iusto facere tenetur vero cumque repudiandae unde consequatur sunt aperiam sequi!</p>
+    </div>
+</div> -->
+
+<!-- Install part -->
+
+<!-- First scene -->
+<canvas id="spline-canvas-1" class="canvas visible"></canvas>
+
+<!-- Second scene -->
+<canvas id="spline-canvas-2" class="canvas"></canvas>
+
+<!-- Black fade layer -->
+<div id="fade-cover" class="fade-cover"></div>
+
+<!-- Welcome message and Explore button -->
+<div *ngIf="showContent" class="overlay">
+  <img src="../../../assets/images/Ddside.png" class="w-50 mb-5" alt="">
+  <h1>Welcome to Dev Dash</h1>
+  <button (click)="onExploreClick()">Explore</button>
+</div>
+
+
+
+

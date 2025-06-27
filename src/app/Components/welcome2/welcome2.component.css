@@ -1,0 +1,304 @@
+.animated-bg-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; 
+    overflow: hidden;
+  
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      pointer-events: none; 
+    }
+  }
+  
+  
+  .content-overlay {
+    position: relative;
+    color: white;
+    z-index: 10;
+  }
+  
+
+
+  /* Install part */
+  .canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    transition: opacity 1s ease-in-out;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .canvas.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  /* .overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    z-index: 10;
+  } */
+  /* button {
+    padding: 12px 24px;
+    background-color: #6c63ff;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 20px;
+  } */
+
+  /* .overlay {
+    position: fixed;
+    isolation: isolate;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    z-index: 10;
+    
+    padding: 24px;
+    border-radius: 12px;
+    background-color: rgba(0, 0, 0, 0.134);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    box-shadow: 0 0 12px #7F2789, 0 0 34px #7F2789;
+    animation: neonBorderAnim 3s ease infinite;
+  }
+
+  .overlay::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 14px;
+    background: linear-gradient(270deg, #7F2789, #9f35b0, #7F2789);
+    background-size: 400% 400%;
+    animation: neonFlow 6s ease infinite;
+    z-index: -1;
+    filter: blur(6px);
+  }
+  
+  @keyframes neonBorderAnim {
+    0% {
+      box-shadow: 0 0 12px #7F2789, 0 0 24px #b138c3;
+    }
+    50% {
+      box-shadow: 0 0 20px #b138c3, 0 0 36px #7F2789;
+    }
+    100% {
+      box-shadow: 0 0 12px #7F2789, 0 0 24px #b138c3;
+    }
+  }
+  
+
+  button{
+    position: relative;
+  padding: 12px 24px;
+  background: linear-gradient(270deg, #7F2789, #9f35b0, #7F2789);
+  background-size: 400% 400%;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 20px;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 12px #7F2789, 0 0 24px #7F2789;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: neonFlow 6s ease infinite;
+} */
+
+button:hover {
+  transform: scale(1.07);
+  box-shadow: 0 0 20px #9f35b0, 0 0 40px #7F2789;
+}
+
+@keyframes neonFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ================== OVERLAY ================== */
+.overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  z-index: 10;
+
+  /* padding: 24px;
+  border-radius: 12px;
+  background-color: rgba(0, 0, 0, 0.134); 
+  box-shadow: 0 0 12px #7F2789, 0 0 34px #7F2789;
+  animation: neonBorderAnim 3s ease infinite; */
+}
+
+/* ================== OVERLAY BOX SHADOW ANIMATION ================== */
+@keyframes neonBorderAnim {
+  0% {
+    box-shadow: 0 0 12px #7F2789, 0 0 24px #b138c3;
+  }
+  50% {
+    box-shadow: 0 0 20px #b138c3, 0 0 36px #7F2789;
+  }
+  100% {
+    box-shadow: 0 0 12px #7F2789, 0 0 24px #b138c3;
+  }
+}
+
+/* ================== BUTTON ================== */
+h1 {
+  font-size: 36px;
+  background: linear-gradient(270deg, #7F2789, #a759b4, #d38cdb);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textGradientMove 5s linear infinite, glowPulse 3s ease-in-out infinite;
+  text-align: center;
+}
+
+@keyframes textGradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow: 0 0 8px #7F2789, 0 0 16px #7F2789;
+  }
+  50% {
+    text-shadow: 0 0 16px #b138c3, 0 0 32px #b138c3;
+  }
+}
+
+
+button {
+  position: relative;
+  padding: 12px 24px;
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 50px; /* Rounded outline */
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 20px;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+
+  /* Glowing animated outline */
+  background-image: linear-gradient(#1f1f1f00, #1f1f1f00),
+    linear-gradient(270deg, #7F2789, #9f35b0, #7F2789);
+  background-size: 400% 400%;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 0 12px #7F2789, 0 0 24px #95539c;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: neonFlow 6s linear infinite, outlinePulse 3s ease-in-out infinite;
+}
+
+@keyframes outlinePulse {
+  0%, 100% {
+    box-shadow: 0 0 12px #7F2789, 0 0 24px #7F2789;
+  }
+  50% {
+    box-shadow: 0 0 20px #b138c3, 0 0 40px #b138c3;
+  }
+}
+
+button:hover {
+  transform: scale(1.07);
+  animation: neonFlow 6s linear infinite, outlinePulse 3s ease-in-out infinite;
+}
+
+/* ================== BUTTON BORDER FLOW ================== */
+@keyframes neonFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ================== HEADING TEXT ANIMATION ================== */
+/* h1 {
+  font-size: 36px;
+  background: linear-gradient(270deg, #7F2789, #b138c3, #7F2789);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textGradientMove 5s linear infinite;
+  text-shadow: 0 0 12px #7F2789;
+}
+
+@keyframes textGradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+} */
+
+
+
+  /* img{
+    height: 25%;
+  } */
+  
+  /* Fade cover for transition */
+  .fade-cover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    /* background: rgba(0, 0, 0, 0.7); */
+    background-image: url('/assets/images/Welcome.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0;
+    z-index: 9;
+    pointer-events: none;
+    transition: opacity 0.6s ease-in-out;
+  }
+  .fade-cover.visible {
+    opacity: 1;
+  }
+  
