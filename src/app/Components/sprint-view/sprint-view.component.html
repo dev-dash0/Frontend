@@ -187,12 +187,14 @@
                         }}</span>
                     </div>
 
-                    <div class="wrapper-card-container overflow-y-auto">
+                    <div class="wrapper-card-container overflow-y-auto" cdkDropList [cdkDropListData]="category.issues"
+                      [id]="formatStatusId(category.status)" [cdkDropListConnectedTo]="connectedDropListsIds"
+                      (cdkDropListDropped)="onIssueDropped($event, category.status)">
                       <div class="no-issues d-flex justify-content-center align-items-center h-100"
                         *ngIf="category.issues.length === 0">
                         <p>No issues found</p>
                       </div>
-                      <div class="wrapper-card" *ngFor="let issue of category.issues">
+                      <div class="wrapper-card" *ngFor="let issue of category.issues" cdkDrag [cdkDragData]="issue">
                         <div class="row">
                           <div class="col-md-2 d-flex justify-content-center  align-items-center">
                             <div class="priority-circle-container glass-circle-container">

@@ -1,6 +1,4 @@
 import { Issue } from '../Dashboard/Issue';
-import { Issues } from './issues';
-
 export interface IssueCategory {
   name: string;
   icon: string;

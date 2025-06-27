@@ -13,11 +13,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { Issue } from '../../Core/interfaces/Dashboard/Issue';
 import { IssueService } from '../../Core/Services/issue/issue.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { CdkDragDrop, DragDropModule, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-sprint-view',
   standalone: true,
-  imports: [CommonModule, DashboardLoaderComponent,MatTooltipModule],
+  imports: [CommonModule, DashboardLoaderComponent,MatTooltipModule
+    ,DragDropModule
+  ],
   templateUrl: './sprint-view.component.html',
   styleUrl: './sprint-view.component.css',
 })
@@ -202,6 +205,11 @@ export class SprintViewComponent {
   
         // Convert to array for template
         this.issueCategories = Object.values(issueCategories);
+
+        this.connectedDropListsIds = this.issueCategories.map(category =>
+          this.formatStatusId(category.status)
+        );
+
   
         console.log('Mapped Issues by Status:', this.issueCategories);
       },
@@ -349,6 +357,57 @@ getFormattedDate(dateStr: string | null | undefined): string {
     month: 'short',
     day: 'numeric'
   });
+}
+
+// //////////////////////////////////////////////////////////////////////////
+// *************************Drag and Drop*************************
+// ////////////////////////////////////////////////////////////////
+connectedDropListsIds: string[] = [];
+
+onIssueDropped(event: CdkDragDrop<any[]>, newStatus: string): void {
+  const previousContainer = event.previousContainer;
+  const currentContainer = event.container;
+
+  if (previousContainer === currentContainer) return;
+
+  const draggedIssue = previousContainer.data[event.previousIndex];
+
+    // 1. Remove from old array, add to new
+  transferArrayItem(
+    previousContainer.data,
+    currentContainer.data,
+    event.previousIndex,
+    event.currentIndex
+  );
+
+  // 2. Update backend issue status
+  const updateData = new FormData();
+  updateData.append("Title", draggedIssue.title);
+  updateData.append("Description", draggedIssue.description ?? '');
+  updateData.append("StartDate", draggedIssue.startDate ?? '');
+  updateData.append("Deadline", draggedIssue.deadline ?? '');
+  updateData.append("DeliveredDate", draggedIssue.deliveredDate ?? '');
+  updateData.append("Type", draggedIssue.type ?? '');
+  updateData.append("Status", newStatus); // what we are updating only
+  updateData.append("Priority", draggedIssue.priority ?? '');
+  updateData.append("Labels", draggedIssue.labels ?? '');
+  updateData.append("SprintId", draggedIssue.sprintId?.toString() ?? '');
+  updateData.append("IsBacklog", "false");
+  updateData.append("LastUpdate", new Date().toISOString());
+
+  this._IssueService.updateIssue(draggedIssue.id, updateData).subscribe({
+    next: () => {
+      console.log(`✅ Issue ${draggedIssue.id} status updated to ${newStatus}`);
+      this._IssueService.notifyIssueUpdated();
+    },
+    error: (err) => {
+      console.error('❌ Failed to update issue status:', err);
+    }
+  });
+}
+
+formatStatusId(status: string): string {
+  return status.toLowerCase().replace(/\s/g, '-');
 }
 
 

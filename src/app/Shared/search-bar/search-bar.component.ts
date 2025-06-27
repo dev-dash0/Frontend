@@ -118,7 +118,7 @@ export class SearchBarComponent {
               );
               if (matchedUser) {
                 notification.userId = matchedUser; // Attach full user object
-                console.log('Matched Notification with User:', notification);
+                // console.log('Matched Notification with User:', notification);
                 this.NotifyUser = notification.userId;
               }
             }
