@@ -21,6 +21,10 @@ export class AiChatPopupComponent {
 
   constructor(private aiService: AiAgentService) {}
 
+  ngOnInit(): void {
+    this.messages.push('Hi User, What can I do for you?');
+  }
+
   closePopup() {
     this.close.emit();
   }

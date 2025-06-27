@@ -56,7 +56,6 @@ export class MyDashboardComponent {
     // }px) scale(1)`;
   }
 
-
   // @HostListener('document:mousemove', ['$event'])
   // onMouseMove(event: MouseEvent) {
   //   const modelWrapper = document.getElementById(
@@ -80,13 +79,21 @@ export class MyDashboardComponent {
   //   rotateX(${rotateX}deg)
   //   rotateY(${rotateY}deg)
   //   scale(1.05)
-  // `;
+  // `
+  //
+  // ;
   // }
+
+  // showChatPopup = false;
 
   onIframeClick() {
     this.showChatPopup = true;
-    console.log('ouch');
+    console.log('Chat Opened');
   }
+  // onIframeClick() {
+  //   this.showChatPopup = true;
+  //   console.log('ouch');
+  // }
 
   // enableIframe() {
   //   const iframe = document.getElementById('splineIframe') as HTMLElement;

@@ -1,4 +1,4 @@
-.chat-popup-container {
+/* .chat-popup-container {
     background: linear-gradient(145deg, #1f1a3c, #32264c);
     border: 1px solid #4e3e75;
     box-shadow: 0 10px 30px rgba(140, 80, 255, 0.5);
@@ -61,7 +61,7 @@
 
   .chat-messages {
     display: flex;
-    flex-direction: column-reverse; /* ❤️ هنا السحر */
+    flex-direction: column-reverse; 
     overflow-y: auto;
     max-height: 280px;
     gap: 8px;
@@ -83,6 +83,166 @@
     100% {
       transform: scale(1) translateY(0);
       opacity: 1;
+    }
+  }
+   */
+
+   .chat-popup-container {
+    /* background: linear-gradient(145deg, #141931, #20254E); */
+    background: linear-gradient(145deg, rgba(20, 25, 49, 0.8), rgba(32, 37, 78, 0.8));
+    backdrop-filter: blur(8px);        /* 👈 adds blur */
+    -webkit-backdrop-filter: blur(8px); /* Safari support */
+    border: 1px solid rgba(100, 76, 170, 0.4);
+    box-shadow:
+      0 10px 30px rgba(89, 60, 143, 0.4),
+      0 0 12px rgba(177, 132, 255, 0.15);
+    border-radius: 18px;
+    padding: 20px;
+    width: 100%;
+    position: relative;
+    animation: dropTiltBounce 1.6s ease-out forwards;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: #e1e1e1;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  .close-btn:hover {
+    color: #fff;
+  }
+  
+  .chat-messages {
+    /* display: flex; */
+    /* flex-direction: column-reverse; */
+    overflow-y: auto;
+    max-height: 180px;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.05);
+    font-size: 14px;
+    overflow-y: scroll;
+  }
+  
+  .chat-input {
+    display: flex;
+    align-items: center;
+    background: #1b1f38;
+    border: 1px solid rgba(83, 71, 150, 0.4);
+    border-radius: 12px;
+    padding: 10px 14px;
+    transition: box-shadow 0.2s;
+  }
+  
+  .chat-input input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #fff;
+    font-size: 14px;
+  }
+  
+  .send-btn {
+    background: #49304C;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    margin-left: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  .send-btn:hover {
+    background: #a96cd3;
+    transform: scale(1.05);
+  }
+
+  .user-msg {
+    align-self: flex-end;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 10px 12px;
+    border-radius: 12px;
+    max-width: 80%;
+    margin-top: 10px;
+    color: #fff;
+  }
+  
+  .ai-msg {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 10px 12px;
+    border-radius: 12px;
+    max-width: 80%;
+    margin-bottom: 10px;
+    color: #ccc;
+  }
+
+  .ai-listening-indicator {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 14px;
+    height: 14px;
+    background: #a96cd3;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(169, 108, 211, 0.7);
+    animation: pulse 1.6s infinite ease-in-out;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.9;
+    }
+    50% {
+      transform: scale(1.5);
+      opacity: 0.4;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.9;
+    }
+  }
+  
+  
+  @keyframes dropTiltBounce {
+    0% {
+      transform: translateY(-150px) rotate(0deg) scale(0.9);
+      opacity: 0;
+    }
+    20% {
+      transform: translateY(0px) rotate(5deg) scale(1.02);
+      opacity: 1;
+    }
+    40% {
+      transform: translateY(5px) rotate(-5deg);
+    }
+    60% {
+      transform: translateY(0px) rotate(3deg);
+    }
+    75% {
+      transform: translateY(3px) rotate(-3deg);
+    }
+    85% {
+      transform: translateY(0px) rotate(1deg);
+    }
+    100% {
+      transform: translateY(0px) rotate(0deg) scale(1);
     }
   }
   
