@@ -153,12 +153,11 @@ input:focus {
   color: #fff;
 }
 
-.notification-panel {
+/* .notification-panel {
   position: absolute;
   top: 50px;
   right: 480px;
   width: 320px;
-  /* max-height: 50vh; */
   background: linear-gradient(145deg, #1b1f3a, #292e5c);
   border-radius: 1rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
@@ -171,14 +170,44 @@ input:focus {
   padding: 0 1rem;
   pointer-events: none;
   color: #fff;
+} */
+
+.notification-panel {
+  position: absolute;
+  top: 60px;
+  right: 480px;
+  width: 320px;
+  max-height: 80vh;
+  background: #1e1e2f;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 0 6px #7f27898e;
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 100;
+  overflow-y: scroll;
+  color: var(--lightBlueColor);
+}
+
+.notification-panel.hover {
+  box-shadow: 0 0 12px #7F2789;
 }
 
 .notification-panel.visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+
+/* .notification-panel.visible {
   max-height: 50vh;
   opacity: 1;
   padding: 1rem;
   pointer-events: auto;
-}
+} */
 
 .notification-arrow {
   position: absolute;
@@ -266,6 +295,28 @@ input:focus {
 .notification {
   position: relative;
   /* existing styles stay the same */
+}
+
+.close-btn{
+  position: sticky;
+  top: 5px;
+  left: 300px;
+  width: 20px;
+  height: 20px;
+  background: rgba(226, 226, 225, 0.441);
+  border: 1px solid rgb(231, 230, 215);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 6px rgb(231, 230, 215), 0 0 12px rgb(212, 211, 194);
+  transition: transform 0.2s ease, text-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.close-btn:hover{
+  transform: scale(1.1);
+  text-shadow: 0 0 12px rgb(231, 230, 215), 0 0 24px rgb(212, 211, 194);
 }
 
 @keyframes fadeScaleIn {

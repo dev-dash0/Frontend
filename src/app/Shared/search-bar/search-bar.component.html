@@ -55,15 +55,21 @@
     </div>
   </div>
 
-  <!-- Notification -->
-  <div class="notification-panel" [class.visible]="showPanel">
+  <!-- Notification Panel Wrapper -->
+<div class="notification-panel" [class.visible]="showPanel">
+
+  <!-- Arrow pointing to icon -->
   <div class="notification-arrow"></div>
 
+  <!-- Close Button -->
+  <div class="close-btn" (click)="getClose()">×</div>
+
+  <!-- Loop through Notifications -->
   <div class="notification"
        *ngFor="let notify of notifications"
        [class.unread]="!notify.isRead"
        (click)="markAsRead(notify, notify.id)">
-    
+       
     <div class="notify-header">
       <p>{{ notify.message }}</p>
     </div>
@@ -78,6 +84,4 @@
 
     <div class="checkmark" *ngIf="notify.isRead">✅</div>
   </div>
-</div>
-
 </div>

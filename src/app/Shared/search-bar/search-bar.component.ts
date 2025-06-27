@@ -12,6 +12,7 @@ import { DashboardService } from '../../Core/Services/dashboard/dashboard.servic
 import { O } from '@angular/cdk/keycodes';
 import { ProjectResult } from '../../Core/interfaces/project';
 import { map, switchMap } from 'rxjs';
+import { BlobOptions } from 'buffer';
 
 @Component({
   selector: 'app-search-bar',
@@ -36,6 +37,7 @@ export class SearchBarComponent {
   projects: ProjectResult[] = [];
   allUsers: User[] = [];
   NotifyUser: any = {};
+  // close: Boolean = false;
 
   joinedUsers: any[] = [];
 
@@ -47,6 +49,7 @@ export class SearchBarComponent {
 
   togglePanel() {
     this.showPanel = !this.showPanel;
+    this.getNotification();
   }
 
   toggleMode() {
@@ -127,15 +130,21 @@ export class SearchBarComponent {
       });
   }
 
-  markAsRead(notify: Notification, id:number) {
+  markAsRead(notify: Notification, id: number) {
     if (!notify.isRead) {
       notify.isRead = true;
       // Optionally, send update to backend here.
       this._NotificationService.markAsRead(id).subscribe({
         next: (res) => {
           console.log('Notification marked as read:', res);
-        }
-      })
+        },
+      });
     }
+  }
+  showWindow = true;
+
+  getClose() {
+    this.showPanel = false;
+    this.getNotification();
   }
 }
