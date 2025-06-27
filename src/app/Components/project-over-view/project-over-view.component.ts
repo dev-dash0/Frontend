@@ -22,11 +22,17 @@ import { Issue } from '../../Core/interfaces/Dashboard/Issue';
 import { PinnedService } from '../../Core/Services/pinned.service';
 import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-users-to-issue.component';
 import { SigninSignupNavbarComponent } from "../../Shared/signin-signup-navbar/signin-signup-navbar.component";
+import { UpdateProjectComponent } from '../update-project/update-project.component';
 
 @Component({
   selector: 'app-project-over-view',
   standalone: true,
-  imports: [AllIssuesDashboardComponent, CommonModule, SigninSignupNavbarComponent, AssignUsersToIssueComponent],
+  imports: [
+    AllIssuesDashboardComponent,
+    CommonModule,
+    SigninSignupNavbarComponent,
+    AssignUsersToIssueComponent,
+  ],
   templateUrl: './project-over-view.component.html',
   styleUrl: './project-over-view.component.css',
 })
@@ -35,7 +41,7 @@ export class ProjectOverViewComponent {
   isSidebarCollapsed = true;
   isMenuOpen = true;
   parentActiveCard: number = 0;
-  projectIdNum!: number;//for issue-apis usage
+  projectIdNum!: number; //for issue-apis usage
   ProjectId: any = 0;
   ProjectDetails?: fetchedProjectDetails;
   ProjectMembers: ProfileData[] = [];
@@ -86,12 +92,26 @@ export class ProjectOverViewComponent {
     // Listen for new issue events and refresh backlog
     this.RefreshBacklogAfterAddingIssue();
     // Get Project id from url
-    this.getProjectId()  //for issue 
+    this.getProjectId(); //for issue
 
     this._sprintService.sprintCreated$.subscribe(() => {
       this.getAllSprints();
     });
+
+    this._IssueService.issueUpdated$.subscribe(() => {
+      this.fetchBacklogIssues(); //for refreshing after issue updated
+    });
+
+    this._IssueService.assignedUsersUpdated$.subscribe((updatedIssueId) => {
+      // لو الـ issue المتحدث تابع للمشروع الحالي، اعملي refresh
+      if (this.projectIdNum) {
+        this.fetchBacklogIssues(); // ✅ تحديث تلقائي للـ backlog
+        this.getAllSprints(); // ✅ كمان لو عايزة تحدث السبرنتس
+      }
+    });
   }
+
+  
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
@@ -118,18 +138,24 @@ export class ProjectOverViewComponent {
   // --------------------------------------------------
   // modals
   openCreateIssue() {
-    this.dialogService.openIssueModal(this.projectIdNum);
+    // this.dialogService.openIssueModal(this.projectIdNum);
+    const dialogRef = this.dialog.open(IssueModalComponent, {
+      width: 'auto',
+      minWidth: '60vw',
+      maxWidth: '70vw', // Limits width to 70% of viewport
+      minHeight: '60vh',
+      data: { projectId: this.projectIdNum ,message: 'project'}
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'created') {
+        this.fetchBacklogIssues(); // Refresh the backlog issues
+      }
+    });
+    
   }
   openIssueView(issueId: number) {
     this.dialogService.openIssueViewModal(issueId);
-  }
-
-  openCreateIssueModal(issueId: number, event: Event) {
-    event.stopPropagation(); // Prevent parent div click event
-    this.dialog.open(IssueModalComponent, {
-      width: '600px',
-      data: { issueId },
-    });
   }
 
   openSprint() {
@@ -146,11 +172,6 @@ export class ProjectOverViewComponent {
 
   openDeleteIssueModal(issueId: number, issueTitle: string) {
     const hideConfirm = localStorage.getItem('hideDeleteConfirm');
-    // if (hideConfirm === 'true') {
-    //   this._IssueService.RemoveIssue(issueId);
-    //   this.fetchBacklogIssues();
-    //   return;
-    // }
     if (hideConfirm === 'true') {
       this._IssueService.RemoveIssue(issueId);
       setTimeout(() => {
@@ -183,6 +204,24 @@ export class ProjectOverViewComponent {
         console.log('Deletion canceled');
       }
     });
+  }
+
+  openDeleteProjectModal(projectId: number, projectTitle: string) {
+    const dialogRef = this.dialog.open(SharedDeleteModalComponent, {
+      width: '450px',
+      data: {
+        title: 'Delete Project',
+        message: `Are you sure you want to delete ${projectTitle}Project? `,
+        confirmText: 'Confirm',
+        cancelText: 'Cancel',
+        itemId: projectId,
+        deleteFunction: () => this.deleteProject(), // Pass function reference
+      },
+    });
+  }
+
+  openUpdateProject(){
+    this.dialogService.openUpdateProjModal(this.projectIdNum);
   }
 
   // ---------------------------------------------------
@@ -221,6 +260,27 @@ export class ProjectOverViewComponent {
     });
   }
 
+  updateProject() {}
+
+  deleteProject() {
+    // this.openDeleteProjectModal(
+    //   Number(this.ProjectId),
+    //   this.ProjectDetails!.name
+    // );
+    this._projectService.deleteProject(this.ProjectId).subscribe({
+      next: (res) => {  
+        this._router.navigate(['MyDashboard/Company', this.ProjectDetails?.tenantId]);
+        console.log('Project deleted:', res);
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000); 
+      },
+      error(err) {
+          console.log(err);
+      },
+    })
+  }
+
   // ---------------------------------------------------
 
   // ---------------------------------------------------
@@ -231,7 +291,7 @@ export class ProjectOverViewComponent {
     this._IssueService.getBacklogIssues(this.projectIdNum, 0, 1).subscribe({
       next: (res) => {
         if (res.isSuccess) {
-          console.log(res);
+          console.log('backlog issues',res);
           this.backlogIssues = res.result;
         }
       },
@@ -249,6 +309,8 @@ export class ProjectOverViewComponent {
         this.openIssueView(issueId);
         this.isModalOpen = true;
 
+        
+
         // بعد ما المودال يفتح (يمكن تستخدم setTimeout لتأخير بسيط لو حصل تأخير في انشاء الـ ViewChild)
         setTimeout(() => {
           if (this.assignUsersComp) {
@@ -261,24 +323,28 @@ export class ProjectOverViewComponent {
       },
     });
   }
-  @ViewChild(AssignUsersToIssueComponent) assignUsersComp!: AssignUsersToIssueComponent;
+  @ViewChild(AssignUsersToIssueComponent)
+  assignUsersComp!: AssignUsersToIssueComponent;
   isModalOpen: boolean = false;
 
   // *************Issue From issue-api**********************
   getProjectId() {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
         this.projectIdNum = +id;
         this.fetchBacklogIssues();
+        this._IssueService.issueMoved$.subscribe(() => {
+          this.fetchBacklogIssues(); // أو getBacklogIssues / getSprintIssues
+        });
       }
     });
   }
 
   RefreshBacklogAfterAddingIssue() {
+    
   }
   // ---------------------------------------------------
-
 
   // Sprints Api
   getAllSprints() {
@@ -341,7 +407,6 @@ export class ProjectOverViewComponent {
       borderLeft: `6px solid ${color}`,
     };
   }
-
 
   // -----------------------------------------------------------
   // pin & unpin

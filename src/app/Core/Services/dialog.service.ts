@@ -7,19 +7,19 @@ import { UpdateInfoComponent } from '../../Components/update-info/update-info.co
 import { AddCompanyModalComponent } from '../../Components/company-modal/company-modal.component';
 import { IssueViewModalComponent } from '../../Components/issue-view-modal/issue-view-modal.component';
 import { ToastrService } from 'ngx-toastr';
+import { UpdateProjectComponent } from '../../Components/update-project/update-project.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DialogService {
-  constructor(private dialog: MatDialog, private toastr: ToastrService) { }
+  constructor(private dialog: MatDialog, private toastr: ToastrService) {}
 
   openDialog(component: any, data: any = null) {
     this.dialog.open(component, {
       width: 'auto',
       minWidth: '60vw',
       maxWidth: '70vw', // Limits width to 80% of viewport
-      minHeight: '60vh',
       maxHeight: '90vh',
       panelClass: 'custom-dialog-container', // Custom class for styling
       disableClose: true,
@@ -33,6 +33,7 @@ export class DialogService {
       message: 'Hello from Issue Modal!',
       projectId, // ✅ Directly pass projectId instead of nesting it under another 'data' object
     });
+    
   }
   openIssueViewModal(issueId: number) {
     this.openDialog(IssueViewModalComponent, {
@@ -41,11 +42,17 @@ export class DialogService {
     });
   }
 
-
   // ! Project Modal //////////////////////////////////////////////////////////////////
   openProjModal() {
     this.openDialog(ProjectModalComponent, {
       message: 'Hello from Project Modal!',
+    });
+  }
+
+  openUpdateProjModal(projectId: number) {
+    this.openDialog(UpdateProjectComponent, {
+      message: 'Hello from Project Modal!',
+      projectId,
     });
   }
 
@@ -71,16 +78,12 @@ export class DialogService {
   }
   // /////////////////////////////////////
   showDeletionSuccess() {
-    this.toastr.success(
-      'The item has been removed',
-      'Removed Successfully',
-      {
-        toastClass: 'toast-pink',
-        timeOut: 5000,
-        closeButton: true,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-      }
-    );
+    this.toastr.success('The item has been removed', 'Removed Successfully', {
+      toastClass: 'toast-pink',
+      timeOut: 5000,
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+    });
   }
 }

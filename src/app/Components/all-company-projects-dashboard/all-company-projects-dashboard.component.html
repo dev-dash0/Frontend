@@ -1,0 +1,53 @@
+<div class="row text-center mb-3 g-3">
+  <!-- Total Projects Chart -->
+  <div
+    class="col-sm-6 totalProject d-flex justify-content-center align-items-center flex-column"
+  >
+    <h6>Total Projects</h6>
+    <div class="chart-card d-flex justify-content-center align-items-center">
+      <canvas #totalprojectsChart></canvas>
+      <div class="chart-label">
+        <h3>{{ totalprojects }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Completed Projects -->
+  <div
+    class="col-sm-6 Completed d-flex justify-content-center align-items-center flex-column"
+  >
+    <h6>Completed Projects</h6>
+    <div class="chart-card d-flex justify-content-center align-items-center">
+      <canvas id="totalCompletedIssuesChart" #completedprojectsChart></canvas>
+      <div class="chart-label">
+        <h3>{{ completedprojects }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Projects in Progress -->
+  <div
+    class="col-sm-6 inProgress d-flex justify-content-center align-items-center flex-column"
+  >
+    <h6>Projects in Progress</h6>
+    <div class="chart-card d-flex justify-content-center align-items-center">
+      <canvas #projectsInProgressChart></canvas>
+      <div class="chart-label">
+        <h3>{{ projectsInProgress }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overdue Projects -->
+  <div
+    class="col-sm-6 overdue d-flex justify-content-center align-items-center flex-column"
+  >
+    <h6>Projects Overdue</h6>
+    <div class="chart-card d-flex justify-content-center align-items-center">
+      <canvas #projectsOverdueChart></canvas>
+      <div class="chart-label">
+        <h3>{{ projectsOverdue }}</h3>
+      </div>
+    </div>
+  </div>
+</div>

@@ -26,8 +26,8 @@
         }
         Pin
       </button>
-      <button class="action-btn edit-btn">Edit Project</button>
-      <button class="action-btn archive-btn">Archive</button>
+      <button class="action-btn edit-btn" (click)="openUpdateProject()">Edit Project</button>
+      <button class="action-btn archive-btn" (click)="openDeleteProjectModal(ProjectId, ProjectDetails!.name)">Archive</button>
     </div>
     }
   </section>
@@ -132,32 +132,59 @@
         <!-- Backlog items would go here -->
         <div *ngFor="let issue of backlogIssues" class="backlog-item" [ngStyle]="getPriorityBorderStyle(issue.priority)"
           (dblclick)="loadIssue(issue.id)">
-          <div class="issue-details">
-            <div class="issue-details">
-              <p class="text-capitalize cursor-pointer backlog-issue-title m-0 " (click)="loadIssue(issue.id)">{{
-                issue.title }}</p>
-              <span class="dates text-uppercase">[ {{issue.type}} ]</span>
-              <!-- <span class="label">Label</span> -->
+          <!-- <div class="issue-details"> -->
+          <div class="row w-100">
+            <div class="col-md-4">
+              <div class="issue-detail">
+                <p class="text-capitalize cursor-pointer backlog-issue-title m-0 " (click)="loadIssue(issue.id)">{{
+                  issue.title }}</p>
+                <span class="dates text-uppercase">[ {{issue.type}} ]</span>
+                <!-- <span class="label">Label</span> -->
+              </div>
             </div>
-            <div class="d-flex justify-content-end ">
-              @if (issue.deadline) {
-              <div class="issue-meta">
-                <span class="dates">Due : {{ issue.deadline | date: 'MMM d'
-                  }}</span>
-              </div>
-              }
+            <div class="col-md-5">
+              <div class="assigned-members d-flex align-items-start justify-content-center ">
+                <div class="">
+                  <img [src]="issue.createdBy?.imageUrl" alt="assigned user"
+                    class="assigned-member cursor-pointer rounded-circle " style="width: 24px; height: 24px;" />
 
-              <div class="delete d-flex justify-content-end">
-                <span class="px-3  cursor-pointer" (click)="openDeleteIssueModal(issue.id,issue.title)">
-                  <i class="fa-solid fa-trash " style="color: #D02705"></i>
-                </span>
+
+                  <img [src]="issue.createdBy?.imageUrl" alt="assigned user"
+                    class="assigned-member cursor-pointer rounded-circle " style="width: 24px; height: 24px;" />
+
+
+                </div>
+
+                <div *ngFor="let user of issue.assignedUsers">
+                  <img [src]="user.imageUrl" alt="{{ user.firstName }} {{ user.lastName }}"
+                    class="assigned-member cursor-pointer rounded-circle" style="width: 24px; height: 24px;" />
+                </div>
               </div>
+            </div>
+            <div class="col-md-3 justify-content-end p-0">
+              <div class="d-flex  flex-column ">
+                @if (issue.deadline) {
+                <div class="issue-meta">
+                  <span class="dates">Due : {{ issue.deadline | date: 'MMM d'
+                    }}</span>
+                </div>
+                }
+
+                <div class="delete d-flex justify-content-end">
+                  <span class="ps-3  cursor-pointer" (click)="openDeleteIssueModal(issue.id,issue.title)">
+                    <i class="fa-solid fa-trash " style="color: #D02705"></i>
+                  </span>
+                </div>
+              </div>
+
             </div>
           </div>
+          <!-- </div> -->
         </div>
 
-
       </div>
+
+
     </div>
   </section>
 

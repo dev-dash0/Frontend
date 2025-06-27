@@ -1,74 +1,124 @@
-<div class="card cardBottomRight">
-  <div class="company">
-    <div class="card-img object-fit-cover">
+<div class="company">
+  <div class="company-img">
+    <div class="image-shine">
       <img
-        class="object-fit-cover w-100"
+        class="w-100"
         [src]="
           isValidUrl(company.image) ? company.image : 'assets/images/cover.jpg'
         "
         alt="{{ company.name }}"
       />
+      <div class="shine"></div>
     </div>
-    <div class="card-body">
+    <div class="company-data">
       <div class="header">
-        <h2 class="text-capitalize">{{ company.name }}</h2>
-        <div class="icons gap-3">
-          <a (click)="copyText('code')">
-            <span *ngIf="!copied.code">
+        <h3 class="text-capitalize">{{ company.name }}</h3>
+      </div>
+      <div class="icons gap-3">
+        <div class="icon-shadow">
+          <div class="pin-icon" (click)="togglePin(company, $event)">
+            @if(isPinned) {
+            <a><i class="fa-solid fa-map-pin active-pin"></i></a>
+            } @else {
+            <a><i class="fa-solid fa-map-pin pin"></i></a>
+            }
+          </div>
+        </div>
+        @if(isOwner) {
+        <div class="icon-shadow">
+          <div class="code-icon">
+            <a (click)="copyText('code')">
+              <span *ngIf="!copied.code">
+                <i
+                  class="fa-regular fa-file-lines"
+                  style="color: var(--mainLightBlueColor)"
+                ></i>
+              </span>
+              <span *ngIf="copied.code">
+                <i class="fa-check fa-solid" style="color: #720e88"></i>
+              </span>
+            </a>
+          </div>
+        </div>
+        }
+        <div class="icon-shadow" *ngIf="isValidUrl(company.tenantUrl)">
+          <div class="link-icon">
+            <a [href]="company.tenantUrl" target="_blank">
               <i
-                class="fa-regular fa-file-lines fa-xl"
+                class="fa-solid fa-link"
                 style="color: var(--mainLightBlueColor)"
               ></i>
-            </span>
-            <span *ngIf="copied.code">
-              <i class="fa-check fa-solid fa-xl" style="color: #28a745"></i>
-            </span>
-          </a>
-          <a
-            [href]="isValidUrl(company.tenantUrl) ? company.tenantUrl : ''"
-            target="_blank"
-          >
-            <i
-              class="fa-solid fa-link fa-xl"
-              style="color: var(--mainLightBlueColor)"
-            ></i>
-          </a>
+            </a>
+          </div>
         </div>
       </div>
-      <mat-chip-set>
-        <mat-chip
-          *ngFor="
-            let tag of company.keywords ? company.keywords.split(' ') : []
-          "
-          >{{ tag }}</mat-chip
+      <div class="divider"></div>
+      <div class="company-description">
+        @if(company.description) {
+        <p class="mt-0 pt-0">
+          {{ company.description }}
+        </p>
+        } @else {
+        <p class="mt-0 pt-0">No Description Available</p>
+        }
+      </div>
+      <div class="company-members">
+        <div
+          class="member-stack"
+          (mouseenter)="hover = true"
+          (mouseleave)="hover = false"
         >
-      </mat-chip-set>
-      <p class="mt-2">
-        {{ company.description }}
-      </p>
-      <div class="members-details">
-        <div class="people gap-1">
           <ng-container
-            *ngFor="let member of company.joinedUsers; let last = last"
+            *ngFor="let member of company?.joinedUsers; let i = index"
           >
-            <div class="gap-1 member">
-              <img
-                [src]="
-                  isValidUrl(member.imageUrl)
-                    ? member?.imageUrl
-                    : 'assets/images/blank profile.svg'
-                "
-                alt=""
-              />
-            </div>
-            <hr *ngIf="!last" />
+            <img
+              [src]="
+                isValidUrl(member.imageUrl)
+                  ? member.imageUrl
+                  : 'assets/images/blank profile.svg'
+              "
+              [ngStyle]="{
+                left: hover ? i * 30 + 'px' : i * 16 + 'px',
+                zIndex: 10 - i
+              }"
+              class="member-avatar"
+              alt="member"
+            />
           </ng-container>
-          <h4 class="m-0 p-0">+5</h4>
+
+          <span
+            *ngIf="company.joinedUsers?.length ?? 0 > 3"
+            class="extra-count"
+          >
+            @if (company.joinedUsers.length > 3) { +{{
+              company.joinedUsers.length - 3
+            }}
+            }
+          </span>
         </div>
-        <button class="btn" (click)="selectCompany()">
-          View More
-          <i class="fa-solid fa-angles-right ps-1" style="color: #dcdfff"></i>
-        </button>
+      </div>
+      <div class="company-tags-details mt-3">
+        <div class="company-tags">
+          @if(company.keywords) {
+          <mat-chip-set>
+            <mat-chip
+              *ngFor="
+                let tag of company.keywords ? company.keywords.split(' ') : []
+              "
+              >{{ tag }}</mat-chip
+            >
+          </mat-chip-set>
+          } @else {
+          <mat-chip-set>
+            <mat-chip>No Tags Avaialable</mat-chip>
+          </mat-chip-set>
+          }
+        </div>
+        <div class="company-details">
+          <a class="custom-btn text-center btn" (click)="selectCompany()"
+            >View Details</a
+          >
+        </div>
       </div>
     </div>
   </div>

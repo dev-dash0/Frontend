@@ -8,12 +8,11 @@ import { MatChipsModule } from '@angular/material/chips';
 import { AllcompaniescardComponent } from '../allcompaniescard/allcompaniescard.component';
 import { CompanyService } from '../../Core/Services/company.service';
 import { ProfileService } from '../../Core/Services/profile.service';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { JoinCompanyComponent } from '../join-company/join-company.component';
+import { transition, trigger, style, animate } from '@angular/animations';
+import { DashboardLoaderComponent } from '../../Shared/dashboard-loader/dashboard-loader.component';
+import { PinnedService } from '../../Core/Services/pinned.service';
 
 @Component({
   selector: 'app-allcompanies',
@@ -23,9 +22,21 @@ import { JoinCompanyComponent } from '../join-company/join-company.component';
     MatTabsModule,
     MatChipsModule,
     AllcompaniescardComponent,
+    DashboardLoaderComponent,
   ],
   templateUrl: './allcompanies.component.html',
   styleUrl: './allcompanies.component.css',
+  animations: [
+    trigger('slideInUp', [
+      transition(':enter', [
+        style({ transform: 'translateY(20px)', opacity: 0 }),
+        animate(
+          '700ms ease-out',
+          style({ transform: 'translateY(0)', opacity: 1 })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class AllcompaniesComponent {
   constructor(
@@ -33,16 +44,21 @@ export class AllcompaniesComponent {
     private _companyService: CompanyService,
     private _profileService: ProfileService,
     private dialog: MatDialog,
-    private _router: Router
+    private _router: Router,
+    private _pinService: PinnedService
   ) {}
 
   //---------------------------------
   joinedCompanies: Company[] = [];
   ownedCompanies: Company[] = [];
+  allCompanies: Company[] = [];
   companyData: Company[] = [];
   userId!: any;
   companyId!: any;
   isSidebarCollapsed = true;
+  showCompanies = false;
+  loading = true;
+  pinnedTenantIds: Set<number> = new Set();
   //---------------------------------
   ngOnInit(): void {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
@@ -52,8 +68,9 @@ export class AllcompaniesComponent {
       console.log('company is being created...');
       this.getCompanies();
     });
+    this.getPinnedCompanies();
     this.getCompanies();
-    this.getCompaniesids();
+    // this.getCompaniesids();
   }
 
   // get all tenants api and show all the companies i am in
@@ -63,18 +80,44 @@ export class AllcompaniesComponent {
         this.userId = user.id;
         this._companyService.getAllCompanies(null).subscribe({
           next: (res) => {
-            console.log(res);
             if (res && res.result && res.result.length > 0) {
-              this.joinedCompanies = res.result;
-              this.ownedCompanies = this.joinedCompanies.filter(
+              this.allCompanies = res.result;
+              this.joinedCompanies = this.allCompanies.filter(
+                (company) => company.owner.id !== this.userId
+              );
+              this.ownedCompanies = this.allCompanies.filter(
                 (company) => company.owner.id === this.userId
               );
+              this.showCompanies = true;
+              this.loading = false;
             }
           },
-          error: (err) => console.error(err),
+          error: (err) => {
+            console.error(err);
+          },
         });
       },
     });
+  }
+
+  getPinnedCompanies() {
+    this._pinService.getPinnedTenants().subscribe({
+      next: (res) => {
+        const ids = res.result.map((t: any) => t.id);
+        this.pinnedTenantIds = new Set(ids);
+      },
+      error: (err) => {
+        console.error('Fetching pinned companies failed:', err);
+      },
+    });
+  }
+
+  onPinChanged(event: { id: number; pinned: boolean }) {
+    if (event.pinned) {
+      this.pinnedTenantIds.add(event.id);
+    } else {
+      this.pinnedTenantIds.delete(event.id);
+    }
   }
 
   // routing to every comapny by id
@@ -83,11 +126,11 @@ export class AllcompaniesComponent {
   }
 
   //get all companies ids
-  getCompaniesids() {
-    this._companyService.getAllCompanyIds().subscribe((companyId) => {
-      console.log('Company IDs:', companyId);
-    });
-  }
+  // getCompaniesids() {
+  //   this._companyService.getAllCompanyIds().subscribe((companyId) => {
+  //     console.log('Company IDs:', companyId);
+  //   });
+  // }
 
   join() {
     const dialogRef = this.dialog.open(JoinCompanyComponent, {
@@ -97,14 +140,6 @@ export class AllcompaniesComponent {
       minHeight: '40vh',
       maxHeight: '50vh',
       disableClose: true,
-      // data: { companyId: this.company.id }, // ✅ Pass company id to modal
     });
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   if (result === 'deleted') {
-    //     console.log('Company deleted successfully');
-    //     this.sidebarService.notifyCompanyDeleted();
-    //     this.router.navigate(['/MyDashboard/allcompanies']);
-    //   }
-    // });
   }
 }

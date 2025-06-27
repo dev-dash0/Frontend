@@ -12,14 +12,11 @@
               @if(sprintDetails) { @for(sprint of sprintDetails ; track
               sprint.id) {
               <div class="profile gap-2">
-                <img
-                  [src]="
+                <img [src]="
                     sprint.createdBy.imageUrl
                       ? sprint.createdBy.imageUrl
                       : 'assets/images/scrum master profile photo.svg'
-                  "
-                  alt="scrum master profile icon"
-                />
+                  " alt="scrum master profile icon" />
                 <div class="scrum-master-header">
                   <h3 class="mb-0">
                     {{ sprint.createdBy.firstName }}
@@ -59,50 +56,35 @@
               <div class="sprint-details">
                 <h5>
                   <div class="sprint-data">
-                    <img
-                      src="assets/images/issue view/sprint details/Sprint Iteration.svg"
-                      alt=""
-                    />
+                    <img src="assets/images/issue view/sprint details/Sprint Iteration.svg" alt="" />
                     <span>Sprint Title</span>
                   </div>
                   <p>{{ sprint.title }}</p>
                 </h5>
                 <h5>
                   <div class="sprint-data">
-                    <img
-                      src="assets/images/issue view/sprint details/Schedule.svg"
-                      alt=""
-                    />
+                    <img src="assets/images/issue view/sprint details/Schedule.svg" alt="" />
                     <span>Start Date</span>
                   </div>
                   <p>{{ sprint.startDate }}</p>
                 </h5>
                 <h5>
                   <div class="sprint-data">
-                    <img
-                      src="assets/images/issue view/sprint details/Clock Alert.svg"
-                      alt=""
-                    />
+                    <img src="assets/images/issue view/sprint details/Clock Alert.svg" alt="" />
                     <span>Due Date</span>
                   </div>
                   <p>{{ sprint.endDate }}</p>
                 </h5>
                 <h5>
                   <div class="sprint-data">
-                    <img
-                      src="assets/images/issue view/sprint details/Spinner.svg"
-                      alt=""
-                    />
+                    <img src="assets/images/issue view/sprint details/Spinner.svg" alt="" />
                     <span>Status</span>
                   </div>
                   <p>{{ sprint.status }}</p>
                 </h5>
                 <h5>
                   <div class="sprint-data">
-                    <img
-                      src="assets/images/issue view/sprint details/Playlist.svg"
-                      alt=""
-                    />
+                    <img src="assets/images/issue view/sprint details/Playlist.svg" alt="" />
                     <span>Description</span>
                   </div>
                   <p>{{ sprint.description }}</p>
@@ -113,24 +95,22 @@
           </div>
         </div>
         <div class="col-md-12">
-          <div class="card cardBottomRight h-100">
+          <div class="dashboard-card  h-100">
             <div class="card-body">
               <div class="issue-header">
                 <h2 class="gap-2">
                   <img src="assets/images/issue view/To Do.svg" alt="" />
-                  <span>Issues</span>
+                  <span class="text-light">Issues</span>
                 </h2>
-                <button class="add-btn btn" (click)="openIssue()">
-                  <img
-                    class="pe-2"
-                    src="assets/images/sidebar icons/Plus.svg"
-                    alt=""
-                  />
-                  Add Issues
-                </button>
+
+                <span class="add-issues-btn" (click)="openCreateIssue()">
+                  <a class="custom-btn text-center"><img src="assets/images/sidebar icons/Plus.svg" class="pe-2"
+                      alt="" />
+                    Add Issues</a>
+                </span>
               </div>
 
-              <div class="row g-3 mt-1">
+              <!-- <div class="row g-3 mt-1">
                 <div class="col-md-4" *ngFor="let category of issueCategories">
                   <div class="tag-box" [ngClass]="category.class">
                     <div class="tag-name">
@@ -139,29 +119,17 @@
                     </div>
                     <span [ngClass]="getSpanStatus(category.status)">{{
                       category.issues.length
-                    }}</span>
+                      }}</span>
                   </div>
 
-                  <div
-                    class="wrapper gap-3"
-                    [ngClass]="getWrapperClass(category.status)"
-                  >
-                    <div
-                      class="col-md-12"
-                      *ngFor="let issue of category.issues"
-                    >
+                  <div class="wrapper gap-3" [ngClass]="getWrapperClass(category.status)">
+                    <div class="col-md-12" *ngFor="let issue of category.issues">
                       <div class="card p-1">
                         <div class="card-body">
                           <div class="issue-header">
-                            <!-- Priority Tag -->
-                            <div
-                              class="priority-tag"
-                              [ngClass]="issue.priority"
-                            >
-                              <img
-                                [src]="issue.priorityIcon"
-                                alt="{{ issue.priority }} Icon"
-                              />
+                            Priority Tag
+                            <div class="priority-tag" [ngClass]="issue.priority">
+                              <img [src]="issue.priorityIcon" alt="{{ issue.priority }} Icon" />
                               <span>{{ issue.priority }}</span>
                             </div>
                           </div>
@@ -186,21 +154,12 @@
 
                           <div class="button-options d-flex align-items-end">
                             <button class="btn mt-3">
-                              <i
-                                class="fa-regular fa-keyboard fa-lg pe-1"
-                                style="color: #dcdfff"
-                              ></i>
+                              <i class="fa-regular fa-keyboard fa-lg pe-1" style="color: #dcdfff"></i>
                               View Details
                             </button>
                             <div class="options-imgs gap-2">
-                              <img
-                                src="assets/images/issue view/Add File.svg"
-                                alt=""
-                              />
-                              <img
-                                src="assets/images/issue view/Edit Chat History.svg"
-                                alt=""
-                              />
+                              <img src="assets/images/issue view/Add File.svg" alt="" />
+                              <img src="assets/images/issue view/Edit Chat History.svg" alt="" />
                             </div>
                           </div>
                         </div>
@@ -208,15 +167,99 @@
                     </div>
                   </div>
                 </div>
+              </div> -->
+              <div class="row flex-nowrap overflow-x-scroll g-4  px-3 pt-3 pb-4">
+                <div class="d-flex justify-content-center align-items-center w-100" style="min-height: 300px"
+                  *ngIf="issueLoading">
+                  <app-dashboard-loader></app-dashboard-loader>
+                </div>
+                @if(!issueLoading) {
+                <div class=" row-cols-md-4 col-lg-4" *ngFor="let category of issueCategories">
+                  <div class="wrapper">
+                    <div class="Updates-tag  d-flex justify-content-between">
+                      <div class="tag-name d-flex align-items-center gap-2 mb-3">
+                        <img [src]="category.icon" alt="" />
+                        <h2 class="m-0">{{ category.name }}</h2>
+                      </div>
+                      <!-- <span [ngClass]="getSpanStatus(category.status)">{{ -->
+                      <span>{{
+                        category.issues.length
+                        }}</span>
+                    </div>
+
+                    <div class="wrapper-card-container overflow-y-auto">
+                      <div class="no-issues d-flex justify-content-center align-items-center h-100"
+                        *ngIf="category.issues.length === 0">
+                        <p>No issues found</p>
+                      </div>
+                      <div class="wrapper-card" *ngFor="let issue of category.issues">
+                        <div class="row">
+                          <div class="col-md-2 d-flex justify-content-center  align-items-center">
+                            <div class="priority-circle-container glass-circle-container">
+                              <img [src]="getPriorityImage(issue.priority)" alt="" />
+                            </div>
+                          </div>
+                          <div class="col-md-10">
+                            <div class="wrapper-card-content ">
+                              <div class="wrapper-card-header d-flex justify-content-between align-items-center">
+                                <h3 (click)="openIssueView(issue.id)" style="cursor: pointer;"
+                                  class="wrapper-card-title text-truncate ">{{ issue.title }}</h3>
+                                <div class="wrapper-card-date">
+                                  {{ issue.startDate }} | {{ issue.deadline }}
+                                </div>
+                              </div>
+                              <div class="wrapper-card-center-body d-flex justify-content-between align-items-center">
+                                <p>
+                                  Type: {{ issue.type }}
+                                </p>
+                                <div class="assigned-members d-flex align-items-center justify-content-end ">
+
+                                  <div *ngFor="let user of issue.assignedUsers">
+                                    <img [src]="user.imageUrl" *ngIf="user.imageUrl"
+                                      alt="{{ user.firstName }} {{ user.lastName }}"
+                                      class="assigned-member cursor-pointer rounded-circle"
+                                      style="width: 22px; height: 22px; margin-right: -5px; " />
+
+                                    <img src="assets/images/user-img-not-found.jpg" *ngIf="!user.imageUrl"
+                                      alt="{{ user.firstName }} {{ user.lastName }}"
+                                      class="assigned-member cursor-pointer rounded-circle"
+                                      style="width: 22px; height: 22px; " />
+
+                                  </div>
+                                </div>
+
+                              </div>
+
+                              <div class="wrapper-card-footer wrapper-card-meta d-flex justify-content-between mt-2">
+                                <div class="card-wrapper-labels d-flex align-items-center gap-2">
+                                  <span class="burble-tag"
+                                    *ngFor="let label of (issue.labels?.split(',')?.slice(0, 3)  || []); let i = index"
+                                    [matTooltip]="label.trim().length > 15 ? label.trim() : ''"
+                                    [matTooltipDisabled]="label.trim().length <= 15" matTooltipPosition="above">
+                                    {{ label.trim() }}
+                                  </span>
+
+                                </div>
+
+                                <span class="view-details-btn" (click)="openIssueView(issue.id)"
+                                  style="cursor: pointer;">
+                                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </span>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+                }
               </div>
 
-              <button class="btn mt-4">
-                View More
-                <i
-                  class="fa-solid fa-angles-right ps-1"
-                  style="color: #dcdfff"
-                ></i>
-              </button>
+
             </div>
           </div>
         </div>

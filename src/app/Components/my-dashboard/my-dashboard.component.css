@@ -14,3 +14,86 @@
     width: calc(100% - 16%);
   }
 }
+
+
+.booty {
+  position: fixed;
+  width: 800px;
+  height: 800px;
+  top: 250px;
+  right: -300px;
+  z-index: 0;
+  transform: scale(0.25);
+  pointer-events: none;  /* IMPORTANT: allows mouse events to pass through */
+}
+
+
+iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.chat-trigger {
+  position: fixed;
+  top: 550px;
+  right: 60px;
+  font-size: 20px;
+  z-index: 100;
+  cursor: pointer;
+  background-color: #21264f;
+  padding: 10px;
+  border-radius: 50%;
+  color: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+
+.chat-popup {
+  position: fixed;
+  top: 500px;
+  right: 200px;
+  width: 300px;
+  background: linear-gradient(145deg, #1c1e38, #292c52);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  color: white;
+  z-index: 100;
+  animation: dropTiltBounce 1.8s ease-out forwards;
+  transform-origin: bottom center;
+}
+
+
+/* .ai-model {
+  transition: transform 0.15s ease-out;
+  transform-origin: center;
+  will-change: transform;
+  
+} */
+
+
+@keyframes dropTiltBounce {
+  0% {
+    transform: translateY(150px) rotate(0deg) scale(0.9);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(0px) rotate(5deg) scale(1.02); /* hit right */
+    opacity: 1;
+  }
+  40% {
+    transform: translateY(5px) rotate(-5deg); /* hit left */
+  }
+  60% {
+    transform: translateY(0px) rotate(3deg); /* smaller right tilt */
+  }
+  75% {
+    transform: translateY(3px) rotate(-3deg); /* smaller left tilt */
+  }
+  85% {
+    transform: translateY(0px) rotate(1deg); /* tiny right tilt */
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg) scale(1); /* final rest */
+  }
+}

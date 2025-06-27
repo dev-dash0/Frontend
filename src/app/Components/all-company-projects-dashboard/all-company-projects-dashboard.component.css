@@ -1,0 +1,80 @@
+h3,
+h6 {
+  font-family: var(--headerFontFamily);
+}
+.col-sm-6 {
+  transform: translateY(0px);
+}
+.col-sm-6:hover {
+  transform: translateY(-5px);
+  transition: all 0.3s ease-in-out;
+}
+.totalProject h3,
+.totalProject h6 {
+  font-weight: 600;
+  background: linear-gradient(180deg, #71a5ff 0%, #1347a3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.totalProject h3:hover {
+  background: linear-gradient(180deg, #eaff71 0%, #1347 A3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.Completed h3,
+.Completed h6 {
+  color: #0eeade;
+  transition: all 0.3s;
+}
+
+.Completed h3:hover,
+.Completed h6:hover {
+  color: #41c3eb !important;
+}
+
+.inProgress h3,
+.inProgress h6 {
+  color: #b926e7 !important;
+  transition: all 0.3s;
+}
+
+.inProgress h3:hover,
+.inProgress h6:hover {
+  color: #c476d9 !important;
+}
+
+.overdue h3,
+.overdue h6 {
+  color: #ff5154 !important;
+  transition: all 0.3s;
+}
+
+.overdue h3:hover,
+.overdue h6:hover {
+  color: #7f83e9 !important;
+}
+
+/* _______________________________________________________________________________ */
+.chart-card {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  text-align: center;
+}
+
+.chart-card canvas {
+  position: relative;
+  z-index: 1;
+}
+
+.chart-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}

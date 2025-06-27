@@ -1,9 +1,10 @@
+import { Issue } from '../Dashboard/Issue';
 import { Issues } from './issues';
 
 export interface IssueCategory {
   name: string;
   icon: string;
   class: string;
-  status: 'backlog' | 'todo' | 'completed';
-  issues: Issues[];
+  status:  'to do' | 'Completed' |'In Progress'| 'Reviewing' | 'Canceled' |'Postponed' | 'Backlog';
+  issues: Issue[];
 }
