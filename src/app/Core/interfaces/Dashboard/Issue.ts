@@ -21,5 +21,7 @@ export interface Issue {
     sprintId: number;
     attachment: string;
     attachmentPath: string;
+    isBacklog: boolean;
+    priorityIcon: string;
 
 }

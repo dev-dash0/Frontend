@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, Subject, throwError } from 'rxjs';
 import { baseUrl } from '../../environment/environment.local';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../../interfaces/User';
@@ -23,12 +23,32 @@ export class IssueService {
   private issueCreatedSource = new Subject<void>(); // Emits event when issue is created
   issueCreated$ = this.issueCreatedSource.asObservable();
   private toastr = inject(ToastrService)
+  
+  private _issueMovedSource = new Subject<void>();
+  issueMoved$ = this._issueMovedSource.asObservable();
+  private issueUpdatedSource = new Subject<void>();
+
+  // Observable that other components can subscribe to
+  issueUpdated$ = this.issueUpdatedSource.asObservable();
+
+  private assignedUsersUpdatedSource = new BehaviorSubject<number | null>(null); // issueId
+assignedUsersUpdated$ = this.assignedUsersUpdatedSource.asObservable();
 
   notifyIssueCreated() {
     this.issueCreatedSource.next();
   }
 
+  notifyIssueMoved() {
+    this._issueMovedSource.next();
+  }
 
+  notifyIssueUpdated() {
+    this.issueUpdatedSource.next();
+  }
+
+  notifyAssignedUsersUpdated(issueId: number) {
+    this.assignedUsersUpdatedSource.next(issueId);
+  }
 
   getBacklogIssues(
     projectId: number,
@@ -75,10 +95,14 @@ export class IssueService {
   }
 
   postSprintIssue(sprintId: number, issueData: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+      // Don't set 'Content-Type' header manually when using FormData
+    });
     return this._HttpClient.post(
       `${baseUrl}/api/Issue/sprint?sprintId=${sprintId}`,
       issueData,
-      { headers: this.headers }
+      { headers: headers }
     );
   }
 
@@ -215,5 +239,8 @@ export class IssueService {
   setAssignedUsers(issueId: number, users: User[]) {
     this.assignedUsersMap.set(issueId, users);
   }
+
+
+  
 
 }

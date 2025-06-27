@@ -97,7 +97,21 @@ export class ProjectOverViewComponent {
     this._sprintService.sprintCreated$.subscribe(() => {
       this.getAllSprints();
     });
+
+    this._IssueService.issueUpdated$.subscribe(() => {
+      this.fetchBacklogIssues(); //for refreshing after issue updated
+    });
+
+    this._IssueService.assignedUsersUpdated$.subscribe((updatedIssueId) => {
+      // لو الـ issue المتحدث تابع للمشروع الحالي، اعملي refresh
+      if (this.projectIdNum) {
+        this.fetchBacklogIssues(); // ✅ تحديث تلقائي للـ backlog
+        this.getAllSprints(); // ✅ كمان لو عايزة تحدث السبرنتس
+      }
+    });
   }
+
+  
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
@@ -124,18 +138,24 @@ export class ProjectOverViewComponent {
   // --------------------------------------------------
   // modals
   openCreateIssue() {
-    this.dialogService.openIssueModal(this.projectIdNum);
+    // this.dialogService.openIssueModal(this.projectIdNum);
+    const dialogRef = this.dialog.open(IssueModalComponent, {
+      width: 'auto',
+      minWidth: '60vw',
+      maxWidth: '70vw', // Limits width to 70% of viewport
+      minHeight: '60vh',
+      data: { projectId: this.projectIdNum ,message: 'project'}
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'created') {
+        this.fetchBacklogIssues(); // Refresh the backlog issues
+      }
+    });
+    
   }
   openIssueView(issueId: number) {
     this.dialogService.openIssueViewModal(issueId);
-  }
-
-  openCreateIssueModal(issueId: number, event: Event) {
-    event.stopPropagation(); // Prevent parent div click event
-    this.dialog.open(IssueModalComponent, {
-      width: '600px',
-      data: { issueId },
-    });
   }
 
   openSprint() {
@@ -152,11 +172,6 @@ export class ProjectOverViewComponent {
 
   openDeleteIssueModal(issueId: number, issueTitle: string) {
     const hideConfirm = localStorage.getItem('hideDeleteConfirm');
-    // if (hideConfirm === 'true') {
-    //   this._IssueService.RemoveIssue(issueId);
-    //   this.fetchBacklogIssues();
-    //   return;
-    // }
     if (hideConfirm === 'true') {
       this._IssueService.RemoveIssue(issueId);
       setTimeout(() => {
@@ -276,7 +291,7 @@ export class ProjectOverViewComponent {
     this._IssueService.getBacklogIssues(this.projectIdNum, 0, 1).subscribe({
       next: (res) => {
         if (res.isSuccess) {
-          console.log(res);
+          console.log('backlog issues',res);
           this.backlogIssues = res.result;
         }
       },
@@ -293,6 +308,8 @@ export class ProjectOverViewComponent {
         // this.issue = res;
         this.openIssueView(issueId);
         this.isModalOpen = true;
+
+        
 
         // بعد ما المودال يفتح (يمكن تستخدم setTimeout لتأخير بسيط لو حصل تأخير في انشاء الـ ViewChild)
         setTimeout(() => {
@@ -317,11 +334,16 @@ export class ProjectOverViewComponent {
       if (id) {
         this.projectIdNum = +id;
         this.fetchBacklogIssues();
+        this._IssueService.issueMoved$.subscribe(() => {
+          this.fetchBacklogIssues(); // أو getBacklogIssues / getSprintIssues
+        });
       }
     });
   }
 
-  RefreshBacklogAfterAddingIssue() {}
+  RefreshBacklogAfterAddingIssue() {
+    
+  }
   // ---------------------------------------------------
 
   // Sprints Api

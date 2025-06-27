@@ -12,15 +12,19 @@
                     <div class="members p-2">
                         <ng-container *ngFor="let user of assignedUsers">
                             @if (user.imageUrl) {
-                            <img alt="user-img" [src]="user.imageUrl" #tooltipRef
-                                class="assigned-member cursor-pointer rounded-circle" [attr.data-bs-toggle]="'tooltip'"
+                            <div class="rounded-circle member-container " #tooltipRef [attr.data-bs-toggle]="'tooltip'"
                                 [attr.data-bs-html]="'true'" title="" [attr.data-bs-title]="getTooltipHtml(user)"
-                                [attr.data-bs-sanitize]="'false'" />
+                                [attr.data-bs-sanitize]="'false'">
+                                <img alt="user-img" [src]="user.imageUrl"
+                                    class="assigned-member cursor-pointer rounded-circle" />
+                            </div>
                             }@else {
-                            <img alt="user-img" src="assets/images/user-img-not-found.jpg" #tooltipRef
-                                class="assigned-member cursor-pointer rounded-circle" [attr.data-bs-toggle]="'tooltip'"
+                            <div class="rounded-circle member-container" #tooltipRef [attr.data-bs-toggle]="'tooltip'"
                                 [attr.data-bs-html]="'true'" title="" [attr.data-bs-title]="getTooltipHtml(user)"
-                                [attr.data-bs-sanitize]="'false'" />
+                                [attr.data-bs-sanitize]="'false'">
+                                <img alt="user-img" src="assets/images/user-img-not-found.jpg"
+                                    class="assigned-member cursor-pointer rounded-circle" />
+                            </div>
                             }
                         </ng-container>
 
@@ -42,7 +46,7 @@
 
             <!-- No assigned users -->
             <ng-template #noUsers>
-                <div class="text-center py-4 dev-text-muted">
+                <div class="text-center py-1 dev-text-muted">
                     <i class="fas fa-users fa-2x mb-2"></i>
                     <div class="d-flex align-items-baseline justify-content-center">
                         <p>No users assigned to this issue</p>

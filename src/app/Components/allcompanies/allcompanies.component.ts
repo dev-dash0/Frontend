@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { JoinCompanyComponent } from '../join-company/join-company.component';
 import { transition, trigger, style, animate } from '@angular/animations';
 import { DashboardLoaderComponent } from '../../Shared/dashboard-loader/dashboard-loader.component';
+import { PinnedService } from '../../Core/Services/pinned.service';
 
 @Component({
   selector: 'app-allcompanies',
@@ -43,18 +44,21 @@ export class AllcompaniesComponent {
     private _companyService: CompanyService,
     private _profileService: ProfileService,
     private dialog: MatDialog,
-    private _router: Router
+    private _router: Router,
+    private _pinService: PinnedService
   ) {}
 
   //---------------------------------
   joinedCompanies: Company[] = [];
   ownedCompanies: Company[] = [];
+  allCompanies: Company[] = [];
   companyData: Company[] = [];
   userId!: any;
   companyId!: any;
   isSidebarCollapsed = true;
   showCompanies = false;
   loading = true;
+  pinnedTenantIds: Set<number> = new Set();
   //---------------------------------
   ngOnInit(): void {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
@@ -64,8 +68,9 @@ export class AllcompaniesComponent {
       console.log('company is being created...');
       this.getCompanies();
     });
+    this.getPinnedCompanies();
     this.getCompanies();
-    this.getCompaniesids();
+    // this.getCompaniesids();
   }
 
   // get all tenants api and show all the companies i am in
@@ -75,10 +80,12 @@ export class AllcompaniesComponent {
         this.userId = user.id;
         this._companyService.getAllCompanies(null).subscribe({
           next: (res) => {
-            console.log(res);
             if (res && res.result && res.result.length > 0) {
-              this.joinedCompanies = res.result;
-              this.ownedCompanies = this.joinedCompanies.filter(
+              this.allCompanies = res.result;
+              this.joinedCompanies = this.allCompanies.filter(
+                (company) => company.owner.id !== this.userId
+              );
+              this.ownedCompanies = this.allCompanies.filter(
                 (company) => company.owner.id === this.userId
               );
               this.showCompanies = true;
@@ -93,17 +100,37 @@ export class AllcompaniesComponent {
     });
   }
 
+  getPinnedCompanies() {
+    this._pinService.getPinnedTenants().subscribe({
+      next: (res) => {
+        const ids = res.result.map((t: any) => t.id);
+        this.pinnedTenantIds = new Set(ids);
+      },
+      error: (err) => {
+        console.error('Fetching pinned companies failed:', err);
+      },
+    });
+  }
+
+  onPinChanged(event: { id: number; pinned: boolean }) {
+    if (event.pinned) {
+      this.pinnedTenantIds.add(event.id);
+    } else {
+      this.pinnedTenantIds.delete(event.id);
+    }
+  }
+
   // routing to every comapny by id
   viewCompany(companyId: string): void {
     this._router.navigate(['/MyDashboard/Company', companyId]);
   }
 
   //get all companies ids
-  getCompaniesids() {
-    this._companyService.getAllCompanyIds().subscribe((companyId) => {
-      console.log('Company IDs:', companyId);
-    });
-  }
+  // getCompaniesids() {
+  //   this._companyService.getAllCompanyIds().subscribe((companyId) => {
+  //     console.log('Company IDs:', companyId);
+  //   });
+  // }
 
   join() {
     const dialogRef = this.dialog.open(JoinCompanyComponent, {
@@ -113,7 +140,6 @@ export class AllcompaniesComponent {
       minHeight: '40vh',
       maxHeight: '50vh',
       disableClose: true,
-      // data: { companyId: this.company.id }, // ✅ Pass company id to modal
     });
   }
 }

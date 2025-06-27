@@ -212,6 +212,9 @@ export class AssignUsersToIssueComponent {
           //Refresh Assigned,project users
           this.loadAssignedUsers();
           this.loadProjectUsers();
+
+          this._IssueService.notifyAssignedUsersUpdated(this.issueId);
+
         },
         error: (err) => {
           console.error('Error unassigning user', err);
@@ -229,6 +232,9 @@ export class AssignUsersToIssueComponent {
           //Refresh Assigned,project users
           this.loadAssignedUsers();
           this.loadProjectUsers();
+
+          this._IssueService.notifyAssignedUsersUpdated(this.issueId);
+
         },
         error: (err) => {
           console.error('Error assigning user', err);

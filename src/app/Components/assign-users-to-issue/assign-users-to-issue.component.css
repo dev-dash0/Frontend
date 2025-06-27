@@ -1,18 +1,113 @@
+/* ------------------ Assignment Dropdown ------------------ */
 .assignment-dropdown {
-    background-color: rgb(149, 168, 240);
-    border: 1px solid #ccc;
+    background: radial-gradient(109.99% 253.12% at 76.68% 66.67%, #3b2341 0%, #2c1d3d 100%);
     border-radius: 0.5rem;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     z-index: 1060;
-    /* فوق المودال */
     max-height: 400px;
-    /* overflow-y: auto; */
     animation: fadeIn 0.5s 1;
     transition: all 0.2s ease-in-out;
+    color: #f2f2f2;
+}
+
+.assignment-dropdown .card-header span {
+    color: #f2f2f2;
+    font-weight: 500;
+}
+
+.assignment-dropdown .btn-close {
+    filter: invert(1);
+    /* Makes the close button white */
+}
+
+.assignment-dropdown input.form-control {
+    background-color: #2c1d3d;
+    color: #fff;
+    border-color: #8051b1;
+}
+
+.assignment-dropdown input.form-control::placeholder {
+    color: #ccc;
+}
+
+.assignment-dropdown .input-group-text {
+    background-color: #2c1d3d;
+    color: #8051b1;
+    border-color: #8051b1;
+}
+
+.assignment-dropdown .list-group {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.assignment-dropdown .text-center p {
+    color: #bbb;
+}
+
+/* ------------------ List Group Item (User Row) ------------------ */
+button.list-group-item {
+    background-color: #1f1b2e !important;
+    color: #eee;
+    border: none;
+}
+
+button.list-group-item:hover {
+    background-color: #342a4f !important;
+}
+
+/* ------------------ Members Row ------------------ */
+.members {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+/* Each User Image Container */
+.member-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    margin-inline-start: -15px;
 }
 
 
+/* ------------------ Assign Button ------------------ */
+.assign-btn-outline {
+    width: 40px;
+    height: 40px;
+    border: 2px dashed #8051b1;
+    border-radius: 50%;
+    background: transparent;
+    color: #8051b1;
+    font-size: 18px;
+    transition: background 0.3s, transform 0.3s, border-color 0.3s;
+    cursor: pointer;
+}
 
+.assign-btn-outline:hover {
+    background: radial-gradient(109.99% 253.12% at 76.68% 66.67%, #db83f1 0%, #8051b1 100%);
+    color: white;
+    border-style: none;
+    transform: rotate(90deg) scale(1.02);
+}
+
+/* ------------------ Badges ------------------ */
+.badge.bg-primary,
+.badge.bg-danger {
+    color: #fff;
+}
+
+/* ------------------ Dev Text Muted ------------------ */
+.dev-text-muted {
+    color: #aaa !important;
+}
+
+/* ------------------ Fade In Animation ------------------ */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -23,51 +118,4 @@
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-
-
-/* ////////////////////////////////////////////////// */
-
-/*  */
-.members {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.member,
-.assigned-member {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    object-fit: cover;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    margin-inline-start: -15px;
-}
-
-.assigned-member:hover {
-    transform: scale(1.2);
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
-}
-
-/* New Sexy Assign Button */
-.assign-btn-outline {
-    width: 40px;
-    height: 40px;
-    border: 2px dashed #007bff;
-    border-radius: 50%;
-    background: transparent;
-    color: #007bff;
-    font-size: 18px;
-    transition: background 0.3s, transform 0.3s, border-color 0.3s;
-    cursor: pointer;
-}
-
-.assign-btn-outline:hover {
-    background-color: #007bff;
-    color: white;
-    border-style: solid;
-    transform: rotate(90deg) scale(1.02);
 }

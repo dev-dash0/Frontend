@@ -147,62 +147,6 @@ export class IssueModalComponent {
   //Priority
   Priorities = this._IssueService.Priorities;
 
-  // submitForm() {
-  //   if (this.issueForm.valid) {
-  //     console.log(this.issueForm.value);
-  //     const issueData = this.issueForm.value;
-  //     const projectId = this.data?.projectId; // Get projectId from modal data
-
-  //     if (!projectId) {
-  //       console.error('Project ID is missing!');
-  //       return;
-  //     }
-
-  //     const labels = issueData.labels?.filter((label: string) => label.trim() !== '').join(',');
-  //     issueData.append('Labels', labels || '');
-
-  //     // Attach file if selected
-  //     if (this.selectedFile) {
-  //       issueData.append('Attachment', this.selectedFile);
-  //     }
-
-  //     this._IssueService.createBacklogIssue(projectId, issueData).subscribe({
-  //       next: (response) => {
-  //         console.log('Issue created successfully:', response);
-  //         this._IssueService.notifyIssueCreated();
-  //         this.dialogRef.close('created'); // Close modal and return status
-
-  //       },
-  //       error: (err) => {
-  //         console.error('Error creating issue:', err);
-  //         this.showError('Error creating Issue');
-  //       },
-  //     });
-  //   }
-  //   else if (this.issueForm.get('title')?.invalid) {
-  //     this.showError('Invalid Title');
-  //     console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-
-  //   } else if (this.issueForm.get('status')?.invalid) {
-  //     this.showError('Invalid status');
-  //   } else if (this.issueForm.get('priority')?.invalid) {
-  //     this.showError('Invalid priority');
-  //   } else if (this.issueForm.get('startDate')?.invalid) {
-  //     this.showError('Invalid start Date');
-  //   } else if (this.issueForm.get('deliveredDate')?.invalid) {
-  //     this.showError('Invalid Delivered Date');
-  //   } else if (this.issueForm.get('deadline')?.invalid) {
-  //     this.showError('Invalid End Date');
-  //   } else {
-  //     console.log(this.issueForm.errors);
-  //     console.log('Form is invalid');
-  //     this.showError('Please fill all the fields');
-  //     this.issueForm.markAllAsTouched();
-  //   }
-  // }
-
-
-
   // Form submission
   submitForm(): void {
     if (this.issueForm.invalid) {
@@ -211,24 +155,48 @@ export class IssueModalComponent {
     }
 
     const formData = this.prepareFormData();
+    const modalMode = this.data.message;
+    console.log(modalMode);
+    
     const projectId = this.data.projectId;
+    const sprintId = this.data.sprintId;
+    console.log(projectId, sprintId);
 
-    this._IssueService.createBacklogIssue(projectId, formData).subscribe({
-      next: (response) => {
-        this.toaster.success('Issue created successfully', 'Success');
-        this._IssueService.notifyIssueCreated();
-        this.dialogRef.close('created');
-      },
-      error: (err) => {
-        console.error('Error creating issue:', err);
-        // this.showError('Error creating issue. Please try again.');
-        this.showError(err.error.message);
-      }
-    });
+    if (modalMode === 'project') {
+      console.log(formData);
+      this._IssueService.createBacklogIssue(projectId, formData).subscribe({
+        next: (res) => {
+          this.toaster.success('Issue created successfully', 'Success');
+          this._IssueService.notifyIssueCreated();
+          this.dialogRef.close('created');
+        },
+        error: (err: any) => {
+          console.error('Error creating issue:', err);
+          this.showError('Error creating issue. Please try again.');
+        }
+      });
+    }
+    else if (modalMode === 'sprint') {
+      console.log(formData);
+      console.log('Sprint ID:', sprintId);
+
+      formData.append('IsBacklog', 'false');
+      this._IssueService.postSprintIssue(sprintId, formData).subscribe({
+        next: (res) => {
+          
+          this.toaster.success('Issue created successfully', 'Success');
+          this.dialogRef.close('created');
+        },
+        error: (err: any) => {
+          console.error('Error creating issue:', err);
+          this.showError('Error creating issue. Please try again.');
+        }
+      });
+    }
   }
 
 
-  private prepareFormData(): FormData {
+    private prepareFormData(): FormData {
     const formData = new FormData();
     const v = this.issueForm.value;
 
