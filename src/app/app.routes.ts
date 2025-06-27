@@ -20,9 +20,11 @@ import { PinnedComponent } from './Components/pinned/pinned.component';
 import { AllProjectsComponent } from './Components/all-projects/all-projects.component';
 import { ProjectOverViewComponent } from './Components/project-over-view/project-over-view.component';
 import { AllIssuesDashboardComponent } from './Components/all-issues-dashboard/all-issues-dashboard.component';
+import { WelcomeComponent } from './Components/welcome/welcome.component';
+import { Welcome2Component } from './Components/welcome2/welcome2.component';
 
 export const routes: Routes = [
-  { path: 'welcome', component: WelcomePageComponent, title: 'Welcome' },
+  { path: 'welcome', component: Welcome2Component, title: 'Welcome' },
   { path: '', redirectTo: 'welcome', pathMatch: 'full' },
   {
     path: '',
