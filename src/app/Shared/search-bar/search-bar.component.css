@@ -138,3 +138,197 @@ input:focus {
     width: 83%;
   }
 }
+
+
+/* -------------------- Notification -------------------- */
+.notification-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.notification-icon {
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* .notification-panel {
+  position: absolute;
+  top: 50px;
+  right: 480px;
+  width: 320px;
+  background: linear-gradient(145deg, #1b1f3a, #292e5c);
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  z-index: 100;
+  overflow: hidden;
+  max-height: 0;
+  overflow-y: scroll;
+  transition: max-height 0.5s ease-in-out, padding 0.3s ease;
+  opacity: 0;
+  padding: 0 1rem;
+  pointer-events: none;
+  color: #fff;
+} */
+
+.notification-panel {
+  position: absolute;
+  top: 60px;
+  right: 480px;
+  width: 320px;
+  max-height: 80vh;
+  background: #1e1e2f;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 0 6px #7f27898e;
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 100;
+  overflow-y: scroll;
+  color: var(--lightBlueColor);
+}
+
+.notification-panel.hover {
+  box-shadow: 0 0 12px #7F2789;
+}
+
+.notification-panel.visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+
+/* .notification-panel.visible {
+  max-height: 50vh;
+  opacity: 1;
+  padding: 1rem;
+  pointer-events: auto;
+} */
+
+.notification-arrow {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(145deg, #1b1f3a, #292e5c);
+  transform: rotate(45deg);
+  box-shadow: -5px -5px 15px rgba(0, 0, 0, 0.5);
+  z-index: -1;
+}
+
+.notification {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  perspective: 1000px;
+}
+
+.notification:hover {
+  transform: rotateX(5deg) rotateY(-5deg) scale(1.02);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  z-index: 2;
+}
+
+.notification-content h4 {
+  color: #fff;
+  font-size: 1rem;
+  margin: 0 0 0.3rem;
+}
+
+.notification-content p {
+  color: #ccc;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.notify-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+
+.sender-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+}
+
+.sender-info img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.notify-date {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.7rem;
+}
+
+.notification.unread {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.checkmark {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  font-size: 1.2rem;
+  color: #00d26a;
+  text-shadow: 1px 1px 4px rgba(0, 210, 106, 0.4);
+  transform: scale(1.1);
+  animation: fadeScaleIn 0.4s ease forwards;
+}
+
+.notification {
+  position: relative;
+  /* existing styles stay the same */
+}
+
+.close-btn{
+  position: sticky;
+  top: 5px;
+  left: 300px;
+  width: 20px;
+  height: 20px;
+  background: rgba(226, 226, 225, 0.441);
+  border: 1px solid rgb(231, 230, 215);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 6px rgb(231, 230, 215), 0 0 12px rgb(212, 211, 194);
+  transition: transform 0.2s ease, text-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.close-btn:hover{
+  transform: scale(1.1);
+  text-shadow: 0 0 12px rgb(231, 230, 215), 0 0 24px rgb(212, 211, 194);
+}
+
+@keyframes fadeScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+
+

@@ -20,7 +20,6 @@ export class DialogService {
       width: 'auto',
       minWidth: '60vw',
       maxWidth: '70vw', // Limits width to 80% of viewport
-      minHeight: '60vh',
       maxHeight: '90vh',
       panelClass: 'custom-dialog-container', // Custom class for styling
       disableClose: true,
@@ -34,6 +33,7 @@ export class DialogService {
       message: 'Hello from Issue Modal!',
       projectId, // ✅ Directly pass projectId instead of nesting it under another 'data' object
     });
+    
   }
   openIssueViewModal(issueId: number) {
     this.openDialog(IssueViewModalComponent, {

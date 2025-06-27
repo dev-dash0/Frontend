@@ -11,9 +11,9 @@
         <span class="position-relative">
           <i class="fa-regular fa-comment-dots fa-lg"></i>
         </span>
-        <span class="position-relative">
-          <i class="fa-regular fa-bell fa-lg"></i>
-          <span class="badge">1</span>
+        <span class="position-relative notification-wrapper" (click)="togglePanel()">
+          <i class="fa-regular fa-bell fa-lg notification-icon"></i>
+          <span class="badge">{{notifications.length}}</span>
         </span>
 
         <div class="profile">
@@ -53,5 +53,35 @@
         <img src="assets/images/tdesign_mode-dark.svg" alt="" /> }
       </button>
     </div>
+  </div>
+
+  <!-- Notification Panel Wrapper -->
+<div class="notification-panel" [class.visible]="showPanel">
+
+  <!-- Arrow pointing to icon -->
+  <div class="notification-arrow"></div>
+
+  <!-- Close Button -->
+  <div class="close-btn" (click)="getClose()">×</div>
+
+  <!-- Loop through Notifications -->
+  <div class="notification"
+       *ngFor="let notify of notifications"
+       [class.unread]="!notify.isRead"
+       (click)="markAsRead(notify, notify.id)">
+       
+    <div class="notify-header">
+      <p>{{ notify.message }}</p>
+    </div>
+
+    <div class="notify-footer">
+      <div class="sender-info">
+        <img [src]="NotifyUser.imageUrl" alt="User" />
+        <span>{{ NotifyUser.firstName }}</span>
+      </div>
+      <span class="notify-date">{{ notify.createdAt | date:'short' }}</span>
+    </div>
+
+    <div class="checkmark" *ngIf="notify.isRead">✅</div>
   </div>
 </div>

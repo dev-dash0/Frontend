@@ -4,11 +4,9 @@
 }
 
 mat-chip {
-  background: radial-gradient(
-    109.99% 253.12% at 76.68% 66.67%,
-    #db83f1 0%,
-    #8051b1 100%
-  ) !important;
+  background: radial-gradient(109.99% 253.12% at 76.68% 66.67%,
+      #db83f1 0%,
+      #8051b1 100%) !important;
 }
 
 .BG {
@@ -18,28 +16,58 @@ mat-chip {
   min-height: 75vh;
 }
 
-.card {
+.card-owner,
+.company-members,
+.projects-dashboard,
+.project-card {
   transform: translateY(0rem);
   transition: all 0.3s ease-in-out;
-  /* box-shadow: 0 3px 10px #4a314c; */
+  background: #5a73c31a !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 3px 10px #4a314c;
+}
+
+.company-div {
+  transform: translateY(0rem);
+  transition: all 0.3s ease-in-out;
+  background: rgba(90, 115, 195, 0.1) !important;
+  box-shadow: 0 3px 10px #4a314c;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  border-radius: var(--standardRoundness);
+  background: none;
+  inset: 0px;
+  z-index: 1;
+  padding: 0.5px;
+  mask: none;
 }
 
 .company-div:hover,
 .card-owner:hover,
 .company-members:hover {
   transform: translateY(-5px);
-  box-shadow: 12px 12px 28px 0 #4a314c;
+  box-shadow: 10px 10px 22px 0 #4a314c;
 }
 
 .project-card .card:hover .shine {
   transform: rotate(25deg) translateX(100%);
 }
+
 .col-md-12 .header {
   display: flex;
   align-items: center;
   gap: 10px;
   text-align: center;
   justify-content: space-between;
+}
+
+.pin-icon {
+  color: var(--mainLightBlueColor);
+  transform: rotate(45deg);
 }
 
 .trash-icon,
@@ -56,8 +84,14 @@ mat-chip {
 .edit-icon:hover {
   color: #ffd43b !important;
 }
+
 .pin-icon:hover {
   color: #ff90e8 !important;
+}
+
+.active-pin {
+  color: #ff90e8 !important;
+  transform: rotate(0deg) !important;
 }
 
 .Red-Pin {
@@ -107,8 +141,8 @@ hr {
   color: var(--lightGrayColor);
 }
 
-.col-md-6 {
-  height: 320px;
+.col-md-4 {
+  height: 340px;
 }
 
 .company-members,
@@ -130,7 +164,7 @@ hr {
   flex-shrink: 0;
 }
 
-.members {
+.members-class {
   flex: 1;
   overflow-y: auto;
   min-height: 0;
@@ -155,13 +189,13 @@ hr {
   justify-content: space-between;
 }
 
-.company-members .member {
+.company-members .company-member {
   padding: 5px;
   border-radius: var(--standardRoundness);
   transition: all 0.3s ease-in-out;
 }
 
-.company-members .member:hover {
+.company-members .company-member:hover {
   background-color: #4a314c76;
 }
 
@@ -188,19 +222,15 @@ p {
 }
 
 .image-gradient {
-  -webkit-mask-image: radial-gradient(
-    circle at center,
-    rgba(0, 0, 0, 1) 30%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  -webkit-mask-image: radial-gradient(circle at center,
+      rgba(0, 0, 0, 1) 30%,
+      rgba(0, 0, 0, 0) 100%);
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: 100% 100%;
 
-  mask-image: radial-gradient(
-    circle at center,
-    rgba(0, 0, 0, 1) 30%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  mask-image: radial-gradient(circle at center,
+      rgba(0, 0, 0, 1) 30%,
+      rgba(0, 0, 0, 0) 100%);
   mask-repeat: no-repeat;
   mask-size: 100% 100%;
 }
@@ -292,6 +322,7 @@ p {
   height: 50px;
   border: 2px var(--mainLightBlueColor) solid;
 }
+
 .project-header h2,
 .options-imgs {
   display: flex;
@@ -302,16 +333,20 @@ p {
   display: flex;
   align-items: center;
 }
+
 .project-header,
 .button-options {
   justify-content: space-between;
 }
+
 .tag-name {
   display: flex;
 }
+
 .tag-name p {
   color: var(--mainLightBlueColor);
 }
+
 .tag-name p:hover {
   color: var(--mainLightBlueColor) !important;
 }
@@ -446,6 +481,7 @@ p {
 .medium-tag {
   background-color: rgba(252, 241, 187, 0.7);
 }
+
 .medium-tag p {
   color: #d07805;
 }
@@ -453,6 +489,7 @@ p {
 .high-tag {
   background-color: rgb(255, 205, 210, 0.8);
 }
+
 .high-tag p {
   color: #d02705;
 }
@@ -460,6 +497,7 @@ p {
 .critical-tag {
   background-color: rgb(204, 22, 70, 0.8);
 }
+
 .critical-tag p {
   color: var(--mainColor);
 }
@@ -502,7 +540,7 @@ p {
   padding-right: 8px;
 }
 
-.member,
+.company-member,
 .add-members {
   display: flex;
   align-items: center;
@@ -543,7 +581,7 @@ p {
   color: #ffffffa6;
 }
 
-.member img {
+.company-member img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -577,10 +615,10 @@ p {
   font-family: var(--headerFontFamily);
   color: var(--mainLightBlueColor);
   cursor: pointer;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: var(--middleFontWeight);
-  width: 100px;
-  max-width: 150px;
+  width: 50xp;
+  max-width: 120px;
   position: relative;
   width: 100%;
   box-shadow: inset 0 0 20px rgba(255, 255, 255, 0);
@@ -637,5 +675,9 @@ p {
 
   .btn i {
     font-size: 16px;
+  }
+
+  .responsive {
+    height: 100%;
   }
 }
