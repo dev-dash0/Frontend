@@ -14,8 +14,23 @@
       [(ngModel)]="userInput"
       placeholder="Ask me anything..."
       (keydown.enter)="sendMessage()"
+      [disabled]="isLoading"
     />
-    <button class="send-btn" (click)="sendMessage()">➤</button>
+
+    <!-- <div class="ai-listening-indicator"></div>
+    <div *ngIf="isLoading" class="typing-animation">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+    
+    <button class="send-btn" (click)="sendMessage()">➤</button> -->
+    <ng-container *ngIf="!isLoading; else typingIndicator">
+      <button class="send-btn" (click)="sendMessage()">➤</button>
+    </ng-container>
+  
+    <ng-template #typingIndicator>
+      <div class="ai-listening-indicator"></div>
+    </ng-template>
   </div>
-  <div class="ai-listening-indicator"></div>
 </div>

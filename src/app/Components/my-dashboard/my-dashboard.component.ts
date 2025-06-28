@@ -41,12 +41,14 @@ export class MyDashboardComponent {
 
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {
-    const booty = document.querySelector('.chat-trigger') as HTMLElement;
-
-    // simple effect: slight parallax movement
-    booty.style.transform = `translate(${event.clientX * 0.02}px, ${
-      event.clientY * 0.02
-    }px) scale(1)`;
+    const booty = document.querySelector('.chat-trigger') as HTMLElement | null;
+  
+    if (booty) {
+      booty.style.transform = `translate(${event.clientX * 0.02}px, ${
+        event.clientY * 0.02
+      }px) scale(1)`;
+    }
+  
 
     // const chat = document.querySelector('.chat-trigger') as HTMLElement;
 
