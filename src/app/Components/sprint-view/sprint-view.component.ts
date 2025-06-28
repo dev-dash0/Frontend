@@ -167,7 +167,13 @@ export class SprintViewComponent {
         };
 
         for (const issue of issues) {
-          const statusKey = issue.isBacklog ? 'backlog' : (issue.status?.trim().toLowerCase() || 'to do');
+          // Issue belongs to the real Project Backlog if isBacklog is true AND it has no sprint assigned
+          // const isInProjectBacklog = issue.isBacklog === true && issue.sprintId === null;
+          // Use 'backlog' category only for project backlog items
+          // const statusKey = isInProjectBacklog ? 'backlog' : (issue.status?.trim().toLowerCase() || 'to do');
+
+          // const statusKey = issue.isBacklog ? 'backlog' : (issue.status?.trim().toLowerCase() || 'to do');
+          const statusKey = issue.status?.trim().toLowerCase() || 'to do';
 
           if (issueCategories[statusKey]) {
             issueCategories[statusKey].issues.push({
@@ -195,7 +201,7 @@ export class SprintViewComponent {
               projectId: issue.projectId,
             });
 
-            console.log('Issue Categories:', issueCategories);
+            // console.log('Issue Categories:', issueCategories);
           } else {
             console.warn('Unknown status category:', statusKey, 'for issue:', issue.title);
           }
@@ -206,11 +212,12 @@ export class SprintViewComponent {
         // Convert to array for template
         this.issueCategories = Object.values(issueCategories);
 
-        this.connectedDropListsIds = this.issueCategories.map(category =>
-          this.formatStatusId(category.status)
-        );
+        // this.connectedDropListsIds = this.issueCategories.map(category =>
+        //   this.formatStatusId(category.status)
+        // );
 
-  
+        this.connectedDropListsIds = this.issueCategories.map(category => category.status);
+
         console.log('Mapped Issues by Status:', this.issueCategories);
       },
       error: (err) => {
@@ -271,55 +278,6 @@ openIssueView(issueId: number) {
 
 //////////////////////////////////////////////// 
 
-  // getWrapperClass(status: string): string {
-  //   switch (status) {
-  //     case 'to do':
-  //       return this.issueStatus[0];
-  //       case 'In Progress':
-  //         return this.issueStatus[1];
-  //     case 'Reviewing':
-  //       return this.issueStatus[2];
-  //     case 'Completed':
-  //       return this.issueStatus[3];
-  //     case 'Canceled':
-  //       return this.issueStatus[4];
-  //     case 'Postponed':
-  //       return this.issueStatus[5];
-  //     default:
-  //       return '';
-  //   }
-  // }
-
-  // getSpanStatus(status: string): string {
-  //   switch (status) {
-  //     case 'to do':
-  //       return this.spanStatus[0];
-  //     case 'In Progress':
-  //       return this.spanStatus[1];
-  //     case 'Completed':
-  //       return this.spanStatus[2];
-  //       case 'Reviewing':
-  //         return this.issueStatus[2];
-  //       case 'Canceled':
-  //         return this.issueStatus[4];
-  //       case 'Postponed':
-  //         return this.issueStatus[5];
-  //     default:
-  //       return '';
-  //   }
-  // }
-
-  // dateFormatter(dateString: string | Date): string {
-  //   const dateFormat = new Date(dateString);
-  //   const formatted = `${String(dateFormat.getDate()).padStart(
-  //     2,
-  //     '0'
-  //   )}/${String(dateFormat.getMonth() + 1).padStart(
-  //     2,
-  //     '0'
-  //   )}/${dateFormat.getFullYear()}`;
-  //   return formatted;
-  // }
   dateFormatter(dateString: string | Date | null | undefined): string {
     if (!dateString || dateString === '') {
       return '—';
@@ -365,6 +323,8 @@ getFormattedDate(dateStr: string | null | undefined): string {
 connectedDropListsIds: string[] = [];
 
 onIssueDropped(event: CdkDragDrop<any[]>, newStatus: string): void {
+  // console.log('🚀 New Status Wrapper ID:', newStatus);
+
   const previousContainer = event.previousContainer;
   const currentContainer = event.container;
 
@@ -380,6 +340,7 @@ onIssueDropped(event: CdkDragDrop<any[]>, newStatus: string): void {
     event.currentIndex
   );
 
+  
   // 2. Update backend issue status
   const updateData = new FormData();
   updateData.append("Title", draggedIssue.title);
@@ -389,6 +350,8 @@ onIssueDropped(event: CdkDragDrop<any[]>, newStatus: string): void {
   updateData.append("DeliveredDate", draggedIssue.deliveredDate ?? '');
   updateData.append("Type", draggedIssue.type ?? '');
   updateData.append("Status", newStatus); // what we are updating only
+  // updateData.append("Status", this.getBackendStatusFromWrapper(newStatus));
+
   updateData.append("Priority", draggedIssue.priority ?? '');
   updateData.append("Labels", draggedIssue.labels ?? '');
   updateData.append("SprintId", draggedIssue.sprintId?.toString() ?? '');
@@ -397,7 +360,7 @@ onIssueDropped(event: CdkDragDrop<any[]>, newStatus: string): void {
 
   this._IssueService.updateIssue(draggedIssue.id, updateData).subscribe({
     next: () => {
-      console.log(`✅ Issue ${draggedIssue.id} status updated to ${newStatus}`);
+      // console.log(`✅ Issue ${draggedIssue.id} status updated to ${newStatus}`);
       this._IssueService.notifyIssueUpdated();
     },
     error: (err) => {
@@ -409,6 +372,21 @@ onIssueDropped(event: CdkDragDrop<any[]>, newStatus: string): void {
 formatStatusId(status: string): string {
   return status.toLowerCase().replace(/\s/g, '-');
 }
+
+
+// getBackendStatusFromWrapper(wrapperId: string): string {
+//   switch (wrapperId) {
+//     case 'to do': return 'to do';
+//     case 'Completed': return 'completed';
+//     case 'reviewing': return 'Reviewing';
+//     case 'canceled': return 'Canceled';
+//     case 'postponed': return 'Postponed';
+//     case 'In Progress': return 'in progress';
+//     case 'backlog': return 'Backlog';
+//     default: return 'To Do';
+//   }
+// }
+
 
 
 }

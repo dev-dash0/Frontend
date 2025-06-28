@@ -105,7 +105,7 @@ export class SearchBarComponent {
       .subscribe({
         next: (res) => {
           this.notifications = res.result.notifications;
-          console.log('Notifications:', this.notifications);
+          // console.log('Notifications:', this.notifications);
 
           // Step 3: Match userId from notifications with joined users
           const joinedUserIds = new Set(this.joinedUsers.map((u) => u.id));

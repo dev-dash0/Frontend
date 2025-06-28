@@ -443,7 +443,7 @@ export class SideMenuComponent {
                 next: (project) => {
                   project.result.forEach((proj: Projects) => {
                     const members = this.getProjectMembers(proj);
-                    console.log(`Project ${proj.id} members:`, members);
+                    // console.log(`Project ${proj.id} members:`, members);
                     const userIsMember = members.some(
                       (member: any) => member.id === userId
                     );

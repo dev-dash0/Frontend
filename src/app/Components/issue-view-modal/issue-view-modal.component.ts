@@ -19,11 +19,12 @@ import { animate, keyframes, style, transition, trigger } from '@angular/animati
 import { SigninSignupNavbarComponent } from "../../Shared/signin-signup-navbar/signin-signup-navbar.component";
 import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-users-to-issue.component';
 import { SprintService } from '../../Core/Services/sprint.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Sprint } from '../../Core/interfaces/sprint';
 import { ToastrService } from 'ngx-toastr';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
+import { ProfileService } from '../../Core/Services/profile.service';
+import { UserProject } from '../../Core/interfaces/notification';
 
 
 @Component({
@@ -72,6 +73,8 @@ export class IssueViewModalComponent {
   private _sprintService = inject(SprintService);
   private readonly route = inject(ActivatedRoute);
   private readonly toaster = inject(ToastrService);
+  private readonly _ProfileService=inject(ProfileService);
+  private _router = inject(Router);
   constructor(
     public dialogRef: MatDialogRef<ModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -92,7 +95,7 @@ export class IssueViewModalComponent {
   issueUpdateForm!: FormGroup;
   isEditMode = false;
   showModal = true;
-  allUsers: ProfileData[] = []; // Load this from your user service
+  allUsers: UserProject[] = []; // Load this from your user service
   priorityConfig: any = {
     Critical: {
       icon: 'assets/images/Issue Priorities/urgent.svg',
@@ -107,6 +110,11 @@ export class IssueViewModalComponent {
   };
   sprintsList: Sprint[] = [];
   selectedSprintId: number | null = null;
+
+  userId!: number;
+  currentUserRole: string = '';
+  isRoleLoaded: boolean = false;
+
 
   @ViewChild('modalContent') modalContent!: TemplateRef<any>;
 
@@ -125,8 +133,8 @@ export class IssueViewModalComponent {
       attachment: [null]
 
     });
-
-    this.loadIssue();
+   this.getCurrentUser();
+    // this.loadIssue();
 
     this._IssueService.issueUpdated$.subscribe(() => {
       this.loadIssue(); // أو أي ميثود بتعمل refresh للبيانات
@@ -366,7 +374,16 @@ onSubmit() {
     return this._ProjectService.getProject(issueProjectId).subscribe(
       {
         next: (res) => {
-          this.allUsers = res.result?.userProjects ?? [];
+          this.allUsers = res.result?.userProjects as UserProject[] ?? [];
+          const userProject = this.allUsers.find(user => user.userId === this.userId);
+          this.currentUserRole = userProject?.role ?? '';
+          this.isRoleLoaded = true;
+          
+    
+
+      console.log('Current Role:', this.currentUserRole);
+      console.log('All Users:', this.allUsers);
+      
         },
         error: (err) => {
           console.error("Error Assigning User", err);
@@ -513,7 +530,8 @@ onSprintChange() {
 
   const issueData = new FormData();
 
-  // بيانات أساسية مطلوبة دائمًا
+
+// 🟢 Issue Data
   issueData.append("Title", this.issue.title ?? '');
   issueData.append("Description", this.issue.description ?? '');
   issueData.append("StartDate", this.issue.startDate ?? '');
@@ -533,12 +551,11 @@ onSprintChange() {
     issueData.append("SprintId", this.selectedSprintId.toString());
   }
 
-  // مرفق اختياري
+
   if (this.selectedFile) {
     issueData.append("Attachment", this.selectedFile);
   }
 
-  // تاريخ التعديل (لو متاح عندك)
   issueData.append("LastUpdate", new Date().toISOString());
 
   this._IssueService.updateIssue(issueId, issueData).subscribe({
@@ -593,13 +610,40 @@ showError(err: string) {
   });
 }
 showSuccess(Message:string){
-this.toaster.success(Message, 'Success Message', {
-  toastClass: 'toast-pink',
-  timeOut: 5000,
-  closeButton: true,
-  progressBar: true,
-  progressAnimation: 'decreasing',
-});
+  this.toaster.success(Message, 'Success Message', {
+    toastClass: 'toast-pink',
+    timeOut: 5000,
+    closeButton: true,
+    progressBar: true,
+    progressAnimation: 'decreasing',
+  });
+}
+
+////////////////////////////////////////////////
+/***************Navigate To The Sprint******************** */
+
+viewSprint(sprintId: any,projectId: any): void {
+  this.dialogRef.close(); //close the modal first before navigating 
+  setTimeout(() => {
+
+    if (sprintId) {
+      this._router.navigate(['/MyDashboard/Sprint', sprintId]); //Navigate to the sprint page if the sprintId is provided
+    } else {
+      this._router.navigate(['/MyDashboard/Project',projectId ]); //Navigate to the project page if the sprintId is not provided 
+    }
+  }, 0);
+}
+
+////////////////////////////////////////////////
+/***************Role Based Access******************** */
+getCurrentUser() {
+  this._ProfileService.getProfileData().subscribe({
+    next: (user) => {
+      this.userId = user.id;
+      this.loadIssue();
+    },
+    error: (err) => console.error('Error fetching profile:', err)
+  });
 }
 
 }

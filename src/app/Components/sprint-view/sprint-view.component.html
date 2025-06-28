@@ -110,64 +110,6 @@
                 </span>
               </div>
 
-              <!-- <div class="row g-3 mt-1">
-                <div class="col-md-4" *ngFor="let category of issueCategories">
-                  <div class="tag-box" [ngClass]="category.class">
-                    <div class="tag-name">
-                      <img [src]="category.icon" alt="" />
-                      <p>{{ category.name }}</p>
-                    </div>
-                    <span [ngClass]="getSpanStatus(category.status)">{{
-                      category.issues.length
-                      }}</span>
-                  </div>
-
-                  <div class="wrapper gap-3" [ngClass]="getWrapperClass(category.status)">
-                    <div class="col-md-12" *ngFor="let issue of category.issues">
-                      <div class="card p-1">
-                        <div class="card-body">
-                          <div class="issue-header">
-                            Priority Tag
-                            <div class="priority-tag" [ngClass]="issue.priority">
-                              <img [src]="issue.priorityIcon" alt="{{ issue.priority }} Icon" />
-                              <span>{{ issue.priority }}</span>
-                            </div>
-                          </div>
-
-                          <div class="issue-name-date">
-                            <h3>{{ issue.title }}</h3>
-                            <p class="p-0 m-0">
-                              Start {{ issue.startDate }} | Due
-                              {{ issue.dueDate }}
-                            </p>
-                          </div>
-
-                          <div class="issue-description">
-                            <p>{{ issue.description }}</p>
-                          </div>
-
-                          <div class="field-tag mt-4">
-                            <p class="p-0 m-0 text-capitalize">
-                              {{ issue.category }}
-                            </p>
-                          </div>
-
-                          <div class="button-options d-flex align-items-end">
-                            <button class="btn mt-3">
-                              <i class="fa-regular fa-keyboard fa-lg pe-1" style="color: #dcdfff"></i>
-                              View Details
-                            </button>
-                            <div class="options-imgs gap-2">
-                              <img src="assets/images/issue view/Add File.svg" alt="" />
-                              <img src="assets/images/issue view/Edit Chat History.svg" alt="" />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div> -->
               <div class="row flex-nowrap overflow-x-scroll g-4  px-3 pt-3 pb-4">
                 <div class="d-flex justify-content-center align-items-center w-100" style="min-height: 300px"
                   *ngIf="issueLoading">
@@ -188,7 +130,7 @@
                     </div>
 
                     <div class="wrapper-card-container overflow-y-auto" cdkDropList [cdkDropListData]="category.issues"
-                      [id]="formatStatusId(category.status)" [cdkDropListConnectedTo]="connectedDropListsIds"
+                      [id]="category.status" [cdkDropListConnectedTo]="connectedDropListsIds"
                       (cdkDropListDropped)="onIssueDropped($event, category.status)">
                       <div class="no-issues d-flex justify-content-center align-items-center h-100"
                         *ngIf="category.issues.length === 0">

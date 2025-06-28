@@ -179,55 +179,145 @@
                     <div class="col-md-6">
                         <div class="card-issue-view shadow-sm border-0 ">
                             <div class="card-body h-100">
+
+                                <!-- Header -->
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h6 class="fw-semibold mb-0">Sprint Assignment</h6>
-                                    <span class="badge burble-tag text-white rounded-pill"
+                                    <span class="badge burble-tag text-white rounded-pill cursor-pointer "
+                                        (click)="viewSprint(sprintId,issue.projectId)"
                                         [matTooltip]="selectedSprintId ? getSprintTooltip(selectedSprintId) : ''"
                                         matTooltipPosition="above" matTooltipClass="sprint-tooltip-class">
                                         {{ selectedSprintId ? getSprintNameById(selectedSprintId) : 'Backlog' }}
                                     </span>
                                 </div>
-                                <mat-form-field appearance="outline" class="w-100">
-                                    <div class="p-2">
-                                        <mat-label>Move Issue To</mat-label>
-                                        <mat-select class [(ngModel)]="selectedSprintId"
-                                            (selectionChange)="onSprintChange()">
-                                            <mat-option [value]="null">
-                                                <div class="d-flex justify-content-between align-items-center gap-2">
-                                                    <div class="backlogOrSprint-logo"><img
-                                                            src="assets/images/Issue Status/backlog.svg" alt="">
-                                                    </div>
-
-                                                    Backlog
-                                                </div>
-                                            </mat-option>
-                                            <mat-option *ngFor="let sprint of sprintsList" [value]="sprint.id" class="d-flex justify-content-between align-items-center gap-2
-                ">
-                                                <div class="d-flex justify-content-between align-items-center gap-2">
-                                                    <div class="backlogOrSprint-logo"> <img
-                                                            src="assets/images/issue view/sprint details/Sprint Iteration.svg"
-                                                            alt=""></div> {{ sprint.title }}
-                                                </div>
-                                                <small class="dropdown-sprints-dates d-block">
-                                                    {{ sprint.startDate }} → {{ sprint.endDate }}
-                                                </small>
-                                            </mat-option>
-                                        </mat-select>
-
+                                <ng-container *ngIf="!isRoleLoaded; else RoleView">
+                                    <div class="d-flex justify-content-center align-items-center p-5">
+                                        <i class="fa-solid fa-circle-notch fa-spin fa-2xl fw-lighter"></i>
                                     </div>
-                                </mat-form-field>
+                                </ng-container>
+
+
+                                <ng-template #RoleView>
+                                    <!-- 👤 Developer View -->
+                                    <div *ngIf="currentUserRole === 'Developer'" class="p-2">
+                                        <label class="fw-semibold dev-text-muted d-block mb-2">This issue is currently
+                                            in:</label>
+                                        <div class="d-flex align-items-center gap-2 cursor-pointer "
+                                            (click)="viewSprint(sprintId,issue.projectId)">
+                                            <i class="fa-solid fa-arrow-right text-info"></i>
+                                            <span class="text-capitalize fw-medium">
+                                                {{ selectedSprintId ? getSprintNameById(selectedSprintId) : 'Backlog' }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <!-- 👤 Admin / Manager View -->
+                                    <mat-form-field appearance="outline" class="w-100"
+                                        *ngIf="currentUserRole !== 'Developer'">
+                                        <div class="p-2">
+                                            <mat-label>Move Issue To</mat-label>
+                                            <mat-select class [(ngModel)]="selectedSprintId"
+                                                (selectionChange)="onSprintChange()">
+                                                <!-- Backlog Option -->
+                                                <mat-option [value]="null">
+                                                    <div
+                                                        class="d-flex justify-content-between align-items-center gap-2">
+                                                        <div class="backlogOrSprint-logo"><img
+                                                                src="assets/images/Issue Status/backlog.svg" alt="">
+                                                        </div>
+
+                                                        Backlog
+                                                    </div>
+                                                </mat-option>
+                                                <!-- Sprint Options -->
+                                                <mat-option *ngFor="let sprint of sprintsList" [value]="sprint.id"
+                                                    class="d-flex justify-content-between align-items-center gap-2
+                    ">
+                                                    <div
+                                                        class="d-flex justify-content-between align-items-center gap-2">
+                                                        <div class="backlogOrSprint-logo"> <img
+                                                                src="assets/images/issue view/sprint details/Sprint Iteration.svg"
+                                                                alt=""></div> {{ sprint.title }}
+                                                    </div>
+                                                    <small class="dropdown-sprints-dates d-block">
+                                                        {{ sprint.startDate }} → {{ sprint.endDate }}
+                                                    </small>
+                                                </mat-option>
+                                            </mat-select>
+
+                                        </div>
+                                    </mat-form-field>
+                                </ng-template>
+
+
 
                             </div>
                         </div>
                     </div>
 
-
+                    <!-- Assigned Users -->
                     <div class="col-md-6">
                         <div class="card-issue-view shadow-sm border-0 h-100">
-                            <div class="card-body">
+                            <div class="card-body h-100">
+                                <!-- Header -->
                                 <h6 class="fw-semibold mb-3">Assigned Users</h6>
+
+                                <!-- @if (!isRoleLoaded) {
+                                <div class="d-flex justify-content-center align-items-center p-5">
+                                    <i class="fa-solid fa-circle-notch fa-spin fa-2xl fw-lighter"></i>
+                                </div>
+                                }@else{
+                                @if(currentUserRole !== 'Developer'){
                                 <app-assign-users-to-issue [issueId]="issue.id"
                                     [issueProjectId]="issue.projectId"></app-assign-users-to-issue>
+                                }
+                                @else{
+                                <div *ngFor="let user of issue.assignedUsers">
+                                    <img [src]="user.imageUrl" alt="{{ user.firstName }} {{ user.lastName }}"
+                                        class="assigned-member cursor-pointer rounded-circle"
+                                        style="width: 40px; height: 40px;" />
+                                </div>
+                                }
+                                } -->
+
+                                <ng-container *ngIf="!isRoleLoaded; else RoleAssigneeView">
+                                    <div class="d-flex justify-content-center align-items-center p-5">
+                                        <i class="fa-solid fa-circle-notch fa-spin fa-2xl fw-lighter"></i>
+                                    </div>
+                                </ng-container>
+
+                                <ng-template #RoleAssigneeView>
+                                    <ng-container class="assigned-users-for-admin-and-projectmanager-view"
+                                        *ngIf="currentUserRole !== 'Developer'">
+                                        <app-assign-users-to-issue [issueId]="issue.id"
+                                            [issueProjectId]="issue.projectId"></app-assign-users-to-issue>
+                                    </ng-container>
+
+                                    <ng-container class="assigned-users-for-developer-view"
+                                        *ngIf="currentUserRole === 'Developer'">
+                                        <div class="assigned-members  d-flex justify-content-center align-items-center">
+                                            <!-- Assigned Members -->
+                                            <div *ngFor="let user of issue.assignedUsers">
+                                                @if(user.imageUrl){
+                                                <img [src]="user.imageUrl"
+                                                    alt="{{ user.firstName }} {{ user.lastName }}"
+                                                    class=" assigned-member member cursor-pointer rounded-circle"
+                                                    style="margin-right: -7px;" />
+                                                }@else {
+                                                <div class="rounded-circle member-container">
+                                                    <img alt="user-img" src="assets/images/user-img-not-found.jpg"
+                                                        class="assigned-member cursor-pointer rounded-circle"
+                                                        style="margin-right: -7px;" />
+                                                </div>
+                                                }
+                                            </div>
+
+
+                                        </div>
+
+                                    </ng-container>
+
+                                </ng-template>
+
                             </div>
                         </div>
                     </div>

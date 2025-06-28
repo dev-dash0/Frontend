@@ -489,4 +489,6 @@ export class ProjectOverViewComponent {
       progressAnimation: 'decreasing',
     });
   }
+  
+  
 }
