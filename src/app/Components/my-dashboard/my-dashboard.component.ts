@@ -41,12 +41,14 @@ export class MyDashboardComponent {
 
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {
-    const booty = document.querySelector('.chat-trigger') as HTMLElement;
-
-    // simple effect: slight parallax movement
-    booty.style.transform = `translate(${event.clientX * 0.02}px, ${
-      event.clientY * 0.02
-    }px) scale(1)`;
+    const booty = document.querySelector('.chat-trigger') as HTMLElement | null;
+  
+    if (booty) {
+      booty.style.transform = `translate(${event.clientX * 0.02}px, ${
+        event.clientY * 0.02
+      }px) scale(1)`;
+    }
+  
 
     // const chat = document.querySelector('.chat-trigger') as HTMLElement;
 
@@ -55,7 +57,6 @@ export class MyDashboardComponent {
     //   event.clientY * 0.02
     // }px) scale(1)`;
   }
-
 
   // @HostListener('document:mousemove', ['$event'])
   // onMouseMove(event: MouseEvent) {
@@ -80,13 +81,21 @@ export class MyDashboardComponent {
   //   rotateX(${rotateX}deg)
   //   rotateY(${rotateY}deg)
   //   scale(1.05)
-  // `;
+  // `
+  //
+  // ;
   // }
+
+  // showChatPopup = false;
 
   onIframeClick() {
     this.showChatPopup = true;
-    console.log('ouch');
+    console.log('Chat Opened');
   }
+  // onIframeClick() {
+  //   this.showChatPopup = true;
+  //   console.log('ouch');
+  // }
 
   // enableIframe() {
   //   const iframe = document.getElementById('splineIframe') as HTMLElement;

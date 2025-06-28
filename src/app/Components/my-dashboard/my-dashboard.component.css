@@ -16,6 +16,10 @@
 }
 
 
+
+
+
+/* Booty default small top-right */
 .booty {
   position: fixed;
   width: 800px;
@@ -24,15 +28,36 @@
   right: -300px;
   z-index: 0;
   transform: scale(0.25);
-  pointer-events: none;  /* IMPORTANT: allows mouse events to pass through */
+  /* pointer-events: none; */
+  transition: all 0.6s ease-in-out;
 }
 
+/* Expanded Booty: centered and scaled up */
+.booty.booty-expanded {
+  top: -40%;
+  left: 50%;
+  width: 100%;
+  transform: translateX(-50%) scale(0.6);
+  z-index: 101;
+}
 
-iframe {
+/* Make Booty interactive only when expanded */
+.booty.interactive {
+  pointer-events: auto;
+}
+
+.booty iframe {
   width: 100%;
   height: 100%;
+  transition: opacity 0.4s ease-in-out;
+  /* pointer-events: none; */
 }
 
+.booty.booty-expanded iframe {
+  pointer-events: auto;
+}
+
+/* Trigger Button */
 .chat-trigger {
   position: fixed;
   top: 550px;
@@ -47,53 +72,74 @@ iframe {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
+/* Backdrop Blur */
+.chat-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 99;
+}
 
+/* Chat Box (below Booty) */
 .chat-popup {
   position: fixed;
-  top: 500px;
-  right: 200px;
-  width: 300px;
-  background: linear-gradient(145deg, #1c1e38, #292c52);
+  top:40%;
+  left: 50%;
+  width: 75%;
+  transform: translate(-50%, -50%);
+  z-index: 102;
+  background: #1c1e38;
   border-radius: 20px;
   padding: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   color: white;
-  z-index: 100;
-  animation: dropTiltBounce 1.8s ease-out forwards;
-  transform-origin: bottom center;
+  animation: dropTiltBounce 1.5s ease-out forwards;
 }
 
+/* Welcome Text */
+.chat-welcome {
+  font-size: 18px;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 16px;
+  text-align: center;
+  background: linear-gradient(145deg, #141931, #20254E);
+  padding: 12px 24px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-/* .ai-model {
-  transition: transform 0.15s ease-out;
-  transform-origin: center;
-  will-change: transform;
-  
-} */
-
-
+/* Drop animation */
 @keyframes dropTiltBounce {
   0% {
-    transform: translateY(150px) rotate(0deg) scale(0.9);
+    transform: translate(-50%, 150px) scale(0.9);
     opacity: 0;
   }
   20% {
-    transform: translateY(0px) rotate(5deg) scale(1.02); /* hit right */
+    transform: translate(-50%, 0px) rotate(5deg) scale(1.02);
     opacity: 1;
   }
   40% {
-    transform: translateY(5px) rotate(-5deg); /* hit left */
+    transform: translate(-50%, 5px) rotate(-5deg);
   }
   60% {
-    transform: translateY(0px) rotate(3deg); /* smaller right tilt */
+    transform: translate(-50%, 0px) rotate(3deg);
   }
   75% {
-    transform: translateY(3px) rotate(-3deg); /* smaller left tilt */
+    transform: translate(-50%, 3px) rotate(-3deg);
   }
   85% {
-    transform: translateY(0px) rotate(1deg); /* tiny right tilt */
+    transform: translate(-50%, 0px) rotate(1deg);
   }
   100% {
-    transform: translateY(0px) rotate(0deg) scale(1); /* final rest */
+    transform: translate(-50%, 0px) rotate(0deg) scale(1);
   }
 }
+

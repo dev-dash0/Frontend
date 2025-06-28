@@ -21,6 +21,10 @@ export class AiChatPopupComponent {
 
   constructor(private aiService: AiAgentService) {}
 
+  ngOnInit(): void {
+    this.messages.push('🤖 Ask me what do u want ?');
+  }
+
   closePopup() {
     this.close.emit();
   }
@@ -34,34 +38,68 @@ export class AiChatPopupComponent {
 
     const payload = {
       text: this.userInput,
-      startDate: '2025-04-17',
-      endDate: '2025-04-17',
+      startDate: '2025-06-17',
+      endDate: '2025-07-17',
       tenant_id: '11',
       chat_id: '',
     };
 
     this.messages.push(`🧑‍💻 You: ${this.userInput}`);
     this.userInput = '';
-    this.isLoading = true;
+    // this.isLoading = true;
 
+    // this.aiService.interactWithAgent(payload).subscribe({
+    //   next: (event) => {
+    //     switch (event.type) {
+    //       case 'start':
+    //         this.messages.push('🤖 Agent started responding...');
+    //         break;
+    //       case 'token':
+    //         this.appendToLastMessage(event.content);
+    //         break;
+    //       case 'tool_call':
+    //         this.messages.push(`[Tool Called: ${event.tool_name}]`);
+    //         break;
+    //       case 'tool_output':
+    //         this.messages.push(`[Tool Output]: ${event.output}`);
+    //         break;
+    //       case 'end':
+    //         this.isLoading = false;
+    //         break;
+    //       case 'error':
+    //         this.messages.push(`⚠️ Error: ${event.content}`);
+    //         this.isLoading = false;
+    //         break;
+    //     }
+    //   },
+    //   error: (err) => {
+    //     this.messages.push(`❌ Connection Error`);
+    //     this.isLoading = false;
+    //     console.error(err);
+    //   },
+    // });
+
+    this.isLoading = true;
     this.aiService.interactWithAgent(payload).subscribe({
       next: (event) => {
         switch (event.type) {
           case 'start':
-            this.messages.push('🤖 Agent started responding...');
+            this.isLoading = true;
             break;
+
           case 'token':
             this.appendToLastMessage(event.content);
             break;
+
           case 'tool_call':
-            this.messages.push(`[Tool Called: ${event.tool_name}]`);
-            break;
           case 'tool_output':
-            this.messages.push(`[Tool Output]: ${event.output}`);
+            // ❌ لا تعرضهم
             break;
+
           case 'end':
             this.isLoading = false;
             break;
+
           case 'error':
             this.messages.push(`⚠️ Error: ${event.content}`);
             this.isLoading = false;
@@ -75,6 +113,15 @@ export class AiChatPopupComponent {
       },
     });
   }
+
+  // private appendToLastMessage(token: string) {
+  //   const lastIndex = this.messages.length - 1;
+  //   if (lastIndex >= 0 && this.messages[lastIndex].startsWith('🤖')) {
+  //     this.messages[lastIndex] += token;
+  //   } else {
+  //     this.messages.push(`🤖 ${token}`);
+  //   }
+  // }
 
   private appendToLastMessage(token: string) {
     const lastIndex = this.messages.length - 1;

@@ -1,4 +1,90 @@
-<div class="bg   position-relative">
+<!-- <div class="bg   position-relative">
+  <div class="container-fluid">
+    <div class="row gx-0">
+      <div class="col-md-2">
+        <app-side-menu></app-side-menu>
+      </div>
+      <div class="col-md-10">
+        <app-search-bar></app-search-bar>
+        <div class="outlet">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <!-- <div class="booty"> -->
+    <!-- <iframe src="https://my.spline.design/greetingrobot-0w5AUg6UNPoAijSFCA2Wj5Ww/" frameborder="0" allowfullscreen></iframe> -->
+    <!-- <iframe src="https://my.spline.design/droid-8eilUU2ONdKHgXFATWi8zFNS/" frameborder="0" allowfullscreen></iframe> -->
+    <!-- <iframe src="https://my.spline.design/robotfollowcursorforlandingpage-A7KtxrCj02arjJHjTuJjbbMm/" frameborder="0" allowfullscreen></iframe> -->
+    <!-- <iframe src="https://my.spline.design/rememberallrobot-VehUYJ8Ymkr2IAUzLSa8wCPr/" (click)="onIframeClick()" allowfullscreen frameborder="0"></iframe> -->
+  <!-- </div> -->
+  <!-- <app-ai-chat-popup *ngIf="showChat"></app-ai-chat-popup> -->
+
+  <!-- <div class="booty" >
+    <iframe
+      src="https://my.spline.design/rememberallrobot-VehUYJ8Ymkr2IAUzLSa8wCPr/"
+      allowfullscreen
+      frameborder="0"
+      (click)="onIframeClick()"
+    ></iframe>
+  </div>
+  <div class="chat-trigger" 
+     (click)="onIframeClick()">
+  💬
+</div> -->
+
+<!-- <div class="booty" [class.booty-expanded]="showChatPopup">
+  <iframe
+    src="https://my.spline.design/rememberallrobot-VehUYJ8Ymkr2IAUzLSa8wCPr/"
+    allowfullscreen
+    frameborder="0"
+    (click)="onIframeClick()"
+  ></iframe>
+</div> -->
+
+<!-- Trigger button (only if modal not showing) -->
+<!-- <div 
+  class="chat-trigger" 
+  *ngIf="!showChatPopup"
+  (click)="onIframeClick()">
+  💬
+</div> -->
+
+<!-- <div class="ai-model" id="eyeModelWrapper" (click)="onIframeClick()">
+  <iframe
+      src="https://my.spline.design/rememberallrobot-VehUYJ8Ymkr2IAUzLSa8wCPr/"
+      allowfullscreen
+      frameborder="0"
+      (click)="onIframeClick()"
+    ></iframe>
+</div> -->
+
+<!-- <app-ai-chat-popup 
+  *ngIf="showChatPopup" 
+  class="chat-popup"
+  (close)="showChatPopup = false"
+></app-ai-chat-popup> -->
+
+  <!-- <app-ai-chat-popup *ngIf="showChatPopup" class="chat-popup" (close)="showChatPopup = false"></app-ai-chat-popup> -->
+   
+  <!-- Modal Backdrop -->
+  <!-- <div 
+    *ngIf="showChatPopup" 
+    class="chat-backdrop" 
+    (click)="showChatPopup = false">
+  </div> -->
+  
+  <!-- Chat Modal -->
+  <!-- <app-ai-chat-popup 
+    *ngIf="showChatPopup" 
+    class="chat-popup"
+    (close)="showChatPopup = false">
+  </app-ai-chat-popup>
+
+  
+</div> -->
+
+<div class="bg position-relative">
   <div class="container-fluid">
     <div class="row gx-0">
       <div class="col-md-2">
@@ -12,15 +98,11 @@
       </div>
     </div>
   </div>
-  <!-- <div class="booty"> -->
-    <!-- <iframe src="https://my.spline.design/greetingrobot-0w5AUg6UNPoAijSFCA2Wj5Ww/" frameborder="0" allowfullscreen></iframe> -->
-    <!-- <iframe src="https://my.spline.design/droid-8eilUU2ONdKHgXFATWi8zFNS/" frameborder="0" allowfullscreen></iframe> -->
-    <!-- <iframe src="https://my.spline.design/robotfollowcursorforlandingpage-A7KtxrCj02arjJHjTuJjbbMm/" frameborder="0" allowfullscreen></iframe> -->
-    <!-- <iframe src="https://my.spline.design/rememberallrobot-VehUYJ8Ymkr2IAUzLSa8wCPr/" (click)="onIframeClick()" allowfullscreen frameborder="0"></iframe> -->
-  <!-- </div> -->
-  <!-- <app-ai-chat-popup *ngIf="showChat"></app-ai-chat-popup> -->
 
-  <div class="booty" >
+  <!-- Booty AI Model -->
+  <div class="booty" 
+       [class.booty-expanded]="showChatPopup"
+       [class.interactive]="showChatPopup">
     <iframe
       src="https://my.spline.design/rememberallrobot-VehUYJ8Ymkr2IAUzLSa8wCPr/"
       allowfullscreen
@@ -28,24 +110,18 @@
       (click)="onIframeClick()"
     ></iframe>
   </div>
-  <div class="chat-trigger" 
-     (click)="onIframeClick()">
-  💬
+
+  <!-- Trigger Button -->
+  <div class="chat-trigger" *ngIf="!showChatPopup" (click)="onIframeClick()">💬</div>
+
+  <!-- Backdrop -->
+  <div *ngIf="showChatPopup" class="chat-backdrop" (click)="showChatPopup = false"></div>
+
+  <!-- Chat Box -->
+  <div *ngIf="showChatPopup" class="chat-popup">
+    <div class="chat-welcome">Hi, I'm your virtual assistant. How can I help you today?</div>
+    <app-ai-chat-popup (close)="showChatPopup = false"></app-ai-chat-popup>
+  </div>
 </div>
 
-<!-- <div class="ai-model" id="eyeModelWrapper" (click)="onIframeClick()">
-  <iframe
-      src="https://my.spline.design/rememberallrobot-VehUYJ8Ymkr2IAUzLSa8wCPr/"
-      allowfullscreen
-      frameborder="0"
-      (click)="onIframeClick()"
-    ></iframe>
-</div> -->
 
-<app-ai-chat-popup 
-  *ngIf="showChatPopup" 
-  class="chat-popup"
-  (close)="showChatPopup = false"
-></app-ai-chat-popup>
-  <!-- <app-ai-chat-popup *ngIf="showChatPopup" class="chat-popup" (close)="showChatPopup = false"></app-ai-chat-popup> -->
-</div>

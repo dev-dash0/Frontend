@@ -15,7 +15,8 @@ export class AiAgentService {
     return new Observable((observer) => {
       const token = localStorage.getItem('token'); // أو استخدم المفتاح اللي مخزن بيه
 
-      fetch('https://8e41-156-203-201-194.ngrok-free.app/api/v1/llm/agent', {
+      // fetch('https://8e41-156-203-201-194.ngrok-free.app/api/v1/llm/agent', {
+      fetch('https://2429-156-203-173-226.ngrok-free.app/api/v1/llm/agent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,7 +50,7 @@ export class AiAgentService {
 
                   try {
                     const json = JSON.parse(cleaned);
-                    
+
                     console.log('[AI Agent Response]', json);
 
                     this.zone.run(() => observer.next(json));
@@ -57,7 +58,6 @@ export class AiAgentService {
                     console.warn('Invalid JSON:', cleaned);
                   }
                 });
-              
 
               read(); // continue reading
             });
