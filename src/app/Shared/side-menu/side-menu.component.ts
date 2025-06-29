@@ -35,8 +35,7 @@ export class SideMenuComponent {
     private projectService: ProjectService,
     private router: Router,
     private profileService: ProfileService,
-    private dialog: MatDialog,
-    private cdRef: ChangeDetectorRef
+    private dialog: MatDialog
   ) {}
   private _sprintService = inject(SprintService);
 
@@ -56,6 +55,8 @@ export class SideMenuComponent {
   collapsed = false;
   isTransitioning = false;
   isSmallScreen = false;
+
+  userId: any = 0;
 
   // ---------------------------------------
   mainServices = [
@@ -82,11 +83,11 @@ export class SideMenuComponent {
   ];
   // -----------------------------------------
   otherServices = [
-    {
-      imagePath: 'assets/images/sidebar icons/Plus.svg',
-      path: '',
-      text: 'Integrations',
-    },
+    // {
+    //   imagePath: 'assets/images/sidebar icons/Plus.svg',
+    //   path: '',
+    //   text: 'Integrations',
+    // },
     {
       imagePath: 'assets/images/sidebar icons/Add User Male.svg',
       path: '',
@@ -124,10 +125,10 @@ export class SideMenuComponent {
       path: '',
       imagePath: 'assets/images/sidebar icons/Project Management.svg',
     },
-    {
-      path: '',
-      imagePath: 'assets/images/sidebar icons/Plus.svg',
-    },
+    // {
+    //   path: '',
+    //   imagePath: 'assets/images/sidebar icons/Plus.svg',
+    // },
     {
       path: '',
       imagePath: 'assets/images/sidebar icons/Add User Male.svg',
@@ -258,6 +259,18 @@ export class SideMenuComponent {
     this._sprintService.sprintCreated$.subscribe(() => {
       this.getSprints();
     });
+
+    this._sprintService.sprintUpdated$.subscribe(() => {
+      this.getSprints();
+    });
+
+    this.projectService.projectCreated$.subscribe(() => {
+      this.getProjects();
+    });
+
+    this.projectService.projectUpdated$.subscribe(() => {
+      this.getProjects();
+    });
   }
 
   // ! getCompanies(): void {
@@ -334,33 +347,37 @@ export class SideMenuComponent {
 
   // companies API
   getCompanies(): void {
-    this.companyService.getAllCompanies(null).subscribe({
-      next: (res) => {
-        console.log('Companies API response:', res);
-        if (res?.result && res.result.length > 0) {
-          this.companyNames = res.result.map((company: any) => ({
-            id: company.id,
-            name: company.name,
-          }));
-          this.companyData = res.result;
-          this.loadedCompanies = false;
-          // Store companies and initialize projects as empty
-          // this.companies = this.companyData.map((company) => ({
-          //   id: company.id,
-          //   name: company.name,
-          //   projects: [],
-          // }));
-          // console.log('Companies after processing:', this.companies);
-          // // Fetch projects for each company
-          // this.fetchProjectsForAllCompanies();
-        }
+    this.profileService.getProfileData().subscribe({
+      next: (user) => {
+        this.userId = user.id;
+        this.companyService.getAllCompanies(null).subscribe({
+          next: (res) => {
+            if (res?.result && res.result.length > 0) {
+              this.companyNames = res.result.map((company: any) => ({
+                id: company.id,
+                name: company.name,
+              }));
+              this.companyData = res.result;
+              this.loadedCompanies = false;
+              // Store companies and initialize projects as empty
+              // this.companies = this.companyData.map((company) => ({
+              //   id: company.id,
+              //   name: company.name,
+              //   projects: [],
+              // }));
+              // console.log('Companies after processing:', this.companies);
+              // // Fetch projects for each company
+              // this.fetchProjectsForAllCompanies();
+            }
+          },
+          error: (err) => console.error('Error fetching companies:', err),
+        });
       },
-      error: (err) => console.error('Error fetching companies:', err),
     });
   }
 
   // Routing to companies,projects,sprints
-  selectCompany(companyId: string) {
+  selectCompany(companyId: any) {
     this.router.navigate(['/MyDashboard/Company', companyId]);
     this.SelectedCompanyId = parseInt(companyId);
     console.log(this.SelectedCompanyId);
@@ -408,10 +425,10 @@ export class SideMenuComponent {
         companyIds.forEach((companyId) => {
           this.projectService.getProjectData(companyId).subscribe({
             next: (response) => {
-              console.log(
-                `Project API response for company ${companyId}:`,
-                response
-              );
+              // console.log(
+              //   `Project API response for company ${companyId}:`,
+              //   response
+              // );
               const projects = response.result.map((project: any) => ({
                 id: project.id,
                 name: project.name,

@@ -1,3 +1,4 @@
+<!-- <div class="bg position-relative"> -->
 <!-- <div class="bg   position-relative">
   <div class="container-fluid">
     <div class="row gx-0">
@@ -8,19 +9,20 @@
         <app-search-bar></app-search-bar>
         <div class="outlet">
           <router-outlet></router-outlet>
-        </div>
+          <app-search-results></app-search-results> -->
+<!-- </div>
       </div>
     </div>
   </div> -->
-  <!-- <div class="booty"> -->
-    <!-- <iframe src="https://my.spline.design/greetingrobot-0w5AUg6UNPoAijSFCA2Wj5Ww/" frameborder="0" allowfullscreen></iframe> -->
-    <!-- <iframe src="https://my.spline.design/droid-8eilUU2ONdKHgXFATWi8zFNS/" frameborder="0" allowfullscreen></iframe> -->
-    <!-- <iframe src="https://my.spline.design/robotfollowcursorforlandingpage-A7KtxrCj02arjJHjTuJjbbMm/" frameborder="0" allowfullscreen></iframe> -->
-    <!-- <iframe src="https://my.spline.design/rememberallrobot-VehUYJ8Ymkr2IAUzLSa8wCPr/" (click)="onIframeClick()" allowfullscreen frameborder="0"></iframe> -->
-  <!-- </div> -->
-  <!-- <app-ai-chat-popup *ngIf="showChat"></app-ai-chat-popup> -->
+<!-- <div class="booty"> -->
+<!-- <iframe src="https://my.spline.design/greetingrobot-0w5AUg6UNPoAijSFCA2Wj5Ww/" frameborder="0" allowfullscreen></iframe> -->
+<!-- <iframe src="https://my.spline.design/droid-8eilUU2ONdKHgXFATWi8zFNS/" frameborder="0" allowfullscreen></iframe> -->
+<!-- <iframe src="https://my.spline.design/robotfollowcursorforlandingpage-A7KtxrCj02arjJHjTuJjbbMm/" frameborder="0" allowfullscreen></iframe> -->
+<!-- <iframe src="https://my.spline.design/rememberallrobot-VehUYJ8Ymkr2IAUzLSa8wCPr/" (click)="onIframeClick()" allowfullscreen frameborder="0"></iframe> -->
+<!-- </div> -->
+<!-- <app-ai-chat-popup *ngIf="showChat"></app-ai-chat-popup> -->
 
-  <!-- <div class="booty" >
+<!-- <div class="booty">
     <iframe
       src="https://my.spline.design/rememberallrobot-VehUYJ8Ymkr2IAUzLSa8wCPr/"
       allowfullscreen
@@ -28,6 +30,7 @@
       (click)="onIframeClick()"
     ></iframe>
   </div>
+  <div class="chat-trigger" (click)="onIframeClick()">💬</div>
   <div class="chat-trigger" 
      (click)="onIframeClick()">
   💬
@@ -59,23 +62,22 @@
     ></iframe>
 </div> -->
 
-<!-- <app-ai-chat-popup 
-  *ngIf="showChatPopup" 
+<app-ai-chat-popup
+  *ngIf="showChatPopup"
   class="chat-popup"
   (close)="showChatPopup = false"
-></app-ai-chat-popup> -->
+></app-ai-chat-popup>
+<!-- <app-ai-chat-popup *ngIf="showChatPopup" class="chat-popup" (close)="showChatPopup = false"></app-ai-chat-popup> -->
 
-  <!-- <app-ai-chat-popup *ngIf="showChatPopup" class="chat-popup" (close)="showChatPopup = false"></app-ai-chat-popup> -->
-   
-  <!-- Modal Backdrop -->
-  <!-- <div 
+<!-- Modal Backdrop -->
+<!-- <div 
     *ngIf="showChatPopup" 
     class="chat-backdrop" 
     (click)="showChatPopup = false">
   </div> -->
-  
-  <!-- Chat Modal -->
-  <!-- <app-ai-chat-popup 
+
+<!-- Chat Modal -->
+<!-- <app-ai-chat-popup 
     *ngIf="showChatPopup" 
     class="chat-popup"
     (close)="showChatPopup = false">
@@ -100,9 +102,11 @@
   </div>
 
   <!-- Booty AI Model -->
-  <div class="booty" 
-       [class.booty-expanded]="showChatPopup"
-       [class.interactive]="showChatPopup">
+  <div
+    class="booty"
+    [class.booty-expanded]="showChatPopup"
+    [class.interactive]="showChatPopup"
+  >
     <iframe
       src="https://my.spline.design/rememberallrobot-VehUYJ8Ymkr2IAUzLSa8wCPr/"
       allowfullscreen
@@ -112,16 +116,22 @@
   </div>
 
   <!-- Trigger Button -->
-  <div class="chat-trigger" *ngIf="!showChatPopup" (click)="onIframeClick()">💬</div>
+  <div class="chat-trigger" *ngIf="!showChatPopup" (click)="onIframeClick()">
+    💬
+  </div>
 
   <!-- Backdrop -->
-  <div *ngIf="showChatPopup" class="chat-backdrop" (click)="showChatPopup = false"></div>
+  <div
+    *ngIf="showChatPopup"
+    class="chat-backdrop"
+    (click)="showChatPopup = false"
+  ></div>
 
   <!-- Chat Box -->
   <div *ngIf="showChatPopup" class="chat-popup">
-    <div class="chat-welcome">Hi, I'm your virtual assistant. How can I help you today?</div>
+    <div class="chat-welcome">
+      Hi, I'm your virtual assistant. How can I help you today?
+    </div>
     <app-ai-chat-popup (close)="showChatPopup = false"></app-ai-chat-popup>
   </div>
 </div>
-
-

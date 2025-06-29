@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { baseUrl } from '../environment/environment.local';
 
 @Injectable({
@@ -8,6 +8,24 @@ import { baseUrl } from '../environment/environment.local';
 })
 export class ProjectService {
   constructor(private _HttpClient: HttpClient) {}
+
+  private projectCreatedSource = new BehaviorSubject<boolean>(false);
+  private projectUpdatedSource = new BehaviorSubject<boolean>(false);
+  private projectDeletedSource = new BehaviorSubject<boolean>(false);
+
+  projectCreated$ = this.projectCreatedSource.asObservable();
+  projectUpdated$ = this.projectUpdatedSource.asObservable();
+  projectDeleted$ = this.projectDeletedSource.asObservable();
+
+  notifyProjectDeleted() {
+    this.projectDeletedSource.next(true);
+  }
+  notifyProjectCreated() {
+    this.projectCreatedSource.next(true);
+  }
+  notifyProjectUpdated() {
+    this.projectUpdatedSource.next(true);
+  }
 
   getProjectData = (Tenantid: any): Observable<any> => {
     const headers = new HttpHeaders({

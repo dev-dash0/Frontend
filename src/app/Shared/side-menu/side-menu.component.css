@@ -110,7 +110,7 @@ mat-sidenav.expanded-sidenav {
 .add-company p {
   color: var(--mainLightBlueColor);
   font-family: var(--regularFontFamily);
-  transition: var(--sidebar-transition);
+  /* transition: var(--sidebar-transition); */
 }
 .company p,
 .work-space p,
