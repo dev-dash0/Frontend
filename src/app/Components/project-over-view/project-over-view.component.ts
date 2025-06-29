@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild, ViewChildren, ElementRef, QueryList  } from '@angular/core';
 import { SideMenuComponent } from "../../Shared/side-menu/side-menu.component";
 import { SearchBarComponent } from "../../Shared/search-bar/search-bar.component";
 import { AllIssuesDashboardComponent } from "../all-issues-dashboard/all-issues-dashboard.component";
@@ -23,6 +23,7 @@ import { PinnedService } from '../../Core/Services/pinned.service';
 import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-users-to-issue.component';
 import { SigninSignupNavbarComponent } from "../../Shared/signin-signup-navbar/signin-signup-navbar.component";
 import { UpdateProjectComponent } from '../update-project/update-project.component';
+import { ProjectStateService } from '../../Core/Services/project-state.service';
 
 @Component({
   selector: 'app-project-over-view',
@@ -76,6 +77,49 @@ export class ProjectOverViewComponent {
   private _toaster = inject(ToastrService);
   private _router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly state = inject(ProjectStateService);
+
+  @ViewChildren('sprintCard') sprintCards!: QueryList<ElementRef>;
+
+  // ngOnInit(): void {
+  //   // Get The Id from the Path
+  //   this.ProjectId = this.route.snapshot.paramMap.get('id');
+
+  //   this.sidebarService.isCollapsed$.subscribe((collapsed) => {
+  //     this.isSidebarCollapsed = collapsed;
+  //   });
+
+  //   this.GetProjectData();
+
+  //   this.getPinnedProjects();
+
+  //   // Listen for new issue events and refresh backlog
+  //   this.RefreshBacklogAfterAddingIssue();
+  //   // Get Project id from url
+  //   this.getProjectId(); //for issue
+
+  //   this._sprintService.sprintCreated$.subscribe(() => {
+  //     this.getAllSprints();
+  //   });
+
+  //   this._IssueService.issueUpdated$.subscribe(() => {
+  //     this.fetchBacklogIssues(); //for refreshing after issue updated
+  //   });
+
+  //   this._IssueService.assignedUsersUpdated$.subscribe((updatedIssueId) => {
+  //     // لو الـ issue المتحدث تابع للمشروع الحالي، اعملي refresh
+  //     if (this.projectIdNum) {
+  //       this.fetchBacklogIssues(); // ✅ تحديث تلقائي للـ backlog
+  //       this.getAllSprints(); // ✅ كمان لو عايزة تحدث السبرنتس
+  //     }
+  //   });
+
+  //   // add the sprint with ai without refresh
+  //   this.state.sprintAdded$.subscribe((sprint) => {
+  //     if (sprint) {
+  //       // this.sprints.push(sprint); // أو أي طريقة عرض عند
+  //       }})
+  // }
 
   ngOnInit(): void {
     // Get The Id from the Path
@@ -109,9 +153,54 @@ export class ProjectOverViewComponent {
         this.getAllSprints(); // ✅ كمان لو عايزة تحدث السبرنتس
       }
     });
-  }
 
-  
+    // ✅ جلب بيانات المشروع والسبرينتس وقت تحميل الصفحة
+    this._projectService.getProject(this.ProjectId).subscribe({
+      next: (res) => {
+        const projectId = res.result.id;
+        this._sprintService.getAllSprints(projectId).subscribe({
+          next: (res) => {
+            this.sprintDetails = res.result.map((sprint: Sprint) => ({
+              ...sprint,
+              startDate: this.dateFormatter(sprint.startDate),
+              endDate: this.dateFormatter(sprint.endDate),
+            }));
+          },
+        });
+      },
+    });
+
+    // add the sprint with ai without refresh
+    this.state.sprintAdded$.subscribe((sprint) => {
+      if (sprint) {
+        const formattedSprint = {
+          ...sprint,
+          startDate: this.dateFormatter(sprint.startDate),
+          endDate: this.dateFormatter(sprint.endDate),
+        };
+
+        setTimeout(() => {
+          const lastSprint = this.sprintCards.last;
+          if (lastSprint) {
+            lastSprint.nativeElement.classList.add('highlight-sprint');
+            lastSprint.nativeElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+            });
+
+            // remove the animation class after it's done
+            setTimeout(() => {
+              lastSprint.nativeElement.classList.remove('highlight-sprint');
+            }, 1500);
+          }
+        }, 100);
+        
+
+        this.sprintDetails.push(formattedSprint);
+
+      }
+    });
+  }
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
@@ -144,15 +233,14 @@ export class ProjectOverViewComponent {
       minWidth: '60vw',
       maxWidth: '70vw', // Limits width to 70% of viewport
       minHeight: '60vh',
-      data: { projectId: this.projectIdNum ,message: 'project'}
+      data: { projectId: this.projectIdNum, message: 'project' },
     });
-  
-    dialogRef.afterClosed().subscribe(result => {
+
+    dialogRef.afterClosed().subscribe((result) => {
       if (result === 'created') {
         this.fetchBacklogIssues(); // Refresh the backlog issues
       }
     });
-    
   }
   openIssueView(issueId: number) {
     this.dialogService.openIssueViewModal(issueId);
@@ -220,7 +308,7 @@ export class ProjectOverViewComponent {
     });
   }
 
-  openUpdateProject(){
+  openUpdateProject() {
     this.dialogService.openUpdateProjModal(this.projectIdNum);
   }
 
@@ -268,17 +356,20 @@ export class ProjectOverViewComponent {
     //   this.ProjectDetails!.name
     // );
     this._projectService.deleteProject(this.ProjectId).subscribe({
-      next: (res) => {  
-        this._router.navigate(['MyDashboard/Company', this.ProjectDetails?.tenantId]);
+      next: (res) => {
+        this._router.navigate([
+          'MyDashboard/Company',
+          this.ProjectDetails?.tenantId,
+        ]);
         console.log('Project deleted:', res);
         setTimeout(() => {
           window.location.reload();
-        }, 3000); 
+        }, 3000);
       },
       error(err) {
-          console.log(err);
+        console.log(err);
       },
-    })
+    });
   }
 
   // ---------------------------------------------------
@@ -291,7 +382,7 @@ export class ProjectOverViewComponent {
     this._IssueService.getBacklogIssues(this.projectIdNum, 0, 1).subscribe({
       next: (res) => {
         if (res.isSuccess) {
-          console.log('backlog issues',res);
+          console.log('backlog issues', res);
           this.backlogIssues = res.result;
         }
       },
@@ -308,8 +399,6 @@ export class ProjectOverViewComponent {
         // this.issue = res;
         this.openIssueView(issueId);
         this.isModalOpen = true;
-
-        
 
         // بعد ما المودال يفتح (يمكن تستخدم setTimeout لتأخير بسيط لو حصل تأخير في انشاء الـ ViewChild)
         setTimeout(() => {
@@ -341,9 +430,7 @@ export class ProjectOverViewComponent {
     });
   }
 
-  RefreshBacklogAfterAddingIssue() {
-    
-  }
+  RefreshBacklogAfterAddingIssue() {}
   // ---------------------------------------------------
 
   // Sprints Api
@@ -489,6 +576,4 @@ export class ProjectOverViewComponent {
       progressAnimation: 'decreasing',
     });
   }
-  
-  
 }

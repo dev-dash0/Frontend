@@ -1,8 +1,8 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { SearchBarComponent } from '../../Shared/search-bar/search-bar.component';
 import { SideMenuComponent } from '../../Shared/side-menu/side-menu.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -39,16 +39,17 @@ export class MyDashboardComponent {
   showChatPopup = false;
   iframeInteractive = false;
 
+  private readonly router = inject(Router);
+
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {
     const booty = document.querySelector('.chat-trigger') as HTMLElement | null;
-  
+
     if (booty) {
       booty.style.transform = `translate(${event.clientX * 0.02}px, ${
         event.clientY * 0.02
       }px) scale(1)`;
     }
-  
 
     // const chat = document.querySelector('.chat-trigger') as HTMLElement;
 
@@ -56,6 +57,12 @@ export class MyDashboardComponent {
     // chat.style.transform = `translate(${event.clientX * 0.02}px, ${
     //   event.clientY * 0.02
     // }px) scale(1)`;
+  }
+
+  agentThinking = false;
+
+  onAgentLoading(isThinking: boolean) {
+    this.agentThinking = isThinking;
   }
 
   // @HostListener('document:mousemove', ['$event'])
@@ -92,6 +99,83 @@ export class MyDashboardComponent {
     this.showChatPopup = true;
     console.log('Chat Opened');
   }
+
+  navigateToProject(projectId: number, projectName: string) {
+    // Shrink Booty
+    this.shrinkBooty();
+
+    // Show popup
+    const popup = document.createElement('div');
+    popup.innerText = `📦 Project "${projectName}" created!`;
+    popup.classList.add('booty-popup');
+    document.body.appendChild(popup);
+    setTimeout(() => popup.remove(), 3000);
+
+    // Navigate
+    this.router.navigate(['/projects', projectId]);
+
+    // Close chat popup
+    this.showChatPopup = false;
+    // 👇 1. غير مكان وحجم booty
+    const booty = document.querySelector('.booty') as HTMLElement;
+    if (booty) {
+      booty.style.transition = 'all 0.5s ease-in-out';
+      booty.style.top = '30px';
+      booty.style.right = '30px';
+      booty.style.transform = 'scale(0.15)';
+      booty.style.zIndex = '1000';
+    }
+
+    // 👇 2. طلع pop-up فوقه
+    // const popup = document.createElement('div');
+    // popup.innerText = `📦 Project "${projectName}" created!`;
+    // popup.classList.add('booty-popup');
+
+    document.body.appendChild(popup);
+    setTimeout(() => popup.remove(), 3000); // auto remove
+
+    // 👇 3. Navigate
+    this.router.navigate(['MyDashboard/Project', projectId]); // route: /projects/:id
+  }
+
+
+
+  handleAgentAction(
+    event:
+      | { type: 'project_created'; projectId: number; projectName: string }
+      | { type: 'agent_done' }
+  ) {
+    if (event.type === 'project_created') {
+      this.navigateToProject(event.projectId, event.projectName);
+    }
+
+    if (event.type === 'agent_done') {
+      this.resetBooty(); // restore position & scale
+    }
+  }
+
+  shrinkBooty() {
+    const booty = document.querySelector('.booty') as HTMLElement;
+    if (booty) {
+      booty.style.transition = 'all 0.5s ease';
+      booty.style.top = '30px';
+      booty.style.right = '30px';
+      booty.style.transform = 'scale(0.15)';
+      booty.style.zIndex = '1000';
+    }
+  }
+
+  resetBooty() {
+    const booty = document.querySelector('.booty') as HTMLElement;
+    if (booty) {
+      booty.style.transition = 'all 0.5s ease';
+      booty.style.top = '250px';
+      booty.style.right = '-300px';
+      booty.style.transform = 'scale(0.25)';
+      booty.style.zIndex = '0';
+    }
+  }
+
   // onIframeClick() {
   //   this.showChatPopup = true;
   //   console.log('ouch');

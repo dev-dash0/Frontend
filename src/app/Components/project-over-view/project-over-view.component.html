@@ -73,30 +73,32 @@
       </div>
       <div class="card-content">
         @for(sprint of sprintDetails ; track sprint.id) {
-        <div class="sprint d-flex justify-content-center flex-column me-4 p-2 my-1">
-          <div class="Name d-flex justify-content-between align-items-center" (click)="viewSprint(sprint.id)">
-            <h3 (click)="viewSprint(sprint.id)">{{ sprint.title }}</h3>
-            <i class="fa fa-solid-arrow fs-5 px-3"></i>
-          </div>
-          <div class="sprint-progress">
-            <div class="progress-bar" style="width: 65%"></div>
-            <!-- [ngClass]="{ width: issuesCompleted }" -->
-          </div>
-          <div class="sprint-details d-flex justify-content-between">
-            <div class="dates">
-              <p class="p-0 m-0 sprint-dates">Starts at {{ sprint.startDate }}</p>
-              <p class="p-0 m-0 sprint-dates">Ends at {{ sprint.endDate }}</p>
+            <div #sprintCard>
+          <div class="sprint d-flex justify-content-center flex-column me-4 p-2 my-1">
+            <div class="Name d-flex justify-content-between align-items-center" (click)="viewSprint(sprint.id)">
+              <h3 (click)="viewSprint(sprint.id)">{{ sprint.title }}</h3>
+              <i class="fa fa-solid-arrow fs-5 px-3"></i>
             </div>
-            <div class="sprint-stats d-flex flex-column">
-              <span>{{ sprint.issues.length }} Tasks</span>
-              <span>8 Completed</span>
+            <div class="sprint-progress">
+              <div class="progress-bar" style="width: 65%"></div>
+              <!-- [ngClass]="{ width: issuesCompleted }" -->
             </div>
-            <!-- <p>{{ sprint.issues.length }} Issues</p> -->
+            <div class="sprint-details d-flex justify-content-between">
+              <div class="dates">
+                <p class="p-0 m-0 sprint-dates">Starts at {{ sprint.startDate }}</p>
+                <p class="p-0 m-0 sprint-dates">Ends at {{ sprint.endDate }}</p>
+              </div>
+              <div class="sprint-stats d-flex flex-column">
+                <span>{{ sprint.issues.length }} Tasks</span>
+                <span>8 Completed</span>
+              </div>
+              <!-- <p>{{ sprint.issues.length }} Issues</p> -->
+            </div>
           </div>
+          <!-- <hr /> -->
+          <!-- <div class="divider my-1"></div> -->
         </div>
-        <!-- <hr /> -->
-        <!-- <div class="divider my-1"></div> -->
-        }
+          }
       </div>
     </div>
     <div class="charts dashboard-card">

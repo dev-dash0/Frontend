@@ -50,6 +50,8 @@ export class AllProjectsComponent {
   userId!: any;
   companyId!: any;
   isSidebarCollapsed = true;
+  loading = false;
+
   //---------------------------------
   ngOnInit(): void {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
@@ -70,24 +72,30 @@ export class AllProjectsComponent {
   }
 
   getProjects(): void {
+    this.loading = true; // ✅ Start loading
+
     this._profileService.getProfileData().subscribe({
       next: (user) => {
         this.userId = user.id;
         this._ProjectService.getAllProjects().subscribe({
           next: (res) => {
-            console.log(res);
             if (res && res.result && res.result.length > 0) {
               this.joinedProjects = res.result;
               this.ownedProjects = this.joinedProjects.filter(
                 (project) => project.creator.id === this.userId
               );
             }
-            console.log(this.joinedProjects)
-            console.log(this.ownedProjects)
-
+            this.loading = false; // ✅ Done loading
           },
-          error: (err) => console.error(err),
+          error: (err) => {
+            console.error(err);
+            this.loading = false; // ✅ Also stop on error
+          },
         });
+      },
+      error: (err) => {
+        console.error(err);
+        this.loading = false; // ✅ Also stop on error
       },
     });
   }

@@ -1,135 +1,118 @@
-<div class="card cardBottomRight">
-  <div class="company">
-    <!-- <div class="card-img object-fit-cover">
-      <img
-        class="object-fit-cover w-100"
-        [src]="
-          isValidUrl(company.image) ? company.image : 'assets/images/cover.jpg'
-        "
-        alt="{{ company.name }}"
-      />
-    </div> -->
-    <div class="card-body position-relative">
-      <!-- Red Pin Icon -->
-<!-- <img
-  *ngIf="isPinned"
-  (click)="onPinProject(project, $event)"
-  src="https://img.icons8.com/arcade/64/unpin.png"
-  alt="Unpin"
-  class="cursor-pointer Red-Pin position-absolute top-0 end-0"
-  width="32"
-  height="32"
-/>
 
-<img
-  *ngIf="!isPinned"
-  (click)="UnPinProject(project, $event)"
-  src="https://img.icons8.com/arcade/64/map-pin.png"
-  alt="Pin"
-  class="cursor-pointer Red-Pin position-absolute top-0 end-0"
-  width="32"
-  height="32"
-/> -->
+  <div class="company-img position-relative image-shine">
+    <img
+      class="w-100"
+      [src]="isValidUrl(company.image) ? company.image : 'assets/images/cover.jpg'"
+      alt="{{ project.name }}"
+    />
+    <div class="shine"></div>
 
-      <img
-        (click)="TogglePin(project, $event)"
-        [src]="isPinned ? 'https://img.icons8.com/arcade/64/unpin.png' : 'https://img.icons8.com/arcade/64/map-pin.png'"
-        [alt]="isPinned ? 'Unpin' : 'Pin'"
-        class="cursor-pointer Red-Pin position-absolute top-0 end-0"
-        width="32"
-        height="32"
-      />
-
-
+    <div class="company-data">
       <div class="header">
-        <div class="HeaderFirstPart">
-          <h2 class="text-capitalize">{{ project.name }}</h2>
-          <div class="Priority-Status d-flex gap-2">
-            <mat-chip-set>
-              <mat-chip [ngClass]="getPriorityClass(project.priority)">
-                {{ project.priority }}
-              </mat-chip>
-            </mat-chip-set>
-            <mat-chip-set>
-              <mat-chip
-                [ngClass]="{
-                  'planning-status': project.status === 'Planning',
-                  'reviewing-status': project.status === 'Reviewing',
-                  'working-on-status': project.status === 'Working on',
-                  'completed-status': project.status === 'Completed',
-                  'canceled-status': project.status === 'Canceled',
-                  'postponed-status': project.status === 'Postponed'
-                }"
-                class="status-chip"
-              >
-                {{ project.status }}
-              </mat-chip>
-            </mat-chip-set>
+        <h3 class="text-capitalize">{{ project.name }}</h3>
+      </div>
+
+      <div class="icons gap-3">
+        <div class="icon-shadow">
+          <div class="pin-icon" (click)="TogglePin(project, $event)">
+            @if(isPinned) {
+            <a><i class="fa-solid fa-map-pin active-pin"></i></a>
+            } @else {
+            <a><i class="fa-solid fa-map-pin pin"></i></a>
+            }
           </div>
         </div>
-        <!-- <div class="icons gap-3">
-            <a (click)="copyText('code')">
+        @if(isOwner) {
+          <div class="icon-shadow">
+            <div class="code-icon">
+              <a (click)="copyText('code')">
                 <span *ngIf="!copied.code">
-                <i
-                    class="fa-regular fa-file-lines fa-xl"
+                  <i
+                    class="fa-regular fa-file-lines"
                     style="color: var(--mainLightBlueColor)"
-                ></i>
+                  ></i>
                 </span>
                 <span *ngIf="copied.code">
-                <i class="fa-check fa-solid fa-xl" style="color: #28a745"></i>
+                  <i class="fa-check fa-solid" style="color: #720e88"></i>
                 </span>
-            </a>
-            </div> -->
-        <p class="p-0 m-0">
+              </a>
+            </div>
+          </div>
+          }
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="company-description">
+        <p class="mt-0 pt-0">
+          {{ project.description || 'No Description Available' }}
+        </p>
+      </div>
+
+      <!-- <div class="company-members mt-2">
+        <div class="member-stack" (mouseenter)="hover = true" (mouseleave)="hover = false">
+          <ng-container *ngFor="let member of project?.userProjects; let i = index">
+            <p *ngIf="!project?.tenant?.joinedUsers?.length">🔍 Missing joined users!</p>
+            <p *ngIf="project?.tenant?.joinedUsers?.length">✅ Found joined users</p>
+
+            <img
+            [src]="
+              isValidUrl(getUserById(member.userId)?.imageUrl)
+                ? getUserById(member.userId)?.imageUrl
+                : 'assets/images/blank profile.svg'
+            "
+            class="member-avatar"
+            [ngStyle]="{ left: hover ? i * 30 + 'px' : i * 16 + 'px', zIndex: 10 - i }"
+          />
+          </ng-container>
+          
+
+          <span *ngIf="project.userProjects.length > 3" class="extra-count">
+            +{{ project.userProjects.length - 3 }}
+          </span>
+        </div>
+      </div> -->
+
+      <div class="Priority-Status mt-3 d-flex gap-2">
+        <mat-chip-set>
+          <mat-chip [ngClass]="getPriorityClass(project.priority)">
+            {{ project.priority }}
+          </mat-chip>
+        </mat-chip-set>
+        <mat-chip-set>
+          <mat-chip
+            [ngClass]="{
+              'planning-status': project.status === 'Planning',
+              'reviewing-status': project.status === 'Reviewing',
+              'working-on-status': project.status === 'Working on',
+              'completed-status': project.status === 'Completed',
+              'canceled-status': project.status === 'Canceled',
+              'postponed-status': project.status === 'Postponed'
+            }"
+            class="status-chip"
+          >
+            {{ project.status }}
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+
+      <div class="date-range mt-2">
+        <p class="m-0 p-0">
           Start {{ project.startDate }}<br />
           Due {{ project.endDate }}
         </p>
       </div>
-      <p class="my-3">
-        {{ project.description }}
-      </p>
-      <div class="TenantDetails mb-3">
-        <h4>Company {{ project.tenant.name }}</h4>
-      </div>
-      <div class="members-details">
-        <div class="people gap-1">
-          <img
-            src="assets/images/blank profile.svg"
-            class="member-img me-3"
-            alt=""
-          />
-          <h4>{{ project.userProjects.length }}</h4>
-          <!-- <ng-container
-            *ngFor="let member of project.userProjects; let last = last"
-          >
-            <div class="gap-1 member">
-              <img
-                [src]="
-                  isValidUrl(member.imgUrl)
-                    ? member?.imgUrl
-                    : 'assets/images/blank profile.svg'
-                "
-                alt=""
-              />
-              @for (member of project.userProjects; track $index) {
-                <p class="text-capitalize">{{ member.role }}</p>
-                <p>{{ member }}</p>
-              }
-            </div>
-            <hr *ngIf="!last" />
-          </ng-container> -->
-          <!-- <h4 class="m-0 p-0">+5</h4> -->
+
+      <div class="company-tags-details mt-3">
+        <div class="company-tags">
+          <mat-chip-set>
+            <mat-chip *ngIf="project.tenant?.name">{{ project.tenant.name }}</mat-chip>
+            <mat-chip *ngIf="!project.tenant?.name">Unknown Tenant</mat-chip>
+          </mat-chip-set>
         </div>
-        <!-- <div>
-            <button class="btn btn-sm btn-light mt-2" (click)="onPinProject(project, $event)">
-              📌 Pin This Project
-            </button>
-        </div> -->
-        <button class="btn" (click)="selectProject()">
-          View More
-          <i class="fa-solid fa-angles-right ps-1" style="color: #dcdfff"></i>
-        </button>
+        <div class="company-details">
+          <a class="custom-btn text-center btn" (click)="selectProject()">View More</a>
+        </div>
       </div>
     </div>
   </div>
-</div>

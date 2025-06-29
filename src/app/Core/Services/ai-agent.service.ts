@@ -16,14 +16,17 @@ export class AiAgentService {
       const token = localStorage.getItem('token'); // أو استخدم المفتاح اللي مخزن بيه
 
       // fetch('https://8e41-156-203-201-194.ngrok-free.app/api/v1/llm/agent', {
-      fetch('https://2429-156-203-173-226.ngrok-free.app/api/v1/llm/agent', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify(payload),
-      })
+      fetch(
+        'https://c606-2c0f-fc88-400e-a051-aa40-7925-526d-c899.ngrok-free.app/api/v1/llm/agent',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify(payload),
+        }
+      )
         .then((response) => {
           const reader = response.body?.getReader();
           const decoder = new TextDecoder('utf-8');

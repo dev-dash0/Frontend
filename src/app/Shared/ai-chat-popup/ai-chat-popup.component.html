@@ -1,5 +1,14 @@
-<div class="chat-popup-container">
+<!-- <div class="chat-popup-container">
   <button class="close-btn" (click)="closePopup()">×</button>
+  
+    <div *ngIf="!selectedTenantId" class="company-picker row ">
+      <div class="col-12">
+        <h6>Select your company to start chatting:</h6>
+      </div>
+      <div class="company-option col-md-3" *ngFor="let company of ownedCompanies" (click)="selectCompany(company.id)">
+          🏢 {{ company.name }}
+      </div>
+    </div>  
 
   <div class="chat-messages" #scrollContainer>
     <div *ngFor="let msg of messages; let i = index; trackBy: trackByIndex" [ngClass]="{'user-msg': i % 2 === 0, 'ai-msg': i % 2 !== 0}">
@@ -10,12 +19,12 @@
 
   <div class="chat-input">
     <input
-      type="text"
-      [(ngModel)]="userInput"
-      placeholder="Ask me anything..."
-      (keydown.enter)="sendMessage()"
-      [disabled]="isLoading"
-    />
+  type="text"
+  placeholder="Ask me anything..."
+  [(ngModel)]="userInput"
+  [disabled]="!selectedTenantId"
+/> -->
+
 
     <!-- <div class="ai-listening-indicator"></div>
     <div *ngIf="isLoading" class="typing-animation">
@@ -25,12 +34,73 @@
     </div>
     
     <button class="send-btn" (click)="sendMessage()">➤</button> -->
-    <ng-container *ngIf="!isLoading; else typingIndicator">
-      <button class="send-btn" (click)="sendMessage()">➤</button>
+    <!-- <ng-container *ngIf="!isLoading; else typingIndicator"> -->
+      <!-- <button class="send-btn" (click)="sendMessage()">➤</button> -->
+      <!-- <button class="send-btn" (click)="sendMessage()" [disabled]="!selectedTenantId || !userInput.trim()">➤</button>
     </ng-container>
   
     <ng-template #typingIndicator>
       <div class="ai-listening-indicator"></div>
     </ng-template>
   </div>
+</div> -->
+
+<div class="chat-popup-container">
+  <button class="close-btn" (click)="closePopup()">×</button>
+
+  <!-- ✅ لو لسه مختارش شركة -->
+  <div *ngIf="!selectedTenantId; else chatUI" class="company-picker row">
+    <div class="col-12">
+      <h6>Select your company to start chatting:</h6>
+    </div>
+    <div
+      class="company-option col-md-3"
+      *ngFor="let company of ownedCompanies"
+      (click)="selectCompany(company.id, company.name)"
+    >
+      🏢 {{ company.name }}
+    </div>
+  </div>
+
+  <!-- ✅ بعد اختيار الشركة يظهر الـ chat UI الكامل -->
+  <ng-template #chatUI>
+    <div class="chat-messages" #scrollContainer>
+
+      <div *ngIf="selectedTenantId" class="chatting-as d-flex justify-content-between align-items-center">
+        <small>Chatting as: <strong>{{ selectedTenantName }}</strong></small>
+        <button class="change-company-btn" (click)="resetCompany()">Change</button>
+      </div>
+
+      <div
+        *ngFor="let msg of messages; let i = index; trackBy: trackByIndex"
+        [ngClass]="{ 'user-msg': i % 2 === 0, 'ai-msg': i % 2 !== 0 }"
+      >
+        {{ msg }}
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <input
+        type="text"
+        placeholder="Ask me anything..."
+        [(ngModel)]="userInput"
+        (keydown.enter)="sendMessage()"
+        />
+
+      <ng-container *ngIf="!isLoading; else typingIndicator">
+        <button
+          class="send-btn"
+          (click)="sendMessage()"
+          [disabled]="!userInput.trim()"
+        >
+          ➤
+        </button>
+      </ng-container>
+
+      <ng-template #typingIndicator>
+        <div class="ai-listening-indicator"></div>
+      </ng-template>
+    </div>
+  </ng-template>
 </div>
+

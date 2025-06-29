@@ -1,22 +1,24 @@
-import { ProjectService } from '../../Core/Services/project.service';
 import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  inject,
   Input,
   Output,
+  inject,
 } from '@angular/core';
-import { Company } from '../../Core/interfaces/company/company';
-import { MatChipsModule } from '@angular/material/chips';
-import { CommonModule } from '@angular/common';
-import { CompanyService } from '../../Core/Services/company.service';
 import { ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { MatChipsModule } from '@angular/material/chips';
+import { IndividualConfig, ToastrService } from 'ngx-toastr';
+
+import { Company, Owner } from '../../Core/interfaces/company/company';
 import { Project, ProjectResult } from '../../Core/interfaces/project';
-import { NameShortcutPipe } from '../../Core/pipes/name-shortcut.pipe';
-import { PinnedService } from '../../Core/Services/pinned.service';
 import { TenantResult } from '../../Core/interfaces/pinned';
-import { ToastrService } from 'ngx-toastr';
+import { ProgressAnimationType } from 'ngx-toastr';
+import { ProjectService } from '../../Core/Services/project.service';
+import { CompanyService } from '../../Core/Services/company.service';
+import { PinnedService } from '../../Core/Services/pinned.service';
+import { ProfileService } from '../../Core/Services/profile.service';
 
 @Component({
   selector: 'app-all-projects-card',
@@ -26,41 +28,77 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './all-projects-card.component.css',
 })
 export class AllProjectsCardComponent {
-  isPinned: boolean = false;
-  SelectedProjectId: number = 0;
-
   @Input() company!: Company;
   @Input() project!: ProjectResult;
-
-  // injections and variables
-  constructor(
-    private ProjectService: ProjectService,
-    private cdr: ChangeDetectorRef,
-    private route: ActivatedRoute
-  ) {}
-
-  private readonly _PinnedService = inject(PinnedService);
-  private readonly _toaster = inject(ToastrService);
 
   @Output() companySelected = new EventEmitter<any>();
   @Output() projectSelected = new EventEmitter<any>();
 
-  selectProject() {
+  isPinned: boolean = false;
+  SelectedProjectId: number = 0;
+  hover: boolean = false;
+  copied = { code: false, url: false };
+  defaultUserImage = 'https://via.placeholder.com/28x28?text=U';
+  projectUsers: any[] = [];
+  isOwner: boolean = false;
+  userId!: any;
+    owner: Owner | null = null;
+
+  private readonly _pinnedService = inject(PinnedService);
+  private readonly _toaster = inject(ToastrService);
+  private readonly _ProfileService = inject(ProfileService);
+  private readonly _cdr = inject(ChangeDetectorRef);
+
+  constructor(
+    private projectService: ProjectService,
+    private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    this.getProject();
+    this.getPinnedProjects();
+
+    console.log('Project Input:', this.project);
+    console.log('Company Input:', this.company);
+  }
+
+  private toastOptions(): Partial<IndividualConfig> {
+    return {
+      toastClass: 'toast-pink',
+      timeOut: 10000,
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing' as ProgressAnimationType, // ✅ fixed
+    };
+  }
+
+  // ------------------ UI Methods ------------------
+
+  selectProject(): void {
     this.projectSelected.emit(this.project.id);
     this.SelectedProjectId = this.project.id;
   }
 
-  copied = { code: false, url: false };
-
-  // ------------------------------------------------------
-
-  ngOnInit(): void {
-    // this.getCompany();
-    this.getProject();
-    this.getPinnedProjects(); // <-- Check pin status on init
+  isValidUrl(url: any): boolean {
+    return !!(url && typeof url === 'string' && url.trim() !== '');
   }
-  //-------------------------------------------------------
-  // CSS-Style --> To add the class to the priority related to the value
+
+  copyText(type: 'code' | 'url'): void {
+    const content =
+      type === 'code' ? this.project.projectCode : this.company.tenantUrl;
+
+    navigator.clipboard.writeText(content).then(() => {
+      this.copied[type] = true;
+      this.cdr.markForCheck();
+
+      setTimeout(() => {
+        this.copied[type] = false;
+        this.cdr.markForCheck();
+      }, 2000);
+    });
+  }
+
   getPriorityClass(priority: string): string {
     switch (priority.toLowerCase()) {
       case 'critical':
@@ -72,84 +110,58 @@ export class AllProjectsCardComponent {
       case 'low':
         return 'low-priority';
       default:
-        return ''; // Default class (optional)
+        return '';
     }
   }
 
-  //-------------------------------------------------------
-  copyText(text: 'code' | 'url') {
-    navigator.clipboard
-      .writeText(
-        text === 'code' ? this.company.tenantCode : this.company.tenantUrl
-      )
-      .then(() => {
-        this.copied[text] = true;
-        this.cdr.markForCheck();
-        setTimeout(() => {
-          this.copied[text] = false;
-          this.cdr.markForCheck();
-        }, 2000);
-      });
+  getUserImage(userId: number): string | null {
+    const matchedUser = this.project?.tenant?.joinedUsers?.find(
+      (user) => user.id === userId
+    );
+    if (
+      matchedUser &&
+      matchedUser.imageUrl &&
+      matchedUser.imageUrl.trim() !== ''
+    ) {
+      return matchedUser.imageUrl;
+    }
+    return null;
   }
 
-  isValidUrl(url: any): boolean {
-    return !!(url && url !== 'string' && url.trim() !== '');
+  ngOnChanges() {
+    this._ProfileService.getProfileData().subscribe({
+      next: (user) => {
+        this.userId = user.id;
+        this.owner = this.project?.creator
+        this.isOwner = this.owner?.id === this.userId;
+      },
+    });
   }
 
-  getProject() {
-    // const companyId = this.route.snapshot.paramMap.get('id');
+  // ------------------ API Methods ------------------
+
+  getProject(): void {
     const projectId = this.route.snapshot.paramMap.get('id');
     if (projectId) {
-      this.ProjectService.getProject(projectId).subscribe({
+      this.projectService.getProject(projectId).subscribe({
         next: (res) => {
           this.project = res.result;
-          console.log(res.result);
+          console.log('Project Fetched:', this.project);
         },
-        error: (err) => console.error('Error fetching project details:', err),
+        error: (err) => {
+          console.error('Error fetching project details:', err);
+        },
       });
     }
   }
 
-  // onPinProject(project: ProjectResult, event: MouseEvent) {
-  //   event.stopPropagation(); // prevent triggering card animation click
-
-  //   const projectId = project.id; // Or project.projectId depending on your model
-  //   this._PinnedService.PinItem('Project', projectId).subscribe({
-  //     next: (res) => {
-  //       console.log('Pinned successfully:', res);
-  //       this.isPinned = true;
-  //     },
-  //     error: (err) => {
-  //       console.error('Pinning failed:', err);
-  //     },
-  //   });
-  // }
-
-  // UnPinProject(project: ProjectResult, event: MouseEvent) {
-  //   event.stopPropagation(); // prevent triggering card animation click
-
-  //   const projectId = project.id;
-  //   this._PinnedService.UnPinItem('Project', projectId).subscribe({
-  //     next: (res) => {
-  //       console.log('UnPinned successfully:', res);
-  //       this.isPinned = false;
-  //       this.showSuccess();
-  //     },
-  //     error: (err) => {
-  //       console.error('UnPinning failed:', err);
-  //       this.showFail(err.error?.message);
-  //     },
-  //   });
-  // }
-
-  getPinnedProjects() {
-    this._PinnedService.getPinnedProjects().subscribe({
+  getPinnedProjects(): void {
+    this._pinnedService.getPinnedProjects().subscribe({
       next: (res) => {
-        const pinnedProjects = res.result; // Adjust based on actual response structure
-        const isFound = pinnedProjects.some(
+        const pinnedProjects = res.result;
+        this.isPinned = pinnedProjects.some(
           (p: any) => p.id === this.project.id
         );
-        this.isPinned = isFound;
       },
       error: (err) => {
         console.error('Fetching pinned projects failed:', err);
@@ -158,67 +170,68 @@ export class AllProjectsCardComponent {
     });
   }
 
-  TogglePin(project: ProjectResult, event: MouseEvent) {
+  TogglePin(project: ProjectResult, event: MouseEvent): void {
     event.stopPropagation();
-    if (this.isPinned) {
-      this._PinnedService.UnPinItem('Project', project.id).subscribe({
-        next: (res) => {
-          this.isPinned = false;
-          this.showSuccessPin();
-        },
-        error: (err) => {
-          console.error('Unpin failed:', err);
-          this.showFail(err?.error?.message || 'Unpin failed');
-        },
-      });
-    } else {
-      this._PinnedService.PinItem('Project', project.id).subscribe({
-        next: (res) => {
-          this.isPinned = true;
-          this.showSuccessUnPin();
-        },
-        error: (err) => {
-          console.error('Pin failed:', err);
-          this.showFail(err?.error?.message || 'Pin failed');
-        },
-      });
-    }
+
+    const pinAction = this.isPinned
+      ? this._pinnedService.UnPinItem('Project', project.id)
+      : this._pinnedService.PinItem('Project', project.id);
+
+    pinAction.subscribe({
+      next: () => {
+        this.isPinned = !this.isPinned;
+        this.isPinned ? this.showSuccessUnPin() : this.showSuccessPin();
+      },
+      error: (err) => {
+        console.error(this.isPinned ? 'Unpin failed:' : 'Pin failed:', err);
+        this.showFail(err?.error?.message || 'Pin/Unpin failed');
+      },
+    });
   }
 
-  showSuccessPin() {
+  // 🧠 Match userId from project.userProjects to profile data
+  fetchFullUsers() {
+    const userIds = this.project.userProjects?.map((u) => u.userId) || [];
+    const uniqueIds = [...new Set(userIds)];
+
+    this.projectUsers = [];
+
+    uniqueIds.forEach((id) => {
+      this._ProfileService.getProfileData().subscribe({
+        next: (user) => {
+          this.projectUsers.push(user.result);
+          this._cdr.markForCheck();
+        },
+        error: (err) => {
+          console.error(`Error fetching user ${id}:`, err);
+        },
+      });
+    });
+  }
+
+  getUserById(userId: number) {
+    return this.projectUsers.find((u) => u.id === userId);
+  }
+
+  // ------------------ Toasts ------------------
+
+  private showSuccessPin(): void {
     this._toaster.success(
       'The Project has been Pinned',
       'Pinned Successfully',
-      {
-        toastClass: 'toast-pink',
-        timeOut: 10000,
-        closeButton: true,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-      }
-    );
-  }
-  showSuccessUnPin() {
-    this._toaster.success(
-      'The Project has been UnPinned',
-      'UnPinned Successfully',
-      {
-        toastClass: 'toast-pink',
-        timeOut: 10000,
-        closeButton: true,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-      }
+      this.toastOptions()
     );
   }
 
-  showFail(err: any) {
-    this._toaster.error('err', 'Pinned Failed', {
-      toastClass: 'toast-pink',
-      timeOut: 10000,
-      closeButton: true,
-      progressBar: true,
-      progressAnimation: 'decreasing',
-    });
+  private showSuccessUnPin(): void {
+    this._toaster.success(
+      'The Project has been UnPinned',
+      'UnPinned Successfully',
+      this.toastOptions()
+    );
+  }
+
+  private showFail(message: string): void {
+    this._toaster.error(message, 'Action Failed', this.toastOptions());
   }
 }
