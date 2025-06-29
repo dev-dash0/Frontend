@@ -1,11 +1,14 @@
-import { Component, inject, ViewChild, ViewChildren, ElementRef, QueryList  } from '@angular/core';
+import { Component, ElementRef, inject, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { SideMenuComponent } from "../../Shared/side-menu/side-menu.component";
 import { SearchBarComponent } from "../../Shared/search-bar/search-bar.component";
 import { AllIssuesDashboardComponent } from "../all-issues-dashboard/all-issues-dashboard.component";
 import { CommonModule } from '@angular/common';
 import { SidebarService } from './../../Core/Services/sidebar.service';
 import { ProjectService } from '../../Core/Services/project.service';
-import { fetchedProjectDetails, ProjectResult } from '../../Core/interfaces/project';
+import {
+  fetchedProjectDetails,
+  ProjectResult,
+} from '../../Core/interfaces/project';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileData } from '../../Core/interfaces/profile';
 import { ProfileService } from '../../Core/Services/profile.service';
@@ -21,7 +24,7 @@ import { Sprint } from '../../Core/interfaces/sprint';
 import { Issue } from '../../Core/interfaces/Dashboard/Issue';
 import { PinnedService } from '../../Core/Services/pinned.service';
 import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-users-to-issue.component';
-import { SigninSignupNavbarComponent } from "../../Shared/signin-signup-navbar/signin-signup-navbar.component";
+import { SigninSignupNavbarComponent } from '../../Shared/signin-signup-navbar/signin-signup-navbar.component';
 import { UpdateProjectComponent } from '../update-project/update-project.component';
 import { ProjectStateService } from '../../Core/Services/project-state.service';
 
@@ -140,6 +143,22 @@ export class ProjectOverViewComponent {
 
     this._sprintService.sprintCreated$.subscribe(() => {
       this.getAllSprints();
+    });
+
+    this._sprintService.sprintUpdated$.subscribe(() => {
+      this.getAllSprints();
+    });
+
+    this._projectService.projectUpdated$.subscribe(() => {
+      this.GetProjectData();
+      this.getAllSprints();
+      this.getProjectId();
+    });
+
+    this.route.paramMap.subscribe(() => {
+      this.GetProjectData();
+      this.getAllSprints();
+      this.getProjectId();
     });
 
     this._IssueService.issueUpdated$.subscribe(() => {

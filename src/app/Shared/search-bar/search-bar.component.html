@@ -3,10 +3,191 @@
     <div class="col-10 col-md-8 col-lg-6">
       <div class="custom-toolbar gap-3 px-3 py-2">
         <div class="search-container">
-          <input class="form-control" type="text" placeholder="Search" />
-          <button class="btn search-btn">
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Search"
+            [(ngModel)]="searchText"
+            (keyup)="search($event)"
+            (input)="onInputChange()"
+            (keyup.escape)="closeResults()"
+          />
+          <button class="btn search-btn" (click)="search()">
             <span><i class="fa-solid fa-magnifying-glass"></i></span>
           </button>
+          <div
+            class="search-results-container auth-form-container show"
+            *ngIf="showResults"
+          >
+            <div class="filter-buttons d-flex gap-2 mb-2">
+              <button
+                class="btn"
+                [class.active]="selectedFilter === 'all'"
+                (click)="setFilter('all')"
+              >
+                All
+              </button>
+              <button
+                class="btn"
+                [class.active]="selectedFilter === 'company'"
+                (click)="setFilter('company')"
+              >
+                Companies
+              </button>
+              <button
+                class="btn"
+                [class.active]="selectedFilter === 'project'"
+                (click)="setFilter('project')"
+              >
+                Projects
+              </button>
+              <button
+                class="btn"
+                [class.active]="selectedFilter === 'sprint'"
+                (click)="setFilter('sprint')"
+              >
+                Sprints
+              </button>
+              <button
+                class="btn"
+                [class.active]="selectedFilter === 'issue'"
+                (click)="setFilter('issue')"
+              >
+                Issues
+              </button>
+            </div>
+            <div class="results">
+              <h6 class="header">Results</h6>
+              <div *ngIf="hasNoSearchResults()" class="no-results">
+                <p>No results found</p>
+              </div>
+              <div
+                class="companies-results"
+                *ngIf="
+                  (selectedFilter === 'company' || selectedFilter === 'all') &&
+                  searchResult?.tenants?.length
+                "
+              >
+                <div
+                  class="company result"
+                  (click)="navigateToTenant(company.id)"
+                  *ngFor="let company of searchResult?.tenants"
+                >
+                  <div class="result-name-type">
+                    <h6 class="company-name m-0 p-0">{{ company.name }}</h6>
+                    <span class="type auth-form-container">Company</span>
+                  </div>
+                  <p class="company-description m-0 pt-1">
+                    {{ company.description || "No Description Available" }}
+                  </p>
+                </div>
+              </div>
+              <div class="divider" *ngIf="showDivider"></div>
+              <div
+                class="projects-results"
+                *ngIf="
+                  (selectedFilter === 'project' || selectedFilter === 'all') &&
+                  searchResult?.projects?.length
+                "
+              >
+                <div
+                  class="project result"
+                  (click)="navigateToProject(project.id)"
+                  *ngFor="let project of searchResult?.projects"
+                >
+                  <div class="result-name-type mb-1">
+                    <h6 class="project-name m-0 p-0">{{ project.name }}</h6>
+                    <div class="project-company-priority-type">
+                      <span class="type auth-form-container">Project</span>
+                      <span class="project-company type auth-form-container">{{
+                        project.tenantName
+                      }}</span>
+                      <div
+                        class="priority-tag auth-form-container"
+                        [ngClass]="getPriorityClass(project.priority)"
+                      >
+                        <p class="p-0 m-0">
+                          {{ project.priority }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="project-description m-0 pt-1">
+                    {{ project.description || "No Description Available" }}
+                  </p>
+                </div>
+              </div>
+              <div class="divider" *ngIf="showDivider"></div>
+              <div
+                class="sprints-results"
+                *ngIf="
+                  (selectedFilter === 'sprint' || selectedFilter === 'all') &&
+                  searchResult?.sprints?.length
+                "
+              >
+                <div
+                  class="sprint result"
+                  (click)="navigateToSprint(sprint.id)"
+                  *ngFor="let sprint of searchResult?.sprints"
+                >
+                  <div class="result-name-type mb-1">
+                    <h6 class="sprint-name m-0 p-0">{{ sprint.title }}</h6>
+                    <div class="sprint-project-status-type">
+                      <span class="type auth-form-container">sprint</span>
+                      <span class="sprint-project type auth-form-container">{{
+                        sprint.projectName
+                      }}</span>
+                      <div
+                        class="priority-tag auth-form-container"
+                        [ngClass]="getPriorityClass(sprint.status)"
+                      >
+                        <p class="p-0 m-0">
+                          {{ sprint.status }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="sprint-description m-0 pt-1">
+                    {{ sprint.description || "No Description Available" }}
+                  </p>
+                </div>
+              </div>
+              <div class="divider" *ngIf="showDivider"></div>
+              <div
+                class="issue-results"
+                *ngIf="
+                  (selectedFilter === 'issue' || selectedFilter === 'all') &&
+                  searchResult?.issues?.length
+                "
+              >
+                <div
+                  class="issue result"
+                  *ngFor="let issue of searchResult?.issues"
+                >
+                  <div class="result-name-type mb-1">
+                    <h6 class="issue-name m-0 p-0">{{ issue.title }}</h6>
+                    <div class="issue-project-priority-type">
+                      <span class="type auth-form-container">issue</span>
+                      <span class="issue-project type auth-form-container">{{
+                        issue.projectName
+                      }}</span>
+                      <div
+                        class="priority-tag auth-form-container"
+                        [ngClass]="getPriorityClass(issue.priority)"
+                      >
+                        <p class="p-0 m-0">
+                          {{ issue.priority }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="issue-description m-0 pt-1">
+                    {{ "No Description Available" }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <span class="position-relative">
           <i class="fa-regular fa-comment-dots fa-lg"></i>
@@ -29,11 +210,14 @@
             <ul class="dropdown-menu">
               <li>
                 <a class="dropdown-item" routerLink="/MyDashboard/Setting"
-                  >Settings</a
+                  ><span class="item-text">Settings</span></a
                 >
               </li>
-              <li><a class="dropdown-item">Another action</a></li>
-              <li><a class="dropdown-item" (click)="LogOut()">Log Out</a></li>
+              <li>
+                <a class="dropdown-item" (click)="LogOut()"
+                  ><span class="item-text">Log Out</span></a
+                >
+              </li>
             </ul>
           </div>
         </div>

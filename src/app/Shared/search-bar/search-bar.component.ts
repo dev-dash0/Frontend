@@ -1,12 +1,20 @@
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../Core/Services/Auth.service';
+import { SearchService } from '../../Core/Services/search.service';
+import { FormsModule } from '@angular/forms';
+import { SearchResults } from '../../Core/interfaces/search-results';
 import { NotificationService } from '../../Core/Services/notification.service';
-import { Notification, Project, User, UserProject } from '../../Core/interfaces/notification';
+import {
+  Notification,
+  Project,
+  User,
+  UserProject,
+} from '../../Core/interfaces/notification';
 import { CompanyService } from '../../Core/Services/company.service';
 import { DashboardService } from '../../Core/Services/dashboard/dashboard.service';
 import { O } from '@angular/cdk/keycodes';
@@ -23,16 +31,26 @@ import { BlobOptions } from 'buffer';
     MatButtonModule,
     CommonModule,
     RouterLink,
+    FormsModule,
   ],
   templateUrl: './search-bar.component.html',
   styleUrl: './search-bar.component.css',
 })
 export class SearchBarComponent {
-  private readonly _AuthService = inject(AuthService);
-  private readonly _NotificationService = inject(NotificationService);
-  private readonly _DashboardService = inject(DashboardService);
-  private readonly _Router = inject(Router);
+  constructor(
+    private authService: AuthService,
+    private readonly _NotificationService: NotificationService,
+    private readonly _DashboardService: DashboardService,
+    private router: Router,
+    private searchService: SearchService
+  ) {}
+
   toggle = false;
+  searchText: string = '';
+  searchResult: SearchResults | null = null;
+  showResults = false;
+  loading = false;
+  showDivider = true;
   showPanel = false;
   projects: ProjectResult[] = [];
   allUsers: User[] = [];
@@ -64,17 +82,126 @@ export class SearchBarComponent {
       return;
     }
     const logoutParams = { accessToken, refreshToken };
-    this._AuthService.Logout(logoutParams).subscribe({
+    this.authService.Logout(logoutParams).subscribe({
       next: (res) => {
         localStorage.removeItem('token');
         localStorage.removeItem('refreshToken');
         localStorage.clear();
-        this._Router.navigate(['/signin']);
+        this.router.navigate(['/signin']);
       },
       error: (err) => {
         console.error('Logout failed:', err);
       },
     });
+  }
+
+  // search API
+  search(event?: KeyboardEvent) {
+    if (event?.key == 'Escape') {
+      return;
+    }
+    this.loading = true;
+    this.searchService.search(this.searchText).subscribe({
+      next: (res) => {
+        console.log(this.searchText);
+        this.searchResult = res.result;
+        this.showResults = true;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Search failed:', err);
+      },
+    });
+  }
+
+  clearSearch() {
+    this.searchText = '';
+    this.searchResult = null;
+    this.showResults = false;
+    this.loading = false;
+  }
+
+  navigateToIssue(issueId: number) {
+    this.router.navigate(['/issue', issueId]);
+    this.clearSearch();
+  }
+  navigateToProject(projectId: number) {
+    this.router.navigate(['/MyDashboard/Project', projectId]);
+    this.clearSearch();
+  }
+  navigateToTenant(tenantId: number) {
+    this.router.navigate(['/MyDashboard/Company', tenantId]);
+    this.clearSearch();
+  }
+  navigateToSprint(sprintId: number) {
+    this.router.navigate(['/MyDashboard/Sprint', sprintId]);
+    this.clearSearch();
+  }
+
+  closeResults(): void {
+    this.showResults = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  colseOnClickOutside(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.search-container')) {
+      this.closeResults();
+    }
+  }
+
+  onInputChange(): void {
+    if (!this.searchText) {
+      this.closeResults();
+    }
+  }
+
+  selectedFilter: 'all' | 'company' | 'project' | 'sprint' | 'issue' = 'all';
+
+  setFilter(filter: typeof this.selectedFilter) {
+    this.selectedFilter = filter;
+    if (this.selectedFilter === 'all') {
+      this.showDivider = true;
+    } else {
+      this.showDivider = false;
+    }
+  }
+
+  hasNoSearchResults(): boolean {
+    if (!this.searchResult) return true;
+
+    switch (this.selectedFilter) {
+      case 'company':
+        return !this.searchResult.tenants?.length;
+      case 'project':
+        return !this.searchResult.projects?.length;
+      case 'sprint':
+        return !this.searchResult.sprints?.length;
+      case 'issue':
+        return !this.searchResult.issues?.length;
+      default:
+        return (
+          !this.searchResult.tenants?.length &&
+          !this.searchResult.projects?.length &&
+          !this.searchResult.sprints?.length &&
+          !this.searchResult.issues?.length
+        );
+    }
+  }
+
+  getPriorityClass(priority: string): string {
+    switch (priority.toLowerCase()) {
+      case 'low':
+        return 'low-tag';
+      case 'medium':
+        return 'medium-tag';
+      case 'high':
+        return 'high-tag';
+      case 'critical':
+        return 'critical-tag';
+      default:
+        return '';
+    }
   }
 
   getNotification() {

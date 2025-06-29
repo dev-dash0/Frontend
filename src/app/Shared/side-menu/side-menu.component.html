@@ -70,7 +70,7 @@
                 <span class="loader" *ngIf="loadedCompanies"></span>
                 @if(!loadedCompanies) {
                 <div
-                  *ngFor="let company of companyNames; let companyIndex = index"
+                  *ngFor="let company of companyData; let companyIndex = index"
                   class="company d-flex flex-column"
                 >
                   <div
@@ -157,6 +157,7 @@
                           }
                           <div
                             class="sprint add-sprint"
+                            *ngIf="company.owner.id === userId"
                             (click)="openSprint(project.id)"
                           >
                             <span><i class="fa-solid fa-plus fa-xs"></i></span>
@@ -165,7 +166,11 @@
                         </div>
                       </div>
 
-                      <div (click)="openProj()" class="add-project mb-2">
+                      <div
+                        (click)="openProj()"
+                        *ngIf="company.owner.id === userId"
+                        class="add-project mb-2"
+                      >
                         <span><i class="fa-solid fa-plus fa-xs"></i></span>
                         <p class="ps-2 p-0 m-0">Add Project</p>
                       </div>
