@@ -164,6 +164,7 @@
 .BG {
   transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
   transform: translateX(0px);
+
 }
 
 .BG.expand {
@@ -824,6 +825,50 @@ li {
 .glass-circle-container:hover {
   transform: translateY(-5px);
   filter: drop-shadow(2px 4px 6px #ff8de87a);
+}
+
+/* ======================================================== */
+/* Pin &Update &Delete Icon */
+.pin-icon {
+  color: var(--mainLightBlueColor);
+  transform: rotate(45deg);
+}
+
+.trash-icon,
+.edit-icon,
+.Red-Pin,
+.pin-icon {
+  transition: all 0.3s ease-in-out;
+}
+
+.trash-icon:hover {
+  color: red !important;
+}
+
+.edit-icon:hover {
+  color: #ffd43b !important;
+}
+
+.pin-icon:hover {
+  color: #ff90e8 !important;
+}
+
+.active-pin {
+  color: #ff90e8 !important;
+  transform: rotate(0deg) !important;
+}
+
+.Red-Pin {
+  /* top:25px; */
+  /* right: 140px; */
+  z-index: 999;
+}
+
+.Red-Pin:hover,
+.trash-icon:hover,
+.edit-icon:hover,
+.pin-icon:hover {
+  transform: translateY(-5px);
 }
 
 /* =========================================================================================================== */

@@ -1,111 +1,175 @@
 <!-- <div class="project-view-container w-100"> -->
+<div class="my-4 min-vh-100" [ngClass]="{ expand: isSidebarCollapsed }">
+  <div class="d-flex justify-content-center align-items-center min-vh-100" *ngIf="loading">
+    <app-dashboard-loader></app-dashboard-loader>
+  </div>
+  <div class="Container" *ngIf="!loading">
 
-<!-- Main Content -->
-<main class="project-main-content w-100 BG" [ngClass]="{ expand: isSidebarCollapsed }">
-  <!-- Project Header Section -->
-  <section class="project-header mt-2 mb-5">
-    <div class="project-meta">
-      <h1 class="project-title mt-3 mb-4 display-3">{{ProjectDetails?.name}}</h1>
-      <p class="text-white-50">{{ProjectDetails?.description}}</p>
-      <div class="project-details">
+    <!-- Main Content -->
+    <main class="project-main-content w-100 BG" [ngClass]="{ expand: isSidebarCollapsed }">
+      <!-- Project Header Section -->
+      <section class="project-header mt-2 mb-4">
+        <div class="project-meta">
+          <div class="title d-flex align-items-baseline gap-1">
+            <h1 class="project-title mt-3 mb-3 display-3 text-capitalize">{{ProjectDetails?.name}}</h1>
+            <div class="type auth-form-container px-2 py-1 rounded-pill flex-row dev-text-muted">
+              {{ProjectDetails?.tenant?.name}}
+              Company
+            </div>
+          </div>
+          <p class="dev-text-muted">{{ProjectDetails?.description}}</p>
+          <!-- <div class="project-details">
         <span class="company-badge tenant-badge">Company: {{ProjectDetails?.tenant?.name}}</span>
         <span class="status-badge status-active">Status: {{ProjectDetails?.status}}</span>
         <span class="priority-badge priority-high">Priority: {{ProjectDetails?.priority}}</span>
-      </div>
-      <div class="project-timeline">
+      </div> -->
+          <!-- <div class="project-timeline">
         <span class="date-badge" *ngIf="ProjectDetails?.startDate">Start: {{ProjectDetails?.startDate}}</span>
         <span class="date-badge" *ngIf="ProjectDetails?.endDate">End: {{ProjectDetails?.endDate}}</span>
-        <!-- <span class="tenant-badge">Tenant: North America</span> -->
-      </div>
-    </div>
-    @if (isOwner) {
-    <div class="project-actions mt-3">
-      <button class="action-btn pin-btn" (click)="TogglePin(ProjectDetails!, $event)">
-        @if (isPinned) {
-        UnPin
-        }
-        Pin
-      </button>
-      <button class="action-btn edit-btn" (click)="openUpdateProject()">Edit Project</button>
-      <button class="action-btn archive-btn"
-        (click)="openDeleteProjectModal(ProjectId, ProjectDetails!.name)">Archive</button>
-    </div>
-    }
-  </section>
-
-  <!-- Dashboard Cards -->
-  <section class="project-dashboard">
-    <!-- Members Card -->
-    <div class="dashboard-card members-card ">
-      <div class="card-header">
-        <h3>Team Members</h3>
-        <!-- <button class="card-action-btn ">+ Add</button> -->
-        <div class="add-issue-btn ms-1">
-          <span class="plus-icon"> <img src="/assets/images/Plus.svg" alt="plus" />
-          </span> Add
-        </div>
-      </div>
-      <div class="card-content">
-        <!-- Member list would go here -->
-        @for (item of ProjectDetails?.tenant?.joinedUsers; track $index) {
-        <div class="member-item me-4 p-2 my-0">
-          @if (item.imageUrl) {
-          <img [src]="item.imageUrl" alt="Member" class="member-avatar" />
-          }@else {
-          <img src="assets/images/user-img-not-found.jpg" class="member-avatar" alt="user image not found">
-          }
-          <span class="text-capitalize">{{item.firstName}} {{item.lastName}}</span>
-        </div>
-        <!-- <div class="divider my-0"></div> -->
-        }
-      </div>
-    </div>
-
-    <!-- Sprint Card -->
-    <div class="dashboard-card sprint-card">
-      <div class="card-header">
-        <h3>Sprints</h3>
-        <!-- <button class="card-action-btn" (click)="openSprint()">Create</button> -->
-        <div class="add-issue-btn ms-1" (click)="openSprint()">
-          <span class="plus-icon"> <img src="/assets/images/Plus.svg" alt="plus" />
-          </span> Create
-        </div>
-      </div>
-      <div class="card-content">
-        @for(sprint of sprintDetails ; track sprint.id) {
-            <div #sprintCard>
-          <div class="sprint d-flex justify-content-center flex-column me-4 p-2 my-1">
-            <div class="Name d-flex justify-content-between align-items-center" (click)="viewSprint(sprint.id)">
-              <h3 (click)="viewSprint(sprint.id)">{{ sprint.title }}</h3>
-              <i class="fa fa-solid-arrow fs-5 px-3"></i>
-            </div>
-            <div class="sprint-progress">
-              <div class="progress-bar" style="width: 65%"></div>
-              <!-- [ngClass]="{ width: issuesCompleted }" -->
-            </div>
-            <div class="sprint-details d-flex justify-content-between">
-              <div class="dates">
-                <p class="p-0 m-0 sprint-dates">Starts at {{ sprint.startDate }}</p>
-                <p class="p-0 m-0 sprint-dates">Ends at {{ sprint.endDate }}</p>
-              </div>
-              <div class="sprint-stats d-flex flex-column">
-                <span>{{ sprint.issues.length }} Tasks</span>
-                <span>8 Completed</span>
-              </div>
-              <!-- <p>{{ sprint.issues.length }} Issues</p> -->
-            </div>
+      </div> -->
+          <div class="project-timeline">
+            <p class="date-badge flex-row p-2 dev-text-muted" *ngIf="ProjectDetails?.startDate">Start :
+              <span class="dev-text-muted">
+                {{ProjectDetails?.startDate}}
+              </span>
+            </p>
+            <p class="date-badge flex-row p-2 dev-text-muted" *ngIf="ProjectDetails?.endDate">End :
+              <span class="dev-text-muted">
+                {{ProjectDetails?.endDate}}
+              </span>
+            </p>
           </div>
-          <!-- <hr /> -->
-          <!-- <div class="divider my-1"></div> -->
         </div>
-          }
-      </div>
-    </div>
-    <div class="charts dashboard-card">
-      <app-all-issues-dashboard [projectId]="ProjectId"></app-all-issues-dashboard>
-    </div>
 
-    <!-- <div class="stack-container mb-3">
+        <div class="mt-3 d-flex  gap-2">
+          <div class="">
+            <div class="auth-form-container align-items-start">
+              @if(isOwner) {
+              <div class="code d-flex gap-2 align-items-center">
+                <div>
+                  <i class="fa-regular fa-file-lines pe-1" style="color: var(--mainLightBlueColor)"></i>
+                  Project Code :
+                </div>
+                <div class="copy-text d-flex align-items-center gap-2">
+                  <p class="m-0 dev-text-muted  fs-6">{{ ProjectDetails?.projectCode }}</p>
+                  <div (click)="copyText('code')">
+                    <span *ngIf="!copied.code">
+                      <i class="fa-clipboard fa-regular" style="color: rgba(36, 89, 255, 0.988)"></i>
+                    </span>
+                    <span *ngIf="copied.code">
+                      <i class="fa-check fa-solid" style="color: #28a745"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              }
+              <div class="project-details flex-column">
+                <!-- <div class=""> Company : <span> {{ProjectDetails?.tenant?.name}}</span></div> -->
+                <div class="">Status : <span>{{ProjectDetails?.status}} </span></div>
+                <div class="">Priority : <span class="priority-tag auth-form-container"
+                    [ngClass]="getPriorityClass(ProjectDetails!.priority)">
+                    <p class="p-0 m-0">
+                      {{ProjectDetails?.priority}}
+                    </p>
+                  </span></div>
+              </div>
+
+            </div>
+
+          </div>
+          <div class="project-actions h-100 flex-column">
+            @if (isOwner) {
+            <div class="btn auth-form-container" (click)="openUpdateProject()">
+              <i class="fa-solid fa-pen edit-icon" style="color: var(--mainLightBlueColor)"></i>
+            </div>
+            <div class="btn auth-form-container" (click)="openDeleteProjectModal(ProjectId, ProjectDetails!.name)">
+              <i class="fa-solid fa-trash trash-icon" style="color: var(--mainLightBlueColor)"></i>
+            </div>
+            }
+            <button class="auth-form-container btn" (click)="TogglePin(ProjectDetails!, $event)">
+              @if (isPinned) {
+              <a><i class="fa-solid fa-map-pin active-pin "></i></a>
+              }@else {
+              <a><i class="fa-solid fa-map-pin pin-icon "></i></a>
+              }
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dashboard Cards -->
+      <section class="project-dashboard">
+        <!-- Members Card -->
+        <div class="dashboard-card members-card ">
+          <div class="card-header">
+            <h3>Team Members</h3>
+            <span class="add-issues-btn" (click)="openCreateIssue()">
+              <a class="custom-btn py-2 text-center">
+                Add Member</a>
+            </span>
+          </div>
+          <div class="card-content">
+            <!-- Member list would go here -->
+            @for (item of ProjectMembers; track $index) {
+            <div class="member-item p-2 ">
+              <div class="member-data me-4 ">
+                @if (item.imageUrl) {
+                <img [src]="item.imageUrl" alt="Member" class="member-avatar" />
+                }@else {
+                <img src="assets/images/user-img-not-found.jpg" class="member-avatar" alt="user image not found">
+                }
+                <span class="text-capitalize">{{item.firstName}} {{item.lastName}}</span>
+
+              </div>
+              <div class="member-role">
+                <span class="dev-text-muted">{{item.role}}</span>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- Sprint Card -->
+        <div class="dashboard-card sprint-card">
+          <div class="card-header">
+            <h3>Sprints</h3>
+            <span class="add-issues-btn" (click)="openSprint()">
+              <a class="custom-btn text-center py-2"><img src="assets/images/sidebar icons/Plus.svg" class="pe-2"
+                  alt="" />
+                Create</a>
+            </span>
+          </div>
+          <div class="card-content">
+            @for(sprint of sprintDetails ; track sprint.id) {
+            <div #sprintCard>
+              <div class="sprint d-flex justify-content-center flex-column me-4 p-3">
+                <div class="Name d-flex justify-content-between align-items-center" (click)="viewSprint(sprint.id)">
+                  <h5 (click)="viewSprint(sprint.id)">{{ sprint.title }}</h5>
+                  <i class="view-sprint-btn fa-solid fa-chevron-right fs-6"></i>
+                </div>
+                <div class="sprint-progress">
+                  <div class="progress-bar" [style.width.%]="sprint.progress"></div>
+                </div>
+                <div class="sprint-details d-flex justify-content-between">
+                  <div class="dates">
+                    <p class="p-0 m-0 sprint-dates dev-text-muted">Starts at {{ sprint.startDate }}</p>
+                    <p class="p-0 m-0 sprint-dates dev-text-muted">Ends at {{ sprint.endDate }}</p>
+                  </div>
+                  <div class="sprint-stats d-flex flex-column">
+                    <span>{{ sprint.totalIssues || 0 }} Issues</span>
+                    <span>{{ sprint.completedIssues || 0 }} Completed</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+        <div class="charts dashboard-card">
+          <app-all-issues-dashboard [projectId]="ProjectId"></app-all-issues-dashboard>
+        </div>
+
+        <!-- <div class="stack-container mb-3">
         <div
           class="glass-card"
           *ngFor="let card of cards; let i = index"
@@ -120,78 +184,76 @@
         </div>
       </div> -->
 
-    <div class="dashboard-card backlog-card">
-      <div class="card-header">
-        <h3>Backlog</h3>
-        <div class="card-actions d-flex justify-content-end">
-          <button class=" add-issue-btn">Filter</button>
-          <div class="add-issue-btn ms-1" (click)="openCreateIssue()">
-            <span class="plus-icon"> <img src="/assets/images/Plus.svg" alt="plus" />
-            </span> Add Issue
-          </div>
-        </div>
-      </div>
-      <div class="card-content ">
-        <!-- Backlog items would go here -->
-        <div *ngFor="let issue of backlogIssues" class="backlog-item" [ngStyle]="getPriorityBorderStyle(issue.priority)"
-          (dblclick)="loadIssue(issue.id)">
-          <!-- <div class="issue-details"> -->
-          <div class="row w-100">
-            <div class="col-md-4">
-              <div class="issue-detail">
-                <p class="text-capitalize cursor-pointer backlog-issue-title m-0 " (click)="loadIssue(issue.id)">{{
-                  issue.title }}</p>
-                <span class="dates text-uppercase">[ {{issue.type}} ]</span>
-                <!-- <span class="label">Label</span> -->
+        <div class="dashboard-card backlog-card">
+          <div class="card-header">
+            <h3>Backlog</h3>
+            <div class="card-actions d-flex justify-content-end align-items-center gap-2">
+              <!-- <div class="filter-btn">
+            <button class=" custom-btn">Filter</button>
+          </div> -->
+
+              <div class="add-issues-btn" (click)="openCreateIssue()">
+                <a class="custom-btn text-center py-2"><img src="assets/images/sidebar icons/Plus.svg" class="pe-2"
+                    alt="" />
+                  Add Issue</a>
               </div>
-            </div>
-            <div class="col-md-5">
-              <div class="assigned-members d-flex align-items-start justify-content-center ">
-                <div class="">
-                  <img [src]="issue.createdBy?.imageUrl" alt="assigned user"
-                    class="assigned-member cursor-pointer rounded-circle " style="width: 24px; height: 24px;" />
-
-
-                  <img [src]="issue.createdBy?.imageUrl" alt="assigned user"
-                    class="assigned-member cursor-pointer rounded-circle " style="width: 24px; height: 24px;" />
-
-
-                </div>
-
-                <div *ngFor="let user of issue.assignedUsers">
-                  <img [src]="user.imageUrl" alt="{{ user.firstName }} {{ user.lastName }}"
-                    class="assigned-member cursor-pointer rounded-circle" style="width: 24px; height: 24px;" />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3 justify-content-end p-0">
-              <div class="d-flex  flex-column ">
-                @if (issue.deadline) {
-                <div class="issue-meta">
-                  <span class="dates">Due : {{ issue.deadline | date: 'MMM d'
-                    }}</span>
-                </div>
-                }
-
-                <div class="delete d-flex justify-content-end">
-                  <span class="ps-3  cursor-pointer" (click)="openDeleteIssueModal(issue.id,issue.title)">
-                    <i class="fa-solid fa-trash " style="color: #D02705"></i>
-                  </span>
-                </div>
-              </div>
-
             </div>
           </div>
-          <!-- </div> -->
+          <div class="card-content ">
+            <!-- Backlog items would go here -->
+            <div *ngFor="let issue of backlogIssues" class="backlog-item"
+              [ngStyle]="getPriorityBorderStyle(issue.priority)" (dblclick)="loadIssue(issue.id)">
+              <!-- <div class="issue-details"> -->
+              <div class="row w-100">
+                <div class="col-md-4">
+                  <div class="issue-detail">
+                    <p class="text-capitalize cursor-pointer backlog-issue-title m-0 " (click)="loadIssue(issue.id)">
+                      {{
+                      issue.title }}</p>
+                    <span class="dates text-uppercase">[ {{issue.type}} ]</span>
+                    <!-- <span class="label">Label</span> -->
+                  </div>
+                </div>
+                <div class="col-md-5">
+                  <div class="assigned-members d-flex align-items-start justify-content-center ">
+                    <div *ngFor="let user of issue.assignedUsers">
+                      <img [src]="user.imageUrl" alt="{{ user.firstName }} {{ user.lastName }}"
+                        class="assigned-member cursor-pointer rounded-circle" style="width: 24px; height: 24px;" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 justify-content-end p-0">
+                  <div class="d-flex  flex-column ">
+                    @if (issue.deadline) {
+                    <div class="issue-meta">
+                      <span class="dates">Due : {{ issue.deadline | date: 'MMM d'
+                        }}</span>
+                    </div>
+                    }
+
+
+                    <div class="delete d-flex justify-content-end" *ngIf="isOwner">
+                      <span class="ps-3  cursor-pointer" (click)="openDeleteIssueModal(issue.id,issue.title)">
+                        <i class="fa-solid fa-trash " style="color: #D02705"></i>
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <!-- </div> -->
+            </div>
+
+          </div>
+
+
         </div>
+      </section>
 
-      </div>
+      <!-- Gradient Fade -->
+      <div class="gradient-fade"></div>
+    </main>
+    <!-- </div> -->
+  </div>
 
-
-    </div>
-  </section>
-
-  <!-- Gradient Fade -->
-  <div class="gradient-fade"></div>
-</main>
-<!-- </div> -->
+</div>

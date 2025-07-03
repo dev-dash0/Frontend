@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { SideMenuComponent } from "../../Shared/side-menu/side-menu.component";
 import { SearchBarComponent } from "../../Shared/search-bar/search-bar.component";
 import { AllIssuesDashboardComponent } from "../all-issues-dashboard/all-issues-dashboard.component";
@@ -20,13 +20,15 @@ import { SprintService } from '../../Core/Services/sprint.service';
 import { IssueModalComponent } from '../issue-modal/issue-modal.component';
 import { SprintModalComponent } from '../sprint-modal/sprint-modal.component';
 import { SharedDeleteModalComponent } from '../../Shared/delete-modal/delete-modal.component';
-import { Sprint } from '../../Core/interfaces/sprint';
+import { Sprint, SprintWithProgress } from '../../Core/interfaces/sprint';
 import { Issue } from '../../Core/interfaces/Dashboard/Issue';
 import { PinnedService } from '../../Core/Services/pinned.service';
 import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-users-to-issue.component';
 import { SigninSignupNavbarComponent } from '../../Shared/signin-signup-navbar/signin-signup-navbar.component';
 import { UpdateProjectComponent } from '../update-project/update-project.component';
 import { ProjectStateService } from '../../Core/Services/project-state.service';
+import { log } from 'console';
+import { DashboardLoaderComponent } from "../../Shared/dashboard-loader/dashboard-loader.component";
 
 @Component({
   selector: 'app-project-over-view',
@@ -36,7 +38,8 @@ import { ProjectStateService } from '../../Core/Services/project-state.service';
     CommonModule,
     SigninSignupNavbarComponent,
     AssignUsersToIssueComponent,
-  ],
+    DashboardLoaderComponent
+],
   templateUrl: './project-over-view.component.html',
   styleUrl: './project-over-view.component.css',
 })
@@ -50,12 +53,17 @@ export class ProjectOverViewComponent {
   ProjectDetails?: fetchedProjectDetails;
   ProjectMembers: ProfileData[] = [];
   isOwner: boolean = false;
-  sprintDetails: Sprint[] = [];
+  sprintDetails: SprintWithProgress[] = [];
   issue?: Issue;
   backlogIssues: Issue[] = [];
   issuesCompleted: string | number = '';
+  totalIssues: number = 0;
+  completionPercentage: number = 0;
   isPinned = false;
   issueLabelsList = [];
+  loading:boolean = true;
+  issueStatus: string = '';
+  issueStatusConfig: any
   priorityConfig: any = {
     Critical: {
       icon: 'assets/images/Issue Priorities/urgent.svg',
@@ -81,6 +89,7 @@ export class ProjectOverViewComponent {
   private _router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly state = inject(ProjectStateService);
+  private cdr=inject(ChangeDetectorRef);
 
   @ViewChildren('sprintCard') sprintCards!: QueryList<ElementRef>;
 
@@ -136,6 +145,8 @@ export class ProjectOverViewComponent {
 
     this.getPinnedProjects();
 
+    this.getAllSprints();
+
     // Listen for new issue events and refresh backlog
     this.RefreshBacklogAfterAddingIssue();
     // Get Project id from url
@@ -173,21 +184,6 @@ export class ProjectOverViewComponent {
       }
     });
 
-    // ✅ جلب بيانات المشروع والسبرينتس وقت تحميل الصفحة
-    this._projectService.getProject(this.ProjectId).subscribe({
-      next: (res) => {
-        const projectId = res.result.id;
-        this._sprintService.getAllSprints(projectId).subscribe({
-          next: (res) => {
-            this.sprintDetails = res.result.map((sprint: Sprint) => ({
-              ...sprint,
-              startDate: this.dateFormatter(sprint.startDate),
-              endDate: this.dateFormatter(sprint.endDate),
-            }));
-          },
-        });
-      },
-    });
 
     // add the sprint with ai without refresh
     this.state.sprintAdded$.subscribe((sprint) => {
@@ -339,8 +335,10 @@ export class ProjectOverViewComponent {
     // this.ProjectId = ProjectId;
     this._projectService.getProject(ProjectId).subscribe({
       next: (res) => {
-        console.log('Project fetched:', res);
         this.ProjectDetails = res.result;
+        console.log('Project Details',this.ProjectDetails);
+        this.loadProjectUsers();
+        this.loading=false
         this._ProfileService.getProfileData().subscribe({
           next: (user) => {
             if (
@@ -349,15 +347,15 @@ export class ProjectOverViewComponent {
             ) {
               this.isOwner = true;
             }
-            //     if (res.result.userProjects.id == user.userId) {
-            //       this.ProjectMembers.push = user;
-            //       console.log(this.ProjectMembers);
-            //     }
-            //     if (res.owner.id !== user.userId || res.creat.id !== user.userId) {
-            //       this.isOwner = false; // hide delete button
-            //     } else {
-            //       this.isOwner = true; // show delete button
-            //     }
+                // if (res.result.userProjects.id == user.userId) {
+                //   this.ProjectMembers.push = user;
+                //   console.log(this.ProjectMembers);
+                // }
+                // if (res.owner.id !== user.userId || res.creat.id !== user.userId) {
+                //   this.isOwner = false; // hide delete button
+                // } else {
+                //   this.isOwner = true; // show delete button
+                // }
           },
         });
       },
@@ -459,12 +457,35 @@ export class ProjectOverViewComponent {
       next: (res) => {
         this._sprintService.getAllSprints(res.result.id).subscribe({
           next: (res) => {
-            console.log(res);
-            this.sprintDetails = res.result.map((sprint: Sprint) => ({
-              ...sprint,
-              startDate: this.dateFormatter(sprint.startDate),
-              endDate: this.dateFormatter(sprint.endDate),
-            }));
+            console.log('Sprints in project view',res);
+
+
+            // let completedCount = 0;
+            // let totalCount = 0;
+
+            // //count the number of completed issues in each sprint
+            // res.result.forEach((sprint: any) => {
+            //   sprint.issues?.forEach((issue: any) => {
+            //     totalCount++;
+            //     if (issue.status=== 'Completed') {
+            //       completedCount++;
+            //     }
+            //   });
+            // });
+  
+            // //store the number of completed issues in the sprintDetails array
+            // this.issuesCompleted = completedCount;
+            // this.totalIssues = totalCount;
+
+            // //get the completion percentage of the sprint
+            // this.completionPercentage = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
+
+            // this.sprintDetails = res.result.map((sprint: Sprint) => ({
+            //   ...sprint,
+            //   startDate: this.dateFormatter(sprint.startDate),
+            //   endDate: this.dateFormatter(sprint.endDate),
+            // }));
+
             // for (let i = 0; i < res.result(0).issues.length; i++) {
             //   if (res.result(0).issue(i).status == 'Completed') {
             //     // var Counter = 0
@@ -475,6 +496,32 @@ export class ProjectOverViewComponent {
             //     console.log('CompletedIssues' + this.issuesCompleted);
             //   }
             // }
+
+            this.sprintDetails = res.result.map((sprint: any) => {
+              let completed = 0;
+              let total = 0;
+            
+              if (Array.isArray(sprint.issues)) {
+                sprint.issues.forEach((issue: any) => {
+                  total++;
+                  if (issue.status?.trim().toLowerCase() === 'completed') {
+                    completed++;
+                  }
+                });
+              }
+            
+              const completionPercentage = total > 0 ? (completed / total) * 100 : 0;
+            
+              return {
+                ...sprint,
+                startDate: this.dateFormatter(sprint.startDate),
+                endDate: this.dateFormatter(sprint.endDate),
+                totalIssues: total,
+                completedIssues: completed,
+                progress: completionPercentage, // 💡 ده اللي هتستخدميه في progress bar
+              }as SprintWithProgress;
+            });
+            
           },
         });
       },
@@ -595,4 +642,70 @@ export class ProjectOverViewComponent {
       progressAnimation: 'decreasing',
     });
   }
+
+
+  // -----------------------------------------------------------
+  // Get Project Users
+  loadProjectUsers() {
+    this._projectService.getProject(this.ProjectId).subscribe({
+      next: (res) => {
+        const joinedUsers = res.result?.tenant.joinedUsers || [];
+        const userProjects = res.result?.userProjects || [];
+  
+        this.ProjectMembers = joinedUsers.map((user: any) => {
+        
+          const matchedProject = userProjects.find((proj: any) => proj.userId === user.id);
+  
+          return {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            imageUrl: user.imageUrl,
+            role: matchedProject?.role || 'Unknown'
+          };
+        });
+  
+        console.log('Project users with roles:', this.ProjectMembers);
+      },
+      error: (err) => {
+        console.error('Error loading project users', err);
+      }
+    });
+  }
+  
+  // -----------------------------------------------------------
+    // copy function
+    copied = { code: false, url: false };
+    copyText(text: 'code' | 'url') {
+      navigator.clipboard
+        .writeText(
+          text === 'code' ? this.ProjectDetails?.projectCode || '' : ''
+        )
+        .then(() => {
+          this.copied[text] = true;
+          this.cdr.markForCheck();
+          setTimeout(() => {
+            this.copied[text] = false;
+            this.cdr.markForCheck();
+          }, 2000);
+        });
+    }
+
+  // -----------------------------------------------------------
+    // Get Priority Class
+    getPriorityClass(priority: string): string {
+      switch (priority.toLowerCase()) {
+        case 'low':
+          return 'low-tag';
+        case 'medium':
+          return 'medium-tag';
+        case 'high':
+          return 'high-tag';
+        case 'critical':
+          return 'critical-tag';
+        default:
+          return '';
+      }
+    }
 }
