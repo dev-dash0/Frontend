@@ -57,8 +57,8 @@ export class PinnedComponent {
 
   showSuccess() {
     this._toaster.success(
-      'The Project has been Pinned',
-      'Pinned Successfully',
+      'The Project has been UnPinned',
+      'UnPinned Successfully',
       {
         toastClass: 'toast-pink',
         timeOut: 10000,
@@ -70,7 +70,7 @@ export class PinnedComponent {
   }
 
   showFail() {
-    this._toaster.error('The Project has not been Pinned', 'Pinned Failed', {
+    this._toaster.error('The Project has not been UnPinned', 'UnPinned Failed', {
       toastClass: 'toast-pink',
       timeOut: 10000,
       closeButton: true,
@@ -104,6 +104,9 @@ export class PinnedComponent {
       next: (res) => {
         console.log('UnPinned successfully:', res);
         this.showSuccess();
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000); 
       },
       error: (err) => {
         console.error('UnPinning failed:', err);
@@ -119,6 +122,9 @@ export class PinnedComponent {
       next: (res) => {
         console.log('UnPinned successfully:', res);
         this.showSuccess();
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000); 
       },
       error: (err) => {
         console.error('UnPinning failed:', err);

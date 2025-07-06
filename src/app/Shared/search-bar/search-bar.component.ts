@@ -21,6 +21,8 @@ import { O } from '@angular/cdk/keycodes';
 import { ProjectResult } from '../../Core/interfaces/project';
 import { map, switchMap } from 'rxjs';
 import { BlobOptions } from 'buffer';
+import { ProfileService } from '../../Core/Services/profile.service';
+import { NameShortcutPipe } from '../../Core/pipes/name-shortcut.pipe';
 
 @Component({
   selector: 'app-search-bar',
@@ -41,6 +43,8 @@ export class SearchBarComponent {
     private authService: AuthService,
     private readonly _NotificationService: NotificationService,
     private readonly _DashboardService: DashboardService,
+    private readonly _ProfileService: ProfileService,
+    private readonly nameShortcutPipe: NameShortcutPipe,
     private router: Router,
     private searchService: SearchService
   ) {}
@@ -55,6 +59,8 @@ export class SearchBarComponent {
   projects: ProjectResult[] = [];
   allUsers: User[] = [];
   NotifyUser: any = {};
+  ProfileName: string = '';
+  // LName: string = '';
   // close: Boolean = false;
 
   joinedUsers: any[] = [];
@@ -62,6 +68,7 @@ export class SearchBarComponent {
   notifications: Notification[] = [];
 
   ngOnInit(): void {
+    this.getProfileName();
     this.getNotification();
   }
 
@@ -204,6 +211,7 @@ export class SearchBarComponent {
     }
   }
 
+  // Notification API
   getNotification() {
     this._DashboardService
       .getDashboardAllProject()
@@ -273,5 +281,15 @@ export class SearchBarComponent {
   getClose() {
     this.showPanel = false;
     this.getNotification();
+  }
+
+  // Profile API
+  getProfileName() {
+    this._ProfileService.getProfileData().subscribe({
+      next: (res) => {
+        const fullName = `${res.firstName} ${res.lastName}`;
+        this.ProfileName = this.nameShortcutPipe.transform(fullName);
+      },
+    });
   }
 }

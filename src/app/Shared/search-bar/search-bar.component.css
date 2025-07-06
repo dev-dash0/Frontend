@@ -401,9 +401,13 @@ input:focus {
 }
 
 .notification-icon {
-  font-size: 1.5rem;
+  /* font-size: 1.5rem; */
   cursor: pointer;
   color: #fff;
+}
+
+.notification-header{
+  color: #ff90e8;
 }
 
 /* .notification-panel {
@@ -431,7 +435,8 @@ input:focus {
   right: 480px;
   width: 320px;
   max-height: 80vh;
-  background: #1e1e2f;
+  /* background: #1e1e2f; */
+  background: #0d1123;
   border-radius: 10px;
   padding: 12px;
   box-shadow: 0 0 6px #7f27898e;
@@ -462,20 +467,32 @@ input:focus {
   pointer-events: auto;
 } */
 
-.notification-arrow {
-  position: absolute;
-  top: -12px;
-  right: 20px;
+.close-btn {
+  /* .notification-arrow { */
+  /* position: relative; */
+  /* top: 12px; */
+  /* top: 0px;
+  left: 0px; */
+  /* right: 20px; */
+  /* left: 300px; */
   width: 20px;
   height: 20px;
   background: linear-gradient(145deg, #1b1f3a, #292e5c);
-  transform: rotate(45deg);
-  box-shadow: -5px -5px 15px rgba(0, 0, 0, 0.5);
-  z-index: -1;
+  /* transform: rotate(45deg); */
+  /* box-shadow: -5px -5px 15px rgba(0, 0, 0, 0.5); */
+  cursor: pointer;
+  /* box-shadow: 0 0 6px rgb(231, 230, 215), 0 0 12px rgb(212, 211, 194); */
+  transition: transform 0.2s ease, text-shadow 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* position: sticky; */
+  /* z-index: -1; */
 }
 
 .notification {
-  background: rgba(255, 255, 255, 0.02);
+  /* background: rgba(255, 255, 255, 0.02); */
+  background: #4a314c76 ;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
   padding: 1rem;
@@ -531,6 +548,7 @@ input:focus {
 
 .notification.unread {
   background: rgba(255, 255, 255, 0.05);
+  /* background: #4a314c76; */
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -550,7 +568,7 @@ input:focus {
   /* existing styles stay the same */
 }
 
-.close-btn{
+/* .close-btn{
   position: sticky;
   top: 5px;
   left: 300px;
@@ -565,12 +583,12 @@ input:focus {
   box-shadow: 0 0 6px rgb(231, 230, 215), 0 0 12px rgb(212, 211, 194);
   transition: transform 0.2s ease, text-shadow 0.3s ease;
   cursor: pointer;
-}
+} */
 
-.close-btn:hover{
+/* .close-btn:hover{
   transform: scale(1.1);
   text-shadow: 0 0 12px rgb(231, 230, 215), 0 0 24px rgb(212, 211, 194);
-}
+} */
 
 @keyframes fadeScaleIn {
   from {

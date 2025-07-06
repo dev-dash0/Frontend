@@ -194,7 +194,16 @@
         </span>
         <span class="position-relative notification-wrapper" (click)="togglePanel()">
           <i class="fa-regular fa-bell fa-lg notification-icon"></i>
-          <span class="badge">{{notifications.length}}</span>
+          @if (notifications.length < 99) {
+              <span class="badge">
+              {{notifications.length}}
+            </span>
+            }
+            @else{
+              <span class="badge">
+                99+
+              </span>
+            }
         </span>
 
         <div class="profile">
@@ -204,7 +213,7 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <button class="btn" type="button">RE</button>
+              <button class="btn" type="button">{{ProfileName}}</button>
               <span><i class="fa-solid fa-chevron-down fa-xs"></i></span>
             </div>
             <ul class="dropdown-menu">
@@ -243,29 +252,37 @@
 <div class="notification-panel" [class.visible]="showPanel">
 
   <!-- Arrow pointing to icon -->
-  <div class="notification-arrow"></div>
+  <div class="notification-arrow" (click)="getClose()"></div>
 
-  <!-- Close Button -->
-  <div class="close-btn" (click)="getClose()">×</div>
+ <div class="position-relative d-flex justify-content-between align-items-center py-3">
+  <h5 class="notification-header">Notification</h5>
+   <!-- Close Button -->
+   <div class="close-btn mb-2" (click)="getClose()">×</div>
+ </div>
 
   <!-- Loop through Notifications -->
-  <div class="notification"
-       *ngFor="let notify of notifications"
-       [class.unread]="!notify.isRead"
-       (click)="markAsRead(notify, notify.id)">
+   <div   *ngFor="let notify of notifications">
+     <div class="notification"
+        
+          [class.unread]="!notify.isRead"
+          (click)="markAsRead(notify, notify.id)">
+          
+       <div class="notify-header">
+         <p>{{ notify.message }}</p>
+       </div>
+   
+       <div class="notify-footer">
+         <div class="sender-info">
+           <img [src]="NotifyUser.imageUrl" alt="User" />
+           <span>{{ NotifyUser.firstName }}</span>
+         </div>
+         <span class="notify-date">{{ notify.createdAt | date:'short' }}</span>
+       </div>
+   
        
-    <div class="notify-header">
-      <p>{{ notify.message }}</p>
-    </div>
-
-    <div class="notify-footer">
-      <div class="sender-info">
-        <img [src]="NotifyUser.imageUrl" alt="User" />
-        <span>{{ NotifyUser.firstName }}</span>
-      </div>
-      <span class="notify-date">{{ notify.createdAt | date:'short' }}</span>
-    </div>
-
-    <div class="checkmark" *ngIf="notify.isRead">✅</div>
-  </div>
+       <div class="checkmark" *ngIf="notify.isRead">✅</div>
+     </div>
+     
+     <div class="divider" *ngIf="showDivider"></div>
+   </div>
 </div>
