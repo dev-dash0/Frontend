@@ -29,13 +29,19 @@
   </div>
 
   <!-- Issues List -->
-  <div #issuesList class="issues-list">
+  <div *ngIf="filteredIssues.length > 0; else noIssues" #issuesList class="issues-list">
     <div *ngFor="let issue of filteredIssues" class="issue-card d-flex justify-content-between align-items-center px-4">
       <div class="issuePlace">
-        <h3>{{ issue.title }}</h3>
-        <p>{{ issue.projectName }} | {{ issue.tenantName }}</p>
+        <h3 class="cursor-pointer" (click)="openIssueView(issue.id)">{{ issue.title }}</h3>
+        <p class="dev-text-muted">{{ issue.projectName }} | {{ issue.tenantName }}</p>
       </div>
-      <p>{{ issue.startDate | date: 'EEE d' }} - {{ issue.deadline | date: 'EEE d' }}</p>
+      <p class="dev-text-muted text-nowrap">{{ issue.startDate | date: 'EEE d' }} - {{ issue.deadline | date: 'EEE d' }}
+      </p>
     </div>
   </div>
+
+  <ng-template #noIssues>
+    <div class="no-issues text-center dev-text-muted my-3">No issues found for the selected date.</div>
+  </ng-template>
+
 </div>

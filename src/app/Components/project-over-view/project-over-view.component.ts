@@ -27,8 +27,8 @@ import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-use
 import { SigninSignupNavbarComponent } from '../../Shared/signin-signup-navbar/signin-signup-navbar.component';
 import { UpdateProjectComponent } from '../update-project/update-project.component';
 import { ProjectStateService } from '../../Core/Services/project-state.service';
-import { log } from 'console';
 import { DashboardLoaderComponent } from "../../Shared/dashboard-loader/dashboard-loader.component";
+import { ProjectVisitService } from '../../Core/Services/project-visit.service';
 
 @Component({
   selector: 'app-project-over-view',
@@ -69,7 +69,7 @@ export class ProjectOverViewComponent {
       icon: 'assets/images/Issue Priorities/urgent.svg',
       color: '#F44336',
     }, // Red
-    High: { icon: 'assets/images/Issue Priorities/high.svg', color: '#FFC107' }, // Orange
+    High: { icon: 'assets/images/Issue Priorities/high.svg', color: '#D07805' }, // Orange
     Medium: {
       icon: 'assets/images/Issue Priorities/normal.svg',
       color: '#4854F1',
@@ -90,52 +90,16 @@ export class ProjectOverViewComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly state = inject(ProjectStateService);
   private cdr=inject(ChangeDetectorRef);
+  private readonly _ProjectVisitService=inject(ProjectVisitService)
 
   @ViewChildren('sprintCard') sprintCards!: QueryList<ElementRef>;
-
-  // ngOnInit(): void {
-  //   // Get The Id from the Path
-  //   this.ProjectId = this.route.snapshot.paramMap.get('id');
-
-  //   this.sidebarService.isCollapsed$.subscribe((collapsed) => {
-  //     this.isSidebarCollapsed = collapsed;
-  //   });
-
-  //   this.GetProjectData();
-
-  //   this.getPinnedProjects();
-
-  //   // Listen for new issue events and refresh backlog
-  //   this.RefreshBacklogAfterAddingIssue();
-  //   // Get Project id from url
-  //   this.getProjectId(); //for issue
-
-  //   this._sprintService.sprintCreated$.subscribe(() => {
-  //     this.getAllSprints();
-  //   });
-
-  //   this._IssueService.issueUpdated$.subscribe(() => {
-  //     this.fetchBacklogIssues(); //for refreshing after issue updated
-  //   });
-
-  //   this._IssueService.assignedUsersUpdated$.subscribe((updatedIssueId) => {
-  //     // لو الـ issue المتحدث تابع للمشروع الحالي، اعملي refresh
-  //     if (this.projectIdNum) {
-  //       this.fetchBacklogIssues(); // ✅ تحديث تلقائي للـ backlog
-  //       this.getAllSprints(); // ✅ كمان لو عايزة تحدث السبرنتس
-  //     }
-  //   });
-
-  //   // add the sprint with ai without refresh
-  //   this.state.sprintAdded$.subscribe((sprint) => {
-  //     if (sprint) {
-  //       // this.sprints.push(sprint); // أو أي طريقة عرض عند
-  //       }})
-  // }
 
   ngOnInit(): void {
     // Get The Id from the Path
     this.ProjectId = this.route.snapshot.paramMap.get('id');
+
+    const projectId = this.route.snapshot.params['id']; //for visit count
+    this._ProjectVisitService.incrementVisit(+projectId);
 
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
       this.isSidebarCollapsed = collapsed;
@@ -177,10 +141,10 @@ export class ProjectOverViewComponent {
     });
 
     this._IssueService.assignedUsersUpdated$.subscribe((updatedIssueId) => {
-      // لو الـ issue المتحدث تابع للمشروع الحالي، اعملي refresh
+    
       if (this.projectIdNum) {
-        this.fetchBacklogIssues(); // ✅ تحديث تلقائي للـ backlog
-        this.getAllSprints(); // ✅ كمان لو عايزة تحدث السبرنتس
+        this.fetchBacklogIssues(); 
+        this.getAllSprints(); 
       }
     });
 
@@ -297,10 +261,10 @@ export class ProjectOverViewComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'deleted') {
-        console.log('Issue deleted successfully');
         // this.dialogService.showDeletionSuccess();  //Want to show toaster
-        // this.showSuccess();
+        this.showSuccessDelete();
         // this._IssueService.showSuccess();
+        console.log('Issue deleted successfully');
         this.fetchBacklogIssues();
       } else {
         // this.fetchBacklogIssues();
@@ -309,6 +273,29 @@ export class ProjectOverViewComponent {
     });
   }
 
+  showSuccessDelete() {
+    this._toaster.success(
+      'The Project has been Pinned',
+      'Pinned Successfully',
+      {
+        toastClass: 'toast-pink',
+        timeOut: 10000,
+        closeButton: true,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+      }
+    );
+  }
+
+  showFailDelete(err: any) {
+    this._toaster.error('err', 'Pinned Failed', {
+      toastClass: 'toast-pink',
+      timeOut: 10000,
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+    });
+  }
   openDeleteProjectModal(projectId: number, projectTitle: string) {
     const dialogRef = this.dialog.open(SharedDeleteModalComponent, {
       width: '450px',
@@ -336,7 +323,7 @@ export class ProjectOverViewComponent {
     this._projectService.getProject(ProjectId).subscribe({
       next: (res) => {
         this.ProjectDetails = res.result;
-        console.log('Project Details',this.ProjectDetails);
+        // console.log('Project Details',this.ProjectDetails);
         this.loadProjectUsers();
         this.loading=false
         this._ProfileService.getProfileData().subscribe({
@@ -395,11 +382,11 @@ export class ProjectOverViewComponent {
 
   // issues Api
   fetchBacklogIssues(): void {
-    console.log('Fetching backlog issues for project ID:', this.projectIdNum);
+    // console.log('Fetching backlog issues for project ID:', this.projectIdNum);
     this._IssueService.getBacklogIssues(this.projectIdNum, 0, 1).subscribe({
       next: (res) => {
         if (res.isSuccess) {
-          console.log('backlog issues', res);
+          // console.log('backlog issues', res);
           this.backlogIssues = res.result;
         }
       },
@@ -417,7 +404,7 @@ export class ProjectOverViewComponent {
         this.openIssueView(issueId);
         this.isModalOpen = true;
 
-        // بعد ما المودال يفتح (يمكن تستخدم setTimeout لتأخير بسيط لو حصل تأخير في انشاء الـ ViewChild)
+        // Load assigned users after the issue is loaded
         setTimeout(() => {
           if (this.assignUsersComp) {
             this.assignUsersComp.loadAssignedUsers();
@@ -457,46 +444,7 @@ export class ProjectOverViewComponent {
       next: (res) => {
         this._sprintService.getAllSprints(res.result.id).subscribe({
           next: (res) => {
-            console.log('Sprints in project view',res);
-
-
-            // let completedCount = 0;
-            // let totalCount = 0;
-
-            // //count the number of completed issues in each sprint
-            // res.result.forEach((sprint: any) => {
-            //   sprint.issues?.forEach((issue: any) => {
-            //     totalCount++;
-            //     if (issue.status=== 'Completed') {
-            //       completedCount++;
-            //     }
-            //   });
-            // });
-  
-            // //store the number of completed issues in the sprintDetails array
-            // this.issuesCompleted = completedCount;
-            // this.totalIssues = totalCount;
-
-            // //get the completion percentage of the sprint
-            // this.completionPercentage = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
-
-            // this.sprintDetails = res.result.map((sprint: Sprint) => ({
-            //   ...sprint,
-            //   startDate: this.dateFormatter(sprint.startDate),
-            //   endDate: this.dateFormatter(sprint.endDate),
-            // }));
-
-            // for (let i = 0; i < res.result(0).issues.length; i++) {
-            //   if (res.result(0).issue(i).status == 'Completed') {
-            //     // var Counter = 0
-            //     // Counter ++
-            //     this.issuesCompleted = Number(this.issuesCompleted);
-            //     this.issuesCompleted++;
-            //     this.issuesCompleted = this.issuesCompleted.toString();
-            //     console.log('CompletedIssues' + this.issuesCompleted);
-            //   }
-            // }
-
+            // console.log('Sprints in project view',res);
             this.sprintDetails = res.result.map((sprint: any) => {
               let completed = 0;
               let total = 0;
@@ -518,7 +466,7 @@ export class ProjectOverViewComponent {
                 endDate: this.dateFormatter(sprint.endDate),
                 totalIssues: total,
                 completedIssues: completed,
-                progress: completionPercentage, // 💡 ده اللي هتستخدميه في progress bar
+                progress: completionPercentage, // Calculate the progress percentage
               }as SprintWithProgress;
             });
             
@@ -666,7 +614,7 @@ export class ProjectOverViewComponent {
           };
         });
   
-        console.log('Project users with roles:', this.ProjectMembers);
+        // console.log('Project users with roles:', this.ProjectMembers);
       },
       error: (err) => {
         console.error('Error loading project users', err);

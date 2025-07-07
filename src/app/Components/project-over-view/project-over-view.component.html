@@ -8,25 +8,16 @@
     <!-- Main Content -->
     <main class="project-main-content w-100 BG" [ngClass]="{ expand: isSidebarCollapsed }">
       <!-- Project Header Section -->
-      <section class="project-header mt-2 mb-4">
+      <section class="project-header mt-2 mb-4 gap-1">
         <div class="project-meta">
           <div class="title d-flex align-items-baseline gap-1">
-            <h1 class="project-title mt-3 mb-3 display-3 text-capitalize">{{ProjectDetails?.name}}</h1>
-            <div class="type auth-form-container px-2 py-1 rounded-pill flex-row dev-text-muted">
+            <h1 class="project-title mt-3 mb-3 display-4 text-capitalize">{{ProjectDetails?.name}}</h1>
+            <div class="type auth-form-container px-2 py-1 text-center rounded-pill flex-row dev-text-muted">
               {{ProjectDetails?.tenant?.name}}
               Company
             </div>
           </div>
           <p class="dev-text-muted">{{ProjectDetails?.description}}</p>
-          <!-- <div class="project-details">
-        <span class="company-badge tenant-badge">Company: {{ProjectDetails?.tenant?.name}}</span>
-        <span class="status-badge status-active">Status: {{ProjectDetails?.status}}</span>
-        <span class="priority-badge priority-high">Priority: {{ProjectDetails?.priority}}</span>
-      </div> -->
-          <!-- <div class="project-timeline">
-        <span class="date-badge" *ngIf="ProjectDetails?.startDate">Start: {{ProjectDetails?.startDate}}</span>
-        <span class="date-badge" *ngIf="ProjectDetails?.endDate">End: {{ProjectDetails?.endDate}}</span>
-      </div> -->
           <div class="project-timeline">
             <p class="date-badge flex-row p-2 dev-text-muted" *ngIf="ProjectDetails?.startDate">Start :
               <span class="dev-text-muted">
@@ -40,7 +31,6 @@
             </p>
           </div>
         </div>
-
         <div class="mt-3 d-flex  gap-2">
           <div class="">
             <div class="auth-form-container align-items-start">
@@ -51,7 +41,7 @@
                   Project Code :
                 </div>
                 <div class="copy-text d-flex align-items-center gap-2">
-                  <p class="m-0 dev-text-muted  fs-6">{{ ProjectDetails?.projectCode }}</p>
+                  <p class="m-0 dev-text-muted  text-truncate fs-6">{{ ProjectDetails?.projectCode }}</p>
                   <div (click)="copyText('code')">
                     <span *ngIf="!copied.code">
                       <i class="fa-clipboard fa-regular" style="color: rgba(36, 89, 255, 0.988)"></i>
@@ -64,7 +54,6 @@
               </div>
               }
               <div class="project-details flex-column">
-                <!-- <div class=""> Company : <span> {{ProjectDetails?.tenant?.name}}</span></div> -->
                 <div class="">Status : <span>{{ProjectDetails?.status}} </span></div>
                 <div class="">Priority : <span class="priority-tag auth-form-container"
                     [ngClass]="getPriorityClass(ProjectDetails!.priority)">
@@ -73,7 +62,6 @@
                     </p>
                   </span></div>
               </div>
-
             </div>
 
           </div>
@@ -139,7 +127,7 @@
                 Create</a>
             </span>
           </div>
-          <div class="card-content">
+          <div class="card-content" *ngIf="sprintDetails.length > 0 ">
             @for(sprint of sprintDetails ; track sprint.id) {
             <div #sprintCard>
               <div class="sprint d-flex justify-content-center flex-column me-4 p-3">
@@ -163,6 +151,10 @@
               </div>
             </div>
             }
+          </div>
+          <div class="card-content d-flex justify-content-center align-items-center h-75 dev-text-muted"
+            *ngIf="sprintDetails.length ==0">
+            <p>No sprints found.</p>
           </div>
         </div>
         <div class="charts dashboard-card">
@@ -201,49 +193,53 @@
           </div>
           <div class="card-content ">
             <!-- Backlog items would go here -->
-            <div *ngFor="let issue of backlogIssues" class="backlog-item"
-              [ngStyle]="getPriorityBorderStyle(issue.priority)" (dblclick)="loadIssue(issue.id)">
-              <!-- <div class="issue-details"> -->
-              <div class="row w-100">
-                <div class="col-md-4">
-                  <div class="issue-detail">
-                    <p class="text-capitalize cursor-pointer backlog-issue-title m-0 " (click)="loadIssue(issue.id)">
-                      {{
-                      issue.title }}</p>
-                    <span class="dates text-uppercase">[ {{issue.type}} ]</span>
-                    <!-- <span class="label">Label</span> -->
-                  </div>
-                </div>
-                <div class="col-md-5">
-                  <div class="assigned-members d-flex align-items-start justify-content-center ">
-                    <div *ngFor="let user of issue.assignedUsers">
-                      <img [src]="user.imageUrl" alt="{{ user.firstName }} {{ user.lastName }}"
-                        class="assigned-member cursor-pointer rounded-circle" style="width: 24px; height: 24px;" />
+            <ng-container *ngIf="backlogIssues.length > 0; else noBacklog">
+              <div *ngFor="let issue of backlogIssues" class="backlog-item"
+                [ngStyle]="getPriorityBorderStyle(issue.priority)" (dblclick)="loadIssue(issue.id)">
+                <!-- <div class="issue-details"> -->
+                <div class="row w-100">
+                  <div class="col-md-4">
+                    <div class="issue-detail">
+                      <p class="text-capitalize cursor-pointer backlog-issue-title m-0 " (click)="loadIssue(issue.id)">
+                        {{
+                        issue.title }}</p>
+                      <span class="dates text-uppercase">[ {{issue.type}} ]</span>
+                      <!-- <span class="label">Label</span> -->
                     </div>
                   </div>
-                </div>
-                <div class="col-md-3 justify-content-end p-0">
-                  <div class="d-flex  flex-column ">
-                    @if (issue.deadline) {
-                    <div class="issue-meta">
-                      <span class="dates">Due : {{ issue.deadline | date: 'MMM d'
-                        }}</span>
-                    </div>
-                    }
-
-
-                    <div class="delete d-flex justify-content-end" *ngIf="isOwner">
-                      <span class="ps-3  cursor-pointer" (click)="openDeleteIssueModal(issue.id,issue.title)">
-                        <i class="fa-solid fa-trash " style="color: #D02705"></i>
-                      </span>
+                  <div class="col-md-5">
+                    <div class="assigned-members d-flex align-items-start justify-content-center ">
+                      <div *ngFor="let user of issue.assignedUsers">
+                        <img [src]="user.imageUrl" alt="{{ user.firstName }} {{ user.lastName }}"
+                          class="assigned-member cursor-pointer rounded-circle" style="width: 24px; height: 24px;" />
+                      </div>
                     </div>
                   </div>
+                  <div class="col-md-3 justify-content-end p-0">
+                    <div class="d-flex  flex-column ">
+                      @if (issue.deadline) {
+                      <div class="issue-meta">
+                        <span class="dates">Due : {{ issue.deadline | date: 'MMM d'
+                          }}</span>
+                      </div>
+                      }
 
+
+                      <div class="delete d-flex justify-content-end" *ngIf="isOwner">
+                        <span class="ps-3  cursor-pointer" (click)="openDeleteIssueModal(issue.id,issue.title)">
+                          <i class="fa-solid fa-trash " style="color: #D02705"></i>
+                        </span>
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
+                <!-- </div> -->
               </div>
-              <!-- </div> -->
-            </div>
-
+            </ng-container>
+            <ng-template #noBacklog>
+              <div class="text-center dev-text-muted py-3">No backlog issues found.</div>
+            </ng-template>
           </div>
 
 
