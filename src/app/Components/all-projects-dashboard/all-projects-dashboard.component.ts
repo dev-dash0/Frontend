@@ -41,6 +41,7 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
   AllIssuesList:any[]=[]
   currentTenantName:string='';
   lineChartInstance: Chart | null = null;
+  doughnutChartInstance: Chart<"doughnut", number[], string> | null = null;
 
 
 
@@ -421,6 +422,8 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
   initCompanyStatusChart() {
     const ctx = this.doughnutChart.nativeElement.getContext('2d');
   
+    if (this.doughnutChartInstance) this.doughnutChartInstance.destroy();
+
     const issues = this.AllIssuesList.filter(issue => issue.tenantName === this.tenantName);
   
     const statuses: IssueStatus[] = ['Completed', 'In Progress', 'Reviewing', 'to do', 'Postponed', 'Canceled', 'BackLog'];
@@ -568,7 +571,7 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
     
     const backgroundColors = labels.map(label => gradients[label]);
   
-    new Chart(ctx!, {
+    this.doughnutChartInstance = new Chart(ctx!, {
       type: 'doughnut',
       data: {
         labels: allZero ? ['No Data'] : labels,

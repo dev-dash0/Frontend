@@ -18,8 +18,7 @@
 
           <div class="urgent-scroll">
             <ul class="list-unstyled mb-0 me-1" *ngIf="UrgentIssues.length>0">
-              <li class="issue-item {{ issue.priority.toLowerCase() }}"
-                *ngFor="let issue of UrgentIssues; track $index">
+              <li class="issue-item {{ issue.priority.toLowerCase() }}" *ngFor="let issue of UrgentIssues;">
                 <div class="d-flex flex-column">
                   <div class="d-flex justify-content-between align-items-center mb-1">
                     <span class="text-capitalize me-1  fw-semibold cursor-pointer" (click)="loadIssue(issue.id)">
