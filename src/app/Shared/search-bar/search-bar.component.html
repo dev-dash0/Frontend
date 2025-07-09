@@ -16,10 +16,14 @@
             <span><i class="fa-solid fa-magnifying-glass"></i></span>
           </button>
           <div
-            class="search-results-container auth-form-container show"
-            *ngIf="showResults"
+            class="search-results-container auth-form-container"
+            *ngIf="showSearchPanel"
           >
-            <div class="filter-buttons d-flex gap-2 mb-2">
+            <app-dashboard-loader
+              [ngStyle]="{ 'align-self': 'center', padding: '200px' }"
+              *ngIf="loading"
+            ></app-dashboard-loader>
+            <div class="filter-buttons d-flex justify-content-between">
               <button
                 class="btn"
                 [class.active]="selectedFilter === 'all'"
@@ -56,9 +60,9 @@
                 Issues
               </button>
             </div>
-            <div class="results">
+            <div class="results" *ngIf="!loading">
               <h6 class="header">Results</h6>
-              <div *ngIf="hasNoSearchResults()" class="no-results">
+              <div *ngIf="noResults" class="no-results">
                 <p>No results found</p>
               </div>
               <div
@@ -82,7 +86,10 @@
                   </p>
                 </div>
               </div>
-              <div class="divider" *ngIf="showDivider"></div>
+              <div
+                class="divider"
+                *ngIf="showDivider && searchResult?.projects?.length"
+              ></div>
               <div
                 class="projects-results"
                 *ngIf="
@@ -117,7 +124,10 @@
                   </p>
                 </div>
               </div>
-              <div class="divider" *ngIf="showDivider"></div>
+              <div
+                class="divider"
+                *ngIf="showDivider && searchResult?.sprints?.length"
+              ></div>
               <div
                 class="sprints-results"
                 *ngIf="
@@ -179,6 +189,14 @@
                           {{ issue.priority }}
                         </p>
                       </div>
+                      <!-- <div
+                        class="issue-status auth-form-container"
+                        [ngClass]="getIssueStatusClass(issue.status)"
+                      >
+                        <p class="m-0 p-0">
+                          {{ issue.status }}
+                        </p>
+                      </div> -->
                     </div>
                   </div>
                   <p class="issue-description m-0 pt-1">
@@ -192,9 +210,12 @@
         <span class="position-relative">
           <i class="fa-regular fa-comment-dots fa-lg"></i>
         </span>
-        <span class="position-relative notification-wrapper" (click)="togglePanel()">
+        <span
+          class="position-relative notification-wrapper"
+          (click)="togglePanel()"
+        >
           <i class="fa-regular fa-bell fa-lg notification-icon"></i>
-          <span class="badge">{{notifications.length}}</span>
+          <span class="badge">{{ notifications.length }}</span>
         </span>
 
         <div class="profile">
@@ -240,32 +261,33 @@
   </div>
 
   <!-- Notification Panel Wrapper -->
-<div class="notification-panel" [class.visible]="showPanel">
+  <div class="notification-panel" [class.visible]="showPanel">
+    <!-- Arrow pointing to icon -->
+    <div class="notification-arrow"></div>
 
-  <!-- Arrow pointing to icon -->
-  <div class="notification-arrow"></div>
+    <!-- Close Button -->
+    <div class="close-btn" (click)="getClose()">×</div>
 
-  <!-- Close Button -->
-  <div class="close-btn" (click)="getClose()">×</div>
-
-  <!-- Loop through Notifications -->
-  <div class="notification"
-       *ngFor="let notify of notifications"
-       [class.unread]="!notify.isRead"
-       (click)="markAsRead(notify, notify.id)">
-       
-    <div class="notify-header">
-      <p>{{ notify.message }}</p>
-    </div>
-
-    <div class="notify-footer">
-      <div class="sender-info">
-        <img [src]="NotifyUser.imageUrl" alt="User" />
-        <span>{{ NotifyUser.firstName }}</span>
+    <!-- Loop through Notifications -->
+    <div
+      class="notification"
+      *ngFor="let notify of notifications"
+      [class.unread]="!notify.isRead"
+      (click)="markAsRead(notify, notify.id)"
+    >
+      <div class="notify-header">
+        <p>{{ notify.message }}</p>
       </div>
-      <span class="notify-date">{{ notify.createdAt | date:'short' }}</span>
-    </div>
 
-    <div class="checkmark" *ngIf="notify.isRead">✅</div>
+      <div class="notify-footer">
+        <div class="sender-info">
+          <img [src]="NotifyUser.imageUrl" alt="User" />
+          <span>{{ NotifyUser.firstName }}</span>
+        </div>
+        <span class="notify-date">{{ notify.createdAt | date : "short" }}</span>
+      </div>
+
+      <div class="checkmark" *ngIf="notify.isRead">✅</div>
+    </div>
   </div>
 </div>

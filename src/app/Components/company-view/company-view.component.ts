@@ -79,6 +79,7 @@ export class CompanyViewComponent implements OnInit {
   hover: boolean = false;
   projectStats: Projectstats[] = [];
   ProjectCategories: ProjectCategory[] = [];
+  projectsGlobalCounter: number = 0;
   loading = true;
   projectLoading = true;
   isPinned = false;
@@ -329,6 +330,7 @@ export class CompanyViewComponent implements OnInit {
 
         if (res.isSuccess && res.result) {
           totalProjectsCounter = res.result.length;
+          this.projectsGlobalCounter = res.result.length;
           res.result.forEach((project: any) => {
             switch (project.status) {
               case 'Completed':
@@ -496,17 +498,13 @@ export class CompanyViewComponent implements OnInit {
 
   // show successful and failed pinned toastr
   showSuccess() {
-    this._toastr.success(
-      'The Project has been Pinned',
-      'Pinned Successfully',
-      {
-        toastClass: 'toast-pink',
-        timeOut: 10000,
-        closeButton: true,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-      }
-    );
+    this._toastr.success('The Project has been Pinned', 'Pinned Successfully', {
+      toastClass: 'toast-pink',
+      timeOut: 10000,
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+    });
   }
 
   showFail(err: any) {

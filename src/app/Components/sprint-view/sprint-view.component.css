@@ -93,7 +93,8 @@ h5 p {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  border-radius: 0 var(--standardRoundness) var(--standardRoundness) var(--standardRoundness);
+  border-radius: 0 var(--standardRoundness) var(--standardRoundness)
+    var(--standardRoundness);
   padding: var(--standardPadding);
   position: relative;
 }
@@ -177,8 +178,6 @@ h5 p {
   background-color: var(--brightBlueColor);
 }
 
-
-
 .field-tag {
   /* display: flex;
   align-items: center; */
@@ -219,6 +218,101 @@ h5 p {
   height: 50px;
   border-radius: 50%;
   border: 2px var(--mainLightBlueColor) solid;
+}
+
+.sprint-title-description,
+.sprint-data {
+  color: var(--mainLightBlueColor);
+}
+
+.sprint-data p {
+  padding: 6px 10px;
+  border-radius: 15px;
+  background-color: #8d66d160;
+  font-size: 12px;
+}
+
+.sprint-title {
+  font-size: 50px;
+}
+.sprint-description {
+  color: var(--lightGrayColor);
+  font-size: var(--smallFontSize);
+}
+
+.auth-form-container {
+  padding: 20px;
+  border-radius: var(--standardRoundness);
+  border: none !important;
+}
+
+.auth-form-container::before {
+  background: none !important;
+  border: none !important;
+  mask: none !important;
+  -webkit-mask: none !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
+
+.sprint-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 20px 0 0;
+}
+
+.header-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sprint-actions .btn {
+  border-radius: 20%;
+  border: none;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pin-icon {
+  color: var(--mainLightBlueColor);
+  transform: rotate(45deg);
+}
+
+.trash-icon,
+.edit-icon,
+.Red-Pin,
+.pin-icon {
+  transition: all 0.3s ease-in-out;
+}
+
+.trash-icon:hover {
+  color: red !important;
+}
+
+.edit-icon:hover {
+  color: #ffd43b !important;
+}
+
+.pin-icon:hover {
+  color: #ff90e8 !important;
+}
+
+.active-pin {
+  color: #ff90e8 !important;
+  transform: rotate(0deg) !important;
+}
+
+.Red-Pin:hover,
+.trash-icon:hover,
+.edit-icon:hover,
+.pin-icon:hover {
+  transform: translateY(-5px);
 }
 
 /*-------------------------------------------*/
@@ -266,7 +360,6 @@ h5 p {
 .wrapper-card-container {
   height: 500px;
   overflow-y: auto;
-
 }
 
 .wrapper h2 {
@@ -287,10 +380,13 @@ h5 p {
   color: #aaa;
 }
 
-
 .wrapper-card {
   /* background: rgba(255, 255, 255, 0.05);   */
-  background: linear-gradient(90deg, rgba(27, 51, 81, 0.7) 0%, rgba(155, 97, 149, 0.25) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(27, 51, 81, 0.7) 0%,
+    rgba(155, 97, 149, 0.25) 100%
+  );
 
   border-radius: 15px;
   padding: 15px 20px;
@@ -298,17 +394,17 @@ h5 p {
   transition: all 0.3s ease;
 }
 
-
 .wrapper-card:hover {
   box-shadow: 0 8px 24px 0 rgba(155, 97, 149, 0.18);
-  background: linear-gradient(90deg, rgba(27, 51, 81, 0.7) 0%, rgba(155, 97, 149, 0.25) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(27, 51, 81, 0.7) 0%,
+    rgba(155, 97, 149, 0.25) 100%
+  );
 }
-
-
 
 .wrapper-card-header {
   margin-bottom: 4px;
-
 }
 
 .wrapper-card-title {
@@ -319,8 +415,6 @@ h5 p {
 
   overflow: hidden;
   width: 55%;
-
-
 }
 
 .wrapper-card-meta {
@@ -328,7 +422,6 @@ h5 p {
   gap: 10px;
   align-items: center;
 }
-
 
 .wrapper-card-date {
   color: #b7bffb;
@@ -344,7 +437,6 @@ h5 p {
 .view-details-btn:hover {
   color: #af66d1;
 }
-
 
 .wrapper-card-center-body {
   display: flex;
@@ -364,7 +456,6 @@ h5 p {
   display: inline-block;
 }
 
-
 /* // ////////////////////////////////////////////////////////////////////////// */
 /* // *************************Drag and Drop************************* */
 /* // //////////////////////////////////////////////////////////////// */
@@ -377,4 +468,10 @@ h5 p {
   border-radius: 8px;
   background-color: white;
   padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .sprint-data p {
+    font-size: 9px;
+  }
 }
