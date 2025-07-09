@@ -4,9 +4,11 @@
 }
 
 mat-chip {
-  background: radial-gradient(109.99% 253.12% at 76.68% 66.67%,
-      #db83f1 0%,
-      #8051b1 100%) !important;
+  background: radial-gradient(
+    109.99% 253.12% at 76.68% 66.67%,
+    #db83f1 0%,
+    #8051b1 100%
+  ) !important;
 }
 
 .BG {
@@ -57,6 +59,9 @@ mat-chip {
   transform: rotate(25deg) translateX(100%);
 }
 
+.col-md-12 .col-md-4 {
+  height: 600px;
+}
 .col-md-12 .header {
   display: flex;
   align-items: center;
@@ -222,15 +227,23 @@ p {
 }
 
 .image-gradient {
-  -webkit-mask-image: radial-gradient(circle at center,
-      rgba(0, 0, 0, 1) 30%,
-      rgba(0, 0, 0, 0) 100%);
+  -webkit-mask-image: radial-gradient(
+    ellipse,
+    rgba(0, 0, 0, 1) 20%,
+    rgba(0, 0, 0, 1) 20%,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: 100% 100%;
 
-  mask-image: radial-gradient(circle at center,
-      rgba(0, 0, 0, 1) 30%,
-      rgba(0, 0, 0, 0) 100%);
+  mask-image: radial-gradient(
+    ellipse,
+    rgba(0, 0, 0, 1) 20%,
+    rgba(0, 0, 0, 1) 20%,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
   mask-repeat: no-repeat;
   mask-size: 100% 100%;
 }
@@ -380,16 +393,20 @@ p {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  border-radius: var(--standardRoundness);
-  padding: var(--standardPadding);
+  padding: 32px 24px 24px 24px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #1c1e3c, #1a1c35);
+  box-shadow: 0 8px 16px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
   position: relative;
-  background-color: #0d1123;
   flex: 1 1 auto;
   overflow: hidden;
 }
 
 .tag-box {
-  padding: 5px;
+  /* padding: 5px; */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -414,11 +431,11 @@ p {
   background-color: #aa9900;
 }
 
-.project-card .row {
+/* .project-card .row {
   background-color: #0d1123;
   border-radius: var(--standardRoundness);
   padding: var(--standardPadding);
-}
+} */
 
 .canceled-span {
   background-color: #4b4a4a;

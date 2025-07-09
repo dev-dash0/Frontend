@@ -9,18 +9,12 @@ import { SearchService } from '../../Core/Services/search.service';
 import { FormsModule } from '@angular/forms';
 import { SearchResults } from '../../Core/interfaces/search-results';
 import { NotificationService } from '../../Core/Services/notification.service';
-import {
-  Notification,
-  Project,
-  User,
-  UserProject,
-} from '../../Core/interfaces/notification';
-import { CompanyService } from '../../Core/Services/company.service';
+import { Notification, User } from '../../Core/interfaces/notification';
 import { DashboardService } from '../../Core/Services/dashboard/dashboard.service';
-import { O } from '@angular/cdk/keycodes';
 import { ProjectResult } from '../../Core/interfaces/project';
 import { map, switchMap } from 'rxjs';
-import { BlobOptions } from 'buffer';
+import { DashboardLoaderComponent } from '../dashboard-loader/dashboard-loader.component';
+import { DialogService } from '../../Core/Services/dialog.service';
 
 @Component({
   selector: 'app-search-bar',
@@ -32,6 +26,7 @@ import { BlobOptions } from 'buffer';
     CommonModule,
     RouterLink,
     FormsModule,
+    DashboardLoaderComponent,
   ],
   templateUrl: './search-bar.component.html',
   styleUrl: './search-bar.component.css',
@@ -39,10 +34,11 @@ import { BlobOptions } from 'buffer';
 export class SearchBarComponent {
   constructor(
     private authService: AuthService,
-    private readonly _NotificationService: NotificationService,
-    private readonly _DashboardService: DashboardService,
+    private _NotificationService: NotificationService,
+    private _DashboardService: DashboardService,
     private router: Router,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private dialogService: DialogService
   ) {}
 
   toggle = false;
@@ -51,6 +47,10 @@ export class SearchBarComponent {
   showResults = false;
   loading = false;
   showDivider = true;
+  noResults = false;
+  showSearchPanel = false;
+
+  // Notification
   showPanel = false;
   projects: ProjectResult[] = [];
   allUsers: User[] = [];
@@ -98,18 +98,37 @@ export class SearchBarComponent {
   // search API
   search(event?: KeyboardEvent) {
     if (event?.key == 'Escape') {
+      this.showSearchPanel = false;
       return;
     }
+    if (!this.searchText) {
+      this.clearSearch();
+      this.showResults = false;
+      this.showSearchPanel = false;
+      return;
+    }
+
+    this.showSearchPanel = true;
     this.loading = true;
+    this.showResults = true;
     this.searchService.search(this.searchText).subscribe({
       next: (res) => {
         console.log(this.searchText);
         this.searchResult = res.result;
-        this.showResults = true;
+        // this.showResults = true;
+        // this.showSearchPanel = true;
+        this.noResults = !(
+          this.searchResult?.tenants?.length ||
+          this.searchResult?.projects?.length ||
+          this.searchResult?.sprints?.length ||
+          this.searchResult?.issues?.length
+        );
         this.loading = false;
       },
       error: (err) => {
         console.error('Search failed:', err);
+        this.loading = false;
+        this.noResults = true;
       },
     });
   }
@@ -119,6 +138,8 @@ export class SearchBarComponent {
     this.searchResult = null;
     this.showResults = false;
     this.loading = false;
+    this.showSearchPanel = false;
+    this.noResults = false;
   }
 
   navigateToIssue(issueId: number) {
@@ -136,6 +157,10 @@ export class SearchBarComponent {
   navigateToSprint(sprintId: number) {
     this.router.navigate(['/MyDashboard/Sprint', sprintId]);
     this.clearSearch();
+  }
+
+  openIssueView(issueId: number) {
+    this.dialogService.openIssueViewModal(issueId);
   }
 
   closeResults(): void {
@@ -199,6 +224,27 @@ export class SearchBarComponent {
         return 'high-tag';
       case 'critical':
         return 'critical-tag';
+      default:
+        return '';
+    }
+  }
+
+  getIssueStatusClass(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'backlog':
+        return 'backlog-status';
+      case 'in progress':
+        return 'inprogress-status';
+      case 'canceled':
+        return 'cancelled-status';
+      case 'completed':
+        return 'complete-status';
+      case 'reviewing':
+        return 'reviewing-status';
+      case 'postponed':
+        return 'postpone-status';
+      case 'to do':
+        return 'todo-status';
       default:
         return '';
     }

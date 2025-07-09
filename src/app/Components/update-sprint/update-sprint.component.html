@@ -1,0 +1,159 @@
+<div class="modal-container">
+  <!-- Header -->
+  <div class="modal-header d-flex justify-content-between align-items-start">
+    <h2>Update Sprint</h2>
+    <button class="close-btn" (click)="close()">&#x2715;</button>
+  </div>
+
+  <div class="divider"></div>
+  <!-- Form -->
+  <form [formGroup]="sprintForm" (ngSubmit)="updateSprint()">
+    <div class="form-group">
+      <!-- Project Name -->
+      <div class="row align-items-center">
+        <div class="col-md-2">
+          <label for="Project Name">Sprint Title*</label>
+        </div>
+        <div class="col-md-10">
+          <input
+            id="Project Name"
+            type="text"
+            formControlName="title"
+            placeholder="e.g. Linear"
+            required
+          />
+        </div>
+      </div>
+      <!-- Description -->
+      <div class="row align-items-center">
+        <div class="col-md-2">
+          <label for="description">Description</label>
+        </div>
+        <div class="col-md-10">
+          <textarea
+            id="description"
+            rows="2"
+            formControlName="description"
+            placeholder="Write a few sentences about the Sprint ..."
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <!-- Dates -->
+      <div class="date-container">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-md-2">
+            <label for="startDate">Start Date*</label>
+          </div>
+          <div class="col-md-10">
+            <mat-form-field appearance="outline" class="custom-date-picker">
+              <mat-icon
+                matPrefix
+                class="custom-calendar-icon"
+                (click)="picker1.open()"
+                ><img src="assets/images/uil_calender.svg" alt=""
+              /></mat-icon>
+              <input
+                matInput
+                [matDatepicker]="picker1"
+                placeholder="Select Date"
+                formControlName="startDate"
+              />
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row justify-content-center align-items-center">
+          <div class="col-md-2">
+            <label for="DueDate">Due Date*</label>
+          </div>
+          <div class="col-md-10">
+            <mat-form-field appearance="outline" class="custom-date-picker">
+              <mat-icon
+                matPrefix
+                class="custom-calendar-icon"
+                (click)="picker2.open()"
+                ><img src="assets/images/uil_calender.svg" alt=""
+              /></mat-icon>
+              <input
+                matInput
+                [matDatepicker]="picker2"
+                placeholder="Select Date"
+                formControlName="endDate"
+              />
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <!-- Status -->
+      <div class="row align-items-center">
+        <div class="col-md-2">
+          <label for="issue-type">Status*</label>
+        </div>
+        <div class="col-md-10">
+          <mat-button-toggle-group
+            formControlName="status"
+            aria-label="Issue Status"
+            class="w-100"
+          >
+            <mat-button-toggle
+              *ngFor="let status of statuses"
+              [value]="status.value"
+            >
+              <img
+                [src]="status.icon"
+                alt="{{ status.label }} Icon"
+                class="status-icon"
+              />
+              {{ status.label }}
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <!-- Summary -->
+      <div class="row align-items-center">
+        <div class="col-md-2">
+          <label for="Summary">Summary</label>
+        </div>
+        <div class="col-md-10">
+          <textarea
+            id="Summary"
+            rows="2"
+            formControlName="summary"
+            placeholder="Write a Summary..."
+          ></textarea>
+        </div>
+      </div>
+      <div class="divider"></div>
+    </div>
+    <!-- Footer Buttons -->
+    <div class="modal-footer">
+      <div
+        class="buttons w-100 d-flex justify-content-center align-items-center gap-3"
+      >
+        <button
+          mat-button
+          type="button"
+          class="cancel-btn w-50 fw-semibold"
+          (click)="close()"
+        >
+          Cancel
+        </button>
+        <button
+          mat-flat-button
+          type="submit"
+          [disabled]="sprintForm.invalid"
+          class="confirm-btn w-50 fw-semibold"
+        >
+          Confirm
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
