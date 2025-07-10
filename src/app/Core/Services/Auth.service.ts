@@ -11,52 +11,52 @@ import { JwtPayload } from '../interfaces/jwt-payload';
   providedIn: 'root',
 })
 export class AuthService {
-
-  
   private readonly _Router = inject(Router);
-  
+
   constructor(private _HttpClient: HttpClient) {}
 
-  
   Register = (user: any): Observable<any> => {
     return this._HttpClient.post(baseUrl + '/api/Account/Register', user);
   };
-  
+
   Login = (user: any): Observable<any> => {
     return this._HttpClient.post(baseUrl + '/api/Account/Login', user);
   };
-  
+
   Logout = (logoutParams: any): Observable<any> => {
     return this._HttpClient.post(baseUrl + '/api/Account/Logout', logoutParams);
   };
-  
-  public isCheckingToken = true;
-  
-  saveUserData() {
-    const token = localStorage.getItem('token');
-    this.isCheckingToken = true;
 
+  public isCheckingToken = true;
+
+  saveUserData() {
+    // ✅ حل الخطأ: تأكدي إن الكود بيشتغل فقط داخل المتصفح
+    if (typeof window === 'undefined') {
+      this.isCheckingToken = false;
+      return;
+    }
+
+    const token = localStorage.getItem('token');
     if (token) {
       try {
-        const decoded = jwtDecode<JwtPayload>(token);
-        const expiryTime = decoded.exp * 1000;
+        const decoded: any = jwtDecode(token);
+        const expiryTime = decoded?.exp * 1000;
         const timeUntilExpiry = expiryTime - Date.now();
-        
+
         if (timeUntilExpiry <= 0) {
           this.logoutAndRedirect();
         } else {
-          setTimeout(() => {
-            this.logoutAndRedirect();
-          }, timeUntilExpiry);
+          setTimeout(() => this.logoutAndRedirect(), timeUntilExpiry);
+          this.isCheckingToken = false;
         }
       } catch (error) {
         this.logoutAndRedirect();
       }
+    } else {
+      this.isCheckingToken = false;
     }
-    
-    this.isCheckingToken = false;
   }
-  
+
   private logoutAndRedirect() {
     // this.isCheckingToken = false;
     // localStorage.clear();
@@ -66,7 +66,7 @@ export class AuthService {
     this.isCheckingToken = false; // ✅ Add this line
     this._Router.navigate(['/signin']);
   }
-  
+
   forceLogout() {
     localStorage.removeItem('token');
     this._Router.navigate(['/signin']); // or your login route
