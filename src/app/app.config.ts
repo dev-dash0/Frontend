@@ -1,6 +1,6 @@
 import { MatDialogModule } from '@angular/material/dialog';
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withRouterConfig } from '@angular/router';
 import { routes } from './app.routes';
 import {
   provideClientHydration,
@@ -20,7 +20,9 @@ import { provideToastr } from 'ngx-toastr';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
+    provideRouter(routes,  withRouterConfig({
+      onSameUrlNavigation: 'reload'
+    } ) ),
     provideClientHydration(),
     provideAnimations(),
     importProvidersFrom(
@@ -33,7 +35,7 @@ export const appConfig: ApplicationConfig = {
       MatSelectModule,
       MatChipsModule
     ),
-    
+
     provideAnimations(), // required animations providers
     provideToastr(),
 

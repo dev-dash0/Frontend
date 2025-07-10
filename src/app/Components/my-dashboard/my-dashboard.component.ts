@@ -162,26 +162,69 @@ export class MyDashboardComponent {
   //   }, 1500);
   // }
 
+  // navigateToProject(projectId: number, projectName: string) {
+  //   // ✅ صغر Booty
+  //   this.shrinkBooty();
+
+  //   // ✅ طلع رسالة فوقه
+  //   const popup = document.createElement('div');
+  //   popup.innerText = `📦 Project "${projectName}" created!`;
+  //   popup.classList.add('booty-popup');
+  //   document.body.appendChild(popup);
+  //   setTimeout(() => popup.remove(), 3000);
+
+  //   // ✅ نفّذ التنقل للصفحة
+  //   // this.router.navigate(['MyDashboard/Project', projectId]);
+  //   this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+  //     this.router.navigate(['MyDashboard/Project', projectId]);
+  //   });
+
+  //   // ❌ ما تقفلش الشات دلوقتي
+
+  //   // ✅ رجّع Booty بعد شوية
+  //   setTimeout(() => {
+  //     this.resetBooty();
+  //     this.showChatPopup = false; // ✅ اقفل بعد النافيجيشن
+  //   }, 1500);
+  // }
+
   navigateToProject(projectId: number, projectName: string) {
-    // ✅ 1. صغّر Booty
     this.shrinkBooty();
 
-    // ✅ 2. أظهر popup
+    // ✅ Popup فوق Booty
     const popup = document.createElement('div');
     popup.innerText = `📦 Project "${projectName}" created!`;
     popup.classList.add('booty-popup');
     document.body.appendChild(popup);
-    setTimeout(() => popup.remove(), 3000); // Remove بعد 3 ثواني
+    setTimeout(() => popup.remove(), 3000);
 
-    // ✅ 3. Navigate
+    // ✅ Navigate to project
     this.router.navigate(['MyDashboard/Project', projectId]);
 
-    // ❌ ما تقفلش الشات فورًا علشان الAgent لسه بيرد
-    // ❌ this.showChatPopup = false;
-
-    // ✅ 4. بعد 1.5 ثانية رجّع بوتي لمكانه الطبيعي
+    // ✅ بعد شوية، رجّع Booty واقفل الشات وعمل Refresh
     setTimeout(() => {
       this.resetBooty();
+      this.showChatPopup = false;
+
+      // ✅ دلوقتي Reload
+      window.location.reload();
+    }, 7000); // استني 2 ثانية علشان الكلام يخلص
+  }
+
+  navigateToSprint(sprintId: number, sprintName: string) {
+    this.shrinkBooty();
+
+    const popup = document.createElement('div');
+    popup.innerText = `🏃 Sprint "${sprintName}" created!`;
+    popup.classList.add('booty-popup');
+    document.body.appendChild(popup);
+    setTimeout(() => popup.remove(), 3000);
+
+    this.router.navigate(['MyDashboard/Sprint', sprintId]);
+
+    setTimeout(() => {
+      this.resetBooty();
+      this.showChatPopup = false; // ✅ اقفل بعد النافيجيشن
     }, 1500);
   }
 
@@ -219,21 +262,14 @@ export class MyDashboardComponent {
   ) {
     if (event.type === 'project_created') {
       this.navigateToProject(event.projectId, event.projectName);
-    }
-
-    if (event.type === 'agent_done') {
-      // ✅ رجّع Booty لحجمه الطبيعي
+      // ✅ هنا بس اقفل الشات وارجّع Booty بعد التنقل
       setTimeout(() => {
         this.resetBooty();
-      }, 600);
-
-      // ✅ اقفل الشات بعد ثانية
-      setTimeout(() => {
         this.showChatPopup = false;
-        this.chatId = null;
-        localStorage.removeItem('booty_chat_id');
-      }, 1600);
+      }, 1500);
     }
+
+    // ❌ مفيش داعي للـ agent_done دلوقتي
   }
 
   // shrinkBooty() {

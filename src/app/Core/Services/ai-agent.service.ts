@@ -19,7 +19,7 @@ export class AiAgentService {
       // fetch('https://2429-156-203-173-226.ngrok-free.app/api/v1/llm/agent', {
       fetch(
         // 'https://c606-2c0f-fc88-400e-a051-aa40-7925-526d-c899.ngrok-free.app/api/v1/llm/agent',
-        'https://54a0-156-203-213-109.ngrok-free.app/api/v1/llm/agent',
+        'https://2cfa508f3b07.ngrok-free.app/api/v1/llm/agent',
         {
           method: 'POST',
           headers: {

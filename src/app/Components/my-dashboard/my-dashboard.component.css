@@ -140,18 +140,103 @@
   animation: fadeSlide 0.5s ease-in-out;
 }
 
-.booty-thought {
+/* .booty-thought {
   position: fixed;
-  top: 180px;
-  right: 160px;
-  background-color: #1e1e3f;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 10px;
-  animation: floatIn 0.5s ease-in-out, fadeOut 3s 2s forwards;
+  top: 160px; 
+  right: 160px; 
+  background: linear-gradient(145deg, #1f1d2f, #292544);
+  color: #e0dfff;
+  padding: 10px 16px;
+  border-radius: 16px;
   font-size: 14px;
+  font-weight: 500;
+  max-width: 320px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    inset 0 0 12px rgba(255, 255, 255, 0.04);
   z-index: 2000;
+  animation: floatIn 0.5s ease-out, fadeOut 4s 2s forwards;
+  transform: translateY(-10px);
+} */
+
+/* 💭 Icon */
+.booty-thought::before {
+  content: "💭";
+  font-size: 20px;
+  margin-right: 6px;
 }
+
+/* Optional: triangle pointer like tooltip */
+.booty-thought::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  right: 20px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #292544;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* .booty-thought {
+  position: fixed;
+  background: linear-gradient(145deg, rgba(32, 37, 78, 0.9), rgba(20, 25, 49, 0.9));
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 20px;
+  font-size: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  animation: floatIn 0.4s ease, fadeOut 5s 3s forwards;
+  max-width: 280px;
+  text-align: center;
+  white-space: normal;
+  z-index: 3000;
+  opacity: 0;
+} */
+
+@keyframes floatIn {
+  from {
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+}
+
+
+/* ✅ Animation */
+@keyframes floatInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0px);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
+}
+
 
 @keyframes floatIn {
   from {

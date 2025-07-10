@@ -5,6 +5,13 @@ import { BehaviorSubject } from 'rxjs';
 
 // to can show every add to sprint or issue without refresh the page
 export class ProjectStateService {
+  private issueAddedSource = new BehaviorSubject<any>(null);
+  issueAdded$ = this.issueAddedSource.asObservable();
+
+  notifyIssueCreated(issue: any) {
+    this.issueAddedSource.next(issue);
+  }
+  
   private sprintAddedSource = new BehaviorSubject<any>(null);
   sprintAdded$ = this.sprintAddedSource.asObservable();
 

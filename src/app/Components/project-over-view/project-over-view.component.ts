@@ -92,20 +92,6 @@ export class ProjectOverViewComponent {
   private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
-    // 📌 Get ID from the route
-    this.ProjectId = this.route.snapshot.paramMap.get('id');
-    const projectId = this.route.snapshot.params['id']; // for visit count
-
-    if (projectId) {
-      this.projectIdNum = +projectId;
-      this._ProjectVisitService.incrementVisit(+projectId);
-      this.GetProjectData();
-      this.getAllSprints();
-      this.fetchBacklogIssues();
-      this.getPinnedProjects();
-    }
-
-    // ✅ Listen to param changes (e.g., if route changes from one project to another)
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
@@ -118,31 +104,24 @@ export class ProjectOverViewComponent {
       }
     });
 
-    // 📦 Sidebar toggle
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
       this.isSidebarCollapsed = collapsed;
     });
 
-    // 🔁 Refresh project and sprint data when updated
     this._sprintService.sprintCreated$.subscribe(() => {
-      this.getAllSprints();
-    });
-
-    this._sprintService.sprintUpdated$.subscribe(() => {
       this.getAllSprints();
     });
 
     this._projectService.projectUpdated$.subscribe(() => {
       this.GetProjectData();
       this.getAllSprints();
-      this.getProjectId();
     });
 
     this._IssueService.issueUpdated$.subscribe(() => {
       this.fetchBacklogIssues();
     });
 
-    this._IssueService.assignedUsersUpdated$.subscribe((updatedIssueId) => {
+    this._IssueService.assignedUsersUpdated$.subscribe(() => {
       this.fetchBacklogIssues();
       this.getAllSprints();
     });
@@ -151,19 +130,13 @@ export class ProjectOverViewComponent {
       this.fetchBacklogIssues();
     });
 
-    // 🧠 AI: Sprint added with animation
     this.state.sprintAdded$.subscribe((sprint) => {
       if (sprint) {
-        const formattedSprint = {
+        this.sprintDetails.push({
           ...sprint,
           startDate: this.dateFormatter(sprint.startDate),
           endDate: this.dateFormatter(sprint.endDate),
-        };
-
-        this.sprintDetails.push(formattedSprint);
-
-        // Optional: remove this reload if animation works smoothly
-        // window.location.reload(); // ❌ you probably don't want this in the merged version
+        });
 
         setTimeout(() => {
           const lastSprint = this.sprintCards.last;
@@ -173,7 +146,6 @@ export class ProjectOverViewComponent {
               behavior: 'smooth',
               block: 'center',
             });
-
             setTimeout(() => {
               lastSprint.nativeElement.classList.remove('highlight-sprint');
             }, 1500);
@@ -182,11 +154,12 @@ export class ProjectOverViewComponent {
       }
     });
 
-    // 🔁 Call this if it's used somewhere for issue actions
-    this.RefreshBacklogAfterAddingIssue();
-
-    // 🆔 Needed for some issue operations
-    this.getProjectId();
+    // ✅ 🆕 تحديث الباكلوج تلقائيًا عند إنشاء issue من الـ AI
+    this.state.issueAdded$.subscribe((issue) => {
+      if (issue) {
+        this.fetchBacklogIssues();
+      }
+    });
   }
 
   private readonly _ProjectVisitService = inject(ProjectVisitService);
@@ -367,9 +340,9 @@ export class ProjectOverViewComponent {
     this._projectService.getProject(this.ProjectId).subscribe({
       next: (res) => {
         this.ProjectDetails = res.result;
-        console.log('Project Details',this.ProjectDetails);
+        console.log('Project Details', this.ProjectDetails);
         this.loadProjectUsers();
-        this.loading=false
+        this.loading = false;
 
         this._ProfileService.getProfileData().subscribe({
           next: (user) => {
@@ -433,6 +406,10 @@ export class ProjectOverViewComponent {
   // }
 
   fetchBacklogIssues(): void {
+    if (!this.projectIdNum) {
+      console.warn('⚠️ projectIdNum is undefined!');
+      return;
+    }
     this._IssueService.getBacklogIssues(this.projectIdNum, 0, 1).subscribe({
       next: (res) => {
         if (res.isSuccess) {
@@ -515,38 +492,43 @@ export class ProjectOverViewComponent {
   //   });
   // }
   getAllSprints() {
-    this._sprintService.getAllSprints(+this.ProjectId).subscribe({
+    if (!this.projectIdNum) {
+      console.warn('⚠️ projectIdNum is undefined!');
+      return;
+    }
+
+    console.log('📦 Sprint API projectIdNum:', this.projectIdNum);
+
+    this._sprintService.getAllSprints(this.projectIdNum).subscribe({
       next: (res) => {
-        this._sprintService.getAllSprints(res.result.id).subscribe({
-          next: (res) => {
-            // console.log('Sprints in project view',res);
-            this.sprintDetails = res.result.map((sprint: any) => {
-              let completed = 0;
-              let total = 0;
-            
-              if (Array.isArray(sprint.issues)) {
-                sprint.issues.forEach((issue: any) => {
-                  total++;
-                  if (issue.status?.trim().toLowerCase() === 'completed') {
-                    completed++;
-                  }
-                });
+        this.sprintDetails = res.result.map((sprint: any) => {
+          let completed = 0;
+          let total = 0;
+
+          if (Array.isArray(sprint.issues)) {
+            sprint.issues.forEach((issue: any) => {
+              total++;
+              if (issue.status?.trim().toLowerCase() === 'completed') {
+                completed++;
               }
-            
-              const completionPercentage = total > 0 ? (completed / total) * 100 : 0;
-            
-              return {
-                ...sprint,
-                startDate: this.dateFormatter(sprint.startDate),
-                endDate: this.dateFormatter(sprint.endDate),
-                totalIssues: total,
-                completedIssues: completed,
-                progress: completionPercentage, // Calculate the progress percentage
-              }as SprintWithProgress;
             });
-            
-          },
+          }
+
+          const completionPercentage =
+            total > 0 ? (completed / total) * 100 : 0;
+
+          return {
+            ...sprint,
+            startDate: this.dateFormatter(sprint.startDate),
+            endDate: this.dateFormatter(sprint.endDate),
+            totalIssues: total,
+            completedIssues: completed,
+            progress: completionPercentage,
+          } as SprintWithProgress;
         });
+      },
+      error: (err) => {
+        console.error('❌ Error loading sprints:', err);
       },
     });
   }
@@ -673,7 +655,7 @@ export class ProjectOverViewComponent {
       next: (res) => {
         const joinedUsers = res.result?.tenant.joinedUsers || [];
         const userProjects = res.result?.userProjects || [];
-  
+
         // رجّع بس الناس المشاركين فعلياً في المشروع
         this.ProjectMembers = joinedUsers
           .filter((user: any) =>
@@ -683,7 +665,7 @@ export class ProjectOverViewComponent {
             const matchedProject = userProjects.find(
               (proj: any) => proj.userId === user.id
             );
-  
+
             return {
               id: user.id,
               firstName: user.firstName,
