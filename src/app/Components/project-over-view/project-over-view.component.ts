@@ -367,7 +367,7 @@ export class ProjectOverViewComponent {
     this._projectService.getProject(this.ProjectId).subscribe({
       next: (res) => {
         this.ProjectDetails = res.result;
-        // console.log('Project Details',this.ProjectDetails);
+        console.log('Project Details',this.ProjectDetails);
         this.loadProjectUsers();
         this.loading=false
 
@@ -673,26 +673,26 @@ export class ProjectOverViewComponent {
       next: (res) => {
         const joinedUsers = res.result?.tenant.joinedUsers || [];
         const userProjects = res.result?.userProjects || [];
-
-        this.ProjectMembers = joinedUsers.map((user: any) => {
-          const matchedProject = userProjects.find(
-            (proj: any) => proj.userId === user.id
-          );
-
-          return {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            imageUrl: user.imageUrl,
-            role: matchedProject?.role || 'Unknown',
-          };
-        });
-
-        // console.log('Project users with roles:', this.ProjectMembers);
-      },
-      error: (err) => {
-        console.error('Error loading project users', err);
+  
+        // رجّع بس الناس المشاركين فعلياً في المشروع
+        this.ProjectMembers = joinedUsers
+          .filter((user: any) =>
+            userProjects.some((proj: any) => proj.userId === user.id)
+          )
+          .map((user: any) => {
+            const matchedProject = userProjects.find(
+              (proj: any) => proj.userId === user.id
+            );
+  
+            return {
+              id: user.id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              imageUrl: user.imageUrl,
+              role: matchedProject?.role || 'Unknown',
+            };
+          });
       },
     });
   }
