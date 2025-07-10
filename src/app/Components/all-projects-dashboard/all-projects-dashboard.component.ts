@@ -608,7 +608,7 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
               label: function (context) {
                 return allZero
                   ? 'No Data'
-                  : `${context.label}: ${context.raw}`;
+                  : `${context.label +' ' +' Issues'}: ${context.raw }`;
               }
             }
           }

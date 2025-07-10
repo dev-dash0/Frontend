@@ -1359,6 +1359,59 @@ li {
   /* Changes the cursor to indicate interactivity */
 }
 
+
+/* =================== STATUS BADGES =================== */
+.status-badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 12px;
+  text-transform: capitalize;
+  width: fit-content;
+  height: fit-content;
+  text-wrap: nowrap;
+  display: inline-block;
+  letter-spacing: 0.5px;
+  color: #e4f4fb;
+
+  padding: 3px 10px;
+  font-size: 11px;
+  border-radius: 6px;
+
+}
+
+.status-badge.completed {
+  background-color: rgba(40, 235, 183, 0.202);
+}
+
+.status-badge.inProgress,
+.working {
+  background-color: rgba(246, 82, 255, 0.2);
+
+}
+
+.status-badge.backlog,
+.planning {
+  background-color: rgba(124, 144, 143, 0.2);
+
+}
+
+.status-badge.canceled {
+  background-color: rgba(255, 82, 82, 0.2);
+}
+
+.status-badge.reviewing {
+  background-color: rgba(145, 69, 75, 0.2);
+}
+
+.status-badge.toDo {
+  background-color: rgba(66, 165, 245, 0.2);
+}
+
+.status-badge.postponed {
+  background-color: rgba(0, 188, 212, 0.2);
+}
+
 /* ================================================ */
 /* Assigned member avatars */
 .member,

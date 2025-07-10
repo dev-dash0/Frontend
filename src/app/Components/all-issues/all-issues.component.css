@@ -1,0 +1,312 @@
+/* =================== MODERN GLASS THEME — ENHANCED =================== */
+
+/* =================== PAGE =================== */
+.modern-issues-page {
+    padding: 2rem;
+    color: #e3e8f8;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* =================== TITLE =================== */
+.modern-title {
+    font-size: 2.5rem;
+    animation: fadeInDown 0.6s ease-out;
+}
+
+/* =================== BUTTONS =================== */
+.btn-export,
+.btn-copy,
+.btn-clear-filters {
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-export {
+    /* background: linear-gradient(135deg, #4854f1, #7f8df1); */
+    background: linear-gradient(135deg, rgba(44, 54, 133, 0.95), rgba(95, 59, 159, 0.95));
+    color: #fff;
+}
+
+.btn-copy {
+    background: linear-gradient(135deg, #fbc2eb, #a18cd1);
+    color: #1a1a1a;
+}
+
+/* Reset button style (keep it glassy & fit in) */
+.btn-clear-filters {
+    background-color: transparent;
+    border: 1px solid #5e6b8f;
+    color: #9da9d9;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: fit-content;
+}
+
+
+.btn-export:hover,
+.btn-copy:hover,
+.btn-clear-filters:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* =================== INPUTS =================== */
+.search-input,
+.dropdown-select {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid #7f8cf142;
+    color: #dce4f8;
+    border-radius: 10px;
+    padding: 8px 14px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus,
+.dropdown-select:focus {
+    border-color: #7f8df1;
+    background-color: #0D1123;
+    box-shadow: 0 0 6px rgba(127, 141, 241, 0.25);
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: #7b8bae;
+}
+
+/* ---------------- CUSTOM DROPDOWN ---------------- */
+.custom-select-container {
+    position: relative;
+    width: 100%;
+    font-size: 0.85rem;
+}
+
+.custom-select-trigger {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid #7f8cf142;
+    color: #dce4f8;
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+
+
+}
+
+.custom-select-trigger:hover {
+    background-color: #0d1123;
+    border-color: #a18cd1;
+}
+
+.custom-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    margin-top: 4px;
+    background: linear-gradient(135deg, rgba(33, 38, 79, 0.95), rgba(79, 49, 131, 0.95));
+    border: 1px solid #7f8cf142;
+    border-radius: 12px;
+    z-index: 1000;
+    padding: 0;
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+    animation: fadeInDropdown 0.25s ease-out;
+}
+
+.custom-options li {
+    padding: 10px 14px;
+    color: #e3e8f8;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.custom-options li:hover {
+    background: rgba(255, 255, 255, 0.07);
+    color: #cdb0f6;
+}
+
+.custom-options::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-options::-webkit-scrollbar-thumb {
+    background-color: rgba(200, 200, 255, 0.2);
+    border-radius: 4px;
+}
+
+/* Ensure all inputs/dropdowns/buttons same height */
+.search-input,
+.custom-select-trigger,
+.btn-clear-filters {
+    min-height: 44px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.85rem;
+}
+
+
+/* =========================================== */
+
+
+/* Dropdown icon */
+.custom-select-trigger i {
+    font-size: 0.75rem;
+    margin-left: 6px;
+    color: #a18cd1;
+}
+
+/* Animations */
+@keyframes fadeInDropdown {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+/* =================== FILTER TABS =================== */
+.filter-tabs .filter-btn {
+    background: rgba(219, 113, 255, 0.08);
+    color: #ccd7f2;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 12px;
+    transition: 0.3s ease;
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
+.filter-tabs .filter-btn:hover,
+.filter-tabs .filter-btn.active {
+    /* background: linear-gradient(135deg, #7f8df1, #0EEADE); */
+    background: linear-gradient(135deg, #21264F, #6d3fb8);
+    color: #fff;
+}
+
+.badge-count {
+    background: #E39FF4;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 8px;
+    margin-left: 6px;
+}
+
+/* =================== ISSUE CARD =================== */
+.glass-card {
+    background: linear-gradient(135deg, rgba(33, 38, 79, 0.45), rgba(155, 97, 149, 0.25));
+    border-radius: 20px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 6px 20px rgba(2, 32, 83, 0.35);
+    transition: all 0.3s ease-in-out;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* Accent glow on hover */
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    background: linear-gradient(120deg, #7f8df1, #db71ff, #0EEADE);
+    z-index: 0;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    filter: blur(8px);
+}
+
+.glass-card:hover::before {
+    opacity: 0.15;
+}
+
+.glass-card>* {
+    position: relative;
+    z-index: 1;
+}
+
+.issue-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.issue-title:hover {
+    color: #cdb0f6;
+}
+
+.overdue-glow {
+    border-left: 6px solid #ff4f5a;
+    border-radius: 12px;
+}
+
+.search-input,
+.dropdown-select {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* /////////////////////////////////////////////// */
+/* =================== STATUS BADGES =================== */
+.status-badge {
+    height: fit-content;
+}
+
+/* =================== ANIMATIONS =================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

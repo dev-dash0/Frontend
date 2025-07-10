@@ -77,7 +77,7 @@ export class SideMenuComponent {
     },
     {
       imagePath: 'assets/images/sidebar icons/Checklist.svg',
-      path: '',
+      path: '/MyDashboard/allIssues',
       title: 'Issues',
     },
   ];

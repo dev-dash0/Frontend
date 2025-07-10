@@ -22,6 +22,7 @@ import { ProjectOverViewComponent } from './Components/project-over-view/project
 import { AllIssuesDashboardComponent } from './Components/all-issues-dashboard/all-issues-dashboard.component';
 import { WelcomeComponent } from './Components/welcome/welcome.component';
 import { Welcome2Component } from './Components/welcome2/welcome2.component';
+import { AllIssuesComponent } from './Components/all-issues/all-issues.component';
 
 export const routes: Routes = [
   { path: 'welcome', component: Welcome2Component, title: 'Welcome' },
@@ -122,7 +123,13 @@ export const routes: Routes = [
                 component: AllProjectsComponent,
                 title: 'All Projects',
               },
-              { path: 'Pinned', component: PinnedComponent, title: 'Pinned' },
+              { path: 'Pinned', component: PinnedComponent, title: 'Pinned' }
+              ,
+              {
+                path: 'allIssues',
+                component: AllIssuesComponent,
+                title: 'All Issues',
+              },
             ],
           },
         ],

@@ -1,0 +1,231 @@
+<div class="modern-issues-page container-fluid min-vh-100 py-5">
+    <!-- 🌟 Page Header -->
+    <div class="page-header mb-4">
+        <div class="row g-3 align-items-center justify-content-between">
+            <div class="col-md-auto">
+                <h2 class="modern-title">
+                    <img src="assets/images/sidebar icons/Checklist.svg" width="40" height="40" alt="check list">
+                    Your Issues
+                </h2>
+            </div>
+            <div class="col-md-auto d-flex flex-wrap gap-2">
+                <button class="btn-export" (click)="exportToCSV()">
+                    <i class="fas fa-file-csv me-1"></i> Export CSV
+                </button>
+                <button class="btn-copy" (click)="copyIssuesToClipboard()">
+                    <i class="fas fa-copy me-1"></i> Copy Issues
+                </button>
+            </div>
+        </div>
+
+        <!-- 🔍 Filters Panel -->
+        <!-- 🔍 Filters Panel -->
+        <div class="mt-4 w-100">
+            <div class="row g-3 align-items-stretch">
+                <!-- 🔍 Search -->
+                <div class="col-sm-6 col-md-6 col-lg-4">
+                    <input type="text" class="search-input w-100 h-100" placeholder="🔍 Search..."
+                        [(ngModel)]="searchTerm" />
+                </div>
+
+                <!-- 🔽 Project -->
+                <div class="col-sm-6 col-md-6 col-lg-2">
+                    <div class="custom-select-container w-100 h-100">
+                        <div class="custom-select-trigger h-100" (click)="toggleDropdown('project')">
+                            {{ selectedProject || 'All Projects' }}
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <ul class="custom-options" *ngIf="isProjectDropdownOpen">
+                            <li (click)="selectProject('')">All Projects</li>
+                            <li *ngFor="let project of uniqueProjects" (click)="selectProject(project)">
+                                {{ project }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 🔽 Priority -->
+                <div class="col-sm-6 col-md-6 col-lg-2">
+                    <div class="custom-select-container w-100 h-100">
+                        <div class="custom-select-trigger h-100" (click)="toggleDropdown('priority')">
+                            {{ selectedPriority || 'All Priorities' }}
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <ul class="custom-options" *ngIf="isPriorityDropdownOpen">
+                            <li (click)="selectPriority('')">All Priorities</li>
+                            <li *ngFor="let p of uniquePriorities" (click)="selectPriority(p)">
+                                {{ p }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 🔽 Sort -->
+                <div class="col-sm-6 col-md-6 col-lg-2">
+                    <div class="custom-select-container w-100 h-100">
+                        <div class="custom-select-trigger h-100" (click)="toggleDropdown('sort')">
+                            {{ getSortLabel(sortOption) }}
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <ul class="custom-options" *ngIf="isSortDropdownOpen">
+                            <li (click)="selectSort('recent')">Upcoming Deadlines</li>
+                            <li (click)="selectSort('closest')">Deadline Closest to Today</li>
+                            <li (click)="selectSort('overdue')">Overdue Only</li>
+                            <li (click)="selectSort('priority')">Sort by Priority</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 🔁 Reset Button -->
+                <div class="col-sm-6 col-md-6 col-lg-2 d-flex align-items-end justify-content-end">
+                    <button class="btn-clear-filters h-100" (click)="resetFilters()">
+                        <i class="fas fa-rotate-right me-1"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="mt-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div class="row g-3 align-items-stretch w-100">
+                <div class="col-md-6 col-lg-6">
+                    <input type="text" class="search-input w-100 h-100" placeholder="🔍 Search..."
+                        [(ngModel)]="searchTerm" />
+                </div>
+
+                <div class="col-md-6 col-lg-2">
+                    <div class="custom-select-container w-100 h-100">
+                        <div class="custom-select-trigger h-100" (click)="toggleDropdown('project')">
+                            {{ selectedProject || 'All Projects' }}
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <ul class="custom-options" *ngIf="isProjectDropdownOpen">
+                            <li (click)="selectProject('')">All Projects</li>
+                            <li *ngFor="let project of uniqueProjects" (click)="selectProject(project)">
+                                {{ project }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-2">
+                    <div class="custom-select-container w-100 h-100">
+                        <div class="custom-select-trigger h-100" (click)="toggleDropdown('priority')">
+                            {{ selectedPriority || 'All Priorities' }}
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <ul class="custom-options" *ngIf="isPriorityDropdownOpen">
+                            <li (click)="selectPriority('')">All Priorities</li>
+                            <li *ngFor="let p of uniquePriorities" (click)="selectPriority(p)">
+                                {{ p }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-2">
+                    <div class="custom-select-container w-100 h-100">
+                        <div class="custom-select-trigger h-100" (click)="toggleDropdown('sort')">
+                            {{ getSortLabel(sortOption) }}
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <ul class="custom-options" *ngIf="isSortDropdownOpen">
+                            <li (click)="selectSort('recent')">Sort by Latest Deadline</li>
+                            <li (click)="selectSort('closest')">Deadline Closest to Today</li>
+                            <li (click)="selectSort('overdue')">Overdue First</li>
+                            <li (click)="selectSort('priority')">Sort by Priority</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="">
+                <button class="btn-clear-filters w-100" (click)="resetFilters()">
+                    <i class="fas fa-rotate-right me-1"></i> Reset
+                </button>
+            </div>
+        </div> -->
+    </div>
+
+    <!-- 🎯 Status Filter Tabs -->
+    <div class="filter-tabs d-flex gap-2 flex-wrap mb-4">
+        <button class="filter-btn" *ngFor="let status of statusFilters" [class.active]="selectedStatus === status"
+            (click)="filterByStatus(status)">
+            <i class="fas fa-filter me-1"></i> {{ status }}
+            <span class="badge-count">{{ getCountForStatus(status) }}</span>
+        </button>
+    </div>
+
+    <!-- ⏳ Loading / Empty States -->
+    <div *ngIf="isLoading" class="text-center dev-text-muted my-5">
+        <i class="fas fa-spinner fa-spin fa-xl mb-3"></i>
+        <p>Loading your issues...</p>
+    </div>
+
+
+    <div *ngIf="!isLoading && filteredIssues().length === 0" class="text-center mt-5">
+        <!-- <img src="assets/images/empty-state.svg" alt="No Issues" class="empty-illustration mb-3" /> -->
+        <p class="dev-text-muted">No issues match your filters.</p>
+    </div>
+
+    <!-- ✅ Issues Grid -->
+    <div class="row g-4" *ngIf="!isLoading && filteredIssues().length > 0">
+        <div class="col-md-6 col-lg-4" *ngFor="let issue of filteredIssues()">
+            <div class="glass-card h-100 p-4 d-flex flex-column justify-content-between"
+                [ngClass]="{ 'overdue-glow': getDeadlineStatus(issue.deadline) === 'passed' }">
+                <div class="card-top">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="issue-title text-capitalize text-truncate" (click)="openIssueView(issue.id)">
+                            {{ issue.title }}
+                        </h5>
+                        <div class="text-end">
+                            <div class="status-badge" [ngClass]="issue.status.toLowerCase()"
+                                *ngIf="issue.status.toLowerCase() != 'in progress'&&issue.status.toLowerCase()!='to do'">
+                                {{ issue.status }}
+                            </div>
+                            <div class="status-badge inProgress" [ngClass]="issue.status.toLowerCase()"
+                                *ngIf="issue.status.toLowerCase() == 'in progress'">{{ issue.status
+                                }}</div>
+                            <div class="status-badge toDo" [ngClass]="issue.status.toLowerCase()"
+                                *ngIf="issue.status.toLowerCase() == 'to do'">{{ issue.status
+                                }}</div>
+
+
+                            <!-- <span *ngIf="getDeadlineStatus(issue.deadline) === 'passed'"
+                                class="badge bg-danger mt-1 ms-1">
+                                <i class="fas fa-exclamation-circle me-1"></i> Overdue
+                            </span> -->
+
+                        </div>
+                    </div>
+
+                    <p class="mt-3 mb-2 dev-text-muted">
+                        <i class="fa-solid fa-folder-open  me-1"></i> {{ issue.projectName }}
+                    </p>
+
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <img [src]="getPriorityIcon(issue.priority)" width="20" alt="priority icon" />
+                        <span class="priority-label text-capitalize" [ngClass]="getPriorityColor(issue.priority)">
+                            {{ issue.priority }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card-footer mt-auto d-flex justify-content-between align-items-center">
+                    <small class="dev-text-muted">
+                        Deadline: <span *ngIf="issue.deadline">
+                            {{ issue.deadline | date: 'mediumDate' }}
+                        </span>
+                        <span *ngIf="!issue.deadline"> Not set</span>
+                    </small>
+                    <small class="dev-text-muted" *ngIf="issue.deadline">
+                        <i [ngClass]="{
+                          'fa-solid fa-triangle-exclamation text-danger': getDeadlineStatus(issue.deadline) === 'passed',
+                          'fa-regular fa-clock text-warning': getDeadlineStatus(issue.deadline) === 'upcoming'
+                        }"></i>
+                        {{ getDeadlineStatus(issue.deadline) === 'passed' ? 'Overdue' : 'Soon' }}
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
