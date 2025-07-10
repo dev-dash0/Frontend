@@ -52,6 +52,8 @@ export class AllProjectsComponent {
   isSidebarCollapsed = true;
   loading = false;
 
+  showProjects: boolean = false;
+
   //---------------------------------
   ngOnInit(): void {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
@@ -70,32 +72,41 @@ export class AllProjectsComponent {
     this.getProjects();
     // this.getCompaniesIds();
   }
-
   getProjects(): void {
-    this.loading = true; // ✅ Start loading
+    this.loading = true;
 
     this._profileService.getProfileData().subscribe({
       next: (user) => {
         this.userId = user.id;
+
         this._ProjectService.getAllProjects().subscribe({
           next: (res) => {
             if (res && res.result && res.result.length > 0) {
-              this.joinedProjects = res.result;
-              this.ownedProjects = this.joinedProjects.filter(
-                (project) => project.creator.id === this.userId
+              const allProjects = res.result;
+
+              this.ownedProjects = allProjects.filter(
+                (project: any) => project.creator?.id === this.userId
               );
+
+              this.joinedProjects = allProjects.filter(
+                (project: any) => project.creator?.id !== this.userId
+              );
+
+              console.log('Owned Projects:', this.ownedProjects);
+              console.log('Joined Projects:', this.joinedProjects);
             }
-            this.loading = false; // ✅ Done loading
+
+            this.loading = false;
           },
           error: (err) => {
             console.error(err);
-            this.loading = false; // ✅ Also stop on error
+            this.loading = false;
           },
         });
       },
       error: (err) => {
         console.error(err);
-        this.loading = false; // ✅ Also stop on error
+        this.loading = false;
       },
     });
   }
@@ -119,7 +130,7 @@ export class AllProjectsComponent {
   //         next: (res) => {
   //           console.log(res);
   //           if (res && res.result && res.result.length > 0) {
-  //             this.joinedCompanies = res.result;
+  //             this.joinedProjects = res.result;
   //             this.ownedCompanies = this.joinedCompanies.filter(
   //               (company) => company.owner.id === this.userId
   //             );
