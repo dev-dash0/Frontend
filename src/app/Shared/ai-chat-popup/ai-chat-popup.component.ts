@@ -28,6 +28,9 @@ export class AiChatPopupComponent {
   userId: undefined;
 
   @Output() loadingState = new EventEmitter<boolean>();
+  @Output() chatIdReceived = new EventEmitter<string>();
+
+  chatId: string | null = localStorage.getItem('booty_chat_id') || null;
 
   constructor(
     private aiService: AiAgentService // private state: ProjectStateServicee
@@ -39,11 +42,41 @@ export class AiChatPopupComponent {
   ngOnInit(): void {
     this.messages.push('🤖 Ask me what do u want ?');
     this.getOwnedCompanies();
+    if (!this.chatId) {
+      this.sendInitialEmptyMessage();
+    }
   }
 
   selectedTenantId: string = '';
   selectedTenantName: string = '';
   ownedCompanies: any[] = [];
+
+  // ------- manage  chat id ------------
+  sendInitialEmptyMessage() {
+    const payload = {
+      text: '',
+      tenant_id: this.selectedTenantId,
+      chat_id: '',
+    };
+
+    this.aiService.interactWithAgent(payload).subscribe({
+      next: (event) => {
+        if (event.type === 'start' && event.chat_id) {
+          this.chatId = event.chat_id;
+          this.chatIdReceived.emit(event.chat_id);
+          localStorage.setItem('booty_chat_id', event.chat_id);
+        }
+      },
+    });
+  }
+
+  closePopup() {
+    this.chatId = null;
+    localStorage.removeItem('booty_chat_id');
+    this.close.emit();
+  }
+
+  //  -------------------------
 
   getOwnedCompanies() {
     this._profileService.getProfileData().subscribe({
@@ -68,6 +101,28 @@ export class AiChatPopupComponent {
   selectCompany(id: string, name: string) {
     this.selectedTenantId = id;
     this.selectedTenantName = name;
+    if (!this.chatId) {
+      const payload = {
+        text: '',
+        tenant_id: this.selectedTenantId,
+        chat_id: '',
+      };
+
+      console.log('🚀 First-time empty message to get chat_id');
+
+      this.aiService.interactWithAgent(payload).subscribe({
+        next: (event) => {
+          if (event.type === 'start' && event.chat_id) {
+            this.chatId = event.chat_id;
+            localStorage.setItem('booty_chat_id', this.chatId!);
+            console.log(
+              '✅ Got and saved chat_id from first message:',
+              this.chatId
+            );
+          }
+        },
+      });
+    }
   }
 
   resetCompany() {
@@ -75,10 +130,6 @@ export class AiChatPopupComponent {
     this.selectedTenantName = '';
     this.userInput = '';
     this.messages = []; // أو تسيبيها لو عايزة تحفظ التاريخ
-  }
-
-  closePopup() {
-    this.close.emit();
   }
 
   trackByIndex(index: number, item: any): number {
@@ -91,7 +142,7 @@ export class AiChatPopupComponent {
     const payload = {
       text: this.userInput,
       tenant_id: this.selectedTenantId,
-      chat_id: '',
+      chat_id: this.chatId || '', // 👈 لو فيه شات ID سابق استخدمه
     };
 
     this.messages.push(`🧑‍💻 You: ${this.userInput}`);
@@ -103,6 +154,13 @@ export class AiChatPopupComponent {
         switch (event.type) {
           case 'start':
             this.isLoading = true;
+
+            // ✅ أول مرة فقط نحفظ الـ chat_id
+            if (event.chat_id && !this.chatId) {
+              this.chatId = event.chat_id;
+              localStorage.setItem('booty_chat_id', this.chatId!);
+              console.log('🔥 Stored new chat_id:', this.chatId);
+            }
             break;
 
           case 'token':
@@ -110,7 +168,7 @@ export class AiChatPopupComponent {
             break;
 
           case 'tool_output':
-            // ✅ 1. create_project (لما يرجع ID البروجكت)
+            // ✅ create_project
             if (event.tool_name === 'create_project') {
               const createdId = event.output?.id || event.output?.project?.id;
               const projectName = event.output?.project?.name || 'New Project';
@@ -124,7 +182,7 @@ export class AiChatPopupComponent {
               }
             }
 
-            // ✅ 2. get_project_details
+            // ✅ get_project_details
             if (event.tool_name === 'get_project_details') {
               const id = event.output?.id;
               const name = event.output?.name;
@@ -138,19 +196,18 @@ export class AiChatPopupComponent {
               }
             }
 
-            // ✅ 3. create_sprint
+            // ✅ create_sprint
             if (event.tool_name === 'create_sprint') {
               const sprint = event.output;
               if (sprint) {
                 this.state.notifySprintCreated(sprint);
               }
             }
-
             break;
 
           case 'end':
             this.isLoading = false;
-            this.agentAction.emit({ type: 'agent_done' }); // 👈
+            this.agentAction.emit({ type: 'agent_done' });
             break;
 
           case 'error':

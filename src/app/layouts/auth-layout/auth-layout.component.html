@@ -1,6 +1,15 @@
 <section class=" bg py-2 d-flex flex-column justify-content-center align-items-center min-vh-100 position-relative overflow-hidden">
     <app-signin-signup-navbar class="z-3"></app-signin-signup-navbar>
-    <router-outlet class="position-absolute z-3"></router-outlet>
+    
+    <ng-container *ngIf="!authService.isCheckingToken; else loading">
+        <router-outlet class="position-absolute z-3"></router-outlet>
+      </ng-container>
+      
+      <ng-template #loading>
+        <div class="text-white">Checking session...</div>
+      </ng-template>
+      
+      
     <div class="container-3d position-absolute">
 
         <img src="assets/images/Group.svg" class="Group1" width="304" alt="" draggable="false" />

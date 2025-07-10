@@ -45,9 +45,10 @@ export class SigninComponent {
       this._AuthService.Login(this.loginForm.value).subscribe({
         next: (res) => {
           console.log(res);
-          this._Router.navigate(['/MyDashboard']);
           localStorage.setItem('token', res.accessToken);
           localStorage.setItem('refreshToken', res.refreshToken);
+          this._AuthService.saveUserData(); // decode and set auto-logout
+          this._Router.navigate(['/MyDashboard']);
         },
         error: (err) => {
           this.errorMessage = err.error.message;

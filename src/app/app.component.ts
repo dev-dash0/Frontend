@@ -17,6 +17,7 @@ import { SignupComponent } from './Components/signup/signup.component';
 import { UpdateInfoComponent } from './Components/update-info/update-info.component';
 import { WelcomePageComponent } from './Components/welcome-page/welcome-page.component';
 import { ProjectOverViewComponent } from './Components/project-over-view/project-over-view.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +29,7 @@ import { ProjectOverViewComponent } from './Components/project-over-view/project
     MatDividerModule,
     MatIconModule,
     ProjectOverViewComponent,
+    CommonModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

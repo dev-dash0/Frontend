@@ -47,6 +47,19 @@ export class PinnedService {
       }
     );
   };
+  
+  getPinnedSprints = (): Observable<any> => {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    });
+    return this._HttpClient.get(
+      baseUrl + '/api/PinnedItem/owned-pinned-items?itemType=Sprint',
+      {
+        headers,
+      }
+    );
+  };
 
   PinItem = (itemType: string, itemId: number): Observable<any> => {
     const headers = new HttpHeaders({

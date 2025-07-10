@@ -38,6 +38,8 @@ import { AiChatPopupComponent } from '../../Shared/ai-chat-popup/ai-chat-popup.c
 export class MyDashboardComponent {
   showChatPopup = false;
   iframeInteractive = false;
+  agentThinking = false;
+  chatId: string | null = null;
 
   private readonly router = inject(Router);
 
@@ -58,8 +60,6 @@ export class MyDashboardComponent {
     //   event.clientY * 0.02
     // }px) scale(1)`;
   }
-
-  agentThinking = false;
 
   onAgentLoading(isThinking: boolean) {
     this.agentThinking = isThinking;
@@ -96,49 +96,121 @@ export class MyDashboardComponent {
   // showChatPopup = false;
 
   onIframeClick() {
+    this.chatId = null; // 🟡 Reset chat ID on fresh open
     this.showChatPopup = true;
     console.log('Chat Opened');
+    this.resetBooty(); // أولًا شيل أي تأثير سابق
+    this.showChatPopup = true;
   }
 
+  // navigateToProject(projectId: number, projectName: string) {
+  //   // Shrink Booty
+  //   this.shrinkBooty();
+
+  //   // Show popup
+  //   const popup = document.createElement('div');
+  //   popup.innerText = `📦 Project "${projectName}" created!`;
+  //   popup.classList.add('booty-popup');
+  //   document.body.appendChild(popup);
+  //   setTimeout(() => popup.remove(), 3000);
+
+  //   // Navigate
+  //   this.router.navigate(['/projects', projectId]);
+
+  //   // Close chat popup
+  //   this.showChatPopup = false;
+  //   // 👇 1. غير مكان وحجم booty
+  //   const booty = document.querySelector('.booty') as HTMLElement;
+  //   if (booty) {
+  //     booty.style.transition = 'all 0.5s ease-in-out';
+  //     booty.style.top = '30px';
+  //     booty.style.right = '30px';
+  //     booty.style.transform = 'scale(0.15)';
+  //     booty.style.zIndex = '1000';
+  //   }
+
+  //   // 👇 2. طلع pop-up فوقه
+  //   // const popup = document.createElement('div');
+  //   // popup.innerText = `📦 Project "${projectName}" created!`;
+  //   // popup.classList.add('booty-popup');
+
+  //   document.body.appendChild(popup);
+  //   setTimeout(() => popup.remove(), 3000); // auto remove
+
+  //   // 👇 3. Navigate
+  //   this.router.navigate(['MyDashboard/Project', projectId]); // route: /projects/:id
+  // }
+
+  // navigateToProject(projectId: number, projectName: string) {
+  //   this.shrinkBooty();
+
+  //   const popup = document.createElement('div');
+  //   popup.innerText = `📦 Project "${projectName}" created!`;
+  //   popup.classList.add('booty-popup');
+  //   document.body.appendChild(popup);
+  //   setTimeout(() => popup.remove(), 3000);
+
+  //   // ✅ تنقل للصفحة
+  //   this.router.navigate(['MyDashboard/Project', projectId]);
+
+  //   // ✅ اقفل الشات
+  //   // this.showChatPopup = false;
+
+  //   // ✅ رجّع بوتي بعد 1.5 ثانية
+  //   setTimeout(() => {
+  //     this.resetBooty();
+  //   }, 1500);
+  // }
+
   navigateToProject(projectId: number, projectName: string) {
-    // Shrink Booty
+    // ✅ 1. صغّر Booty
     this.shrinkBooty();
 
-    // Show popup
+    // ✅ 2. أظهر popup
     const popup = document.createElement('div');
     popup.innerText = `📦 Project "${projectName}" created!`;
     popup.classList.add('booty-popup');
     document.body.appendChild(popup);
-    setTimeout(() => popup.remove(), 3000);
+    setTimeout(() => popup.remove(), 3000); // Remove بعد 3 ثواني
 
-    // Navigate
-    this.router.navigate(['/projects', projectId]);
+    // ✅ 3. Navigate
+    this.router.navigate(['MyDashboard/Project', projectId]);
 
-    // Close chat popup
-    this.showChatPopup = false;
-    // 👇 1. غير مكان وحجم booty
-    const booty = document.querySelector('.booty') as HTMLElement;
-    if (booty) {
-      booty.style.transition = 'all 0.5s ease-in-out';
-      booty.style.top = '30px';
-      booty.style.right = '30px';
-      booty.style.transform = 'scale(0.15)';
-      booty.style.zIndex = '1000';
-    }
+    // ❌ ما تقفلش الشات فورًا علشان الAgent لسه بيرد
+    // ❌ this.showChatPopup = false;
 
-    // 👇 2. طلع pop-up فوقه
-    // const popup = document.createElement('div');
-    // popup.innerText = `📦 Project "${projectName}" created!`;
-    // popup.classList.add('booty-popup');
-
-    document.body.appendChild(popup);
-    setTimeout(() => popup.remove(), 3000); // auto remove
-
-    // 👇 3. Navigate
-    this.router.navigate(['MyDashboard/Project', projectId]); // route: /projects/:id
+    // ✅ 4. بعد 1.5 ثانية رجّع بوتي لمكانه الطبيعي
+    setTimeout(() => {
+      this.resetBooty();
+    }, 1500);
   }
 
+  // handleAgentAction(
+  //   event:
+  //     | { type: 'project_created'; projectId: number; projectName: string }
+  //     | { type: 'agent_done' }
+  // ) {
+  //   if (event.type === 'project_created') {
+  //     this.navigateToProject(event.projectId, event.projectName);
+  //   }
 
+  //   // if (event.type === 'agent_done') {
+  //   //   this.resetBooty(); // restore position & scale
+  //   // }
+  //   if (event.type === 'agent_done') {
+  //     // ✅ رجع Booty بعد 1 ثانية
+  //     setTimeout(() => {
+  //       this.resetBooty();
+  //     }, 1000);
+
+  //     // ✅ اقفل الشات بعد ما Booty يرجع
+  //     setTimeout(() => {
+  //       this.showChatPopup = false;
+  //       this.chatId = null;
+  //       localStorage.removeItem('booty_chat_id');
+  //     }, 1600);
+  //   }
+  // }
 
   handleAgentAction(
     event:
@@ -150,31 +222,97 @@ export class MyDashboardComponent {
     }
 
     if (event.type === 'agent_done') {
-      this.resetBooty(); // restore position & scale
+      // ✅ رجّع Booty لحجمه الطبيعي
+      setTimeout(() => {
+        this.resetBooty();
+      }, 600);
+
+      // ✅ اقفل الشات بعد ثانية
+      setTimeout(() => {
+        this.showChatPopup = false;
+        this.chatId = null;
+        localStorage.removeItem('booty_chat_id');
+      }, 1600);
     }
   }
+
+  // shrinkBooty() {
+  //   const booty = document.querySelector('.booty') as HTMLElement;
+  //   if (booty) {
+  //     booty.style.transition = 'all 0.5s ease';
+  //     booty.style.top = '30px';
+  //     booty.style.right = '30px';
+  //     booty.style.transform = 'scale(0.15)';
+  //     booty.style.zIndex = '1000';
+  //   }
+  // }
 
   shrinkBooty() {
     const booty = document.querySelector('.booty') as HTMLElement;
     if (booty) {
-      booty.style.transition = 'all 0.5s ease';
-      booty.style.top = '30px';
-      booty.style.right = '30px';
-      booty.style.transform = 'scale(0.15)';
-      booty.style.zIndex = '1000';
+      booty.classList.remove('booty-expanded');
+      booty.classList.remove('interactive');
+      booty.classList.add('booty--shrunk'); // ✅ كلاس جديد بدل styles
     }
   }
+
+  // resetBooty() {
+  //   const booty = document.querySelector('.booty') as HTMLElement;
+  //   if (booty) {
+  //     booty.style.transition = 'all 0.5s ease';
+  //     booty.style.top = '250px';
+  //     booty.style.right = '-300px';
+  //     booty.style.transform = 'scale(0.25)';
+  //     booty.style.zIndex = '0';
+  //   }
+  // }
+
+  // resetBooty() {
+  //   const booty = document.querySelector('.booty') as HTMLElement;
+  //   if (booty) {
+  //     booty.style.transition = 'all 0.5s ease';
+  //     booty.style.top = '250px';
+  //     booty.style.right = '-300px';
+  //     booty.style.transform = 'scale(0.25)';
+  //     booty.style.zIndex = '0';
+
+  //     // ✅ امسح الكلاس لو لسه موجود علشان متضربش تاني مع الـ CSS
+  //     booty.classList.remove('booty-expanded');
+  //     booty.classList.remove('interactive');
+  //   }
+  // }
 
   resetBooty() {
     const booty = document.querySelector('.booty') as HTMLElement;
     if (booty) {
-      booty.style.transition = 'all 0.5s ease';
-      booty.style.top = '250px';
-      booty.style.right = '-300px';
-      booty.style.transform = 'scale(0.25)';
-      booty.style.zIndex = '0';
+      booty.classList.remove('booty--shrunk');
+      booty.classList.remove('booty-expanded');
+      booty.classList.remove('interactive');
     }
   }
+
+  // ------- manage chat id -------
+
+  onChatClosed() {
+    this.showChatPopup = false;
+    this.chatId = null; // 🔴 Clear chat ID when closed
+    localStorage.removeItem('booty_chat_id');
+  }
+
+  onChatIdReceived(chatId: string) {
+    this.chatId = chatId;
+    if (typeof window !== 'undefined' && localStorage) {
+      // localStorage.setItem('booty_chat_id', this.chatId);
+      localStorage.setItem('booty_chat_id', chatId);
+      console.log('🔥 Stored new chat_id:', chatId);
+    }
+  }
+
+  getSavedChatId() {
+    return localStorage.getItem('booty_chat_id');
+  }
+
+  // ----- manage navigation for the project
 
   // onIframeClick() {
   //   this.showChatPopup = true;

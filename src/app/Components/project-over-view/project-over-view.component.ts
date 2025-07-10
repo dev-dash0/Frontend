@@ -124,79 +124,167 @@ export class ProjectOverViewComponent {
   //       }})
   // }
 
+  // ngOnInit(): void {
+  //   // Get The Id from the Path
+  //   this.ProjectId = this.route.snapshot.paramMap.get('id');
+
+  //   this.sidebarService.isCollapsed$.subscribe((collapsed) => {
+  //     this.isSidebarCollapsed = collapsed;
+  //   });
+
+  //   this.GetProjectData();
+
+  //   this.getPinnedProjects();
+
+  //   // Listen for new issue events and refresh backlog
+  //   this.RefreshBacklogAfterAddingIssue();
+  //   // Get Project id from url
+  //   this.getProjectId(); //for issue
+
+  //   this._sprintService.sprintCreated$.subscribe(() => {
+  //     this.getAllSprints();
+  //   });
+
+  //   this._sprintService.sprintUpdated$.subscribe(() => {
+  //     this.getAllSprints();
+  //   });
+
+  //   this._projectService.projectUpdated$.subscribe(() => {
+  //     this.GetProjectData();
+  //     this.getAllSprints();
+  //     this.getProjectId();
+  //   });
+
+  //   this.route.paramMap.subscribe(() => {
+  //     this.GetProjectData();
+  //     this.getAllSprints();
+  //     this.getProjectId();
+  //   });
+
+  //   this._IssueService.issueUpdated$.subscribe(() => {
+  //     this.fetchBacklogIssues(); //for refreshing after issue updated
+  //   });
+
+  //   this._IssueService.assignedUsersUpdated$.subscribe((updatedIssueId) => {
+  //     // لو الـ issue المتحدث تابع للمشروع الحالي، اعملي refresh
+  //     if (this.projectIdNum) {
+  //       this.fetchBacklogIssues(); // ✅ تحديث تلقائي للـ backlog
+  //       this.getAllSprints(); // ✅ كمان لو عايزة تحدث السبرنتس
+  //     }
+  //   });
+
+  //   // ✅ جلب بيانات المشروع والسبرينتس وقت تحميل الصفحة
+  //   this._projectService.getProject(this.ProjectId).subscribe({
+  //     next: (res) => {
+  //       const projectId = res.result.id;
+  //       this._sprintService.getAllSprints(projectId).subscribe({
+  //         next: (res) => {
+  //           this.sprintDetails = res.result.map((sprint: Sprint) => ({
+  //             ...sprint,
+  //             startDate: this.dateFormatter(sprint.startDate),
+  //             endDate: this.dateFormatter(sprint.endDate),
+  //           }));
+  //         },
+  //       });
+  //     },
+  //   });
+
+  //   // add the sprint with ai without refresh
+  //   this.state.sprintAdded$.subscribe((sprint) => {
+  //     // if (sprint) {
+  //     //   const formattedSprint = {
+  //     //     ...sprint,
+  //     //     startDate: this.dateFormatter(sprint.startDate),
+  //     //     endDate: this.dateFormatter(sprint.endDate),
+  //     //   };
+
+  //     if (sprint) {
+  //       this.sprintDetails.push({
+  //         ...sprint,
+  //         startDate: this.dateFormatter(sprint.startDate),
+  //         endDate: this.dateFormatter(sprint.endDate),
+  //       });
+
+  //       setTimeout(() => {
+  //         const lastSprint = this.sprintCards.last;
+  //         if (lastSprint) {
+  //           lastSprint.nativeElement.classList.add('highlight-sprint');
+  //           lastSprint.nativeElement.scrollIntoView({
+  //             behavior: 'smooth',
+  //             block: 'center',
+  //           });
+
+  //           // remove the animation class after it's done
+  //           setTimeout(() => {
+  //             lastSprint.nativeElement.classList.remove('highlight-sprint');
+  //           }, 1500);
+  //         }
+  //       }, 100);
+
+  //       // this.sprintDetails.push(formattedSprint);
+
+  //     }
+  //   });
+
+  //   this.route.paramMap.subscribe((params) => {
+  //     const projectId = Number(params.get('id'));
+  //     if (projectId) {
+  //       this.GetProjectData(); // ✅ جلب المشروع
+  //       this.RefreshBacklogAfterAddingIssue(); // ✅ جلب الـ issues
+  //       this.getAllSprints()
+  //     }
+  //   });
+  // }
+
   ngOnInit(): void {
-    // Get The Id from the Path
-    this.ProjectId = this.route.snapshot.paramMap.get('id');
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      if (id) {
+        this.ProjectId = id;
+        this.projectIdNum = +id;
+
+        this.GetProjectData(); // تحميل بيانات المشروع
+        this.getAllSprints(); // تحميل السبرنتس
+        this.fetchBacklogIssues(); // تحميل الـ backlog
+        this.getPinnedProjects(); // تحقق من pin
+      }
+    });
 
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
       this.isSidebarCollapsed = collapsed;
     });
 
-    this.GetProjectData();
-
-    this.getPinnedProjects();
-
-    // Listen for new issue events and refresh backlog
-    this.RefreshBacklogAfterAddingIssue();
-    // Get Project id from url
-    this.getProjectId(); //for issue
-
     this._sprintService.sprintCreated$.subscribe(() => {
-      this.getAllSprints();
-    });
-
-    this._sprintService.sprintUpdated$.subscribe(() => {
       this.getAllSprints();
     });
 
     this._projectService.projectUpdated$.subscribe(() => {
       this.GetProjectData();
       this.getAllSprints();
-      this.getProjectId();
-    });
-
-    this.route.paramMap.subscribe(() => {
-      this.GetProjectData();
-      this.getAllSprints();
-      this.getProjectId();
     });
 
     this._IssueService.issueUpdated$.subscribe(() => {
-      this.fetchBacklogIssues(); //for refreshing after issue updated
+      this.fetchBacklogIssues();
     });
 
-    this._IssueService.assignedUsersUpdated$.subscribe((updatedIssueId) => {
-      // لو الـ issue المتحدث تابع للمشروع الحالي، اعملي refresh
-      if (this.projectIdNum) {
-        this.fetchBacklogIssues(); // ✅ تحديث تلقائي للـ backlog
-        this.getAllSprints(); // ✅ كمان لو عايزة تحدث السبرنتس
-      }
+    this._IssueService.assignedUsersUpdated$.subscribe(() => {
+      this.fetchBacklogIssues();
+      this.getAllSprints();
     });
 
-    // ✅ جلب بيانات المشروع والسبرينتس وقت تحميل الصفحة
-    this._projectService.getProject(this.ProjectId).subscribe({
-      next: (res) => {
-        const projectId = res.result.id;
-        this._sprintService.getAllSprints(projectId).subscribe({
-          next: (res) => {
-            this.sprintDetails = res.result.map((sprint: Sprint) => ({
-              ...sprint,
-              startDate: this.dateFormatter(sprint.startDate),
-              endDate: this.dateFormatter(sprint.endDate),
-            }));
-          },
-        });
-      },
+    this._IssueService.issueMoved$.subscribe(() => {
+      this.fetchBacklogIssues();
     });
 
-    // add the sprint with ai without refresh
     this.state.sprintAdded$.subscribe((sprint) => {
       if (sprint) {
-        const formattedSprint = {
+        this.sprintDetails.push({
           ...sprint,
           startDate: this.dateFormatter(sprint.startDate),
           endDate: this.dateFormatter(sprint.endDate),
-        };
+        });
+
+        window.location.reload();
 
         setTimeout(() => {
           const lastSprint = this.sprintCards.last;
@@ -206,17 +294,11 @@ export class ProjectOverViewComponent {
               behavior: 'smooth',
               block: 'center',
             });
-
-            // remove the animation class after it's done
             setTimeout(() => {
               lastSprint.nativeElement.classList.remove('highlight-sprint');
             }, 1500);
           }
         }, 100);
-        
-
-        this.sprintDetails.push(formattedSprint);
-
       }
     });
   }
@@ -266,7 +348,9 @@ export class ProjectOverViewComponent {
   }
 
   openSprint() {
-    const projectId = this.route.snapshot.paramMap.get('id');
+    // const projectId = this.route.snapshot.paramMap.get('id');
+    const projectId = this.projectIdNum;
+
     this.dialog.open(SprintModalComponent, {
       width: 'auto',
       minWidth: '60vw',
@@ -334,13 +418,43 @@ export class ProjectOverViewComponent {
   // ---------------------------------------------------
 
   // Projects Api
+  // GetProjectData() {
+  //   const ProjectId = this.route.snapshot.paramMap.get('id');
+  //   // this.ProjectId = ProjectId;
+  //   this._projectService.getProject(ProjectId).subscribe({
+  //     next: (res) => {
+  //       console.log('Project fetched:', res);
+  //       this.ProjectDetails = res.result;
+  //       this._ProfileService.getProfileData().subscribe({
+  //         next: (user) => {
+  //           if (
+  //             user.id == res.result.tenant?.owner.id ||
+  //             user.id == res.result.creator.id
+  //           ) {
+  //             this.isOwner = true;
+  //           }
+  //           //     if (res.result.userProjects.id == user.userId) {
+  //           //       this.ProjectMembers.push = user;
+  //           //       console.log(this.ProjectMembers);
+  //           //     }
+  //           //     if (res.owner.id !== user.userId || res.creat.id !== user.userId) {
+  //           //       this.isOwner = false; // hide delete button
+  //           //     } else {
+  //           //       this.isOwner = true; // show delete button
+  //           //     }
+  //         },
+  //       });
+  //     },
+  //     error: (err) => {
+  //       console.log(err);
+  //     },
+  //   });
+  // }
   GetProjectData() {
-    const ProjectId = this.route.snapshot.paramMap.get('id');
-    // this.ProjectId = ProjectId;
-    this._projectService.getProject(ProjectId).subscribe({
+    this._projectService.getProject(this.ProjectId).subscribe({
       next: (res) => {
-        console.log('Project fetched:', res);
         this.ProjectDetails = res.result;
+
         this._ProfileService.getProfileData().subscribe({
           next: (user) => {
             if (
@@ -349,15 +463,6 @@ export class ProjectOverViewComponent {
             ) {
               this.isOwner = true;
             }
-            //     if (res.result.userProjects.id == user.userId) {
-            //       this.ProjectMembers.push = user;
-            //       console.log(this.ProjectMembers);
-            //     }
-            //     if (res.owner.id !== user.userId || res.creat.id !== user.userId) {
-            //       this.isOwner = false; // hide delete button
-            //     } else {
-            //       this.isOwner = true; // show delete button
-            //     }
           },
         });
       },
@@ -396,12 +501,25 @@ export class ProjectOverViewComponent {
   // ---------------------------------------------------
 
   // issues Api
+  // fetchBacklogIssues(): void {
+  //   console.log('Fetching backlog issues for project ID:', this.projectIdNum);
+  //   this._IssueService.getBacklogIssues(this.projectIdNum, 0, 1).subscribe({
+  //     next: (res) => {
+  //       if (res.isSuccess) {
+  //         console.log('backlog issues', res);
+  //         this.backlogIssues = res.result;
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('Error fetching backlog issues:', err);
+  //     },
+  //   });
+  // }
+
   fetchBacklogIssues(): void {
-    console.log('Fetching backlog issues for project ID:', this.projectIdNum);
     this._IssueService.getBacklogIssues(this.projectIdNum, 0, 1).subscribe({
       next: (res) => {
         if (res.isSuccess) {
-          console.log('backlog issues', res);
           this.backlogIssues = res.result;
         }
       },
@@ -453,30 +571,41 @@ export class ProjectOverViewComponent {
   // ---------------------------------------------------
 
   // Sprints Api
+  // getAllSprints() {
+  //   const ProjectId = this.route.snapshot.paramMap.get('id');
+  //   this._projectService.getProject(ProjectId).subscribe({
+  //     next: (res) => {
+  //       this._sprintService.getAllSprints(res.result.id).subscribe({
+  //         next: (res) => {
+  //           console.log(res);
+  //           this.sprintDetails = res.result.map((sprint: Sprint) => ({
+  //             ...sprint,
+  //             startDate: this.dateFormatter(sprint.startDate),
+  //             endDate: this.dateFormatter(sprint.endDate),
+  //           }));
+  //           // for (let i = 0; i < res.result(0).issues.length; i++) {
+  //           //   if (res.result(0).issue(i).status == 'Completed') {
+  //           //     // var Counter = 0
+  //           //     // Counter ++
+  //           //     this.issuesCompleted = Number(this.issuesCompleted);
+  //           //     this.issuesCompleted++;
+  //           //     this.issuesCompleted = this.issuesCompleted.toString();
+  //           //     console.log('CompletedIssues' + this.issuesCompleted);
+  //           //   }
+  //           // }
+  //         },
+  //       });
+  //     },
+  //   });
+  // }
   getAllSprints() {
-    const ProjectId = this.route.snapshot.paramMap.get('id');
-    this._projectService.getProject(ProjectId).subscribe({
+    this._sprintService.getAllSprints(+this.ProjectId).subscribe({
       next: (res) => {
-        this._sprintService.getAllSprints(res.result.id).subscribe({
-          next: (res) => {
-            console.log(res);
-            this.sprintDetails = res.result.map((sprint: Sprint) => ({
-              ...sprint,
-              startDate: this.dateFormatter(sprint.startDate),
-              endDate: this.dateFormatter(sprint.endDate),
-            }));
-            // for (let i = 0; i < res.result(0).issues.length; i++) {
-            //   if (res.result(0).issue(i).status == 'Completed') {
-            //     // var Counter = 0
-            //     // Counter ++
-            //     this.issuesCompleted = Number(this.issuesCompleted);
-            //     this.issuesCompleted++;
-            //     this.issuesCompleted = this.issuesCompleted.toString();
-            //     console.log('CompletedIssues' + this.issuesCompleted);
-            //   }
-            // }
-          },
-        });
+        this.sprintDetails = res.result.map((sprint: Sprint) => ({
+          ...sprint,
+          startDate: this.dateFormatter(sprint.startDate),
+          endDate: this.dateFormatter(sprint.endDate),
+        }));
       },
     });
   }
