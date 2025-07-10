@@ -24,3 +24,9 @@ export interface sprintCreatedBy {
   phoneNumber: string;
   birthday: Date;
 }
+
+export interface SprintWithProgress extends Sprint {
+  totalIssues: number;
+  completedIssues: number;
+  progress: number;
+};

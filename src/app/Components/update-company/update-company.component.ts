@@ -27,8 +27,6 @@ export class UpdateCompanyComponent {
     private dialogRef: MatDialogRef<UpdateCompanyComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _companyService: CompanyService,
-    private _profile: ProfileService,
-    private route: ActivatedRoute,
     private fb: FormBuilder
   ) {
     this.companyForm = this.fb.group({

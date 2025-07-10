@@ -264,6 +264,10 @@ export class SideMenuComponent {
       this.getSprints();
     });
 
+    this._sprintService.sprintDeleted$.subscribe(() => {
+      this.getSprints();
+    });
+
     this.projectService.projectCreated$.subscribe(() => {
       this.getProjects();
     });

@@ -16,10 +16,14 @@
             <span><i class="fa-solid fa-magnifying-glass"></i></span>
           </button>
           <div
-            class="search-results-container auth-form-container show"
-            *ngIf="showResults"
+            class="search-results-container auth-form-container"
+            *ngIf="showSearchPanel"
           >
-            <div class="filter-buttons d-flex gap-2 mb-2">
+            <app-dashboard-loader
+              [ngStyle]="{ 'align-self': 'center', padding: '200px' }"
+              *ngIf="loading"
+            ></app-dashboard-loader>
+            <div class="filter-buttons d-flex justify-content-between">
               <button
                 class="btn"
                 [class.active]="selectedFilter === 'all'"
@@ -56,9 +60,9 @@
                 Issues
               </button>
             </div>
-            <div class="results">
+            <div class="results" *ngIf="!loading">
               <h6 class="header">Results</h6>
-              <div *ngIf="hasNoSearchResults()" class="no-results">
+              <div *ngIf="noResults" class="no-results">
                 <p>No results found</p>
               </div>
               <div
@@ -82,7 +86,10 @@
                   </p>
                 </div>
               </div>
-              <div class="divider" *ngIf="showDivider"></div>
+              <div
+                class="divider"
+                *ngIf="showDivider && searchResult?.projects?.length"
+              ></div>
               <div
                 class="projects-results"
                 *ngIf="
@@ -117,7 +124,10 @@
                   </p>
                 </div>
               </div>
-              <div class="divider" *ngIf="showDivider"></div>
+              <div
+                class="divider"
+                *ngIf="showDivider && searchResult?.sprints?.length"
+              ></div>
               <div
                 class="sprints-results"
                 *ngIf="
@@ -179,6 +189,14 @@
                           {{ issue.priority }}
                         </p>
                       </div>
+                      <!-- <div
+                        class="issue-status auth-form-container"
+                        [ngClass]="getIssueStatusClass(issue.status)"
+                      >
+                        <p class="m-0 p-0">
+                          {{ issue.status }}
+                        </p>
+                      </div> -->
                     </div>
                   </div>
                   <p class="issue-description m-0 pt-1">
@@ -192,7 +210,10 @@
         <span class="position-relative">
           <i class="fa-regular fa-comment-dots fa-lg"></i>
         </span>
-        <span class="position-relative notification-wrapper" (click)="togglePanel()">
+        <span
+          class="position-relative notification-wrapper"
+          (click)="togglePanel()"
+        >
           <i class="fa-regular fa-bell fa-lg notification-icon"></i>
           @if (notifications.length < 99) {
               <span class="badge">

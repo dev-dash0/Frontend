@@ -2,24 +2,34 @@ import { Sprint } from './../../Core/interfaces/sprint';
 import { DialogService } from './../../Core/Services/dialog.service';
 import { SidebarService } from './../../Core/Services/sidebar.service';
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { IssueModalComponent } from '../issue-modal/issue-modal.component';
 import { Issues } from '../../Core/interfaces/company/issues';
 import { IssueCategory } from '../../Core/interfaces/company/issue-category';
 import { SprintService } from '../../Core/Services/sprint.service';
-import { ActivatedRoute } from '@angular/router';
-import { DashboardLoaderComponent } from "../../Shared/dashboard-loader/dashboard-loader.component";
+import { ActivatedRoute, Router } from '@angular/router';
+import { DashboardLoaderComponent } from '../../Shared/dashboard-loader/dashboard-loader.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Issue } from '../../Core/interfaces/Dashboard/Issue';
 import { IssueService } from '../../Core/Services/issue/issue.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { CdkDragDrop, DragDropModule, transferArrayItem } from '@angular/cdk/drag-drop';
+import {
+  CdkDragDrop,
+  DragDropModule,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
+import { SharedDeleteModalComponent } from '../../Shared/delete-modal/delete-modal.component';
+import { Observable } from 'rxjs';
+import { UpdateSprintComponent } from '../update-sprint/update-sprint.component';
 
 @Component({
   selector: 'app-sprint-view',
   standalone: true,
-  imports: [CommonModule, DashboardLoaderComponent,MatTooltipModule
-    ,DragDropModule
+  imports: [
+    CommonModule,
+    DashboardLoaderComponent,
+    MatTooltipModule,
+    DragDropModule,
   ],
   templateUrl: './sprint-view.component.html',
   styleUrl: './sprint-view.component.css',
@@ -30,8 +40,9 @@ export class SprintViewComponent {
   private dialog = inject(MatDialog);
   private sidebarService = inject(SidebarService);
   private _sprintService = inject(SprintService);
-  private _IssueService=inject(IssueService)
+  private _IssueService = inject(IssueService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   sprintId = Number(this.route.snapshot.paramMap.get('id'));
   sprintDetails: Sprint[] = [];
@@ -53,14 +64,29 @@ export class SprintViewComponent {
     },
   ];
 
-  issueStatus = ['todo-wrapper', 'completed-wrapper', 'reviewing-wrapper', 'canceled-wrapper', 'postponed-wrapper', 'in-progress-wrapper'];
-  spanStatus = ['todo-span', 'completed-span', 'reviewing-span', 'canceled-span', 'postponed-span', 'in-progress-span'];
+  issueStatus = [
+    'todo-wrapper',
+    'completed-wrapper',
+    'reviewing-wrapper',
+    'canceled-wrapper',
+    'postponed-wrapper',
+    'in-progress-wrapper',
+  ];
+  spanStatus = [
+    'todo-span',
+    'completed-span',
+    'reviewing-span',
+    'canceled-span',
+    'postponed-span',
+    'in-progress-span',
+  ];
 
   ngOnInit(): void {
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
       this.isSidebarCollapsed = collapsed;
     });
     this.getSprintDetails();
+
     this.route.paramMap.subscribe(() => {
       this.getSprintDetails();
     });
@@ -69,7 +95,7 @@ export class SprintViewComponent {
       this.getSprintDetails();
     });
     this._IssueService.issueUpdated$.subscribe(() => {
-      this.getSprintDetails(); 
+      this.getSprintDetails();
     });
 
     this._IssueService.assignedUsersUpdated$.subscribe((updatedIssueId) => {
@@ -77,9 +103,12 @@ export class SprintViewComponent {
         this.getSprintDetails(); // ✅ تحديث sprint تلقائي بعد أي تعديل في assigned users
       }
     });
-    
+
+    this._sprintService.sprintUpdated$.subscribe(() => {
+      this.getSprintDetails();
+    });
   }
-///////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////
   getSprintDetails() {
     const sprintId = this.route.snapshot.paramMap.get('id');
     this._sprintService.getSprintData(sprintId).subscribe({
@@ -92,7 +121,7 @@ export class SprintViewComponent {
           startDate: this.dateFormatter(sprint.startDate),
           endDate: this.dateFormatter(sprint.endDate),
           issues: sprint.issues.map((issue: Issue) => ({
-            ...issue, 
+            ...issue,
             assignedUsers: issue.assignedUsers || [],
             startDate: this.dateFormatter(issue.startDate),
             deadline: this.dateFormatter(issue.deadline),
@@ -100,7 +129,7 @@ export class SprintViewComponent {
             priority: issue.priority,
             priorityIcon: this.getPriorityIcon(issue.priority),
             isBacklog: issue.isBacklog,
-            status: issue.status,       
+            status: issue.status,
             issueId: issue.id,
             title: issue.title,
             description: issue.description,
@@ -109,9 +138,9 @@ export class SprintViewComponent {
           })),
         }));
         console.log('Sprint Details:', res);
-  
+
         const issues = rawSprint[0].issues || [];
-  
+
         // Initialize empty categories
         const issueCategories: { [key: string]: IssueCategory } = {
           backlog: {
@@ -149,7 +178,7 @@ export class SprintViewComponent {
             status: 'Completed',
             issues: [],
           },
-        canceled: {
+          canceled: {
             name: 'Canceled',
             icon: 'assets/images/Issue Status/canceled.svg',
             class: 'canceled-tag',
@@ -163,7 +192,6 @@ export class SprintViewComponent {
             status: 'Postponed',
             issues: [],
           },
-  
         };
 
         for (const issue of issues) {
@@ -195,7 +223,7 @@ export class SprintViewComponent {
               attachments: issue.attachments,
               sprintId: issue.sprintId,
               attachment: issue.attachment,
-              attachmentPath: issue.attachmentPath, 
+              attachmentPath: issue.attachmentPath,
               deliveredDate: issue.deliveredDate,
               lastUpdate: issue.lastUpdate,
               projectId: issue.projectId,
@@ -203,12 +231,15 @@ export class SprintViewComponent {
 
             // console.log('Issue Categories:', issueCategories);
           } else {
-            console.warn('Unknown status category:', statusKey, 'for issue:', issue.title);
+            console.warn(
+              'Unknown status category:',
+              statusKey,
+              'for issue:',
+              issue.title
+            );
           }
-          
         }
-        
-  
+
         // Convert to array for template
         this.issueCategories = Object.values(issueCategories);
 
@@ -216,7 +247,9 @@ export class SprintViewComponent {
         //   this.formatStatusId(category.status)
         // );
 
-        this.connectedDropListsIds = this.issueCategories.map(category => category.status);
+        this.connectedDropListsIds = this.issueCategories.map(
+          (category) => category.status
+        );
 
         console.log('Mapped Issues by Status:', this.issueCategories);
       },
@@ -247,146 +280,187 @@ export class SprintViewComponent {
         return 'assets/images/Issue Priorities/normal.svg';
       case 'low':
         return 'assets/images/Issue Priorities/low.svg';
-        case 'critical':
-          return 'assets/images/Issue Priorities/urgent.svg';
+      case 'critical':
+        return 'assets/images/Issue Priorities/urgent.svg';
       default:
         return 'assets/images/Issue Priorities/Low.svg';
     }
   }
-//////////////////////////////////////////////// 
-// modals
-openCreateIssue() {
-  const dialogRef = this.dialog.open(IssueModalComponent, {
-    width: 'auto',
-    minWidth: '60vw',
-    maxWidth: '70vw', // Limits width to 80% of viewport
-    minHeight: '60vh',
-    data: { sprintId: this.sprintId, message: 'sprint'}
-     
-  });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result === 'created') {
-      this.getSprintDetails(); // Refresh the sprint details
-    }
-  });
-  
-}
-openIssueView(issueId: number) {
-  this.dialogService.openIssueViewModal(issueId);
-}
+  deleteSprint() {
+    this._sprintService.deleteSprint(this.sprintId).subscribe({
+      next: () => {
+        this._sprintService.notifySprintDeleted();
+        this.router.navigate([
+          '/MyDashboard/Project/' + this.sprintDetails[0].projectId,
+        ]);
+      },
+      error: (err) => {
+        console.error('Error deleting sprint:', err);
+      },
+    });
+  }
 
-//////////////////////////////////////////////// 
+  ////////////////////////////////////////////////
+  // modals
+  openCreateIssue() {
+    const dialogRef = this.dialog.open(IssueModalComponent, {
+      width: 'auto',
+      minWidth: '60vw',
+      maxWidth: '70vw', // Limits width to 80% of viewport
+      minHeight: '60vh',
+      data: { sprintId: this.sprintId, message: 'sprint' },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'created') {
+        this.getSprintDetails(); // Refresh the sprint details
+      }
+    });
+  }
+
+  openIssueView(issueId: number) {
+    this.dialogService.openIssueViewModal(issueId);
+  }
+
+  deleteSprintModal(sprintId: number, sprintTitle: string, projectId: any) {
+    const dialogRef = this.dialog.open(SharedDeleteModalComponent, {
+      width: '450px',
+      data: {
+        title: 'Delete Sprint',
+        message: `Are you sure you want to delete ${sprintTitle} sprint? `,
+        confirmText: 'Confirm',
+        cancelText: 'Cancel',
+        itemId: sprintId,
+        deleteFunction: () => this.deleteSprint(),
+      },
+    });
+  }
+
+  updateSprintModal() {
+    const dialogRef = this.dialog.open(UpdateSprintComponent, {
+      width: 'auto',
+      minWidth: '60vw',
+      maxWidth: '70vw',
+      minHeight: '60vh',
+      maxHeight: '90vh',
+      disableClose: true,
+      data: { sprintId: this.sprintId }, // ✅ Pass company id to modal
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'updated') {
+        this._sprintService.notifySprintUpdated();
+        console.log('sprint updated successfully');
+      }
+    });
+  }
+
+  ////////////////////////////////////////////////
 
   dateFormatter(dateString: string | Date | null | undefined): string {
     if (!dateString || dateString === '') {
       return '—';
     }
-  
+
     const dateFormat = new Date(dateString);
     if (isNaN(dateFormat.getTime())) {
       return '—';
     }
-  
+
     const day = dateFormat.getDate(); // بدون padStart علشان تطلع 5 مش 05
     const month = dateFormat.toLocaleString('en-US', { month: 'short' }); // Nov
-  
+
     return `${day} ${month}`;
   }
-  
+
   // ////////////////////////////////////////////////////////////////
-//Date Format from string
-getFormattedDate(dateStr: string | null | undefined): string {
-  if (!dateStr) return 'Not set yet';
+  //Date Format from string
+  getFormattedDate(dateStr: string | null | undefined): string {
+    if (!dateStr) return 'Not set yet';
 
-  const parts = dateStr.split('/');
-  if (parts.length !== 3) return 'Not set yet';
+    const parts = dateStr.split('/');
+    if (parts.length !== 3) return 'Not set yet';
 
-  const day = +parts[0];
-  const month = +parts[1] - 1; // JavaScript months start from 0
-  const year = +parts[2];
+    const day = +parts[0];
+    const month = +parts[1] - 1; // JavaScript months start from 0
+    const year = +parts[2];
 
-  const date = new Date(year, month, day);
+    const date = new Date(year, month, day);
 
-  if (isNaN(date.getTime())) return 'Not set yet';
+    if (isNaN(date.getTime())) return 'Not set yet';
 
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
-}
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  }
 
-// //////////////////////////////////////////////////////////////////////////
-// *************************Drag and Drop*************************
-// ////////////////////////////////////////////////////////////////
-connectedDropListsIds: string[] = [];
+  // //////////////////////////////////////////////////////////////////////////
+  // *************************Drag and Drop*************************
+  // ////////////////////////////////////////////////////////////////
+  connectedDropListsIds: string[] = [];
 
-onIssueDropped(event: CdkDragDrop<any[]>, newStatus: string): void {
-  // console.log('🚀 New Status Wrapper ID:', newStatus);
+  onIssueDropped(event: CdkDragDrop<any[]>, newStatus: string): void {
+    // console.log('🚀 New Status Wrapper ID:', newStatus);
 
-  const previousContainer = event.previousContainer;
-  const currentContainer = event.container;
+    const previousContainer = event.previousContainer;
+    const currentContainer = event.container;
 
-  if (previousContainer === currentContainer) return;
+    if (previousContainer === currentContainer) return;
 
-  const draggedIssue = previousContainer.data[event.previousIndex];
+    const draggedIssue = previousContainer.data[event.previousIndex];
 
     // 1. Remove from old array, add to new
-  transferArrayItem(
-    previousContainer.data,
-    currentContainer.data,
-    event.previousIndex,
-    event.currentIndex
-  );
+    transferArrayItem(
+      previousContainer.data,
+      currentContainer.data,
+      event.previousIndex,
+      event.currentIndex
+    );
 
-  
-  // 2. Update backend issue status
-  const updateData = new FormData();
-  updateData.append("Title", draggedIssue.title);
-  updateData.append("Description", draggedIssue.description ?? '');
-  updateData.append("StartDate", draggedIssue.startDate ?? '');
-  updateData.append("Deadline", draggedIssue.deadline ?? '');
-  updateData.append("DeliveredDate", draggedIssue.deliveredDate ?? '');
-  updateData.append("Type", draggedIssue.type ?? '');
-  updateData.append("Status", newStatus); // what we are updating only
-  // updateData.append("Status", this.getBackendStatusFromWrapper(newStatus));
+    // 2. Update backend issue status
+    const updateData = new FormData();
+    updateData.append('Title', draggedIssue.title);
+    updateData.append('Description', draggedIssue.description ?? '');
+    updateData.append('StartDate', draggedIssue.startDate ?? '');
+    updateData.append('Deadline', draggedIssue.deadline ?? '');
+    updateData.append('DeliveredDate', draggedIssue.deliveredDate ?? '');
+    updateData.append('Type', draggedIssue.type ?? '');
+    updateData.append('Status', newStatus); // what we are updating only
+    // updateData.append("Status", this.getBackendStatusFromWrapper(newStatus));
 
-  updateData.append("Priority", draggedIssue.priority ?? '');
-  updateData.append("Labels", draggedIssue.labels ?? '');
-  updateData.append("SprintId", draggedIssue.sprintId?.toString() ?? '');
-  updateData.append("IsBacklog", "false");
-  updateData.append("LastUpdate", new Date().toISOString());
+    updateData.append('Priority', draggedIssue.priority ?? '');
+    updateData.append('Labels', draggedIssue.labels ?? '');
+    updateData.append('SprintId', draggedIssue.sprintId?.toString() ?? '');
+    updateData.append('IsBacklog', 'false');
+    updateData.append('LastUpdate', new Date().toISOString());
 
-  this._IssueService.updateIssue(draggedIssue.id, updateData).subscribe({
-    next: () => {
-      // console.log(`✅ Issue ${draggedIssue.id} status updated to ${newStatus}`);
-      this._IssueService.notifyIssueUpdated();
-    },
-    error: (err) => {
-      console.error('❌ Failed to update issue status:', err);
-    }
-  });
-}
+    this._IssueService.updateIssue(draggedIssue.id, updateData).subscribe({
+      next: () => {
+        // console.log(`✅ Issue ${draggedIssue.id} status updated to ${newStatus}`);
+        this._IssueService.notifyIssueUpdated();
+      },
+      error: (err) => {
+        console.error('❌ Failed to update issue status:', err);
+      },
+    });
+  }
 
-formatStatusId(status: string): string {
-  return status.toLowerCase().replace(/\s/g, '-');
-}
+  formatStatusId(status: string): string {
+    return status.toLowerCase().replace(/\s/g, '-');
+  }
 
-
-// getBackendStatusFromWrapper(wrapperId: string): string {
-//   switch (wrapperId) {
-//     case 'to do': return 'to do';
-//     case 'Completed': return 'completed';
-//     case 'reviewing': return 'Reviewing';
-//     case 'canceled': return 'Canceled';
-//     case 'postponed': return 'Postponed';
-//     case 'In Progress': return 'in progress';
-//     case 'backlog': return 'Backlog';
-//     default: return 'To Do';
-//   }
-// }
-
-
-
+  // getBackendStatusFromWrapper(wrapperId: string): string {
+  //   switch (wrapperId) {
+  //     case 'to do': return 'to do';
+  //     case 'Completed': return 'completed';
+  //     case 'reviewing': return 'Reviewing';
+  //     case 'canceled': return 'Canceled';
+  //     case 'postponed': return 'Postponed';
+  //     case 'In Progress': return 'in progress';
+  //     case 'backlog': return 'Backlog';
+  //     default: return 'To Do';
+  //   }
+  // }
 }

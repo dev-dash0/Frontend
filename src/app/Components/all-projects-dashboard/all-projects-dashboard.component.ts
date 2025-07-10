@@ -16,6 +16,14 @@ import { DashboardService } from '../../Core/Services/dashboard/dashboard.servic
 import { ChartLoaderComponent } from "../../Shared/chart-loader/chart-loader.component";
 
 Chart.register(...registerables);
+type IssueStatus =
+  | 'Completed'
+  | 'In Progress'
+  | 'Reviewing'
+  | 'to do'
+  | 'Postponed'
+  | 'Canceled'
+  | 'BackLog';
 
 @Component({
   selector: 'app-all-projects-dashboard',
@@ -30,11 +38,19 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
   totalProjects: any;
   projectsOverdue: any;
   isLoading: boolean = true;
+  AllIssuesList:any[]=[]
+  currentTenantName:string='';
+  lineChartInstance: Chart | null = null;
+  doughnutChartInstance: Chart<"doughnut", number[], string> | null = null;
+
+
 
 
   private readonly _DashboardService = inject(DashboardService);
 
   @Input() tenantId!: number;
+  @Input() tenantName!: string;
+  
 
   @ViewChild('doughnutChart') doughnutChart!: ElementRef<HTMLCanvasElement>;
   @ViewChild('lineChart') lineChart!: ElementRef<HTMLCanvasElement>;
@@ -42,6 +58,7 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
   @ViewChild('totalCompletedProjectsChart') totalCompletedProjectsChart!: ElementRef;
   @ViewChild('projectsInProgressChart') projectsInProgressChart!: ElementRef;
   @ViewChild('projectsOverdueChart') projectsOverdueChart!: ElementRef;
+  
 
   ngOnInit(): void {
     console.log('AllProjectsDashboardComponent initialized');
@@ -51,22 +68,25 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['tenantId'] && this.tenantId) {
       this.getTenantDashboard(this.tenantId);
+      this.getDashboardAllIssue();
     }
   }
+  
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
   initCharts() {
     if (isPlatformBrowser(this.platformId)) {
       this.initLineChart();
-      this.initDoughnutChart();
+      // this.initDoughnutChart();
       this.initSmallCharts();
+      this.initCompanyStatusChart();
     }
   }
 
   getTenantDashboard(tenantId: number) {
     this._DashboardService.getDashboardData(tenantId).subscribe({
       next: (res) => {
-        // console.log(res);
+        console.log('Tenant Dashboard Data',res);
         this.completedProjects = res.result.completedProjects;
         this.projectsInProgress = res.result.projectsInProgress;
         this.totalProjects = res.result.totalProjects;
@@ -87,201 +107,514 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
 
   // ///////////////////////////////////////////////////////
   // ////////////////Charts Implementation///////////////
+  // initLineChart() {
+  //   const ctx_line = this.lineChart.nativeElement.getContext('2d');
+  //   const gradient_purple = ctx_line!.createLinearGradient(150, 350, 50, 150);
+  //   gradient_purple.addColorStop(0, 'rgba(107, 98, 239, 1)');
+  //   gradient_purple.addColorStop(0.5, 'rgba(186, 37, 230, 1)');
+  //   gradient_purple.addColorStop(0.1, 'rgb(253, 141, 249)');
+  //   gradient_purple.addColorStop(0.3, 'rgb(209, 84, 225)');
+  //   gradient_purple.addColorStop(1, 'rgba(107, 98, 239, 1)');
+
+  //   const gradient_blueSky = ctx_line!.createLinearGradient(150, 300, 0, 150);
+  //   gradient_blueSky.addColorStop(0, 'rgba(78, 131, 237, 1)');
+  //   gradient_blueSky.addColorStop(0.1, 'rgba(9, 240, 222, 1)');
+  //   gradient_blueSky.addColorStop(0.5, 'rgba(29, 246, 228,1)');
+  //   gradient_blueSky.addColorStop(1, 'rgba(78, 131, 237, 1)');
+
+  //   const lineChart = new Chart(ctx_line!, {
+  //     type: 'line',
+  //     data: {
+  //       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+  //       datasets: [
+  //         {
+  //           label: 'Completed Issues',
+  //           data: [25, 28, 26, 29, 26, 28],
+  //           borderColor: gradient_blueSky,
+  //           borderWidth: 2.5,
+  //           fill: false,
+  //           tension: 0.4,
+  //           pointRadius: 0,
+  //         },
+  //         {
+  //           label: 'In Progress Issues',
+  //           data: [27, 25.5, 27.4, 26, 26.6, 27],
+  //           borderColor: gradient_purple,
+  //           borderWidth: 2.5,
+  //           fill: false,
+  //           tension: 0.4,
+  //           pointRadius: 0,
+  //         },
+  //       ],
+  //     },
+  //     options: {
+  //       responsive: true, // Ensures the chart resizes with the window
+  //       maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
+  //       plugins: {
+  //         legend: {
+  //           display: false,
+  //           position: 'bottom',
+  //           labels: {
+  //             color: '#ffffff',
+  //           },
+  //         },
+  //       },
+  //       scales: {
+  //         x: {
+  //           ticks: {
+  //             color: '#71A5FF',
+  //             padding: 30,
+  //           },
+  //           grid: { color: 'rgba(255, 255, 255, 0)' },
+  //         },
+
+  //         y: {
+  //           ticks: {
+  //             color: '#71A5FF',
+  //             padding: 35,
+  //             stepSize: 1,
+  //             callback: function (value) {
+  //               // Only show specific values on the Y-axis
+  //               if ([25, 26, 27, 28, 29].includes(value as number)) {
+  //                 return value;
+  //               }
+  //               return '';
+  //             },
+  //           },
+  //           grid: { color: 'rgba(255,255,255,0.1)' },
+  //           // min: 25,
+  //           // max: 29
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
+
+  // initDoughnutChart() {
+  //   const ctx = this.doughnutChart.nativeElement.getContext('2d');
+  //   const allZero = this.completedProjects === 0 && this.projectsInProgress === 0 && this.projectsOverdue === 0;
+
+  //   const gradient_purple = ctx!.createRadialGradient(
+  //     100,
+  //     350,
+  //     350,
+  //     150,
+  //     150,
+  //     50
+  //   );
+  //   gradient_purple.addColorStop(1, 'rgba(193, 32, 230, 1)');
+  //   gradient_purple.addColorStop(0, 'rgba(91, 110, 239, 1)');
+
+  //   const gradient_blueSky = ctx!.createRadialGradient(
+  //     150,
+  //     150,
+  //     0,
+  //     150,
+  //     150,
+  //     150
+  //   );
+  //   gradient_blueSky.addColorStop(0, 'rgba(78, 131, 237, 1)');
+  //   gradient_blueSky.addColorStop(0.1, 'rgba(9, 240, 222, 1)');
+  //   gradient_blueSky.addColorStop(0.5, 'rgba(29, 246, 228,1)');
+  //   gradient_blueSky.addColorStop(1, 'rgba(78, 131, 237, 1)');
+
+  //   const gradient_pink = ctx!.createRadialGradient(
+  //     150,
+  //     150,
+  //     150,
+  //     150,
+  //     150,
+  //     50
+  //   );
+  //   gradient_pink.addColorStop(0, 'rgba(219, 131, 241, 1)');
+  //   gradient_pink.addColorStop(1, 'rgb(249, 223, 255)');
+
+  //   // const gradientOverdue = ctx!.createRadialGradient(150, 150, 50, 150, 150, 150);
+  //   // gradientOverdue.addColorStop(0, 'rgba(246,93,63,1)');
+  //   // gradientOverdue.addColorStop(1, 'rgba(91,110,239,1)');
+    
+    
+  //   const doughnutChart = allZero
+  //     ? new Chart(ctx!, {
+  //       type: 'doughnut',
+  //       data: {
+  //         labels: ['No Data'],
+  //         datasets: [{
+  //           data: [1], // value 1 just to render
+  //           backgroundColor: ['#0C1E3D'], // gray color
+  //           borderColor: [gradient_purple, gradient_blueSky, gradient_pink],
+  //           borderWidth: 1,
+  //           borderRadius: 3.5,
+  //         }]
+  //       },
+  //       options: {
+  //         responsive: true, // Ensures the chart resizes with the window
+  //         maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
+  //         cutout: '55%',
+  //         plugins: {
+  //           legend: {
+  //             display: true, // Optional: Hide legend
+  //             position: 'bottom', // Set legend position to bottom
+  //             labels: {
+  //               padding: 35, // Optional: Add some spacing
+  //               color: '#7d92ca', // Optional: Set text color
+  //               font: {
+  //                 size: 10, // Reduce the font size
+  //               },
+  //               boxWidth: 10, // Reduce the size of color indicator boxes
+  //             },
+  //           },
+  //         },
+  //       },
+  //     })
+  //     : new Chart(ctx!, {
+  //       type: 'doughnut',
+  //       data: {
+  //         labels: ['Completed Projects', 'In Progress Projects', 'Overdue Projects'],
+  //         datasets: [
+  //           {
+  //             label: '# of Votes',
+  //             // data: [50, 30, 20],
+  //             data: [
+  //               this.completedProjects,
+  //               this.projectsInProgress,
+  //               this.projectsOverdue,
+  //             ],
+  //             backgroundColor: [gradient_purple, gradient_blueSky, gradient_pink],
+  //             borderColor: [gradient_purple, gradient_blueSky, gradient_pink],
+  //             borderWidth: 1,
+  //             borderRadius: 3.5,
+  //           },
+  //         ],
+  //       },
+  //       options: {
+  //         responsive: true, // Ensures the chart resizes with the window
+  //         maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
+  //         cutout: '55%',
+  //         plugins: {
+  //           legend: {
+  //             display: true, // Optional: Hide legend
+  //             position: 'bottom', // Set legend position to bottom
+  //             labels: {
+  //               padding: 35, // Optional: Add some spacing
+  //               color: '#7d92ca', // Optional: Set text color
+  //               font: {
+  //                 size: 10, // Reduce the font size
+  //               },
+  //               boxWidth: 10, // Reduce the size of color indicator boxes
+  //             },
+  //           },
+  //         },
+  //       },
+  //     });
+  // }
+
+
   initLineChart() {
-    const ctx_line = this.lineChart.nativeElement.getContext('2d');
-    const gradient_purple = ctx_line!.createLinearGradient(150, 350, 50, 150);
-    gradient_purple.addColorStop(0, 'rgba(107, 98, 239, 1)');
-    gradient_purple.addColorStop(0.5, 'rgba(186, 37, 230, 1)');
-    gradient_purple.addColorStop(0.1, 'rgb(253, 141, 249)');
-    gradient_purple.addColorStop(0.3, 'rgb(209, 84, 225)');
-    gradient_purple.addColorStop(1, 'rgba(107, 98, 239, 1)');
-
-    const gradient_blueSky = ctx_line!.createLinearGradient(150, 300, 0, 150);
-    gradient_blueSky.addColorStop(0, 'rgba(78, 131, 237, 1)');
-    gradient_blueSky.addColorStop(0.1, 'rgba(9, 240, 222, 1)');
-    gradient_blueSky.addColorStop(0.5, 'rgba(29, 246, 228,1)');
-    gradient_blueSky.addColorStop(1, 'rgba(78, 131, 237, 1)');
-
-    const lineChart = new Chart(ctx_line!, {
+    const ctx = this.lineChart.nativeElement.getContext('2d');
+  
+    // 🧹Remove the existing chart 
+    if (this.lineChartInstance) {
+      this.lineChartInstance.destroy();
+    }
+  
+    const { months, data } = this.getMonthlyStatusCounts(this.tenantName);
+  
+    const gradientCompleted = ctx!.createLinearGradient(150, 350, 50, 150);
+      gradientCompleted.addColorStop(0, 'rgb(98, 239, 190)');
+      gradientCompleted.addColorStop(0.5, 'rgb(25, 175, 120)');
+      gradientCompleted.addColorStop(0.1, 'rgb(253, 141, 249)');
+      gradientCompleted.addColorStop(0.3, 'rgb(209, 84, 225)');
+      gradientCompleted.addColorStop(1, 'rgb(14, 234, 179)');
+      
+      const gradientInProgress = ctx!.createRadialGradient(
+        150,
+        150,
+        0,
+        150,
+        150,
+        150
+      );
+      gradientInProgress.addColorStop(0, 'rgba(78, 131, 237, 1)');
+      gradientInProgress.addColorStop(0.1, 'rgba(153, 83, 207, 0.54)');
+      gradientInProgress.addColorStop(0.5, 'rgb(181, 94, 236)');
+      gradientInProgress.addColorStop(1, 'rgba(78, 131, 237, 1)');
+  
+   //create the chart and add the data
+    this.lineChartInstance = new Chart(ctx!, {
       type: 'line',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        labels: months,
         datasets: [
           {
             label: 'Completed Issues',
-            data: [25, 28, 26, 29, 26, 28],
-            borderColor: gradient_blueSky,
-            borderWidth: 2.5,
+            data: data['Completed'],
+            borderColor: '#0EEADE',
+            borderWidth: 2,
             fill: false,
             tension: 0.4,
-            pointRadius: 0,
+            pointRadius: 0.5,
+            pointBackgroundColor: '#66bb6a',
+            segment: {
+              borderColor: ctx => gradientCompleted 
+            }
           },
           {
             label: 'In Progress Issues',
-            data: [27, 25.5, 27.4, 26, 26.6, 27],
-            borderColor: gradient_purple,
-            borderWidth: 2.5,
+            data: data['In Progress'],
+            borderColor: gradientInProgress,
+            borderWidth: 2,
             fill: false,
             tension: 0.4,
-            pointRadius: 0,
-          },
-        ],
+            pointRadius: 0.5,
+            pointBackgroundColor: '#9575cd',
+                  segment: {
+              borderColor: ctx => gradientInProgress 
+            }
+          }
+        ]
       },
       options: {
-        responsive: true, // Ensures the chart resizes with the window
-        maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
-            display: false,
-            position: 'bottom',
+            display: true, // Optional: Hide legend
+            position: 'bottom', // Set legend position to bottom
+            
             labels: {
-              color: '#ffffff',
+              padding: 35, // Optional: Add some spacing
+              color: '#7d92ca', // Optional: Set text color
+              font: {
+                size: 10, // Reduce the font size
+              },
+              boxWidth: 10, // Reduce the size of color indicator boxes
             },
           },
+          tooltip: {
+            mode: 'index',
+            intersect: false
+          }
         },
         scales: {
           x: {
             ticks: {
-              color: '#71A5FF',
-              padding: 30,
+              color: '#71A5FF'
             },
-            grid: { color: 'rgba(255, 255, 255, 0)' },
+            grid: {
+              color: 'rgba(255, 255, 255, 0.02)'
+            }
           },
-
           y: {
+            beginAtZero: true,
             ticks: {
-              color: '#71A5FF',
-              padding: 35,
-              stepSize: 1,
-              callback: function (value) {
-                // Only show specific values on the Y-axis
-                if ([25, 26, 27, 28, 29].includes(value as number)) {
-                  return value;
-                }
-                return '';
-              },
+              color: '#71A5FF'
             },
-            grid: { color: 'rgba(255,255,255,0.1)' },
-            // min: 25,
-            // max: 29
-          },
-        },
-      },
+            grid: {
+              color: 'rgba(255, 255, 255, 0.01)'
+            }
+          }
+        }
+      }
     });
   }
-
-  initDoughnutChart() {
+  
+  initCompanyStatusChart() {
     const ctx = this.doughnutChart.nativeElement.getContext('2d');
-    const allZero = this.completedProjects === 0 && this.projectsInProgress === 0 && this.projectsOverdue === 0;
+  
+    if (this.doughnutChartInstance) this.doughnutChartInstance.destroy();
 
-    const gradient_purple = ctx!.createRadialGradient(
-      100,
-      350,
-      350,
-      150,
-      150,
-      50
-    );
-    gradient_purple.addColorStop(1, 'rgba(193, 32, 230, 1)');
-    gradient_purple.addColorStop(0, 'rgba(91, 110, 239, 1)');
-
-    const gradient_blueSky = ctx!.createRadialGradient(
-      150,
-      150,
-      0,
-      150,
-      150,
-      150
-    );
-    gradient_blueSky.addColorStop(0, 'rgba(78, 131, 237, 1)');
-    gradient_blueSky.addColorStop(0.1, 'rgba(9, 240, 222, 1)');
-    gradient_blueSky.addColorStop(0.5, 'rgba(29, 246, 228,1)');
-    gradient_blueSky.addColorStop(1, 'rgba(78, 131, 237, 1)');
-
-    const gradient_pink = ctx!.createRadialGradient(
-      150,
-      150,
-      150,
-      150,
-      150,
-      50
-    );
-    gradient_pink.addColorStop(0, 'rgba(219, 131, 241, 1)');
-    gradient_pink.addColorStop(1, 'rgb(249, 223, 255)');
-
-    const doughnutChart = allZero
-      ? new Chart(ctx!, {
-        type: 'doughnut',
-        data: {
-          labels: ['No Data'],
-          datasets: [{
-            data: [1], // value 1 just to render
-            backgroundColor: ['#0C1E3D'], // gray color
-            borderColor: [gradient_purple, gradient_blueSky, gradient_pink],
+    const issues = this.AllIssuesList.filter(issue => issue.tenantName === this.tenantName);
+  
+    const statuses: IssueStatus[] = ['Completed', 'In Progress', 'Reviewing', 'to do', 'Postponed', 'Canceled', 'BackLog'];
+    const statusCounts: Record<IssueStatus, number> = {
+      'Completed': 0,
+      'In Progress': 0,
+      'Reviewing': 0,
+      'to do': 0,
+      'Postponed': 0,
+      'Canceled': 0,
+      'BackLog': 0
+    };
+  
+    issues.forEach(issue => {
+      const status = issue.status;
+    
+      if ((statuses as string[]).includes(status)) {
+        statusCounts[status as IssueStatus]++;
+      }
+    });
+    
+  
+    const labels = Object.keys(statusCounts) as IssueStatus[];
+    const data = Object.values(statusCounts);
+  
+    const allZero = data.every(count => count === 0);
+  
+    // gradients
+    const gradients: Record<IssueStatus, CanvasGradient> = {
+      'Completed': (() => {
+        const g = ctx!.createLinearGradient(0, 0, 150, 150);
+        g.addColorStop(0, 'rgb(98, 239, 190)');
+        g.addColorStop(1, 'rgb(14, 234, 179)');
+        return g;
+      })(),
+      'In Progress': (() => {
+        // const g = ctx!.createLinearGradient(0, 0, 150, 150);
+        // g.addColorStop(0, 'rgba(78, 131, 237, 1)');
+        // g.addColorStop(1, 'rgb(181, 94, 236)');
+        // return g;
+        const g =  ctx!.createRadialGradient(
+              100,
+              350,
+              350,
+              150,
+              150,
+              50
+            );
+            g.addColorStop(1, 'rgba(193, 32, 230, 1)');
+            g.addColorStop(0, 'rgba(91, 110, 239, 1)');
+        return g;
+      })(),
+      'Reviewing': (() => {
+        const g = ctx!.createLinearGradient(0, 0, 150, 150);
+        g.addColorStop(0, '#f7b733');
+        g.addColorStop(1, '#fc4a1a');
+        return g;
+      })(),
+      'to do': (() => {
+        // const g = ctx!.createLinearGradient(0, 0, 150, 150);
+        // g.addColorStop(0, '#36D1DC');
+        // g.addColorStop(1, '#5B86E5');
+        // return g;
+        const g = ctx!.createRadialGradient(
+              150,
+              150,
+              0,
+              150,
+              150,
+              150
+            );
+            g.addColorStop(0, 'rgba(78, 131, 237, 1)');
+            g.addColorStop(0.1, 'rgba(9, 240, 222, 1)');
+            g.addColorStop(0.5, 'rgba(29, 246, 228,1)');
+            g.addColorStop(1, 'rgba(78, 131, 237, 1)');
+        return g;
+      })(),
+      'Postponed': (() => {
+        const g = ctx!.createLinearGradient(0, 0, 150, 150);
+        g.addColorStop(0, '#FFB75E');
+        g.addColorStop(1, '#ED8F03');
+        return g;
+      })(),
+      
+      'Canceled': (() => {
+        // const g = ctx!.createLinearGradient(0, 0, 150, 150);
+        // g.addColorStop(0, '#ff5858');
+        // g.addColorStop(1, '#f857a6');
+        // return g;
+        const g = ctx!.createRadialGradient(
+              150,
+              150,
+              150,
+              150,
+              150,
+              50
+            );;
+         g.addColorStop(0, 'rgba(219, 131, 241, 1)');
+      g.addColorStop(1, 'rgb(249, 223, 255)');
+        return g;
+      })(),
+      'BackLog': (() => {
+        const g = ctx!.createLinearGradient(0, 0, 150, 150);
+        g.addColorStop(0, '#616161');
+        g.addColorStop(1, '#9bc5c3');
+        return g;
+      })()
+    };
+  
+        const gradient_purple = ctx!.createRadialGradient(
+        100,
+        350,
+        350,
+        150,
+        150,
+        50
+      );
+      gradient_purple.addColorStop(1, 'rgba(193, 32, 230, 1)');
+      gradient_purple.addColorStop(0, 'rgba(91, 110, 239, 1)');
+  
+      const gradient_blueSky = ctx!.createRadialGradient(
+        150,
+        150,
+        0,
+        150,
+        150,
+        150
+      );
+      gradient_blueSky.addColorStop(0, 'rgba(78, 131, 237, 1)');
+      gradient_blueSky.addColorStop(0.1, 'rgba(9, 240, 222, 1)');
+      gradient_blueSky.addColorStop(0.5, 'rgba(29, 246, 228,1)');
+      gradient_blueSky.addColorStop(1, 'rgba(78, 131, 237, 1)');
+  
+      const gradient_pink = ctx!.createRadialGradient(
+        150,
+        150,
+        150,
+        150,
+        150,
+        50
+      );
+      gradient_pink.addColorStop(0, 'rgba(219, 131, 241, 1)');
+      gradient_pink.addColorStop(1, 'rgb(249, 223, 255)');
+  
+    
+    const backgroundColors = labels.map(label => gradients[label]);
+  
+    this.doughnutChartInstance = new Chart(ctx!, {
+      type: 'doughnut',
+      data: {
+        labels: allZero ? ['No Data'] : labels,
+        datasets: [
+          {
+            label: 'Issue Status Breakdown',
+            data: allZero ? [1] : data,
+            backgroundColor: allZero ? ['#0C1E3D'] : backgroundColors,
+            borderColor: allZero ? [gradient_purple, gradient_blueSky, gradient_pink] : backgroundColors,
             borderWidth: 1,
             borderRadius: 3.5,
-          }]
-        },
-        options: {
-          responsive: true, // Ensures the chart resizes with the window
-          maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
-          cutout: '55%',
-          plugins: {
-            legend: {
-              display: true, // Optional: Hide legend
-              position: 'bottom', // Set legend position to bottom
-              labels: {
-                padding: 35, // Optional: Add some spacing
-                color: '#7d92ca', // Optional: Set text color
-                font: {
-                  size: 10, // Reduce the font size
-                },
-                boxWidth: 10, // Reduce the size of color indicator boxes
+  
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '55%',
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom',
+            labels: {
+              color: '#7d92ca',
+              font: {
+                size: 10
               },
-            },
+              boxWidth: 10
+            }
           },
-        },
-      })
-      : new Chart(ctx!, {
-        type: 'doughnut',
-        data: {
-          labels: ['Completed', 'In Progress', 'Overdue'],
-          datasets: [
-            {
-              label: '# of Votes',
-              // data: [50, 30, 20],
-              data: [
-                this.completedProjects,
-                this.projectsInProgress,
-                this.projectsOverdue,
-              ],
-              backgroundColor: [gradient_purple, gradient_blueSky, gradient_pink],
-              borderColor: [gradient_purple, gradient_blueSky, gradient_pink],
-              borderWidth: 1,
-              borderRadius: 3.5,
-            },
-          ],
-        },
-        options: {
-          responsive: true, // Ensures the chart resizes with the window
-          maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
-          cutout: '55%',
-          plugins: {
-            legend: {
-              display: true, // Optional: Hide legend
-              position: 'bottom', // Set legend position to bottom
-              labels: {
-                padding: 35, // Optional: Add some spacing
-                color: '#7d92ca', // Optional: Set text color
-                font: {
-                  size: 10, // Reduce the font size
-                },
-                boxWidth: 10, // Reduce the size of color indicator boxes
-              },
-            },
-          },
-        },
-      });
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                return allZero
+                  ? 'No Data'
+                  : `${context.label}: ${context.raw}`;
+              }
+            }
+          }
+        }
+      }
+    });
   }
 
   initSmallCharts() {
@@ -465,4 +798,69 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
       },
     });
   }
+
+  //////////////////////////////////////////////////////////////////
+
+getMonthlyStatusCounts(tenantName: string) {
+  const issues = this.AllIssuesList.filter(issue => issue.tenantName === this.tenantName);
+  // console.log('📊 Current Tenant:', this.tenantName);
+
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  const statuses = ['Completed', 'In Progress','Reviewing' ,'to do' ,'Postponed','Canceled','BackLog'];
+
+  // Initialize the data object with empty arrays for each month and status
+
+  const data: { [status: string]: number[] } = {};
+
+  statuses.forEach(status => {
+    data[status] = new Array(12).fill(0);
+  });
+
+  issues.forEach(issue => {
+    if (!statuses.includes(issue.status)) return;
+
+    const date = new Date(issue.deadline || issue.creationDate || new Date());
+    const monthIndex = date.getMonth();
+
+    if (data[issue.status]) {
+      data[issue.status][monthIndex]++;
+    }
+  });
+
+  return { months, data };
+}
+getDashboardAllIssue() {
+  this._DashboardService.getDashboardAllIssue().subscribe({
+    next: (res) => {
+      this.AllIssuesList = res.result || []; // array of issues
+
+      // console.log(' Loaded Issues:', this.AllIssuesList);
+      //  Get tenantName from first issue
+      if (this.AllIssuesList.length > 0) {
+        // console.log(' Tenant:', this.currentTenantName);
+
+        //  Wait for chart element to be available
+        setTimeout(() => {
+          if (this.lineChart?.nativeElement) {
+            this.initLineChart();
+          } else {
+            console.warn("⚠️lineChart not ready yet.");
+          }
+          if (this.doughnutChart?.nativeElement) this.initCompanyStatusChart();
+        }, 0);
+      } else {
+        console.warn('🚫 No issues found.');
+      }
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
+}
+
+
+
+
+  
 }

@@ -15,7 +15,7 @@
         @for (tab of lotsOfTabs; track tab) {
         <mat-tab [label]="tab.name" labelClass="mat-tab-label">
           <div class="visualize_content visualize_allProject p-4">
-            <app-all-projects-dashboard [tenantId]="tab.id"></app-all-projects-dashboard>
+            <app-all-projects-dashboard [tenantId]="tab.id" [tenantName]="tab.name"></app-all-projects-dashboard>
           </div>
         </mat-tab>
         }

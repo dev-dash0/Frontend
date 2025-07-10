@@ -1,6 +1,9 @@
 import { CommonModule, NgClass } from '@angular/common';
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { DashboardService } from '../../Core/Services/dashboard/dashboard.service';
+import { DialogService } from '../../Core/Services/dialog.service';
+import { IssueService } from '../../Core/Services/issue/issue.service';
+import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-users-to-issue.component';
 
 @Component({
   selector: 'app-calendar',
@@ -137,5 +140,32 @@ export class CalendarComponent {
 
   formatDate(date: Date): string {
     return date.toISOString().split('T')[0];
+  }
+// ===============================================================
+private dialogService = inject(DialogService);
+private _IssueService = inject(IssueService);
+assignUsersComp!: AssignUsersToIssueComponent;
+isModalOpen: boolean = false;
+  //open issue modal
+  loadIssue(issueId: number): void {
+    this._IssueService.getIssueById(issueId).subscribe({
+      next: (res) => {
+        this.openIssueView(issueId);
+        this.isModalOpen = true;
+
+        // Load assigned users after the issue is loaded
+        setTimeout(() => {
+          if (this.assignUsersComp) {
+            this.assignUsersComp.loadAssignedUsers();
+          }
+        }, 0);
+      },
+      error: (err) => {
+        console.error('Error fetching issue:', err);
+      },
+    });
+  }
+  openIssueView(issueId: number) {
+    this.dialogService.openIssueViewModal(issueId);
   }
 }

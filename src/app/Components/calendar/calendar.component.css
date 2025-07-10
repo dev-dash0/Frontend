@@ -135,6 +135,7 @@
 
 .issue-card h3 {
   margin: 0;
+  text-transform: capitalize;
 }
 
 .issue-card p {

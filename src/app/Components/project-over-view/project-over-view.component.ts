@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { SideMenuComponent } from "../../Shared/side-menu/side-menu.component";
 import { SearchBarComponent } from "../../Shared/search-bar/search-bar.component";
 import { AllIssuesDashboardComponent } from "../all-issues-dashboard/all-issues-dashboard.component";
@@ -20,13 +20,15 @@ import { SprintService } from '../../Core/Services/sprint.service';
 import { IssueModalComponent } from '../issue-modal/issue-modal.component';
 import { SprintModalComponent } from '../sprint-modal/sprint-modal.component';
 import { SharedDeleteModalComponent } from '../../Shared/delete-modal/delete-modal.component';
-import { Sprint } from '../../Core/interfaces/sprint';
+import { Sprint, SprintWithProgress } from '../../Core/interfaces/sprint';
 import { Issue } from '../../Core/interfaces/Dashboard/Issue';
 import { PinnedService } from '../../Core/Services/pinned.service';
 import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-users-to-issue.component';
 import { SigninSignupNavbarComponent } from '../../Shared/signin-signup-navbar/signin-signup-navbar.component';
 import { UpdateProjectComponent } from '../update-project/update-project.component';
 import { ProjectStateService } from '../../Core/Services/project-state.service';
+import { DashboardLoaderComponent } from "../../Shared/dashboard-loader/dashboard-loader.component";
+import { ProjectVisitService } from '../../Core/Services/project-visit.service';
 
 @Component({
   selector: 'app-project-over-view',
@@ -36,6 +38,7 @@ import { ProjectStateService } from '../../Core/Services/project-state.service';
     CommonModule,
     SigninSignupNavbarComponent,
     AssignUsersToIssueComponent,
+    DashboardLoaderComponent,
   ],
   templateUrl: './project-over-view.component.html',
   styleUrl: './project-over-view.component.css',
@@ -50,18 +53,23 @@ export class ProjectOverViewComponent {
   ProjectDetails?: fetchedProjectDetails;
   ProjectMembers: ProfileData[] = [];
   isOwner: boolean = false;
-  sprintDetails: Sprint[] = [];
+  sprintDetails: SprintWithProgress[] = [];
   issue?: Issue;
   backlogIssues: Issue[] = [];
   issuesCompleted: string | number = '';
+  totalIssues: number = 0;
+  completionPercentage: number = 0;
   isPinned = false;
   issueLabelsList = [];
+  loading: boolean = true;
+  issueStatus: string = '';
+  issueStatusConfig: any;
   priorityConfig: any = {
     Critical: {
       icon: 'assets/images/Issue Priorities/urgent.svg',
       color: '#F44336',
     }, // Red
-    High: { icon: 'assets/images/Issue Priorities/high.svg', color: '#FFC107' }, // Orange
+    High: { icon: 'assets/images/Issue Priorities/high.svg', color: '#D07805' }, // Orange
     Medium: {
       icon: 'assets/images/Issue Priorities/normal.svg',
       color: '#4854F1',
@@ -81,193 +89,60 @@ export class ProjectOverViewComponent {
   private _router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly state = inject(ProjectStateService);
-
-  @ViewChildren('sprintCard') sprintCards!: QueryList<ElementRef>;
-
-  // ngOnInit(): void {
-  //   // Get The Id from the Path
-  //   this.ProjectId = this.route.snapshot.paramMap.get('id');
-
-  //   this.sidebarService.isCollapsed$.subscribe((collapsed) => {
-  //     this.isSidebarCollapsed = collapsed;
-  //   });
-
-  //   this.GetProjectData();
-
-  //   this.getPinnedProjects();
-
-  //   // Listen for new issue events and refresh backlog
-  //   this.RefreshBacklogAfterAddingIssue();
-  //   // Get Project id from url
-  //   this.getProjectId(); //for issue
-
-  //   this._sprintService.sprintCreated$.subscribe(() => {
-  //     this.getAllSprints();
-  //   });
-
-  //   this._IssueService.issueUpdated$.subscribe(() => {
-  //     this.fetchBacklogIssues(); //for refreshing after issue updated
-  //   });
-
-  //   this._IssueService.assignedUsersUpdated$.subscribe((updatedIssueId) => {
-  //     // لو الـ issue المتحدث تابع للمشروع الحالي، اعملي refresh
-  //     if (this.projectIdNum) {
-  //       this.fetchBacklogIssues(); // ✅ تحديث تلقائي للـ backlog
-  //       this.getAllSprints(); // ✅ كمان لو عايزة تحدث السبرنتس
-  //     }
-  //   });
-
-  //   // add the sprint with ai without refresh
-  //   this.state.sprintAdded$.subscribe((sprint) => {
-  //     if (sprint) {
-  //       // this.sprints.push(sprint); // أو أي طريقة عرض عند
-  //       }})
-  // }
-
-  // ngOnInit(): void {
-  //   // Get The Id from the Path
-  //   this.ProjectId = this.route.snapshot.paramMap.get('id');
-
-  //   this.sidebarService.isCollapsed$.subscribe((collapsed) => {
-  //     this.isSidebarCollapsed = collapsed;
-  //   });
-
-  //   this.GetProjectData();
-
-  //   this.getPinnedProjects();
-
-  //   // Listen for new issue events and refresh backlog
-  //   this.RefreshBacklogAfterAddingIssue();
-  //   // Get Project id from url
-  //   this.getProjectId(); //for issue
-
-  //   this._sprintService.sprintCreated$.subscribe(() => {
-  //     this.getAllSprints();
-  //   });
-
-  //   this._sprintService.sprintUpdated$.subscribe(() => {
-  //     this.getAllSprints();
-  //   });
-
-  //   this._projectService.projectUpdated$.subscribe(() => {
-  //     this.GetProjectData();
-  //     this.getAllSprints();
-  //     this.getProjectId();
-  //   });
-
-  //   this.route.paramMap.subscribe(() => {
-  //     this.GetProjectData();
-  //     this.getAllSprints();
-  //     this.getProjectId();
-  //   });
-
-  //   this._IssueService.issueUpdated$.subscribe(() => {
-  //     this.fetchBacklogIssues(); //for refreshing after issue updated
-  //   });
-
-  //   this._IssueService.assignedUsersUpdated$.subscribe((updatedIssueId) => {
-  //     // لو الـ issue المتحدث تابع للمشروع الحالي، اعملي refresh
-  //     if (this.projectIdNum) {
-  //       this.fetchBacklogIssues(); // ✅ تحديث تلقائي للـ backlog
-  //       this.getAllSprints(); // ✅ كمان لو عايزة تحدث السبرنتس
-  //     }
-  //   });
-
-  //   // ✅ جلب بيانات المشروع والسبرينتس وقت تحميل الصفحة
-  //   this._projectService.getProject(this.ProjectId).subscribe({
-  //     next: (res) => {
-  //       const projectId = res.result.id;
-  //       this._sprintService.getAllSprints(projectId).subscribe({
-  //         next: (res) => {
-  //           this.sprintDetails = res.result.map((sprint: Sprint) => ({
-  //             ...sprint,
-  //             startDate: this.dateFormatter(sprint.startDate),
-  //             endDate: this.dateFormatter(sprint.endDate),
-  //           }));
-  //         },
-  //       });
-  //     },
-  //   });
-
-  //   // add the sprint with ai without refresh
-  //   this.state.sprintAdded$.subscribe((sprint) => {
-  //     // if (sprint) {
-  //     //   const formattedSprint = {
-  //     //     ...sprint,
-  //     //     startDate: this.dateFormatter(sprint.startDate),
-  //     //     endDate: this.dateFormatter(sprint.endDate),
-  //     //   };
-
-  //     if (sprint) {
-  //       this.sprintDetails.push({
-  //         ...sprint,
-  //         startDate: this.dateFormatter(sprint.startDate),
-  //         endDate: this.dateFormatter(sprint.endDate),
-  //       });
-
-  //       setTimeout(() => {
-  //         const lastSprint = this.sprintCards.last;
-  //         if (lastSprint) {
-  //           lastSprint.nativeElement.classList.add('highlight-sprint');
-  //           lastSprint.nativeElement.scrollIntoView({
-  //             behavior: 'smooth',
-  //             block: 'center',
-  //           });
-
-  //           // remove the animation class after it's done
-  //           setTimeout(() => {
-  //             lastSprint.nativeElement.classList.remove('highlight-sprint');
-  //           }, 1500);
-  //         }
-  //       }, 100);
-
-  //       // this.sprintDetails.push(formattedSprint);
-
-  //     }
-  //   });
-
-  //   this.route.paramMap.subscribe((params) => {
-  //     const projectId = Number(params.get('id'));
-  //     if (projectId) {
-  //       this.GetProjectData(); // ✅ جلب المشروع
-  //       this.RefreshBacklogAfterAddingIssue(); // ✅ جلب الـ issues
-  //       this.getAllSprints()
-  //     }
-  //   });
-  // }
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
+    // 📌 Get ID from the route
+    this.ProjectId = this.route.snapshot.paramMap.get('id');
+    const projectId = this.route.snapshot.params['id']; // for visit count
+
+    if (projectId) {
+      this.projectIdNum = +projectId;
+      this._ProjectVisitService.incrementVisit(+projectId);
+      this.GetProjectData();
+      this.getAllSprints();
+      this.fetchBacklogIssues();
+      this.getPinnedProjects();
+    }
+
+    // ✅ Listen to param changes (e.g., if route changes from one project to another)
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
         this.ProjectId = id;
         this.projectIdNum = +id;
-
-        this.GetProjectData(); // تحميل بيانات المشروع
-        this.getAllSprints(); // تحميل السبرنتس
-        this.fetchBacklogIssues(); // تحميل الـ backlog
-        this.getPinnedProjects(); // تحقق من pin
+        this.GetProjectData();
+        this.getAllSprints();
+        this.fetchBacklogIssues();
+        this.getPinnedProjects();
       }
     });
 
+    // 📦 Sidebar toggle
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
       this.isSidebarCollapsed = collapsed;
     });
 
+    // 🔁 Refresh project and sprint data when updated
     this._sprintService.sprintCreated$.subscribe(() => {
+      this.getAllSprints();
+    });
+
+    this._sprintService.sprintUpdated$.subscribe(() => {
       this.getAllSprints();
     });
 
     this._projectService.projectUpdated$.subscribe(() => {
       this.GetProjectData();
       this.getAllSprints();
+      this.getProjectId();
     });
 
     this._IssueService.issueUpdated$.subscribe(() => {
       this.fetchBacklogIssues();
     });
 
-    this._IssueService.assignedUsersUpdated$.subscribe(() => {
+    this._IssueService.assignedUsersUpdated$.subscribe((updatedIssueId) => {
       this.fetchBacklogIssues();
       this.getAllSprints();
     });
@@ -276,15 +151,19 @@ export class ProjectOverViewComponent {
       this.fetchBacklogIssues();
     });
 
+    // 🧠 AI: Sprint added with animation
     this.state.sprintAdded$.subscribe((sprint) => {
       if (sprint) {
-        this.sprintDetails.push({
+        const formattedSprint = {
           ...sprint,
           startDate: this.dateFormatter(sprint.startDate),
           endDate: this.dateFormatter(sprint.endDate),
-        });
+        };
 
-        window.location.reload();
+        this.sprintDetails.push(formattedSprint);
+
+        // Optional: remove this reload if animation works smoothly
+        // window.location.reload(); // ❌ you probably don't want this in the merged version
 
         setTimeout(() => {
           const lastSprint = this.sprintCards.last;
@@ -294,6 +173,7 @@ export class ProjectOverViewComponent {
               behavior: 'smooth',
               block: 'center',
             });
+
             setTimeout(() => {
               lastSprint.nativeElement.classList.remove('highlight-sprint');
             }, 1500);
@@ -301,7 +181,17 @@ export class ProjectOverViewComponent {
         }, 100);
       }
     });
+
+    // 🔁 Call this if it's used somewhere for issue actions
+    this.RefreshBacklogAfterAddingIssue();
+
+    // 🆔 Needed for some issue operations
+    this.getProjectId();
   }
+
+  private readonly _ProjectVisitService = inject(ProjectVisitService);
+
+  @ViewChildren('sprintCard') sprintCards!: QueryList<ElementRef>;
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
@@ -385,10 +275,10 @@ export class ProjectOverViewComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'deleted') {
-        console.log('Issue deleted successfully');
         // this.dialogService.showDeletionSuccess();  //Want to show toaster
-        // this.showSuccess();
+        this.showSuccessDelete();
         // this._IssueService.showSuccess();
+        console.log('Issue deleted successfully');
         this.fetchBacklogIssues();
       } else {
         // this.fetchBacklogIssues();
@@ -397,6 +287,29 @@ export class ProjectOverViewComponent {
     });
   }
 
+  showSuccessDelete() {
+    this._toaster.success(
+      'The Project has been Pinned',
+      'Pinned Successfully',
+      {
+        toastClass: 'toast-pink',
+        timeOut: 10000,
+        closeButton: true,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+      }
+    );
+  }
+
+  showFailDelete(err: any) {
+    this._toaster.error('err', 'Pinned Failed', {
+      toastClass: 'toast-pink',
+      timeOut: 10000,
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+    });
+  }
   openDeleteProjectModal(projectId: number, projectTitle: string) {
     const dialogRef = this.dialog.open(SharedDeleteModalComponent, {
       width: '450px',
@@ -454,6 +367,9 @@ export class ProjectOverViewComponent {
     this._projectService.getProject(this.ProjectId).subscribe({
       next: (res) => {
         this.ProjectDetails = res.result;
+        // console.log('Project Details',this.ProjectDetails);
+        this.loadProjectUsers();
+        this.loading=false
 
         this._ProfileService.getProfileData().subscribe({
           next: (user) => {
@@ -537,7 +453,7 @@ export class ProjectOverViewComponent {
         this.openIssueView(issueId);
         this.isModalOpen = true;
 
-        // بعد ما المودال يفتح (يمكن تستخدم setTimeout لتأخير بسيط لو حصل تأخير في انشاء الـ ViewChild)
+        // Load assigned users after the issue is loaded
         setTimeout(() => {
           if (this.assignUsersComp) {
             this.assignUsersComp.loadAssignedUsers();
@@ -601,11 +517,36 @@ export class ProjectOverViewComponent {
   getAllSprints() {
     this._sprintService.getAllSprints(+this.ProjectId).subscribe({
       next: (res) => {
-        this.sprintDetails = res.result.map((sprint: Sprint) => ({
-          ...sprint,
-          startDate: this.dateFormatter(sprint.startDate),
-          endDate: this.dateFormatter(sprint.endDate),
-        }));
+        this._sprintService.getAllSprints(res.result.id).subscribe({
+          next: (res) => {
+            // console.log('Sprints in project view',res);
+            this.sprintDetails = res.result.map((sprint: any) => {
+              let completed = 0;
+              let total = 0;
+            
+              if (Array.isArray(sprint.issues)) {
+                sprint.issues.forEach((issue: any) => {
+                  total++;
+                  if (issue.status?.trim().toLowerCase() === 'completed') {
+                    completed++;
+                  }
+                });
+              }
+            
+              const completionPercentage = total > 0 ? (completed / total) * 100 : 0;
+            
+              return {
+                ...sprint,
+                startDate: this.dateFormatter(sprint.startDate),
+                endDate: this.dateFormatter(sprint.endDate),
+                totalIssues: total,
+                completedIssues: completed,
+                progress: completionPercentage, // Calculate the progress percentage
+              }as SprintWithProgress;
+            });
+            
+          },
+        });
       },
     });
   }
@@ -723,5 +664,69 @@ export class ProjectOverViewComponent {
       progressBar: true,
       progressAnimation: 'decreasing',
     });
+  }
+
+  // -----------------------------------------------------------
+  // Get Project Users
+  loadProjectUsers() {
+    this._projectService.getProject(this.ProjectId).subscribe({
+      next: (res) => {
+        const joinedUsers = res.result?.tenant.joinedUsers || [];
+        const userProjects = res.result?.userProjects || [];
+
+        this.ProjectMembers = joinedUsers.map((user: any) => {
+          const matchedProject = userProjects.find(
+            (proj: any) => proj.userId === user.id
+          );
+
+          return {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            imageUrl: user.imageUrl,
+            role: matchedProject?.role || 'Unknown',
+          };
+        });
+
+        // console.log('Project users with roles:', this.ProjectMembers);
+      },
+      error: (err) => {
+        console.error('Error loading project users', err);
+      },
+    });
+  }
+
+  // -----------------------------------------------------------
+  // copy function
+  copied = { code: false, url: false };
+  copyText(text: 'code' | 'url') {
+    navigator.clipboard
+      .writeText(text === 'code' ? this.ProjectDetails?.projectCode || '' : '')
+      .then(() => {
+        this.copied[text] = true;
+        this.cdr.markForCheck();
+        setTimeout(() => {
+          this.copied[text] = false;
+          this.cdr.markForCheck();
+        }, 2000);
+      });
+  }
+
+  // -----------------------------------------------------------
+  // Get Priority Class
+  getPriorityClass(priority: string): string {
+    switch (priority.toLowerCase()) {
+      case 'low':
+        return 'low-tag';
+      case 'medium':
+        return 'medium-tag';
+      case 'high':
+        return 'high-tag';
+      case 'critical':
+        return 'critical-tag';
+      default:
+        return '';
+    }
   }
 }

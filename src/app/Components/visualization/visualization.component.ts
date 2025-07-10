@@ -68,7 +68,6 @@ export class VisualizationComponent implements OnInit {
           error: (err) => {
             console.error(err)
             this.isLoading = false;
-
           },
         });
       },

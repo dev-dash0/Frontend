@@ -7,49 +7,178 @@
     </div>
     <div class="row g-3 mt-2">
       <div class="col-lg-6">
-        <div class="card cardBottomRight h-100">
-          <div class="card-body ">
-            <div class="headTitle mb-4">
-              <img src="assets/images/dashboard icons/Group of Projects.svg" alt="projects icon" />
-              <h3 class="m-0">Projects</h3>
+        <div class="card h-100 cardBottomRight urgent-card">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="headTitle">
+              <img src="assets/images/dashboard icons/urgent alarm.svg" width="30" class="me-2" alt="Urgent alarm icon">
+              <h3 class="mb-0">Urgent Issues</h3>
             </div>
-            <ul>
-              @for (project of AllProjectList; track $index)
-              {
-              <li>
-                <div class="project card-sub-title ">
-                  <img src="assets/images/dashboard icons/list.svg" alt="" />
-                  <span class="fs-5">{{capitalizeTitles(project.name)}}</span>
+            <span class="badge bg-danger">Attention</span>
+          </div>
+
+          <div class="urgent-scroll">
+            <ul class="list-unstyled mb-0 me-1" *ngIf="UrgentIssues.length>0">
+              <li class="issue-item {{ issue.priority.toLowerCase() }}" *ngFor="let issue of UrgentIssues;">
+                <div class="d-flex flex-column">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="text-capitalize me-1  fw-semibold cursor-pointer" (click)="loadIssue(issue.id)">
+                      {{ issue.title }}
+                    </span>
+                    <img *ngIf="getPriorityIcon(issue.priority)" [src]="getPriorityIcon(issue.priority)" width="20"
+                      height="20" [alt]="issue.priority + ' priority icon'" [matTooltip]="issue.priority + ' priority'"
+                      matTooltipPosition="above" matTooltipClass="my-custom-tooltip" />
+
+                  </div>
+                  <small class="dev-text-muted text-capitalize cursor-pointer"
+                    routerLink="/MyDashboard/Project/{{ issue.projectId }}">
+                    <i class="fa-solid fa-folder"></i>
+
+                    {{ issue.projectName}}
+                  </small>
                 </div>
-                <span class="CardbelongToSec">In {{project.tenant.name}} company</span>
+                <div class="d-flex justify-content-between  mt-1">
+                </div>
+                <div class="d-flex flex-column align-items-end">
+                  <small class="status-badge text-center" matTooltip="status" matTooltipPosition="left"
+                    matTooltipClass="my-custom-tooltip" [ngClass]="issue.status.toLowerCase()"
+                    *ngIf="issue.status.toLowerCase() != 'in progress'">{{ issue.status
+                    }}</small>
+                  <small class="status-badge inProgress" *ngIf="issue.status.toLowerCase() === 'in progress'"
+                    matTooltip="status" matTooltipPosition="left" matTooltipClass="my-custom-tooltip">{{ issue.status
+                    }}
+                  </small>
+                  <!-- Deadline Section -->
+                  <div class="Deadline d-flex justify-content-between mt-1"
+                    matTooltip="{{issue.deadline| date: 'mediumDate'}}" matTooltipPosition="above"
+                    matTooltipClass="my-custom-tooltip">
+                    <small class="text-light">
+
+                      <span>
+                        Deadline
+                        <!-- <span class="ms-1">
+                          {{ issue.deadline | date: 'mediumDate' }}
+                        </span> -->
+                      </span>
+                    </small>
+
+                    <small class="dev-text-muted">(
+                      <i [ngClass]="{
+                        'fa-solid fa-triangle-exclamation text-danger': getDeadlineStatus(issue.deadline) === 'passed',
+                        'fa-regular fa-clock text-warning': getDeadlineStatus(issue.deadline) === 'upcoming'
+                      }"></i>
+                      {{ getDeadlineStatus(issue.deadline) === 'passed' ? 'Overdue' : 'Soon' }})
+                    </small>
+                  </div>
+
+                </div>
               </li>
-              }
+
             </ul>
+            <div class="d-flex justify-content-center align-items-center dev-text-muted h-100"
+              *ngIf="UrgentIssues.length ==0">
+              <p>No Issues found yet.</p>
+            </div>
           </div>
         </div>
       </div>
+
       <div class="col-lg-6">
-        <div class="card cardBottomLeft h-100">
-          <div class="card-body">
-            <div class="headTitle mb-4">
-              <img src="assets/images/dashboard icons/Checklist.svg" alt="Issues icon" />
-              <h3 class="m-0">Issues</h3>
+        <div class="card h-100 cardBottomLeft recent-projects-card glass-effect">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="headTitle d-flex align-items-center">
+              <img src="assets/images/dashboard icons/Group of Projects.svg" width="28" class="me-2"
+                alt="Projects icon" />
+              <h3 class="m-0">Your Projects</h3>
             </div>
-            <ul>
-              @for (issue of AllIssueList; track $index)
-              {
-              <li>
-                <div class="issues card-sub-title">
-                  <img src="assets/images/dashboard icons/list.svg" alt="" />
-                  <span class="fs-5">{{capitalizeTitles(issue.title)}}</span>
-                </div>
-                <span class="CardbelongToSec">In {{capitalizeTitles(issue.projectName)}} Project</span>
-              </li>
-              }
-            </ul>
+            <a class="small custom-btn text-center text-decoration-none" routerLink="/MyDashboard/allProjects">
+              View All
+            </a>
           </div>
+          <div class="recent-scroll">
+            <div class="h-100" *ngIf="recentProjects.length > 0 ||mostVisitedProjects.length>0">
+              <div class="recentProjects" [@fadeSlideAnimation] *ngIf="activeTab === 'recent'">
+                <ul class="list-unstyled mb-0 me-1">
+                  @for (project of recentProjects; track $index) {
+                  <li class="project-item">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                      <div>
+                        <h6 class="mb-1 text-capitalize fw-semibold text-light cursor-pointer"
+                          routerLink="/MyDashboard/Project/{{ project.id }}">
+                          {{ project.name }}
+                        </h6>
+
+                        <small class="dev-text-muted">
+                          <i class="fa-solid fa-calendar-days me-1"></i>
+                          {{ project.creationDate | date: 'mediumDate' }}
+                        </small>
+                      </div>
+                      <span class="status-badge text-capitalize" [ngClass]="project.status.toLowerCase()">
+                        {{ project.status }}
+                      </span>
+                    </div>
+                  </li>
+                  }
+                </ul>
+
+              </div>
+              <div class="mostVisitedProjects h-100" [@fadeSlideAnimation] *ngIf="activeTab === 'visited'">
+                <ul class="list-unstyled mb-0 me-1" *ngIf="mostVisitedProjects.length>0">
+                  @for (project of mostVisitedProjects; track $index) {
+                  <li class="project-item">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                      <div>
+                        <h6 class="mb-1 text-capitalize fw-semibold text-light cursor-pointer"
+                          routerLink="/MyDashboard/Project/{{ project.id }}">
+                          {{ project.name }}
+                        </h6>
+
+                        <small class="dev-text-muted">
+                          <i class="fa-solid fa-calendar-days me-1"></i>
+                          {{ project.creationDate | date: 'mediumDate' }}
+                        </small>
+                      </div>
+                      <small class="text-info d-block mt-1">
+                        <i class="fa-solid fa-chart-line me-1"></i>
+                        {{ getVisitPercentage(project.id) }}% visits
+                      </small>
+                      <span class="status-badge text-capitalize" [ngClass]="project.status.toLowerCase()">
+                        {{ project.status }}
+                      </span>
+                    </div>
+                  </li>
+                  }
+                </ul>
+                <div class="d-flex justify-content-center align-items-center dev-text-muted h-100"
+                  *ngIf="mostVisitedProjects.length ==0">
+                  <p>No Projects visited yet.</p>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-center align-items-center dev-text-muted h-100"
+              *ngIf="recentProjects.length== 0 &&mostVisitedProjects.length==0">
+              <p>No Projects found yet.</p>
+            </div>
+          </div>
+          <!-- Tabs -->
+          <ul class="nav nav-pills d-flex align-items-center justify-content-center px-1"
+            *ngIf="recentProjects.length > 0 ||mostVisitedProjects.length>0">
+            <li class="nav-item">
+              <a class="nav-link text-decoration-none cursor-pointer" [class.active]="activeTab === 'recent'"
+                (click)="activeTab = 'recent'">Recent</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-decoration-none cursor-pointer" [class.active]="activeTab === 'visited'"
+                (click)="activeTab = 'visited'">Most
+                Visited</a>
+            </li>
+          </ul>
         </div>
       </div>
+
+
+
+
+
 
       <div class="col-lg-6">
         <div class="card cardTopRight">
