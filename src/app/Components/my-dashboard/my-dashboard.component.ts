@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { DeleteModalComponent } from '../deletemodal/deletemodal.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AiChatPopupComponent } from '../../Shared/ai-chat-popup/ai-chat-popup.component';
+import { ProfileService } from './../../Core/Services/profile.service';
 @Component({
   selector: 'app-my-dashboard',
   standalone: true,
@@ -208,7 +209,7 @@ export class MyDashboardComponent {
 
       // ✅ دلوقتي Reload
       window.location.reload();
-    }, 7000); // استني 2 ثانية علشان الكلام يخلص
+    }, 7000);
   }
 
   navigateToSprint(sprintId: number, sprintName: string) {
@@ -364,4 +365,5 @@ export class MyDashboardComponent {
   //   const iframe = document.getElementById('splineIframe') as HTMLElement;
   //   iframe.style.pointerEvents = 'none';
   // }
+
 }

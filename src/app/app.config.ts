@@ -17,12 +17,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideToastr } from 'ngx-toastr';
+import { tokenExpiryInterceptor } from './Core/Interceptors/token-expiry.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes,  withRouterConfig({
-      onSameUrlNavigation: 'reload'
-    } ) ),
+    provideRouter(
+      routes,
+      withRouterConfig({
+        onSameUrlNavigation: 'reload',
+      })
+    ),
     provideClientHydration(),
     provideAnimations(),
     importProvidersFrom(
@@ -38,10 +42,11 @@ export const appConfig: ApplicationConfig = {
 
     provideAnimations(), // required animations providers
     provideToastr(),
-
+    // provideHttpClient(withInterceptors([TokenExpiryInterceptor])),
     provideHttpClient(
       withFetch(),
       withInterceptors([
+        tokenExpiryInterceptor,
         // headersInterceptor,
         // catchErrorInterceptor,
         // loadingInterceptor,

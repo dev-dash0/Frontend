@@ -10,6 +10,7 @@ import { AuthService } from '../../Core/Services/Auth.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { signupValidators } from '../../Shared/validators/validators.component';
 import { ToastrService } from 'ngx-toastr';
+import { SidebarService } from '../../Core/Services/sidebar.service';
 
 @Component({
   selector: 'app-signin',
@@ -33,6 +34,7 @@ export class SigninComponent {
   private readonly _FormBuilder = inject(FormBuilder);
   private readonly _Router = inject(Router);
   private readonly toastr = inject(ToastrService);
+  private readonly sidebarService = inject(SidebarService); // ✅ Inject it
 
   loginForm: FormGroup = this._FormBuilder.group({
     email: [null, signupValidators.email],
@@ -48,7 +50,11 @@ export class SigninComponent {
           localStorage.setItem('token', res.accessToken);
           localStorage.setItem('refreshToken', res.refreshToken);
           this._AuthService.saveUserData(); // decode and set auto-logout
-          this._Router.navigate(['/MyDashboard']);
+          // this.sidebarService.resetSidebar(); // ✅ ⬅️ Reset sidebar data after login ===> dose not work 100%
+          // this._Router.navigate(['/MyDashboard']);
+          this._Router.navigateByUrl('/MyDashboard/Dashboard').then(() => {  // for auto refresh after log in 
+            window.location.reload(); // 🔄 Force full reload of sidebar
+          });
         },
         error: (err) => {
           this.errorMessage = err.error.message;

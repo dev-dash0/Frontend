@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,11 +9,17 @@ export class SidebarService {
   private companyDeletedSource = new BehaviorSubject<boolean>(false);
   private companyCreatedSource = new BehaviorSubject<boolean>(false);
   private companyUpdatedSource = new BehaviorSubject<boolean>(false);
+  private resetSidebarSubject = new Subject<void>();
   companyCreated$ = this.companyCreatedSource.asObservable();
   isCollapsed$ = this.isCollapsed.asObservable();
   companyDeleted$ = this.companyDeletedSource.asObservable();
   companyUpdated$ = this.companyUpdatedSource.asObservable();
 
+  resetSidebar$ = this.resetSidebarSubject.asObservable();
+
+  resetSidebar() {
+    this.resetSidebarSubject.next();
+  }
   notifyCompanyDeleted() {
     this.companyDeletedSource.next(true);
   }

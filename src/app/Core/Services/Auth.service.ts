@@ -57,7 +57,7 @@ export class AuthService {
     }
   }
 
-  private logoutAndRedirect() {
+  logoutAndRedirect() {
     // this.isCheckingToken = false;
     // localStorage.clear();
     // this._Router.navigate(['/signin']);

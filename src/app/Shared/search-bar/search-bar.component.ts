@@ -22,7 +22,7 @@ import { NameShortcutPipe } from '../../Core/pipes/name-shortcut.pipe';
   selector: 'app-search-bar',
   standalone: true,
   imports: [
-    MatToolbarModule,
+  MatToolbarModule,
     MatIconModule,
     MatButtonModule,
     CommonModule,
@@ -80,26 +80,51 @@ export class SearchBarComponent {
   toggleMode() {
     this.toggle = !this.toggle;
   }
+  // LogOut() {
+  //   const accessToken = localStorage.getItem('token');
+  //   const refreshToken = localStorage.getItem('refreshToken');
+
+  //   if (!accessToken || !refreshToken) {
+  //     console.warn('no tokens found,you are logged out.');
+  //     return;
+  //   }
+  //   const logoutParams = { accessToken, refreshToken };
+  //   this.authService.Logout(logoutParams).subscribe({
+  //     next: (res) => {
+  //       localStorage.removeItem('token');
+  //       localStorage.removeItem('refreshToken');
+  //       localStorage.clear();
+  //       this.router.navigate(['/signin']);
+  //     },
+  //     error: (err) => {
+  //       console.error('Logout failed:', err);
+  //     },
+  //   });
+  // }
+
   LogOut() {
     const accessToken = localStorage.getItem('token');
     const refreshToken = localStorage.getItem('refreshToken');
+    const token = { accessToken, refreshToken };
 
-    if (!accessToken || !refreshToken) {
-      console.warn('no tokens found,you are logged out.');
-      return;
+    if (token) {
+      this.authService.Logout({ token }).subscribe({
+        next: () => {
+          this.cleanUpAndRedirect();
+        },
+        error: () => {
+          this.cleanUpAndRedirect(); // Fallback if server logout fails
+        },
+      });
+    } else {
+      this.cleanUpAndRedirect(); // No token to begin with
     }
-    const logoutParams = { accessToken, refreshToken };
-    this.authService.Logout(logoutParams).subscribe({
-      next: (res) => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-        localStorage.clear();
-        this.router.navigate(['/signin']);
-      },
-      error: (err) => {
-        console.error('Logout failed:', err);
-      },
-    });
+  }
+
+  private cleanUpAndRedirect() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    this.router.navigate(['/signin']);
   }
 
   // search API
