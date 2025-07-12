@@ -74,13 +74,25 @@
               <i class="fa-solid fa-trash trash-icon" style="color: var(--mainLightBlueColor)"></i>
             </div>
             }
-            <button class="auth-form-container btn" (click)="TogglePin(ProjectDetails!, $event)">
+            <!-- <button class="auth-form-container btn" (click)="TogglePin(ProjectDetails!, $event)">
               @if (isPinned) {
               <a><i class="fa-solid fa-map-pin active-pin "></i></a>
               }@else {
               <a><i class="fa-solid fa-map-pin pin-icon "></i></a>
               }
-            </button>
+            </button> -->
+            <!-- الزر الخارجي -->
+            <div class="auth-form-container p-2" 
+            (click)="TogglePin($event)">
+              <a class="pin-icon p-0"
+                [ngClass]="{
+                'active-pin': isPinned,
+                'pin-unpinned': !isPinned }">
+                <i
+                  class="fa-solid fa-map-pin"
+                ></i>
+              </a>
+            </div>
           </div>
         </div>
       </section>

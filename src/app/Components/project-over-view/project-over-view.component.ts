@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, inject, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { SideMenuComponent } from "../../Shared/side-menu/side-menu.component";
 import { SearchBarComponent } from "../../Shared/search-bar/search-bar.component";
 import { AllIssuesDashboardComponent } from "../all-issues-dashboard/all-issues-dashboard.component";
@@ -15,7 +15,7 @@ import { ProfileService } from '../../Core/Services/profile.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogService } from '../../Core/Services/dialog.service';
 import { IssueService } from '../../Core/Services/issue/issue.service';
-import { ToastrService } from 'ngx-toastr';
+import { IndividualConfig, ProgressAnimationType, ToastrService } from 'ngx-toastr';
 import { SprintService } from '../../Core/Services/sprint.service';
 import { IssueModalComponent } from '../issue-modal/issue-modal.component';
 import { SprintModalComponent } from '../sprint-modal/sprint-modal.component';
@@ -64,6 +64,7 @@ export class ProjectOverViewComponent {
   loading: boolean = true;
   issueStatus: string = '';
   issueStatusConfig: any;
+  isPinLoading: boolean = false;
   priorityConfig: any = {
     Critical: {
       icon: 'assets/images/Issue Priorities/urgent.svg',
@@ -76,6 +77,8 @@ export class ProjectOverViewComponent {
     }, // Yellow
     Low: { icon: 'assets/images/Issue Priorities/low.svg', color: '#908F8F' }, // Green
   };
+
+  @Input() project!: ProjectResult;
 
   private dialogService = inject(DialogService);
   private dialog = inject(MatDialog);
@@ -160,6 +163,9 @@ export class ProjectOverViewComponent {
         this.fetchBacklogIssues();
       }
     });
+
+    this.getPinnedProjects(); // لازم تتنده بعد ProjectId يتحدد
+    // this.isPinned = this.ProjectDetails?.isPinned ?? false;
   }
 
   private readonly _ProjectVisitService = inject(ProjectVisitService);
@@ -566,43 +572,18 @@ export class ProjectOverViewComponent {
     };
   }
 
-  // -----------------------------------------------------------
+  //--------// -----------------------------------------------------------
   // pin & unpin
-  TogglePin(project: ProjectResult, event: MouseEvent) {
-    event.stopPropagation();
-    if (this.isPinned) {
-      this._PinnedService.UnPinItem('Project', project.id).subscribe({
-        next: (res) => {
-          this.isPinned = false;
-          this.showSuccessPin();
-        },
-        error: (err) => {
-          console.error('Unpin failed:', err);
-          this.showFail(err?.error?.message || 'Unpin failed');
-        },
-      });
-    } else {
-      this._PinnedService.PinItem('Project', project.id).subscribe({
-        next: (res) => {
-          this.isPinned = true;
-          this.showSuccessUnPin();
-        },
-        error: (err) => {
-          console.error('Pin failed:', err);
-          this.showFail(err?.error?.message || 'Pin failed');
-        },
-      });
-    }
-  }
 
-  getPinnedProjects() {
+  //------------ Pinned Part --------------------
+  getPinnedProjects(): void {
     this._PinnedService.getPinnedProjects().subscribe({
       next: (res) => {
-        const pinnedProjects = res.result; // Adjust based on actual response structure
-        const isFound = pinnedProjects.some(
-          (p: any) => p.id === this.ProjectId
-        );
-        this.isPinned = isFound;
+        const pinnedProjects = res.result;
+        const myProjectId = this.ProjectDetails?.id || this.ProjectId;
+
+        this.isPinned = pinnedProjects.some((p: any) => p.id === myProjectId);
+        console.log('✅ isPinned =', this.isPinned); // 🟢 أضيفي ده للتأكد
       },
       error: (err) => {
         console.error('Fetching pinned projects failed:', err);
@@ -611,44 +592,73 @@ export class ProjectOverViewComponent {
     });
   }
 
-  showSuccessPin() {
-    this._toaster.success(
-      'The Project has been Pinned',
-      'Pinned Successfully',
-      {
-        toastClass: 'toast-pink',
-        timeOut: 10000,
-        closeButton: true,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-      }
-    );
-  }
-  showSuccessUnPin() {
-    this._toaster.success(
-      'The Project has been UnPinned',
-      'UnPinned Successfully',
-      {
-        toastClass: 'toast-pink',
-        timeOut: 10000,
-        closeButton: true,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-      }
-    );
+  TogglePin(event: MouseEvent): void {
+    event.stopPropagation();
+
+    const itemId = this.ProjectDetails?.id;
+    if (!itemId) {
+      this.showFail('Project ID is missing!');
+      return;
+    }
+
+    console.log('📌 TogglePin clicked. isPinned =', this.isPinned); // 🟢
+
+    if (this.isPinned) {
+      this._PinnedService.UnPinItem('Project', itemId).subscribe({
+        next: () => {
+          this.isPinned = false;
+          this.showSuccessUnPin();
+        },
+        error: (err) => {
+          console.error('❌ Unpin failed:', err);
+          this.showFail(err?.error?.message || 'Unpin failed');
+        },
+      });
+    } else {
+      this._PinnedService.PinItem('Project', itemId).subscribe({
+        next: () => {
+          this.isPinned = true;
+          this.showSuccessPin();
+        },
+        error: (err) => {
+          console.error('❌ Pin failed:', err);
+          this.showFail(err?.error?.message || 'Pin failed');
+        },
+      });
+    }
   }
 
-  showFail(err: any) {
-    this._toaster.error('err', 'Pinned Failed', {
+  // ------------------ Toasts ------------------
+
+  private toastOptions(): Partial<IndividualConfig> {
+    return {
       toastClass: 'toast-pink',
       timeOut: 10000,
       closeButton: true,
       progressBar: true,
-      progressAnimation: 'decreasing',
-    });
+      progressAnimation: 'decreasing' as ProgressAnimationType, // ✅ fixed
+    };
+  }
+  private showSuccessPin(): void {
+    this._toaster.success(
+      'The Project has been Pinned',
+      'Pinned Successfully',
+      this.toastOptions()
+    );
   }
 
-  // -----------------------------------------------------------
+  private showSuccessUnPin(): void {
+    this._toaster.success(
+      'The Project has been UnPinned',
+      'UnPinned Successfully',
+      this.toastOptions()
+    );
+  }
+
+  private showFail(message: string): void {
+    this._toaster.error(message, 'Action Failed', this.toastOptions());
+  }
+  //-----------// -------------------------------------------------------
   // Get Project Users
   loadProjectUsers() {
     this._projectService.getProject(this.ProjectId).subscribe({
