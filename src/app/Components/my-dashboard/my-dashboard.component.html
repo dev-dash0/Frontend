@@ -101,7 +101,7 @@
     </div>
   </div>
 
-  <div class="booty-thought" *ngIf="agentThinking">
+  <div class="booty-thought " *ngIf="agentThinking">
     🤖 Thinking...
   </div>
   
@@ -136,12 +136,19 @@
   <div *ngIf="showChatPopup" class="chat-popup">
     <div class="chat-welcome">Hi, I'm your virtual assistant. How can I help you today?</div>
     <!-- <app-ai-chat-popup (close)="showChatPopup = false"></app-ai-chat-popup> -->
-    <app-ai-chat-popup
+    <!-- <app-ai-chat-popup
     *ngIf="showChatPopup"
     (close)="showChatPopup = false"
     (agentAction)="handleAgentAction($event)"
     (loadingState)="onAgentLoading($event)"
-  ></app-ai-chat-popup>
+  ></app-ai-chat-popup> -->
+  <app-ai-chat-popup
+  *ngIf="showChatPopup"
+  (close)="onChatClosed()"
+  (agentAction)="handleAgentAction($event)"
+  (chatIdReceived)="onChatIdReceived($event)"
+></app-ai-chat-popup>
+
   
   </div>
 </div>

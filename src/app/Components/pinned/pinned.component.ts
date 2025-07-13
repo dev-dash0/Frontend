@@ -10,6 +10,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { FlipCardComponent } from '../../Shared/flip-card/flip-card.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Sprint } from '../../Core/interfaces/sprint';
 
 @Component({
   selector: 'app-pinned',
@@ -30,6 +31,8 @@ export class PinnedComponent {
   IssuesLists: Issue[] = []; //! Wait for the Issue Interface
   TenantOwner: TenantOwner[] = [];
   hovering: boolean = false;
+  SprintsList: Sprint[] = [];
+  SprintCurrentIndex = 0;
 
   // Tenants: Tenant[] = [];
   // defaultUserImage: string =
@@ -53,12 +56,14 @@ export class PinnedComponent {
     });
     this.GetPinnedProjects();
     this.getPinnedTenants();
+    this.getPinnedSprints();
+    this.getPinnedIssues();
   }
 
   showSuccess() {
     this._toaster.success(
-      'The Project has been Pinned',
-      'Pinned Successfully',
+      'The Project has been UnPinned',
+      'UnPinned Successfully',
       {
         toastClass: 'toast-pink',
         timeOut: 10000,
@@ -70,13 +75,17 @@ export class PinnedComponent {
   }
 
   showFail() {
-    this._toaster.error('The Project has not been Pinned', 'Pinned Failed', {
-      toastClass: 'toast-pink',
-      timeOut: 10000,
-      closeButton: true,
-      progressBar: true,
-      progressAnimation: 'decreasing',
-    });
+    this._toaster.error(
+      'The Project has not been UnPinned',
+      'UnPinned Failed',
+      {
+        toastClass: 'toast-pink',
+        timeOut: 10000,
+        closeButton: true,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+      }
+    );
   }
 
   isValidUrl(url: any): boolean {
@@ -104,6 +113,9 @@ export class PinnedComponent {
       next: (res) => {
         console.log('UnPinned successfully:', res);
         this.showSuccess();
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       },
       error: (err) => {
         console.error('UnPinning failed:', err);
@@ -119,6 +131,9 @@ export class PinnedComponent {
       next: (res) => {
         console.log('UnPinned successfully:', res);
         this.showSuccess();
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       },
       error: (err) => {
         console.error('UnPinning failed:', err);
@@ -159,6 +174,59 @@ export class PinnedComponent {
     });
   }
 
+  // --------- sprint details
+  getPinnedSprints() {
+    this._PinnedService.getPinnedSprints().subscribe({
+      next: (res) => {
+        this.SprintsList = res.result;
+        this.SprintCurrentIndex = 0;
+      },
+    });
+  }
+
+  get visibleSprints() {
+    const visibleCount = Math.min(3, this.SprintsList.length);
+    return Array.from(
+      { length: visibleCount },
+      (_, i) =>
+        this.SprintsList[
+          (this.SprintCurrentIndex + i) % this.SprintsList.length
+        ]
+    );
+  }
+
+  getSprintsColor(index: number): string {
+    const visibleCount = Math.min(3, this.SprintsList.length);
+    const adjustedIndex = (this.SprintCurrentIndex + index) % visibleCount;
+    return this.cardColors[adjustedIndex];
+  }
+
+  onSprintCardClick() {
+    if (this.isAnimating) return;
+    this.isAnimating = true;
+
+    const card = document.querySelector('.card.SprintFront') as HTMLElement;
+    card.classList.add('drop');
+
+    setTimeout(() => {
+      card.classList.remove('drop');
+      this.SprintCurrentIndex =
+        (this.SprintCurrentIndex + 1) % this.SprintsList.length;
+      this.isAnimating = false;
+    }, 500);
+  }
+
+  UnPinSprint(Sprint: Sprint, event: MouseEvent) {
+    event.stopPropagation();
+    const sprintId = Sprint.id;
+    this._PinnedService.UnPinItem('Sprint', sprintId).subscribe({
+      next: () => {
+        this.showSuccess();
+        setTimeout(() => window.location.reload(), 3000);
+      },
+      error: () => this.showFail(),
+    });
+  }
   //---------- project details
 
   getPriorityClass(priority: string): string {
@@ -179,15 +247,20 @@ export class PinnedComponent {
   //  --------- card stack ---------------------------
 
   // --------- Projects
+  cardColors = [
+    'linear-gradient(145deg,rgb(24, 45, 91),rgb(91, 45, 68))',
+    'linear-gradient(145deg,rgb(32, 62, 121),rgb(34, 59, 105))',
+    'linear-gradient(145deg,rgb(35, 69, 102),rgb(21, 57, 123))',
+  ]; // The Most most
   // cardColors = ['#21264F', '#322B4E', '#3F2E4D']; // project colors
   // cardColors = ['#4B5D67', '#38434F', '#2C2F3A']; //
   // cardColors = ['#5A4E7C', '#3D3B4F', '#2A2933']; // lavender
   //cardColors = ['#2A2E43', '#3E4463', '#525B7A'];  // The Most
-  cardColors = [
-    'linear-gradient(145deg, #1B2A47,rgb(47, 70, 113))',
-    'linear-gradient(145deg,rgb(32, 62, 121),rgb(34, 59, 105))',
-    'linear-gradient(145deg,rgb(35, 69, 102),rgb(21, 57, 123))',
-  ]; // The Most most
+  // cardColors = [
+  //   'linear-gradient(145deg, #1B2A47,rgb(47, 70, 113))',
+  //   'linear-gradient(145deg,rgb(32, 62, 121),rgb(34, 59, 105))',
+  //   'linear-gradient(145deg,rgb(35, 69, 102),rgb(21, 57, 123))',
+  // ]; // The Most most
   // cardColors = [
   //   'rgba(30, 50, 90, 0.75)',
   //   'rgba(31, 54, 101, 0.75)',

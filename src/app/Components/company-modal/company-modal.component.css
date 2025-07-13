@@ -156,7 +156,7 @@ p {
   margin-bottom: 0;
 }
 
-@media screen and (max-width: 1010px) {
+/* @media screen and (max-width: 1010px) {
   .modal-container {
     width: 70%;
   }

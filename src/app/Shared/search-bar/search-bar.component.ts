@@ -9,29 +9,26 @@ import { SearchService } from '../../Core/Services/search.service';
 import { FormsModule } from '@angular/forms';
 import { SearchResults } from '../../Core/interfaces/search-results';
 import { NotificationService } from '../../Core/Services/notification.service';
-import {
-  Notification,
-  Project,
-  User,
-  UserProject,
-} from '../../Core/interfaces/notification';
-import { CompanyService } from '../../Core/Services/company.service';
+import { Notification, User } from '../../Core/interfaces/notification';
 import { DashboardService } from '../../Core/Services/dashboard/dashboard.service';
-import { O } from '@angular/cdk/keycodes';
 import { ProjectResult } from '../../Core/interfaces/project';
 import { map, switchMap } from 'rxjs';
-import { BlobOptions } from 'buffer';
+import { DashboardLoaderComponent } from '../dashboard-loader/dashboard-loader.component';
+import { DialogService } from '../../Core/Services/dialog.service';
+import { ProfileService } from '../../Core/Services/profile.service';
+import { NameShortcutPipe } from '../../Core/pipes/name-shortcut.pipe';
 
 @Component({
   selector: 'app-search-bar',
   standalone: true,
   imports: [
-    MatToolbarModule,
+  MatToolbarModule,
     MatIconModule,
     MatButtonModule,
     CommonModule,
     RouterLink,
     FormsModule,
+    DashboardLoaderComponent,
   ],
   templateUrl: './search-bar.component.html',
   styleUrl: './search-bar.component.css',
@@ -39,10 +36,13 @@ import { BlobOptions } from 'buffer';
 export class SearchBarComponent {
   constructor(
     private authService: AuthService,
-    private readonly _NotificationService: NotificationService,
-    private readonly _DashboardService: DashboardService,
+    private _NotificationService: NotificationService,
+    private _DashboardService: DashboardService,
+    private readonly _ProfileService: ProfileService,
+    private readonly nameShortcutPipe: NameShortcutPipe,
     private router: Router,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private dialogService: DialogService
   ) {}
 
   toggle = false;
@@ -51,10 +51,16 @@ export class SearchBarComponent {
   showResults = false;
   loading = false;
   showDivider = true;
+  noResults = false;
+  showSearchPanel = false;
+
+  // Notification
   showPanel = false;
   projects: ProjectResult[] = [];
   allUsers: User[] = [];
   NotifyUser: any = {};
+  ProfileName: string = '';
+  // LName: string = '';
   // close: Boolean = false;
 
   joinedUsers: any[] = [];
@@ -62,6 +68,7 @@ export class SearchBarComponent {
   notifications: Notification[] = [];
 
   ngOnInit(): void {
+    this.getProfileName();
     this.getNotification();
   }
 
@@ -73,43 +80,87 @@ export class SearchBarComponent {
   toggleMode() {
     this.toggle = !this.toggle;
   }
+  // LogOut() {
+  //   const accessToken = localStorage.getItem('token');
+  //   const refreshToken = localStorage.getItem('refreshToken');
+
+  //   if (!accessToken || !refreshToken) {
+  //     console.warn('no tokens found,you are logged out.');
+  //     return;
+  //   }
+  //   const logoutParams = { accessToken, refreshToken };
+  //   this.authService.Logout(logoutParams).subscribe({
+  //     next: (res) => {
+  //       localStorage.removeItem('token');
+  //       localStorage.removeItem('refreshToken');
+  //       localStorage.clear();
+  //       this.router.navigate(['/signin']);
+  //     },
+  //     error: (err) => {
+  //       console.error('Logout failed:', err);
+  //     },
+  //   });
+  // }
+
   LogOut() {
     const accessToken = localStorage.getItem('token');
     const refreshToken = localStorage.getItem('refreshToken');
+    const token = { accessToken, refreshToken };
 
-    if (!accessToken || !refreshToken) {
-      console.warn('no tokens found,you are logged out.');
-      return;
+    if (token) {
+      this.authService.Logout({ token }).subscribe({
+        next: () => {
+          this.cleanUpAndRedirect();
+        },
+        error: () => {
+          this.cleanUpAndRedirect(); // Fallback if server logout fails
+        },
+      });
+    } else {
+      this.cleanUpAndRedirect(); // No token to begin with
     }
-    const logoutParams = { accessToken, refreshToken };
-    this.authService.Logout(logoutParams).subscribe({
-      next: (res) => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-        localStorage.clear();
-        this.router.navigate(['/signin']);
-      },
-      error: (err) => {
-        console.error('Logout failed:', err);
-      },
-    });
+  }
+
+  private cleanUpAndRedirect() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    this.router.navigate(['/signin']);
   }
 
   // search API
   search(event?: KeyboardEvent) {
     if (event?.key == 'Escape') {
+      this.showSearchPanel = false;
       return;
     }
+    if (!this.searchText) {
+      this.clearSearch();
+      this.showResults = false;
+      this.showSearchPanel = false;
+      return;
+    }
+
+    this.showSearchPanel = true;
     this.loading = true;
+    this.showResults = true;
     this.searchService.search(this.searchText).subscribe({
       next: (res) => {
         console.log(this.searchText);
         this.searchResult = res.result;
-        this.showResults = true;
+        // this.showResults = true;
+        // this.showSearchPanel = true;
+        this.noResults = !(
+          this.searchResult?.tenants?.length ||
+          this.searchResult?.projects?.length ||
+          this.searchResult?.sprints?.length ||
+          this.searchResult?.issues?.length
+        );
         this.loading = false;
       },
       error: (err) => {
         console.error('Search failed:', err);
+        this.loading = false;
+        this.noResults = true;
       },
     });
   }
@@ -119,6 +170,8 @@ export class SearchBarComponent {
     this.searchResult = null;
     this.showResults = false;
     this.loading = false;
+    this.showSearchPanel = false;
+    this.noResults = false;
   }
 
   navigateToIssue(issueId: number) {
@@ -136,6 +189,10 @@ export class SearchBarComponent {
   navigateToSprint(sprintId: number) {
     this.router.navigate(['/MyDashboard/Sprint', sprintId]);
     this.clearSearch();
+  }
+
+  openIssueView(issueId: number) {
+    this.dialogService.openIssueViewModal(issueId);
   }
 
   closeResults(): void {
@@ -204,6 +261,28 @@ export class SearchBarComponent {
     }
   }
 
+  getIssueStatusClass(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'backlog':
+        return 'backlog-status';
+      case 'in progress':
+        return 'inprogress-status';
+      case 'canceled':
+        return 'cancelled-status';
+      case 'completed':
+        return 'complete-status';
+      case 'reviewing':
+        return 'reviewing-status';
+      case 'postponed':
+        return 'postpone-status';
+      case 'to do':
+        return 'todo-status';
+      default:
+        return '';
+    }
+  }
+
+  // Notification API
   getNotification() {
     this._DashboardService
       .getDashboardAllProject()
@@ -273,5 +352,15 @@ export class SearchBarComponent {
   getClose() {
     this.showPanel = false;
     this.getNotification();
+  }
+
+  // Profile API
+  getProfileName() {
+    this._ProfileService.getProfileData().subscribe({
+      next: (res) => {
+        const fullName = `${res.firstName} ${res.lastName}`;
+        this.ProfileName = this.nameShortcutPipe.transform(fullName);
+      },
+    });
   }
 }

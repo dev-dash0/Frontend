@@ -1,0 +1,391 @@
+/*********************** Global Modal************************** */
+.modal-container {
+  color: #fff;
+  min-width: 100% !important;
+  width: fit-content;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  background-image: linear-gradient(134deg, #292f65 8%, #0b1a34 54%);
+}
+
+::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: transparent !important;
+}
+
+.row {
+  margin-block: 10px;
+}
+
+.divider {
+  height: 1px;
+  width: 100%;
+  margin-block: 10px;
+  background: linear-gradient(
+    144.98deg,
+    rgba(58, 73, 98, 0.5) 1.37%,
+    rgba(255, 144, 232, 0.5) 43.67%,
+    rgba(116, 202, 255, 0.5) 70.8%,
+    rgba(41, 47, 101, 0.5) 91.44%
+  );
+}
+
+/* ======================================================================== */
+/*********************** Modal Header**************************** */
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+/* =========================================================================== */
+/*********************** Global Modal Content Styling************************** */
+label {
+  font-size: 0.8rem;
+  margin-bottom: 5px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #91a0c0 !important;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background-color: #010423;
+  color: #91a0c0;
+  font-size: 0.7rem !important;
+  transition: background-color 9999s ease-in-out 0s, color 9999s ease-in-out 0s !important;
+}
+
+input:focus,
+textarea:focus {
+  outline: #d076be;
+  border: 1px solid #d076be7a;
+  box-shadow: 0px 0px 5px 0px #d076be7a;
+}
+
+textarea {
+  resize: none;
+}
+
+/* ============================================================================================== */
+
+/* *********************Date Piker **************************/
+
+.date-container input {
+  margin: 0px;
+  color: #91a0c0 !important;
+  width: 95px !important;
+}
+
+mat-form-field input:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+.custom-date-picker {
+  width: fit-content !important;
+  background-color: #010423;
+  border-radius: 5px !important;
+  border: 0 !important;
+}
+
+::ng-deep .mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-width: 0px;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused {
+  box-shadow: 0px 0px 5px 0px #d076be7a;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch {
+  border-width: 1px !important;
+  border-color: #d076be7a !important;
+}
+
+::ng-deep
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined
+  .mat-mdc-form-field-infix {
+  padding: 0 !important;
+}
+
+::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
+}
+
+::ng-deep .mat-mdc-form-field-icon-prefix > .mat-icon {
+  padding: 0 0 0 10px !important;
+}
+
+::ng-deep .mat-mdc-form-field-infix {
+  min-height: fit-content !important;
+  width: fit-content !important;
+}
+
+/* Dark calender */
+::ng-deep .mat-datepicker-content {
+  background-color: #010423 !important;
+  border-radius: 5px !important;
+}
+
+::ng-deep .mat-calendar-table td,
+::ng-deep .mat-calendar-table-header th {
+  color: #e28ed3 !important;
+  /* Days and weekdays */
+}
+
+::ng-deep .mat-calendar-body-cell-content {
+  color: #91a0c0 !important;
+}
+
+::ng-deep .mat-mdc-button,
+::ng-deep .mat-mdc-calendar-header {
+  color: #04122f !important;
+  /* Header text (Month/Year) */
+}
+
+::ng-deep .mat-calendar-header {
+  background-color: #d77fd4 !important;
+  border-radius: 5px 5px 0 0;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background-color: #91a0c0 !important;
+  color: #4461a8 !important;
+}
+
+::ng-deep .mat-calendar-body-today {
+  border: 1px solid #91a0c0 !important;
+  color: #91a0c0 !important;
+}
+
+/* ======================================================================= */
+/************************ Drop dawn of Type options*********************  */
+
+.custom-dropdown {
+  min-width: 150px;
+}
+
+::ng-deep .mat-mdc-form-field {
+  background: #010423 !important;
+  border-radius: 5px !important;
+}
+
+::ng-deep .mat-mdc-select-value {
+  color: #91a0c0 !important;
+  font-size: 0.7rem;
+}
+
+::ng-deep .mat-mdc-select-arrow {
+  color: #91a0c0 !important;
+}
+
+::ng-deep .mat-mdc-form-field-focus-overlay {
+  background: transparent !important;
+}
+
+/* Remove the default border */
+::ng-deep .mat-mdc-form-field-outline {
+  color: transparent !important;
+}
+
+::ng-deep .custom-mat-select.has-value .mdc-floating-label {
+  display: none !important;
+}
+
+::ng-deep .custom-dropdown .mat-mdc-text-field-wrapper {
+  padding: 10px !important;
+}
+
+/* Hide default Angular Material select arrow */
+::ng-deep .custom-dropdown .mat-mdc-select-arrow-wrapper {
+  display: none !important;
+}
+
+/* Add custom SVG arrow */
+::ng-deep.custom-dropdown .mat-mdc-select::after {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2391A0C0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/*============================================================================ */
+/* Customizing the mat-select dropdown panel */
+::ng-deep .mat-mdc-select-panel {
+  background-color: #010423 !important;
+  color: #91a0c0 !important;
+  /* border-radius: 8px !important; */
+}
+
+/* Style individual options */
+::ng-deep .mat-mdc-option {
+  color: #91a0c0 !important;
+}
+
+/* Hover effect */
+::ng-deep .mat-mdc-option:hover {
+  background-color: #2e1c33 !important;
+  /* Slightly lighter */
+}
+
+/* Selected option background */
+::ng-deep .mat-mdc-option.mat-mdc-option-active {
+  /* background-color: #242F4A !important; */
+  color: #ffffff !important;
+}
+
+/* =============================================================================== */
+/*************************** Customizing the Modal Footer**********************/
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  font-size: 0.8rem;
+}
+
+.cancel-btn {
+  background-color: #010423;
+  border: none;
+  color: #52668f;
+  cursor: pointer;
+  border: 1px solid #132342;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: all 0.2s;
+}
+
+.cancel-btn:hover {
+  background-color: #52668f7a;
+  color: #d5ddf6;
+}
+
+.confirm-btn {
+  background-color: #ff90e8;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.confirm-btn:hover {
+  background-color: #ea76d3;
+}
+
+/* ********************************************** */
+/* Labels */
+.label-chip-list {
+  width: 100%;
+  max-width: 100%;
+  overflow: auto;
+}
+
+::ng-deep .mat-mdc-chip {
+  border: 2px solid #191b36 !important;
+  background-color: transparent !important;
+}
+
+::ng-deep .mat-mdc-chip .mdc-evolution-chip__text-label {
+  color: #7b86e8 !important;
+}
+
+::ng-deep .mat-mdc-chip-remove {
+  color: #ff99eb !important;
+}
+
+::ng-deep .mat-mdc-chip:hover {
+  background-color: #252748 !important;
+}
+
+::ng-deep .mat-mdc-chip-remove mat-icon {
+  color: #d77fd4 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+::ng-deep .label-chip-list .mat-mdc-text-field-wrapper {
+  padding: 10px !important;
+}
+
+::ng-deep .mat-mdc-chip-input {
+  margin: 0 !important;
+  padding: 0 10px !important;
+  color: #91a0c0 !important;
+}
+
+/* //////////////////////////////////////////// */
+/* Status */
+::ng-deep .mat-button-toggle-group {
+  border: none !important;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+::ng-deep .mat-button-toggle {
+  background-color: transparent !important;
+  color: #91a0c0 !important;
+  border-radius: 5px;
+  border: 0 !important;
+  padding: 0 8px;
+  font-size: 0.7rem;
+}
+
+::ng-deep .mat-button-toggle-label-content {
+  padding: 0 !important;
+  height: 30px !important;
+  display: flex !important;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+
+::ng-deep .mat-button-toggle-checked {
+  background-color: #252748 !important;
+  color: #96a0f7 !important;
+}
+
+/* ?************************ */
+/* Priority */
+.low {
+  color: #908f8f !important;
+}
+
+.normal {
+  color: #4854f1 !important;
+}
+
+.high {
+  color: #d07805 !important;
+}
+
+.urgent {
+  color: #d02705 !important;
+}

@@ -22,17 +22,126 @@ import { ProjectOverViewComponent } from './Components/project-over-view/project
 import { AllIssuesDashboardComponent } from './Components/all-issues-dashboard/all-issues-dashboard.component';
 import { WelcomeComponent } from './Components/welcome/welcome.component';
 import { Welcome2Component } from './Components/welcome2/welcome2.component';
-import { AllIssuesComponent } from './Components/all-issues/all-issues.component';
+
+// export const routes: Routes = [
+//   { path: 'welcome', component: Welcome2Component, title: 'Welcome' },
+//   { path: '', redirectTo: 'welcome', pathMatch: 'full' },
+//   {
+//     path: '',
+//     component: AuthLayoutComponent,
+//     canActivate: [isLoggedInGuardGuard],
+//     children: [
+//       { path: '', redirectTo: 'signin', pathMatch: 'full' },
+//       {
+//         path: 'signin',
+//         component: SigninComponent,
+//         title: 'Sign in to Dev Dash',
+//       },
+//       {
+//         path: 'signup',
+//         component: SignupComponent,
+//         title: 'Sign up to Dev Dash',
+//       },
+//       {
+//         path: 'forgetPassword',
+//         component: ForgetPasswordComponent,
+//         title: 'Forget Password',
+//       },
+//     ],
+//   },
+//   {
+//     path: '',
+//     component: MainLayoutComponent,
+//     canActivate: [authGuardGuard],
+//     children: [
+//       //   {
+//       //     path: 'MyDashboard',
+//       //     component: ProjectOverViewComponent,
+//       //     title: 'My Dashboard',
+//       //   },
+//       //   {
+//       //     path: 'Issues',
+//       //     component: AllIssuesDashboardComponent,
+//       //     title: 'My Dashboard',
+//       //   },
+//       // ],
+//       // },
+//       {
+//         path: '',
+//         component: MainLayoutComponent,
+//         canActivate: [authGuardGuard],
+//         children: [
+//           {
+//             path: 'MyDashboard',
+//             component: MyDashboardComponent,
+//             title: 'My Dashboard',
+//             children: [
+//               {
+//                 path: '',
+//                 component: DashboardComponent,
+//                 pathMatch: 'full',
+//                 title: 'Dashboard',
+//               },
+//               {
+//                 path: 'Dashboard',
+//                 component: DashboardComponent,
+//                 title: 'Dashboard',
+//               },
+//               // {
+//               //   path: 'Project/:id',
+//               //   component: ProjectViewComponent,
+//               //   title: 'Project',
+//               // },
+//               {
+//                 path: 'Project/:id',
+//                 component: ProjectOverViewComponent,
+//                 title: 'Project',
+//               },
+//               {
+//                 path: 'Setting',
+//                 component: SettingComponent,
+//                 title: 'Settings',
+//               },
+//               {
+//                 path: 'Sprint/:id',
+//                 component: SprintViewComponent,
+//                 title: 'Sprint',
+//               },
+//               {
+//                 path: 'Company/:id',
+//                 component: CompanyViewComponent,
+//                 title: 'Company',
+//               },
+//               {
+//                 path: 'allcompanies',
+//                 component: AllcompaniesComponent,
+//                 title: 'All Companies',
+//               },
+//               {
+//                 path: 'allProjects',
+//                 component: AllProjectsComponent,
+//                 title: 'All Projects',
+//               },
+//               { path: 'Pinned', component: PinnedComponent, title: 'Pinned' },
+//             ],
+//           },
+//         ],
+//       },
+//     ],
+//   },
+//   { path: '**', component: ErrorpageComponent, title: 'Error' },
+// ];
 
 export const routes: Routes = [
   { path: 'welcome', component: Welcome2Component, title: 'Welcome' },
   { path: '', redirectTo: 'welcome', pathMatch: 'full' },
+
+  // 🔐 Auth Layout Routes (signin/signup)
   {
     path: '',
     component: AuthLayoutComponent,
     canActivate: [isLoggedInGuardGuard],
     children: [
-      { path: '', redirectTo: 'signin', pathMatch: 'full' },
       {
         path: 'signin',
         component: SigninComponent,
@@ -50,91 +159,61 @@ export const routes: Routes = [
       },
     ],
   },
+
+  // 🧑‍💻 Main Layout Routes (authenticated)
   {
     path: '',
     component: MainLayoutComponent,
     canActivate: [authGuardGuard],
     children: [
-      //   {
-      //     path: 'MyDashboard',
-      //     component: ProjectOverViewComponent,
-      //     title: 'My Dashboard',
-      //   },
-      //   {
-      //     path: 'Issues',
-      //     component: AllIssuesDashboardComponent,
-      //     title: 'My Dashboard',
-      //   },
-      // ],
-      // },
       {
-        path: '',
-        component: MainLayoutComponent,
-        canActivate: [authGuardGuard],
+        path: 'MyDashboard',
+        component: MyDashboardComponent,
+        title: 'My Dashboard',
         children: [
           {
-            path: 'MyDashboard',
-            component: MyDashboardComponent,
-            title: 'My Dashboard',
-            children: [
-              {
-                path: '',
-                component: DashboardComponent,
-                pathMatch: 'full',
-                title: 'Dashboard',
-              },
-              {
-                path: 'Dashboard',
-                component: DashboardComponent,
-                title: 'Dashboard',
-              },
-              // {
-              //   path: 'Project/:id',
-              //   component: ProjectViewComponent,
-              //   title: 'Project',
-              // },
-              {
-                path: 'Project/:id',
-                component: ProjectOverViewComponent,
-                title: 'Project',
-              },
-              {
-                path: 'Setting',
-                component: SettingComponent,
-                title: 'Settings',
-              },
-              {
-                path: 'Sprint/:id',
-                component: SprintViewComponent,
-                title: 'Sprint',
-              },
-              {
-                path: 'Company/:id',
-                component: CompanyViewComponent,
-                title: 'Company',
-              },
-              {
-                path: 'allcompanies',
-                component: AllcompaniesComponent,
-                title: 'All Companies',
-              },
-              {
-                path: 'allProjects',
-                component: AllProjectsComponent,
-                title: 'All Projects',
-              },
-              { path: 'Pinned', component: PinnedComponent, title: 'Pinned' }
-              ,
-              {
-                path: 'allIssues',
-                component: AllIssuesComponent,
-                title: 'All Issues',
-              },
-            ],
+            path: '',
+            component: DashboardComponent,
+            pathMatch: 'full',
+            title: 'Dashboard',
           },
+          {
+            path: 'Dashboard',
+            component: DashboardComponent,
+            title: 'Dashboard',
+          },
+          {
+            path: 'Project/:id',
+            component: ProjectOverViewComponent,
+            title: 'Project',
+          },
+          { path: 'Setting', component: SettingComponent, title: 'Settings' },
+          {
+            path: 'Sprint/:id',
+            component: SprintViewComponent,
+            title: 'Sprint',
+          },
+          {
+            path: 'Company/:id',
+            component: CompanyViewComponent,
+            title: 'Company',
+          },
+          {
+            path: 'allcompanies',
+            component: AllcompaniesComponent,
+            title: 'All Companies',
+          },
+          {
+            path: 'allProjects',
+            component: AllProjectsComponent,
+            title: 'All Projects',
+          },
+          { path: 'Pinned', component: PinnedComponent, title: 'Pinned' },
         ],
       },
     ],
   },
+
+  // 404 page
   { path: '**', component: ErrorpageComponent, title: 'Error' },
 ];

@@ -1,7 +1,7 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { Application } from '@splinetool/runtime';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-welcome2',
@@ -17,31 +17,35 @@ export class Welcome2Component implements AfterViewInit {
   private secondApp!: Application;
   private preloadDone = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
+
 
   ngAfterViewInit(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
     const canvas1 = document.getElementById(
       'spline-canvas-1'
     ) as HTMLCanvasElement;
     this.firstApp = new Application(canvas1);
 
-    this.firstApp
-      .load('https://prod.spline.design/bUbWPXg9-mlFAu0Z/scene.splinecode')
-      .then(() => {
-        this.firstApp.play();
+      this.firstApp
+        .load('https://prod.spline.design/bUbWPXg9-mlFAu0Z/scene.splinecode')
+        .then(() => {
+          this.firstApp.play();
 
-        setTimeout(() => {
-          this.firstApp.stop();
-          this.showContent = true;
+          setTimeout(() => {
+            this.firstApp.stop();
+            this.showContent = true;
 
-          // Start preloading second scene 2s after pause
-          setTimeout(() => this.preloadSecondScene(), 2000);
-        }, 13000);
-      });
-  }
+            setTimeout(() => this.preloadSecondScene(), 2000);
+          }, 13000);
+        });
+    }
 
   preloadSecondScene(): void {
-    if (this.preloadDone) return;
+    if (!isPlatformBrowser(this.platformId) || this.preloadDone) return;
 
     const canvas2 = document.getElementById(
       'spline-canvas-2'
@@ -57,6 +61,7 @@ export class Welcome2Component implements AfterViewInit {
   }
 
   onExploreClick(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
     this.showContent = false;
     this.isTransitioning = true;
 

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, inject, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { SideMenuComponent } from "../../Shared/side-menu/side-menu.component";
 import { SearchBarComponent } from "../../Shared/search-bar/search-bar.component";
 import { AllIssuesDashboardComponent } from "../all-issues-dashboard/all-issues-dashboard.component";
@@ -15,7 +15,7 @@ import { ProfileService } from '../../Core/Services/profile.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogService } from '../../Core/Services/dialog.service';
 import { IssueService } from '../../Core/Services/issue/issue.service';
-import { ToastrService } from 'ngx-toastr';
+import { IndividualConfig, ProgressAnimationType, ToastrService } from 'ngx-toastr';
 import { SprintService } from '../../Core/Services/sprint.service';
 import { IssueModalComponent } from '../issue-modal/issue-modal.component';
 import { SprintModalComponent } from '../sprint-modal/sprint-modal.component';
@@ -38,8 +38,8 @@ import { ProjectVisitService } from '../../Core/Services/project-visit.service';
     CommonModule,
     SigninSignupNavbarComponent,
     AssignUsersToIssueComponent,
-    DashboardLoaderComponent
-],
+    DashboardLoaderComponent,
+  ],
   templateUrl: './project-over-view.component.html',
   styleUrl: './project-over-view.component.css',
 })
@@ -61,9 +61,10 @@ export class ProjectOverViewComponent {
   completionPercentage: number = 0;
   isPinned = false;
   issueLabelsList = [];
-  loading:boolean = true;
+  loading: boolean = true;
   issueStatus: string = '';
-  issueStatusConfig: any
+  issueStatusConfig: any;
+  isPinLoading: boolean = false;
   priorityConfig: any = {
     Critical: {
       icon: 'assets/images/Issue Priorities/urgent.svg',
@@ -77,6 +78,8 @@ export class ProjectOverViewComponent {
     Low: { icon: 'assets/images/Issue Priorities/low.svg', color: '#908F8F' }, // Green
   };
 
+  @Input() project!: ProjectResult;
+
   private dialogService = inject(DialogService);
   private dialog = inject(MatDialog);
   private sidebarService = inject(SidebarService);
@@ -89,51 +92,34 @@ export class ProjectOverViewComponent {
   private _router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly state = inject(ProjectStateService);
-  private cdr=inject(ChangeDetectorRef);
-  private readonly _ProjectVisitService=inject(ProjectVisitService)
+  private cdr = inject(ChangeDetectorRef);
 
-  @ViewChildren('sprintCard') sprintCards!: QueryList<ElementRef>;
+  
 
   ngOnInit(): void {
-    // Get The Id from the Path
-    this.ProjectId = this.route.snapshot.paramMap.get('id');
-
-    const projectId = this.route.snapshot.params['id']; //for visit count
-    this._ProjectVisitService.incrementVisit(+projectId);
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      if (id) {
+        this.ProjectId = id;
+        this.projectIdNum = +id;
+        this.GetProjectData();
+        this.getAllSprints();
+        this.fetchBacklogIssues();
+        this.getPinnedProjects();
+      }
+    });
 
     this.sidebarService.isCollapsed$.subscribe((collapsed) => {
       this.isSidebarCollapsed = collapsed;
     });
 
-    this.GetProjectData();
-
-    this.getPinnedProjects();
-
-    this.getAllSprints();
-
-    // Listen for new issue events and refresh backlog
-    this.RefreshBacklogAfterAddingIssue();
-    // Get Project id from url
-    this.getProjectId(); //for issue
-
     this._sprintService.sprintCreated$.subscribe(() => {
-      this.getAllSprints();
-    });
-
-    this._sprintService.sprintUpdated$.subscribe(() => {
       this.getAllSprints();
     });
 
     this._projectService.projectUpdated$.subscribe(() => {
       this.GetProjectData();
       this.getAllSprints();
-      this.getProjectId();
-    });
-
-    this.route.paramMap.subscribe(() => {
-      this.GetProjectData();
-      this.getAllSprints();
-      this.getProjectId();
     });
 
     this._IssueService.issueUpdated$.subscribe(() => {
@@ -143,23 +129,23 @@ export class ProjectOverViewComponent {
       this.fetchBacklogIssues(); //for refreshing after issue deleted
     });
 
-    this._IssueService.assignedUsersUpdated$.subscribe((updatedIssueId) => {
-    
-      if (this.projectIdNum) {
-        this.fetchBacklogIssues(); 
-        this.getAllSprints(); 
-      }
+
+    this._IssueService.assignedUsersUpdated$.subscribe(() => {
+      this.fetchBacklogIssues();
+      this.getAllSprints();
     });
 
+    this._IssueService.issueMoved$.subscribe(() => {
+      this.fetchBacklogIssues();
+    });
 
-    // add the sprint with ai without refresh
     this.state.sprintAdded$.subscribe((sprint) => {
       if (sprint) {
-        const formattedSprint = {
+        this.sprintDetails.push({
           ...sprint,
           startDate: this.dateFormatter(sprint.startDate),
           endDate: this.dateFormatter(sprint.endDate),
-        };
+        });
 
         setTimeout(() => {
           const lastSprint = this.sprintCards.last;
@@ -169,20 +155,28 @@ export class ProjectOverViewComponent {
               behavior: 'smooth',
               block: 'center',
             });
-
-            // remove the animation class after it's done
             setTimeout(() => {
               lastSprint.nativeElement.classList.remove('highlight-sprint');
             }, 1500);
           }
         }, 100);
-        
-
-        this.sprintDetails.push(formattedSprint);
-
       }
     });
+
+    // ✅ 🆕 تحديث الباكلوج تلقائيًا عند إنشاء issue من الـ AI
+    this.state.issueAdded$.subscribe((issue) => {
+      if (issue) {
+        this.fetchBacklogIssues();
+      }
+    });
+
+    this.getPinnedProjects(); // لازم تتنده بعد ProjectId يتحدد
+    // this.isPinned = this.ProjectDetails?.isPinned ?? false;
   }
+
+  private readonly _ProjectVisitService = inject(ProjectVisitService);
+
+  @ViewChildren('sprintCard') sprintCards!: QueryList<ElementRef>;
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
@@ -229,7 +223,9 @@ export class ProjectOverViewComponent {
   }
 
   openSprint() {
-    const projectId = this.route.snapshot.paramMap.get('id');
+    // const projectId = this.route.snapshot.paramMap.get('id');
+    const projectId = this.projectIdNum;
+
     this.dialog.open(SprintModalComponent, {
       width: 'auto',
       minWidth: '60vw',
@@ -373,15 +369,46 @@ export class ProjectOverViewComponent {
   // ---------------------------------------------------
 
   // Projects Api
+  // GetProjectData() {
+  //   const ProjectId = this.route.snapshot.paramMap.get('id');
+  //   // this.ProjectId = ProjectId;
+  //   this._projectService.getProject(ProjectId).subscribe({
+  //     next: (res) => {
+  //       console.log('Project fetched:', res);
+  //       this.ProjectDetails = res.result;
+  //       this._ProfileService.getProfileData().subscribe({
+  //         next: (user) => {
+  //           if (
+  //             user.id == res.result.tenant?.owner.id ||
+  //             user.id == res.result.creator.id
+  //           ) {
+  //             this.isOwner = true;
+  //           }
+  //           //     if (res.result.userProjects.id == user.userId) {
+  //           //       this.ProjectMembers.push = user;
+  //           //       console.log(this.ProjectMembers);
+  //           //     }
+  //           //     if (res.owner.id !== user.userId || res.creat.id !== user.userId) {
+  //           //       this.isOwner = false; // hide delete button
+  //           //     } else {
+  //           //       this.isOwner = true; // show delete button
+  //           //     }
+  //         },
+  //       });
+  //     },
+  //     error: (err) => {
+  //       console.log(err);
+  //     },
+  //   });
+  // }
   GetProjectData() {
-    const ProjectId = this.route.snapshot.paramMap.get('id');
-    // this.ProjectId = ProjectId;
-    this._projectService.getProject(ProjectId).subscribe({
+    this._projectService.getProject(this.ProjectId).subscribe({
       next: (res) => {
         this.ProjectDetails = res.result;
-        // console.log('Project Details',this.ProjectDetails);
+        console.log('Project Details', this.ProjectDetails);
         this.loadProjectUsers();
-        this.loading=false
+        this.loading = false;
+
         this._ProfileService.getProfileData().subscribe({
           next: (user) => {
             if (
@@ -390,15 +417,6 @@ export class ProjectOverViewComponent {
             ) {
               this.isOwner = true;
             }
-                // if (res.result.userProjects.id == user.userId) {
-                //   this.ProjectMembers.push = user;
-                //   console.log(this.ProjectMembers);
-                // }
-                // if (res.owner.id !== user.userId || res.creat.id !== user.userId) {
-                //   this.isOwner = false; // hide delete button
-                // } else {
-                //   this.isOwner = true; // show delete button
-                // }
           },
         });
       },
@@ -437,13 +455,30 @@ export class ProjectOverViewComponent {
   // ---------------------------------------------------
 
   // issues Api
+  // fetchBacklogIssues(): void {
+  //   console.log('Fetching backlog issues for project ID:', this.projectIdNum);
+  //   this._IssueService.getBacklogIssues(this.projectIdNum, 0, 1).subscribe({
+  //     next: (res) => {
+  //       if (res.isSuccess) {
+  //         console.log('backlog issues', res);
+  //         this.backlogIssues = res.result;
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('Error fetching backlog issues:', err);
+  //     },
+  //   });
+  // }
+
   fetchBacklogIssues(): void {
-    // console.log('Fetching backlog issues for project ID:', this.projectIdNum);
+    if (!this.projectIdNum) {
+      console.warn('⚠️ projectIdNum is undefined!');
+      return;
+    }
     this._IssueService.getBacklogIssues(this.projectIdNum, 0, 1).subscribe({
       next: (res) => {
         if (res.isSuccess) {
           // console.log('backlog issues', res);
-          // this.backlogIssues = res.result;
           this.backlogIssues = [...res.result];
           this.cdr.detectChanges(); 
         }
@@ -496,40 +531,71 @@ export class ProjectOverViewComponent {
   // ---------------------------------------------------
 
   // Sprints Api
+  // getAllSprints() {
+  //   const ProjectId = this.route.snapshot.paramMap.get('id');
+  //   this._projectService.getProject(ProjectId).subscribe({
+  //     next: (res) => {
+  //       this._sprintService.getAllSprints(res.result.id).subscribe({
+  //         next: (res) => {
+  //           console.log(res);
+  //           this.sprintDetails = res.result.map((sprint: Sprint) => ({
+  //             ...sprint,
+  //             startDate: this.dateFormatter(sprint.startDate),
+  //             endDate: this.dateFormatter(sprint.endDate),
+  //           }));
+  //           // for (let i = 0; i < res.result(0).issues.length; i++) {
+  //           //   if (res.result(0).issue(i).status == 'Completed') {
+  //           //     // var Counter = 0
+  //           //     // Counter ++
+  //           //     this.issuesCompleted = Number(this.issuesCompleted);
+  //           //     this.issuesCompleted++;
+  //           //     this.issuesCompleted = this.issuesCompleted.toString();
+  //           //     console.log('CompletedIssues' + this.issuesCompleted);
+  //           //   }
+  //           // }
+  //         },
+  //       });
+  //     },
+  //   });
+  // }
   getAllSprints() {
-    const ProjectId = this.route.snapshot.paramMap.get('id');
-    this._projectService.getProject(ProjectId).subscribe({
+    if (!this.projectIdNum) {
+      console.warn('⚠️ projectIdNum is undefined!');
+      return;
+    }
+
+    console.log('📦 Sprint API projectIdNum:', this.projectIdNum);
+
+    this._sprintService.getAllSprints(this.projectIdNum).subscribe({
       next: (res) => {
-        this._sprintService.getAllSprints(res.result.id).subscribe({
-          next: (res) => {
-            // console.log('Sprints in project view',res);
-            this.sprintDetails = res.result.map((sprint: any) => {
-              let completed = 0;
-              let total = 0;
-            
-              if (Array.isArray(sprint.issues)) {
-                sprint.issues.forEach((issue: any) => {
-                  total++;
-                  if (issue.status?.trim().toLowerCase() === 'completed') {
-                    completed++;
-                  }
-                });
+        this.sprintDetails = res.result.map((sprint: any) => {
+          let completed = 0;
+          let total = 0;
+
+          if (Array.isArray(sprint.issues)) {
+            sprint.issues.forEach((issue: any) => {
+              total++;
+              if (issue.status?.trim().toLowerCase() === 'completed') {
+                completed++;
               }
-            
-              const completionPercentage = total > 0 ? (completed / total) * 100 : 0;
-            
-              return {
-                ...sprint,
-                startDate: this.dateFormatter(sprint.startDate),
-                endDate: this.dateFormatter(sprint.endDate),
-                totalIssues: total,
-                completedIssues: completed,
-                progress: completionPercentage, // Calculate the progress percentage
-              }as SprintWithProgress;
             });
-            
-          },
+          }
+
+          const completionPercentage =
+            total > 0 ? (completed / total) * 100 : 0;
+
+          return {
+            ...sprint,
+            startDate: this.dateFormatter(sprint.startDate),
+            endDate: this.dateFormatter(sprint.endDate),
+            totalIssues: total,
+            completedIssues: completed,
+            progress: completionPercentage,
+          } as SprintWithProgress;
         });
+      },
+      error: (err) => {
+        console.error('❌ Error loading sprints:', err);
       },
     });
   }
@@ -566,152 +632,155 @@ export class ProjectOverViewComponent {
       borderLeft: `6px solid ${color}`,
     };
   }
-
-  // -----------------------------------------------------------
+ //--------// -----------------------------------------------------------
   // pin & unpin
-  TogglePin(project: ProjectResult, event: MouseEvent) {
+
+  //------------ Pinned Part --------------------
+  getPinnedProjects(): void {
+    this._PinnedService.getPinnedProjects().subscribe({
+      next: (res) => {
+        const pinnedProjects = res.result;
+        const myProjectId = this.ProjectDetails?.id || this.ProjectId;
+
+        this.isPinned = pinnedProjects.some((p: any) => p.id === myProjectId);
+        console.log('✅ isPinned =', this.isPinned); // 🟢 أضيفي ده للتأكد
+      },
+      error: (err) => {
+        console.error('Fetching pinned projects failed:', err);
+        this.showFail(err?.error?.message || 'Failed to fetch pinned projects');
+      },
+    });
+  }
+
+  TogglePin(event: MouseEvent): void {
     event.stopPropagation();
+
+    const itemId = this.ProjectDetails?.id;
+    if (!itemId) {
+      this.showFail('Project ID is missing!');
+      return;
+    }
+
+    console.log('📌 TogglePin clicked. isPinned =', this.isPinned); // 🟢
+
     if (this.isPinned) {
-      this._PinnedService.UnPinItem('Project', project.id).subscribe({
-        next: (res) => {
+      this._PinnedService.UnPinItem('Project', itemId).subscribe({
+        next: () => {
           this.isPinned = false;
-          this.showSuccessPin();
+          this.showSuccessUnPin();
         },
         error: (err) => {
-          console.error('Unpin failed:', err);
+          console.error('❌ Unpin failed:', err);
           this.showFail(err?.error?.message || 'Unpin failed');
         },
       });
     } else {
-      this._PinnedService.PinItem('Project', project.id).subscribe({
-        next: (res) => {
+      this._PinnedService.PinItem('Project', itemId).subscribe({
+        next: () => {
           this.isPinned = true;
-          this.showSuccessUnPin();
+          this.showSuccessPin();
         },
         error: (err) => {
-          console.error('Pin failed:', err);
+          console.error('❌ Pin failed:', err);
           this.showFail(err?.error?.message || 'Pin failed');
         },
       });
     }
   }
 
-  getPinnedProjects() {
-    this._PinnedService.getPinnedProjects().subscribe({
-      next: (res) => {
-        const pinnedProjects = res.result; // Adjust based on actual response structure
-        const isFound = pinnedProjects.some(
-          (p: any) => p.id === this.ProjectId
-        );
-        this.isPinned = isFound;
-      },
-      error: (err) => {
-        console.error('Fetching pinned projects failed:', err);
-        // this.showFail(err?.error?.message || 'Failed to fetch pinned projects');
-      },
-    });
-  }
+  // ------------------ Toasts ------------------
 
-  showSuccessPin() {
-    this._toaster.success(
-      'The Project has been Pinned',
-      'Pinned Successfully',
-      {
-        toastClass: 'toast-pink',
-        timeOut: 10000,
-        closeButton: true,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-      }
-    );
-  }
-  showSuccessUnPin() {
-    this._toaster.success(
-      'The Project has been UnPinned',
-      'UnPinned Successfully',
-      {
-        toastClass: 'toast-pink',
-        timeOut: 10000,
-        closeButton: true,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-      }
-    );
-  }
-
-  showFail(err: any) {
-    this._toaster.error('err', 'Pinned Failed', {
+  private toastOptions(): Partial<IndividualConfig> {
+    return {
       toastClass: 'toast-pink',
       timeOut: 10000,
       closeButton: true,
       progressBar: true,
-      progressAnimation: 'decreasing',
-    });
+      progressAnimation: 'decreasing' as ProgressAnimationType, // ✅ fixed
+    };
+  }
+  private showSuccessPin(): void {
+    this._toaster.success(
+      'The Project has been Pinned',
+      'Pinned Successfully',
+      this.toastOptions()
+    );
   }
 
+  private showSuccessUnPin(): void {
+    this._toaster.success(
+      'The Project has been UnPinned',
+      'UnPinned Successfully',
+      this.toastOptions()
+    );
+  }
 
-  // -----------------------------------------------------------
+  private showFail(message: string): void {
+    this._toaster.error(message, 'Action Failed', this.toastOptions());
+  }
+  //-----------// -------------------------------------------------------
+  // Get Project Users
+  //-----------// -------------------------------------------------------
   // Get Project Users
   loadProjectUsers() {
     this._projectService.getProject(this.ProjectId).subscribe({
       next: (res) => {
         const joinedUsers = res.result?.tenant.joinedUsers || [];
         const userProjects = res.result?.userProjects || [];
-  
-        this.ProjectMembers = joinedUsers.map((user: any) => {
-        
-          const matchedProject = userProjects.find((proj: any) => proj.userId === user.id);
-  
-          return {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            imageUrl: user.imageUrl,
-            role: matchedProject?.role || 'Unknown'
-          };
-        });
-  
-        // console.log('Project users with roles:', this.ProjectMembers);
+
+        // رجّع بس الناس المشاركين فعلياً في المشروع
+        this.ProjectMembers = joinedUsers
+          .filter((user: any) =>
+            userProjects.some((proj: any) => proj.userId === user.id)
+          )
+          .map((user: any) => {
+            const matchedProject = userProjects.find(
+              (proj: any) => proj.userId === user.id
+            );
+
+            return {
+              id: user.id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              imageUrl: user.imageUrl,
+              role: matchedProject?.role || 'Unknown',
+            };
+          });
       },
-      error: (err) => {
-        console.error('Error loading project users', err);
-      }
     });
   }
-  
-  // -----------------------------------------------------------
-    // copy function
-    copied = { code: false, url: false };
-    copyText(text: 'code' | 'url') {
-      navigator.clipboard
-        .writeText(
-          text === 'code' ? this.ProjectDetails?.projectCode || '' : ''
-        )
-        .then(() => {
-          this.copied[text] = true;
-          this.cdr.markForCheck();
-          setTimeout(() => {
-            this.copied[text] = false;
-            this.cdr.markForCheck();
-          }, 2000);
-        });
-    }
 
   // -----------------------------------------------------------
-    // Get Priority Class
-    getPriorityClass(priority: string): string {
-      switch (priority.toLowerCase()) {
-        case 'low':
-          return 'low-tag';
-        case 'medium':
-          return 'medium-tag';
-        case 'high':
-          return 'high-tag';
-        case 'critical':
-          return 'critical-tag';
-        default:
-          return '';
-      }
+  // copy function
+  copied = { code: false, url: false };
+  copyText(text: 'code' | 'url') {
+    navigator.clipboard
+      .writeText(text === 'code' ? this.ProjectDetails?.projectCode || '' : '')
+      .then(() => {
+        this.copied[text] = true;
+        this.cdr.markForCheck();
+        setTimeout(() => {
+          this.copied[text] = false;
+          this.cdr.markForCheck();
+        }, 2000);
+      });
+  }
+
+  // -----------------------------------------------------------
+  // Get Priority Class
+  getPriorityClass(priority: string): string {
+    switch (priority.toLowerCase()) {
+      case 'low':
+        return 'low-tag';
+      case 'medium':
+        return 'medium-tag';
+      case 'high':
+        return 'high-tag';
+      case 'critical':
+        return 'critical-tag';
+      default:
+        return '';
     }
+  }
 }

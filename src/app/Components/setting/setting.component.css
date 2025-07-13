@@ -1,62 +1,18 @@
-/* .BG { 
-background: var(--mainBackgroundGradient);
-min-height: 100vh;
-overflow: hidden;
-display: flex;
-flex-wrap: wrap;
-justify-content: center;
-align-items: center;
-flex-direction: column;
-} */
+/* ================================
+   General Typography & Headings
+=================================*/
+h1, h2 {
+  font-family: var(--headerFontFamily);
+}
 
 h1 {
   color: var(--mainLightBlueColor);
 }
-h1,
-h2 {
-  font-family: var(--headerFontFamily);
-}
 
-.card {
-  /* border-radius: var(--standardRoundness); */
-  padding: 30px 20px;
-  /* margin: 20px auto; */
-  /* width: 45%; */
-  /* min-height: 200px; */
-  /* text-align: left; */
-  color: #fff;
-}
-
-.Profile-Pic {
-  width: 200px;
-  height: 200px;
-}
-
-.cancel-btn {
-  background: none;
-  border: none;
-  color: #b5b5b5;
-  font-size: 0.875rem;
-  cursor: pointer;
-  border: 1px solid #b5b5b5;
-  padding: 10px 20px;
-  border-radius: 5px;
-  transition: all 0.1s;
-}
-.delete-btn {
-  background: #d13232;
-  border: none;
-  color: #fff;
-  font-size: 0.875rem;
-  cursor: pointer;
-  /* border: 1px solid #b5b5b5; */
-  padding: 10px 40px;
-  border-radius: 5px;
-  transition: all 0.1s;
-}
-
+/* ================================
+   Button Styles
+=================================*/
 .confirm-btn {
-  /* background: linear-gradient(90deg, #a445ff, #634bff); */
   background-color: #ff90e9d8;
   border: none;
   padding: 10px 20px;
@@ -65,54 +21,204 @@ h2 {
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.1s;
+  font-weight: 600;
 }
-
-.divider {
-  height: 1px;
-  width: 100%;
-  margin-block: 10px;
-  background: linear-gradient(
-    144.98deg,
-    rgba(58, 73, 98, 0.5) 1.37%,
-    rgba(255, 144, 232, 0.5) 43.67%,
-    rgba(116, 202, 255, 0.5) 70.8%,
-    rgba(41, 47, 101, 0.5) 91.44%
-  );
-}
-.divider2 {
-  height: 200px;
-  width: 1px;
-  /* margin-inline: 10px; */
-  /* border-radius: 75%; */
-  /* background: linear-gradient(144.98deg, rgba(58, 73, 98, 0.5) 1.37%, rgba(255, 144, 232, 0.5) 43.67%, rgba(116, 202, 255, 0.5) 70.8%, rgba(41, 47, 101, 0.5) 91.44%); */
-  background-color: #d076be;
-}
-
 .confirm-btn:hover {
-  /* background: linear-gradient(90deg, #7a35d4, #5034cc); */
   background-color: #d076be;
+}
+
+.cancel-btn {
+  background: none;
+  border: 1px solid #b5b5b5;
+  color: #b5b5b5;
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: all 0.1s;
 }
 .cancel-btn:hover {
   background-color: #acaaaa6e;
   color: #fff;
 }
+
+.delete-btn {
+  background: #d13232;
+  border: none;
+  color: #fff;
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 10px 40px;
+  border-radius: 5px;
+  transition: all 0.1s;
+}
 .delete-btn:hover {
   background: #e84242;
 }
 
+/* ================================
+   Dividers
+=================================*/
+.divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  width: 100%;
+  margin-block: 10px;
+}
+
+.divider2 {
+  height: 200px;
+  width: 1px;
+  background-color: #d076be;
+}
+
+/* ================================
+   Layout Containers
+=================================*/
+.profile-layout {
+  margin: 40px auto;
+  padding: 20px;
+}
+
+/* ================================
+   Profile Card Design
+=================================*/
+.profile-card-custom {
+  background: linear-gradient(145deg, #25284d, #322850);
+  padding: 35px;
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(116, 202, 255, 0.1);
+  color: white;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.profile-card-custom h2 {
+  font-size: 2rem;
+  margin-bottom: 5px;
+}
+
+.profile-card-custom h4 {
+  font-size: 1.1rem;
+  color: #ddd;
+  margin-bottom: 10px;
+}
+
+.profile-card-custom label {
+  font-weight: 500;
+  color: #bcbccc;
+  cursor: pointer;
+}
+
+.profile-card-custom input[type="radio"] {
+  margin-right: 8px;
+  accent-color: #8b5cf6;
+}
+
+/* ================================
+   Profile Image Styles
+=================================*/
+.profile-img-rectangle {
+  width: 100%;
+  max-width: 360px;
+  height: 460px;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(255, 144, 233, 0.4);
+  position: relative;
+}
+
+.profile-img-rectangle-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.profile-img-rectangle:hover .profile-img-rectangle-img {
+  transform: scale(1.05);
+}
+
+/* ================================
+   Info Text Styling
+=================================*/
+.username {
+  color: #b99dfd;
+  font-size: 1.1rem;
+  margin-bottom: 1.2rem;
+}
+
+.info-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #d4d2e3;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.info-line i {
+  color: #ff90e9d8;
+  font-size: 1.1rem;
+}
+
+/* ================================
+   Skeleton Loading Effect
+=================================*/
+.loading-placeholder {
+  padding: 40px;
+  background: #1b1f3b;
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(255, 144, 233, 0.15);
+}
+
+.skeleton-img {
+  width: 100%;
+  max-width: 360px;
+  height: 460px;
+  background: linear-gradient(90deg, #2a2e4c 25%, #3e4264 50%, #2a2e4c 75%);
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.4s infinite;
+  border-radius: 25px;
+}
+
+.skeleton-text {
+  height: 20px;
+  background: linear-gradient(90deg, #2a2e4c 25%, #3e4264 50%, #2a2e4c 75%);
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.4s infinite;
+  border-radius: 8px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ================================
+   Section Title Hover Effect
+=================================*/
+.col-md-12 h2 {
+  color: var(--mainLightBlueColor);
+  transition: all 0.3s ease-in-out;
+}
+
+.col-md-12 h2:hover {
+  color: var(--lightPinkColor);
+  transform: translateX(5px);
+}
+
+/* ================================
+   Dropdown Menu Style
+=================================*/
 .dropdown-menu {
   width: 75%;
 }
 
-.Profile-Pic{
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid ;
-  border-color: var(--mainLightBlueColor);
-}
-
-.featuresChange{
-  width: 49%;
+.toggle-menu:hover {
+  cursor: pointer;
 }

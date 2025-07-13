@@ -161,8 +161,10 @@ input:focus {
   top: 110%;
   bottom: 0;
   left: 0;
-  width: 100%;
-  height: 500px;
+  /* width: 100%; */
+  width: 400px;
+  height: 400px;
+  display: flex;
   /* background-color: #0d1123; */
   z-index: 10;
 }
@@ -170,10 +172,11 @@ input:focus {
 .results {
   background-color: #0d1123;
   width: 100%;
-  min-height: 100px;
+  height: 100%;
   position: absolute;
-  top: 10%;
+  top: 12%;
   left: 0;
+  /* max-height: 200px; */
   bottom: 0;
   z-index: 1000;
   padding: 15px;
@@ -226,6 +229,7 @@ input:focus {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .priority-tag {
@@ -366,6 +370,7 @@ input:focus {
   top: 10px;
   left: 10px;
   z-index: 11;
+  width: 95%;
 }
 
 .filter-buttons .btn.active {
@@ -378,11 +383,114 @@ input:focus {
   color: var(--mainLightBlueColor);
   border: 1px solid rgba(255, 255, 255, 0.516);
   padding: 5px 10px;
-  margin-right: 5px;
-  font-size: 14px;
+  font-size: 12px;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.3s ease-in-out;
   font-family: var(--headerFontFamily);
+}
+
+.no-results {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--mainLightBlueColor);
+  font-size: var(--mediumFontSize);
+  text-align: center;
+}
+
+.issue-status {
+  display: inline-block;
+  min-width: 50px;
+  text-align: center;
+  border-radius: 12px;
+  padding: 5px 7px;
+  transition: all 0.3s ease-in-out;
+}
+
+.issue-status p {
+  text-transform: capitalize;
+  font-size: 9px;
+  font-family: var(--headerFontFamily);
+}
+
+.issue-status:hover {
+  transform: translateX(5px);
+}
+
+.issue-status p:hover {
+  transform: translateX(0);
+  color: var(--mainLightBlueColor) !important;
+}
+
+.backlog-status {
+  background-image: linear-gradient(
+    144.86deg,
+    rgba(58, 73, 98, 0.18) 6.8%,
+    #fcd43498 29.3%,
+    rgba(91, 177, 230, 0.15) 51.79%,
+    rgba(255, 144, 232, 0.13) 96.78%
+  );
+}
+
+.cancelled-status {
+  background-image: linear-gradient(
+    144.86deg,
+    rgba(58, 73, 98, 0.18) 6.8%,
+    #94949485 29.3%,
+    rgba(91, 177, 230, 0.15) 51.79%,
+    rgba(255, 144, 232, 0.13) 96.78%
+  );
+}
+
+.complete-status {
+  background-image: linear-gradient(
+    144.86deg,
+    rgba(58, 73, 98, 0.18) 6.8%,
+    #1c8425ad 29.3%,
+    rgba(91, 177, 230, 0.15) 51.79%,
+    rgba(255, 144, 232, 0.13) 96.78%
+  );
+}
+
+.reviewing-status {
+  background-image: linear-gradient(
+    144.86deg,
+    rgba(58, 73, 98, 0.18) 6.8%,
+    #c45c5c 29.3%,
+    rgba(91, 177, 230, 0.15) 51.79%,
+    rgba(255, 144, 232, 0.13) 96.78%
+  );
+}
+
+.inprogress-status {
+  background-image: linear-gradient(
+    144.86deg,
+    rgba(58, 73, 98, 0.18) 6.8%,
+    #4c54f4a0 29.3%,
+    rgba(91, 177, 230, 0.15) 51.79%,
+    rgba(255, 144, 232, 0.13) 96.78%
+  );
+}
+
+.postpone-status {
+  background-image: linear-gradient(
+    144.86deg,
+    rgba(58, 73, 98, 0.18) 6.8%,
+    #9374dc8c 29.3%,
+    rgba(91, 177, 230, 0.15) 51.79%,
+    rgba(255, 144, 232, 0.13) 96.78%
+  );
+}
+
+.todo-status {
+  background-image: linear-gradient(
+    144.86deg,
+    rgba(58, 73, 98, 0.18) 6.8%,
+    #0f19d1b1 29.3%,
+    rgba(91, 177, 230, 0.15) 51.79%,
+    rgba(255, 144, 232, 0.13) 96.78%
+  );
 }
 
 @media (max-width: 768px) {
@@ -392,7 +500,6 @@ input:focus {
   }
 }
 
-
 /* -------------------- Notification -------------------- */
 .notification-wrapper {
   position: relative;
@@ -401,9 +508,13 @@ input:focus {
 }
 
 .notification-icon {
-  font-size: 1.5rem;
+  /* font-size: 1.5rem; */
   cursor: pointer;
   color: #fff;
+}
+
+.notification-header{
+  color: #ff90e8;
 }
 
 /* .notification-panel {
@@ -431,7 +542,8 @@ input:focus {
   right: 480px;
   width: 320px;
   max-height: 80vh;
-  background: #1e1e2f;
+  /* background: #1e1e2f; */
+  background: #0d1123;
   border-radius: 10px;
   padding: 12px;
   box-shadow: 0 0 6px #7f27898e;
@@ -445,7 +557,7 @@ input:focus {
 }
 
 .notification-panel.hover {
-  box-shadow: 0 0 12px #7F2789;
+  box-shadow: 0 0 12px #7f2789;
 }
 
 .notification-panel.visible {
@@ -454,7 +566,6 @@ input:focus {
   pointer-events: auto;
 }
 
-
 /* .notification-panel.visible {
   max-height: 50vh;
   opacity: 1;
@@ -462,20 +573,32 @@ input:focus {
   pointer-events: auto;
 } */
 
-.notification-arrow {
-  position: absolute;
-  top: -12px;
-  right: 20px;
+.close-btn {
+  /* .notification-arrow { */
+  /* position: relative; */
+  /* top: 12px; */
+  /* top: 0px;
+  left: 0px; */
+  /* right: 20px; */
+  /* left: 300px; */
   width: 20px;
   height: 20px;
   background: linear-gradient(145deg, #1b1f3a, #292e5c);
-  transform: rotate(45deg);
-  box-shadow: -5px -5px 15px rgba(0, 0, 0, 0.5);
-  z-index: -1;
+  /* transform: rotate(45deg); */
+  /* box-shadow: -5px -5px 15px rgba(0, 0, 0, 0.5); */
+  cursor: pointer;
+  /* box-shadow: 0 0 6px rgb(231, 230, 215), 0 0 12px rgb(212, 211, 194); */
+  transition: transform 0.2s ease, text-shadow 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* position: sticky; */
+  /* z-index: -1; */
 }
 
 .notification {
-  background: rgba(255, 255, 255, 0.02);
+  /* background: rgba(255, 255, 255, 0.02); */
+  background: #4a314c76 ;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
   padding: 1rem;
@@ -530,7 +653,8 @@ input:focus {
 }
 
 .notification.unread {
-  background: rgba(255, 255, 255, 0.05);
+  /* background: rgba(255, 255, 255, 0.05); */
+  background: #4a314c76;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -550,7 +674,7 @@ input:focus {
   /* existing styles stay the same */
 }
 
-.close-btn{
+/* .close-btn{
   position: sticky;
   top: 5px;
   left: 300px;
@@ -565,12 +689,12 @@ input:focus {
   box-shadow: 0 0 6px rgb(231, 230, 215), 0 0 12px rgb(212, 211, 194);
   transition: transform 0.2s ease, text-shadow 0.3s ease;
   cursor: pointer;
-}
+} */
 
-.close-btn:hover{
+/* .close-btn:hover{
   transform: scale(1.1);
   text-shadow: 0 0 12px rgb(231, 230, 215), 0 0 24px rgb(212, 211, 194);
-}
+} */
 
 @keyframes fadeScaleIn {
   from {
@@ -582,6 +706,3 @@ input:focus {
     transform: scale(1.1);
   }
 }
-
-
-

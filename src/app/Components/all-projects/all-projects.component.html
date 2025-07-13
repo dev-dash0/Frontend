@@ -1,25 +1,36 @@
 <div class="my-4 min-vh-100">
   <div class="BG" [ngClass]="{ expand: isSidebarCollapsed }">
+
+    <!-- 🔹 Header -->
     <header>
       <div class="header">
         <img src="assets/images/sidebar icons/Group of Projects.svg" alt="Projects Icon" />
         <h2>Your Projects</h2>
       </div>
+
+      <!-- 🔘 Join Project Button -->
       <span class="btn join-btn" (click)="join()">
         <a class="custom-btn text-center btn">
-          <img src="assets/images/sidebar icons/Plus.svg" class="pe-2" alt="" />
+          <img src="assets/images/sidebar icons/Plus.svg" class="pe-2" alt="Plus Icon" />
           Join Project
         </a>
       </span>
     </header>
 
+    <!-- 🗂️ Tabbed Sections -->
     <mat-tab-group>
+
+      <!-- 🔹 Owned Projects Tab -->
       <mat-tab label="Owned Projects">
         <div class="card1">
+
+          <!-- 🔄 Loading State -->
           <app-dashboard-loader
             [ngStyle]="{ 'align-self': 'center', padding: '200px' }"
             *ngIf="loading"
           ></app-dashboard-loader>
+
+          <!-- ✅ Loaded Projects -->
           <div class="container" *ngIf="!loading">
             <div class="row g-3">
               <div class="col-md-6" *ngFor="let project of ownedProjects">
@@ -34,12 +45,17 @@
         </div>
       </mat-tab>
 
+      <!-- 🔹 Joined Projects Tab -->
       <mat-tab label="Joined Projects">
         <div class="card1">
+
+          <!-- 🔄 Loading State -->
           <app-dashboard-loader
             [ngStyle]="{ 'align-self': 'center', padding: '200px' }"
             *ngIf="loading"
           ></app-dashboard-loader>
+
+          <!-- ✅ Loaded Projects -->
           <div class="container" *ngIf="!loading">
             <div class="row g-3">
               <div class="col-md-6" *ngFor="let project of joinedProjects">
@@ -53,6 +69,7 @@
           </div>
         </div>
       </mat-tab>
+
     </mat-tab-group>
   </div>
 </div>

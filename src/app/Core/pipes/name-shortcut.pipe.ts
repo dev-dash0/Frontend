@@ -1,9 +1,10 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Injectable, Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'nameShortcut',
   standalone: true,
 })
+@Injectable({ providedIn: 'root' }) // ✅ Add this
 export class NameShortcutPipe implements PipeTransform {
   // transform(value: unknown, ...args: unknown[]): unknown {
   //   return null;

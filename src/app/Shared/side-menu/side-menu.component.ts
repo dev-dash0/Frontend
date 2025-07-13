@@ -243,6 +243,23 @@ export class SideMenuComponent {
   ];
 
   ngOnInit() {
+    // this.getCompanies();
+    // this.getSprints();
+    // this.getProjects();
+    // this.checkScreenSize();
+
+    // 🧹 Clear old data
+    this.companyData = [];
+    this.companyNames = [];
+    this.projectsNames = [];
+    this.projectTest = {};
+    this.showSprints = {};
+    this.userId = 0;
+    this.loadedCompanies = true;
+    this.loadedProjects = true;
+    this.loadedSprints = true;
+
+    // 🔄 Reload fresh data
     this.getCompanies();
     this.getSprints();
     this.getProjects();
@@ -261,6 +278,10 @@ export class SideMenuComponent {
     });
 
     this._sprintService.sprintUpdated$.subscribe(() => {
+      this.getSprints();
+    });
+
+    this._sprintService.sprintDeleted$.subscribe(() => {
       this.getSprints();
     });
 
