@@ -179,9 +179,9 @@ export class IssueViewModalComponent {
         this.issueUpdateForm.patchValue({
           title: this.issue?.title,
           description: this.issue?.description,
-          startDate: this.issue?.startDate,
-          deadline: this.issue?.deadline,
-          deliveredDate: this.issue?.deliveredDate,
+         startDate: this.issue?.startDate ? new Date(this.issue.startDate) : '',
+  deadline: this.issue?.deadline ? new Date(this.issue.deadline) : '',
+  deliveredDate: this.issue?.deliveredDate ? new Date(this.issue.deliveredDate) : '',
           type: this.issue?.type,
           status: this.issue?.status,
           priority: this.issue?.priority,
@@ -189,6 +189,8 @@ export class IssueViewModalComponent {
           labels: this.issue?.labels ? this.issue.labels.split(',').map(l => l.trim()) : [],
           // sprintId: res.result.sprintId,
         });
+        console.log('🎯 Form raw values:', this.issueUpdateForm.value);
+
         this.getUserJoinedToTheProject(this.issue.projectId);
 
         this.getAllSprints(this.issue.projectId); // for sprint dropdown in the modal 
@@ -215,56 +217,132 @@ export class IssueViewModalComponent {
     // this.issueUpdateForm.reset(this.issue); // Reset to original values
   }
 
-onSubmit() {
-  if (this.issueUpdateForm.valid) {
-    this.issue = this.issueUpdateForm.value;
-    this.isEditMode = false;
+// onSubmit() {
+//   if (this.issueUpdateForm.valid) {
+//     this.issue = this.issueUpdateForm.value;
+//     this.isEditMode = false;
 
+//     const issueId = this.data?.issueId;
+//     const issueData = new FormData();
+//     const values = this.issueUpdateForm.value;
+
+//     // Append basic fields
+//     issueData.append("Title", values.title);
+//     issueData.append("Description", values.description ?? "");
+//     issueData.append("StartDate", values.startDate ?? "");
+//     issueData.append("Deadline", values.deadline ?? "");
+//     issueData.append("DeliveredDate", values.deliveredDate ?? "");
+//     issueData.append("Type", values.type ?? "");
+//     issueData.append("Status", values.status ?? "");
+//     issueData.append("Priority", values.priority ?? "");
+
+//     // Clean and append labels
+//     const cleanedLabels = (values.labels as string[])
+//       .map(label => label.trim())
+//       .filter(l => !!l)
+//       .filter((l, i, arr) => arr.indexOf(l) === i);
+
+//     issueData.append('Labels', cleanedLabels.join(','));
+
+//     // Append file if selected
+//     if (this.selectedFile) {
+//       issueData.append("Attachment", this.selectedFile);
+//     }
+
+//     // ✅ Append SprintId and IsBacklog based on selectedSprintId
+//     if (this.selectedSprintId === null) {
+//       issueData.append("IsBacklog", "true");
+//       issueData.append("SprintId", ""); // optional: you can skip this if your API handles it
+//     } else {
+//       issueData.append("IsBacklog", "false");
+//       issueData.append("SprintId", this.selectedSprintId.toString());
+//     }
+
+//     // Append optional last update date
+//     issueData.append("LastUpdate", new Date().toISOString());
+
+//     // Send the update request
+//     if (!issueId) {
+//       console.error('Issue ID is missing!');
+//       return;
+//     }
+
+//     this._IssueService.updateIssue(issueId, issueData).subscribe({
+//       next: () => {
+//         console.log('Issue updated successfully');
+//         this._IssueService.notifyIssueUpdated();
+//         this.dialogRef.close('created');
+//       },
+//       error: (err) => {
+//         console.error('Error updating issue:', err);
+//         this.showError('Error updating issue');
+//       },
+//     });
+//   }
+// }
+onSubmit(){
+  if (this.issueUpdateForm.valid) {
+    
     const issueId = this.data?.issueId;
     const issueData = new FormData();
     const values = this.issueUpdateForm.value;
-
-    // Append basic fields
+    console.log('Raw deadline type:', typeof values.deadline);
+    console.log('Raw deliveredDate value:', values.deliveredDate);
+    
     issueData.append("Title", values.title);
     issueData.append("Description", values.description ?? "");
-    issueData.append("StartDate", values.startDate ?? "");
-    issueData.append("Deadline", values.deadline ?? "");
-    issueData.append("DeliveredDate", values.deliveredDate ?? "");
+  
+    const formatDateOnly = (date: Date) =>
+      `${date.getFullYear()}-${(date.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+    
+    
+    if (values.startDate instanceof Date && !isNaN(values.startDate)) {
+      issueData.append("StartDate", formatDateOnly(values.startDate));
+    }
+    
+    if (values.deadline instanceof Date && !isNaN(values.deadline)) {
+      issueData.append("Deadline", formatDateOnly(values.deadline));
+    }
+    
+    if (values.deliveredDate instanceof Date && !isNaN(values.deliveredDate)) {
+      issueData.append("DeliveredDate", formatDateOnly(values.deliveredDate));
+    }
+    
+  
     issueData.append("Type", values.type ?? "");
     issueData.append("Status", values.status ?? "");
     issueData.append("Priority", values.priority ?? "");
-
-    // Clean and append labels
+  
     const cleanedLabels = (values.labels as string[])
       .map(label => label.trim())
       .filter(l => !!l)
       .filter((l, i, arr) => arr.indexOf(l) === i);
-
+  
     issueData.append('Labels', cleanedLabels.join(','));
-
-    // Append file if selected
+  
     if (this.selectedFile) {
       issueData.append("Attachment", this.selectedFile);
     }
-
-    // ✅ Append SprintId and IsBacklog based on selectedSprintId
+  
     if (this.selectedSprintId === null) {
       issueData.append("IsBacklog", "true");
-      issueData.append("SprintId", ""); // optional: you can skip this if your API handles it
+      issueData.append("SprintId", "");
     } else {
       issueData.append("IsBacklog", "false");
       issueData.append("SprintId", this.selectedSprintId.toString());
     }
-
-    // Append optional last update date
+  
     issueData.append("LastUpdate", new Date().toISOString());
-
-    // Send the update request
-    if (!issueId) {
-      console.error('Issue ID is missing!');
-      return;
-    }
-
+  console.log(issueData.get('StartDate'));
+  
+  console.log("🔎 FormData contents:");
+  (issueData as FormData).forEach((value, key) => {
+    console.log(`${key}: ${value}`);
+  });
+  
+  
     this._IssueService.updateIssue(issueId, issueData).subscribe({
       next: () => {
         console.log('Issue updated successfully');
@@ -277,8 +355,8 @@ onSubmit() {
       },
     });
   }
+  
 }
-
 
   close(): void {
     this.dialogRef.close();
@@ -478,7 +556,6 @@ onSprintChange() {
   issueData.append("Description", this.issue.description ?? '');
   issueData.append("StartDate", this.issue.startDate ?? '');
   issueData.append("Deadline", this.issue.deadline ?? '');
-  // issueData.append("DeliveredDate", this.issue.deliveredDate ?? '');
   issueData.append("Type", this.issue.type ?? '');
   issueData.append("Status", this.issue.status ?? '');
   issueData.append("Priority", this.issue.priority ?? '');
@@ -590,13 +667,26 @@ getCurrentUser() {
 // ***************Delete Issue ****************
 private dialog = inject(MatDialog);
 private _toaster = inject(ToastrService);
+
 openDeleteIssueModal(issueId: number, issueTitle: string) {
   const hideConfirm = localStorage.getItem('hideDeleteConfirm');
+
+  const handleDeletion = () => {
+    this._IssueService.deleteIssue(issueId).subscribe({
+      next: () => {
+        this.showSuccessDelete();
+        this._IssueService.notifyIssueDeleted();
+        this.dialogRef.close('deleted'); // Close the modal after deletion
+      },
+      error: (err) => {
+        console.error('Error deleting issue:', err);
+        this.showFailDelete(err.error?.message || 'Failed to delete issue');
+      }
+    });
+  };
+
   if (hideConfirm === 'true') {
-    this._IssueService.RemoveIssue(issueId);
-    setTimeout(() => {
-      // this.fetchBacklogIssues(); // ✅ Ensures backlog refreshes after deletion
-    }, 100); // Small delay to ensure delete operation finishes
+    handleDeletion();
     return;
   }
 
@@ -604,28 +694,28 @@ openDeleteIssueModal(issueId: number, issueTitle: string) {
     width: '450px',
     data: {
       title: 'Delete Issue',
-      message: `Are you sure you want to delete ${issueTitle}issue? `,
+      message: `Are you sure you want to delete the issue "${issueTitle}"?`,
       confirmText: 'Confirm',
       cancelText: 'Cancel',
       itemId: issueId,
-      deleteFunction: (id: number) => this._IssueService.RemoveIssue(id), // Pass function reference
+      deleteFunction: (id: number) => {
+        return this._IssueService.deleteIssue(id); 
+      }
+      
     },
   });
 
   dialogRef.afterClosed().subscribe((result) => {
     if (result === 'deleted') {
-      // this.dialogService.showDeletionSuccess();  //Want to show toaster
       this.showSuccessDelete();
-      this.dialogRef.close('deleted'); 
-      // this._IssueService.showSuccess();
-      // console.log('Issue deleted successfully');
-      // this.fetchBacklogIssues();
+      this._IssueService.notifyIssueDeleted();
+      this.dialogRef.close('deleted'); // Close the Issue modal after deletion
     } else {
-      // this.fetchBacklogIssues();
-      console.log('Deletion canceled');
+      this.showFailDelete('Deletion was cancelled');
     }
   });
 }
+
 
 showSuccessDelete() {
   this._toaster.success(

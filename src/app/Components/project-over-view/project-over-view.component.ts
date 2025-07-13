@@ -139,6 +139,9 @@ export class ProjectOverViewComponent {
     this._IssueService.issueUpdated$.subscribe(() => {
       this.fetchBacklogIssues(); //for refreshing after issue updated
     });
+    this._IssueService.issueDeleted$.subscribe(() => {
+      this.fetchBacklogIssues(); //for refreshing after issue deleted
+    });
 
     this._IssueService.assignedUsersUpdated$.subscribe((updatedIssueId) => {
     
@@ -237,41 +240,94 @@ export class ProjectOverViewComponent {
     });
   }
 
+  // openDeleteIssueModal(issueId: number, issueTitle: string) {
+  //   const hideConfirm = localStorage.getItem('hideDeleteConfirm');
+  //   if (hideConfirm === 'true') {
+  //     this._IssueService.RemoveIssue(issueId);
+  //     setTimeout(() => {
+  //       this.fetchBacklogIssues(); // ✅ Ensures backlog refreshes after deletion
+  //     }, 100); // Small delay to ensure delete operation finishes
+  //     return;
+  //   }
+
+  //   const dialogRef = this.dialog.open(SharedDeleteModalComponent, {
+  //     width: '450px',
+  //     data: {
+  //       title: 'Delete Issue',
+  //       message: `Are you sure you want to delete ${issueTitle}issue? `,
+  //       confirmText: 'Confirm',
+  //       cancelText: 'Cancel',
+  //       itemId: issueId,
+  //       deleteFunction: (id: number) => this._IssueService.RemoveIssue(id), // Pass function reference
+  //     },
+  //   });
+
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result === 'deleted') {
+  //       // this.dialogService.showDeletionSuccess();  //Want to show toaster
+  //       this.showSuccessDelete();
+  //       // this._IssueService.showSuccess();
+  //       console.log('Issue deleted successfully');
+  //       this.fetchBacklogIssues();
+  //     } else {
+  //       // this.fetchBacklogIssues();
+  //       console.log('Deletion canceled');
+  //     }
+  //   });
+  // }
+
   openDeleteIssueModal(issueId: number, issueTitle: string) {
     const hideConfirm = localStorage.getItem('hideDeleteConfirm');
+  
+    const deleteAndRefresh = () => {
+      this._IssueService.deleteIssue(issueId).subscribe({
+        next: () => {
+          this.showSuccessDelete();
+          this._IssueService.notifyIssueDeleted();
+          console.log('Issue deleted and backlog refreshed');
+        },
+        error: (err) => {
+          console.error('Failed to delete issue:', err);
+          this.showFailDelete(err.error?.message || 'Failed to delete issue');
+        }
+      });
+    };
+  
     if (hideConfirm === 'true') {
-      this._IssueService.RemoveIssue(issueId);
-      setTimeout(() => {
-        this.fetchBacklogIssues(); // ✅ Ensures backlog refreshes after deletion
-      }, 100); // Small delay to ensure delete operation finishes
+      deleteAndRefresh();
       return;
     }
-
+  
     const dialogRef = this.dialog.open(SharedDeleteModalComponent, {
       width: '450px',
       data: {
         title: 'Delete Issue',
-        message: `Are you sure you want to delete ${issueTitle}issue? `,
+        message: `Are you sure you want to delete "${issueTitle}" issue?`,
         confirmText: 'Confirm',
         cancelText: 'Cancel',
         itemId: issueId,
-        deleteFunction: (id: number) => this._IssueService.RemoveIssue(id), // Pass function reference
+        deleteFunction: (id: number) => {
+          return this._IssueService.deleteIssue(id); 
+        }
+        
       },
     });
-
+    
+  
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'deleted') {
-        // this.dialogService.showDeletionSuccess();  //Want to show toaster
         this.showSuccessDelete();
-        // this._IssueService.showSuccess();
-        console.log('Issue deleted successfully');
-        this.fetchBacklogIssues();
-      } else {
         // this.fetchBacklogIssues();
-        console.log('Deletion canceled');
+        this._IssueService.notifyIssueDeleted();
+      } else {
+        this.showFailDelete('Deletion canceled or failed');
       }
     });
+
+ 
+    
   }
+  
 
   showSuccessDelete() {
     this._toaster.success(
@@ -387,7 +443,9 @@ export class ProjectOverViewComponent {
       next: (res) => {
         if (res.isSuccess) {
           // console.log('backlog issues', res);
-          this.backlogIssues = res.result;
+          // this.backlogIssues = res.result;
+          this.backlogIssues = [...res.result];
+          this.cdr.detectChanges(); 
         }
       },
       error: (err) => {
@@ -549,7 +607,7 @@ export class ProjectOverViewComponent {
       },
       error: (err) => {
         console.error('Fetching pinned projects failed:', err);
-        this.showFail(err?.error?.message || 'Failed to fetch pinned projects');
+        // this.showFail(err?.error?.message || 'Failed to fetch pinned projects');
       },
     });
   }

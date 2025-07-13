@@ -200,6 +200,9 @@ export class IssueModalComponent {
     const formData = new FormData();
     const v = this.issueForm.value;
 
+    const formatDateOnly = (date: Date) =>
+      `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+
     // Required
     formData.append('Title', v.title);
     formData.append('Type', v.type);
@@ -212,11 +215,17 @@ export class IssueModalComponent {
     formData.append('Labels', this.issueForm.value.labels.join(','));
 
 
-    // Dates (ISO)
-    if (v.startDate) formData.append('StartDate', new Date(v.startDate).toISOString());
-    if (v.deadline) formData.append('Deadline', new Date(v.deadline).toISOString());
-    if (v.deliveredDate) formData.append('DeliveredDate', new Date(v.deliveredDate).toISOString());
-
+  // Dates - format to YYYY-MM-DD to avoid UTC shift issues
+  if (v.startDate instanceof Date && !isNaN(v.startDate)) {
+    formData.append('StartDate', formatDateOnly(v.startDate));
+  }
+  if (v.deadline instanceof Date && !isNaN(v.deadline)) {
+    formData.append('Deadline', formatDateOnly(v.deadline));
+  }
+  if (v.deliveredDate instanceof Date && !isNaN(v.deliveredDate)) {
+    formData.append('DeliveredDate', formatDateOnly(v.deliveredDate));
+  }
+    
     // File
     if (this.selectedFile) {
       formData.append('Attachment', this.selectedFile, this.selectedFile.name);

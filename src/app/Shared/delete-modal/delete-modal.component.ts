@@ -32,17 +32,77 @@ export class SharedDeleteModalComponent {
     private _DialogService: DialogService,
   ) { }
 
-  onConfirm(): void {
-    if (this.dontShowAgain) {
-      localStorage.setItem('hideDeleteConfirm', 'true'); // ✅ Store preference
-    }
+  // onConfirm(): void {
+  //   if (this.dontShowAgain) {
+  //     localStorage.setItem('hideDeleteConfirm', 'true'); // ✅ Store preference
+  //   }
 
-    if (this.data.deleteFunction && this.data.itemId !== undefined) {
-      this.data.deleteFunction(this.data.itemId);
-      this._DialogService.showDeletionSuccess();
+  //   if (this.data.deleteFunction && this.data.itemId !== undefined) {
+  //     this.data.deleteFunction(this.data.itemId);
+  //     this._DialogService.showDeletionSuccess();
+  //   }
+  //   this.dialogRef.close('deleted');
+  // }
+
+  // onConfirm(): void {
+  //   if (this.dontShowAgain) {
+  //     localStorage.setItem('hideDeleteConfirm', 'true');
+  //   }
+  
+  //   if (this.data.deleteFunction && this.data.itemId !== undefined) {
+  //     try {
+  //       const deletion$ = this.data.deleteFunction(this.data.itemId);
+  
+  //       // ✅ Ensure it’s an observable
+  //       if (deletion$?.subscribe) {
+  //         deletion$.subscribe({
+  //           next: () => {
+  //             this._DialogService.showDeletionSuccess();
+  //             this.dialogRef.close('deleted'); 
+  //           },
+  //           error: (err: any) => {
+  //             console.error('Delete failed:', err);
+  //             this.dialogRef.close('error');
+  //           }
+  //         });
+  //       } else {
+  //         console.warn('deleteFunction did not return an observable.');
+  //         this.dialogRef.close('error');
+  //       }
+  //     } catch (err) {
+  //       console.error('Error executing deleteFunction:', err);
+  //       this.dialogRef.close('error');
+  //     }
+  //   } else {
+  //     this.dialogRef.close('canceled');
+  //   }
+  // }
+  
+  onConfirm(): void {
+    console.log('✅ onConfirm triggered');
+  
+    if (this.dontShowAgain) {
+      localStorage.setItem('hideDeleteConfirm', 'true');
     }
-    this.dialogRef.close('deleted');
+  
+    if (this.data.deleteFunction && this.data.itemId !== undefined) {
+      const deletion$ = this.data.deleteFunction(this.data.itemId);
+      if (deletion$ && typeof deletion$.subscribe === 'function') {
+        deletion$.subscribe({
+          next: () => {
+            console.log('✅ Deletion done in modal');
+            this.dialogRef.close('deleted'); // ✅ مهمة جدًا
+          },
+          error: (err: any) => {
+            console.error('❌ Deletion error:', err);
+            this.dialogRef.close('error');
+          }
+        });
+      }
+    }
   }
+  
+  
 
   onCancel(): void {
     this.dialogRef.close('canceled');
@@ -61,6 +121,8 @@ export class SharedDeleteModalComponent {
   //     }
   //   );
   // }
+
+  
 
 
 }

@@ -27,9 +27,11 @@ export class IssueService {
   private _issueMovedSource = new Subject<void>();
   issueMoved$ = this._issueMovedSource.asObservable();
   private issueUpdatedSource = new Subject<void>();
+  private issueDeletedSource = new Subject<void>();
 
   // Observable that other components can subscribe to
   issueUpdated$ = this.issueUpdatedSource.asObservable();
+  issueDeleted$ = this.issueDeletedSource.asObservable();
 
   private assignedUsersUpdatedSource = new BehaviorSubject<number | null>(null); // issueId
 assignedUsersUpdated$ = this.assignedUsersUpdatedSource.asObservable();
@@ -44,6 +46,9 @@ assignedUsersUpdated$ = this.assignedUsersUpdatedSource.asObservable();
 
   notifyIssueUpdated() {
     this.issueUpdatedSource.next();
+  }
+  notifyIssueDeleted() {
+    this.issueDeletedSource.next();
   }
 
   notifyAssignedUsersUpdated(issueId: number) {
@@ -131,17 +136,10 @@ assignedUsersUpdated$ = this.assignedUsersUpdatedSource.asObservable();
   }
 
 
-  RemoveIssue(issueId: number) {
-    this.deleteIssue(issueId).subscribe({
-      next: () => {
-        this.showSuccess();
-        console.log('Issue deleted successfully');
-      },
-      error: (err) => {
-        console.log('Error deleting Issue', err);
-      }
-    });
+  RemoveIssue(issueId: number): Observable<any> {
+    return this.deleteIssue(issueId); 
   }
+  
   showSuccess() {
     this.toastr.success(
       'This issue has been removed',
