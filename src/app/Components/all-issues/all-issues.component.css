@@ -27,7 +27,6 @@
 }
 
 .btn-export {
-    /* background: linear-gradient(135deg, #4854f1, #7f8df1); */
     background: linear-gradient(135deg, rgba(44, 54, 133, 0.95), rgba(95, 59, 159, 0.95));
     color: #fff;
 }
@@ -211,7 +210,8 @@
 }
 
 .badge-count {
-    background: #E39FF4;
+    /* background: #E39FF4; */
+    border: 0.1px solid #E39FF4 !important;
     color: #fff;
     font-size: 0.7rem;
     font-weight: bold;
@@ -226,7 +226,7 @@
     border-radius: 20px;
     padding: 1.5rem;
     position: relative;
-    overflow: hidden;
+    /* overflow: hidden; */
     border: 1px solid rgba(255, 255, 255, 0.06);
     box-shadow: 0 6px 20px rgba(2, 32, 83, 0.35);
     transition: all 0.3s ease-in-out;
@@ -309,4 +309,51 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* =================Pin&Unpin Styles======================= */
+/* .icons {
+    position: absolute;
+    top: calc(width* 0.025,
+            -100%);
+    right: calc(width* 0.025,
+            -100%);
+} */
+
+.icons a {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+    background: radial-gradient(109.99% 253.12% at 76.68% 66.67%,
+            #db83f1 0%,
+            #8051b1 100%);
+    /* margin-top: -50px; */
+    cursor: pointer;
+
+
+}
+
+.pin-icon .pin {
+    color: var(--mainLightBlueColor) !important;
+    transform: rotate(45deg) !important;
+    display: inline-block !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.icons .icon-shadow:hover {
+    transform: translateY(-5px);
+    filter: drop-shadow(2px 4px 6px #ff8de87a);
+}
+
+.icons .icon-shadow:hover .pin-icon .pin {
+    transform: rotate(0) !important;
+    color: #720e88 !important;
+}
+
+.active-pin {
+    transform: rotate(0) !important;
+    color: #720e88 !important;
 }

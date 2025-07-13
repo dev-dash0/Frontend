@@ -6,6 +6,7 @@
 
 .visualize_content {
     width: 100% !important;
+    min-height: 400px;
     background-color: #0D1123;
     border-radius: 5px;
 }
@@ -30,6 +31,7 @@
 
 ::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
     color: #DD8AF2 !important;
+    text-transform: capitalize;
 }
 
 ::ng-deep .mdc-tab {

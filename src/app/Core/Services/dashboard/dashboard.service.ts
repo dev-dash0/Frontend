@@ -1,7 +1,7 @@
 import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
 
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { baseUrl } from '../../environment/environment.local';
 
 @Injectable({
@@ -70,4 +70,25 @@ export class DashboardService {
       { headers, params }
     );
   };
+
+
+// Listening
+private companyDeletedSource = new BehaviorSubject<boolean>(false);
+private companyCreatedSource = new BehaviorSubject<boolean>(false);
+private companyUpdatedSource = new BehaviorSubject<boolean>(false);
+companyCreated$ = this.companyCreatedSource.asObservable();
+companyDeleted$ = this.companyDeletedSource.asObservable();
+companyUpdated$ = this.companyUpdatedSource.asObservable();
+
+notifyCompanyDeleted() {
+  this.companyDeletedSource.next(true);
+}
+notifyCompanyCreated() {
+  this.companyCreatedSource.next(true);
+}
+notifyCompanyUpdated() {
+  this.companyUpdatedSource.next(true);
+}
+
+
 }

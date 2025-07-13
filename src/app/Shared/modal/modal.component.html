@@ -1,11 +1,13 @@
 <div class="modal-container" (click)="$event.stopPropagation();">
-    <div class="modal-header d-flex justify-content-between align-items-start">
+    <!-- <div class="modal-container-scroll "> -->
+
+    <div class="modal-header d-flex justify-content-between align-items-start" *ngIf="showHeader">
         <h2>{{ title }}</h2>
         <button type="button" class="close-btn" (click)="onClose()" aria-label="Close"><i
                 class="fa-solid fa-xmark"></i></button>
     </div>
 
-    <div class="divider"></div>
+    <div class="divider" *ngIf="showHeader"></div>
 
     <form [formGroup]="formGroup">
         <div class="form-group">
@@ -15,7 +17,8 @@
 
         <div class="modal-footer" *ngIf="showSubmit">
             <div class="buttons w-100 d-flex justify-content-center align-items-center gap-3">
-                <button mat-button type="button" class="cancel-btn w-50 fw-semibold" (click)="onClose()">{{ cancelText
+                <button mat-button type="button" class="cancel-btn w-50 fw-semibold" (click)="onClose()">{{
+                    cancelText
                     }}</button>
                 <button mat-flat-button type="submit" [disabled]="formGroup.invalid"
                     class="confirm-btn w-50 fw-semibold">
@@ -25,4 +28,5 @@
         </div>
 
     </form>
+    <!-- </div> -->
 </div>

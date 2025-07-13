@@ -233,3 +233,74 @@ mat-label {
     padding: 6px 12px;
     border-radius: 8px;
 }
+
+/* Scrollbar*/
+
+/* Scrollbar */
+.modal-container-scroll {
+    min-height: inherit;
+    max-height: 85vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    /* scrollbar-color: #fd737c #372c4d55; */
+    scrollbar-color: rgba(200, 200, 255, 0.2) #372c4d55;
+
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        /* background-color: #fc6c76; */
+        /* margin-top: 7%; */
+        background-color: rgba(200, 200, 255, 0.2);
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+}
+
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.auth-form-container {
+    padding: 10px;
+    border-radius: 5px;
+    border-radius: var(--standardRoundness);
+    border: none !important;
+}
+
+.auth-form-container::before {
+    background: none !important;
+    border: none !important;
+    mask: none !important;
+    -webkit-mask: none !important;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+}
+
+.issue-actions .btn {
+    border-radius: 20%;
+    border: none;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.issue-title {
+    margin: 0;
+    font-size: 1.4rem;
+}

@@ -280,4 +280,7 @@ get displayedProjects() {
   openIssueView(issueId: number) {
     this.dialogService.openIssueViewModal(issueId);
   }
+
+
+  
 }

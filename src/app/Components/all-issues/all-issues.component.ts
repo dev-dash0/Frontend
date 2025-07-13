@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Output } from '@angular/core';
 import { DashboardService } from '../../Core/Services/dashboard/dashboard.service';
 import { CommonModule } from '@angular/common';
 import { IssueService } from '../../Core/Services/issue/issue.service';
@@ -7,6 +7,14 @@ import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-use
 import { Issue } from '../../Core/interfaces/Dashboard/Issue';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
+import { PinnedService } from '../../Core/Services/pinned.service';
+import { ToastrService } from 'ngx-toastr';
+import { EventEmitter } from '@angular/core';
+
+
+interface IssueWithPin extends Issue {
+  isPinned: boolean;
+}
 
 @Component({
   selector: 'app-all-issues',
@@ -16,7 +24,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './all-issues.component.css'
 })
 export class AllIssuesComponent implements OnInit {
-  myIssues: Issue[] = [];
+  myIssues: IssueWithPin[] = [];
   isLoading: boolean = true;
   isModalOpen:boolean=true;
   assignUsersComp!: AssignUsersToIssueComponent;
@@ -40,10 +48,44 @@ export class AllIssuesComponent implements OnInit {
     this.getUserIssues();
   }
 
+  // getUserIssues() {
+  //   this.dashboardService.getDashboardAllIssue().subscribe({
+  //     next: (res) => {
+  //       this.myIssues = res.result || [];
+  //       this.isLoading = false;
+  //     },
+  //     error: (err) => {
+  //       console.error(err);
+  //       this.isLoading = false;
+  //     }
+  //   });
+  // }
+
   getUserIssues() {
     this.dashboardService.getDashboardAllIssue().subscribe({
       next: (res) => {
-        this.myIssues = res.result || [];
+        const issuesFromApi = res.result || [];
+  
+        // ➊ نضيف isPinned=false مؤقتًا
+        this.myIssues = issuesFromApi.map((issue: Issue) => ({
+          ...issue,
+          isPinned: false
+        }));
+  
+        // ➋ نجيب pinned issues ونحدد مين منهم pinned فعلاً
+        this._PinnedService.getPinnedIssues().subscribe({
+          next: (pinnedRes) => {
+            const pinnedIds = pinnedRes.result.map((i: any) => i.id);
+  
+            this.myIssues.forEach(issue => {
+              if (pinnedIds.includes(issue.id)) {
+                issue.isPinned = true;
+              }
+            });
+          },
+          error: (err) => console.error('Error loading pinned issues:', err)
+        });
+  
         this.isLoading = false;
       },
       error: (err) => {
@@ -52,7 +94,7 @@ export class AllIssuesComponent implements OnInit {
       }
     });
   }
-
+  
   getDeadlineStatus(deadline: string | null | undefined): 'passed' | 'upcoming' | 'unknown' {
     if (!deadline || isNaN(Date.parse(deadline))) {
       return 'unknown'; 
@@ -145,7 +187,7 @@ resetFilters() {
   this.sortOption = 'recent';
 }
 
-sortIssues(issues: Issue[]) {
+sortIssues(issues: IssueWithPin[]) {
   if (this.sortOption === 'priority') {
     const priorityOrder = ['Critical', 'High', 'Medium', 'Low'];
     return issues.sort((a, b) => priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority));
@@ -274,4 +316,60 @@ getSortLabel(value: string): string {
   }
 }
 
+// ****************Pin &Unpin Issues******************
+
+@Output() pinChanged = new EventEmitter<{ id: number; pinned: boolean }>();
+private readonly _PinnedService = inject(PinnedService);
+isPinned = false; // current pin status
+togglePin(issue: IssueWithPin, event: MouseEvent) {
+  event.stopPropagation();
+
+  if (issue.isPinned) {
+    this._PinnedService.UnPinItem('issue', issue.id).subscribe({
+      next: () => {
+        issue.isPinned = false;
+        this.showSuccess('Issue unpinned successfully');
+        this.pinChanged.emit({ id: issue.id, pinned: false });
+      },
+      error: (err) => {
+        console.error('Unpinning failed:', err);
+        this.showError(err.error.message);
+      },
+    });
+  } else {
+    this._PinnedService.PinItem('issue', issue.id).subscribe({
+      next: () => {
+        issue.isPinned = true;
+        this.showSuccess('Issue pinned successfully');
+        this.pinChanged.emit({ id: issue.id, pinned: true });
+      },
+      error: (err) => {
+        console.error('Pinning failed:', err);
+        this.showError(err.error.message);
+      },
+    });
+  }
+}
+
+
+/***************Toaster******************** */
+private readonly _toaster = inject(ToastrService);
+showError(err: string) {
+  this._toaster.error(err, 'Error Message', {
+    toastClass: 'toast-pink',
+    timeOut: 5000,
+    closeButton: true,
+    progressBar: true,
+    progressAnimation: 'decreasing',
+  });
+}
+showSuccess(Message:string){
+  this._toaster.success(Message, 'Success Message', {
+    toastClass: 'toast-pink',
+    timeOut: 5000,
+    closeButton: true,
+    progressBar: true,
+    progressAnimation: 'decreasing',
+  });
+}
 }

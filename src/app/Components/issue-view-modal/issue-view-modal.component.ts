@@ -1,7 +1,7 @@
 import { Issue } from './../../Core/interfaces/Dashboard/Issue';
-import { Component, ElementRef, HostListener, inject, Inject, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, Inject, Input, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { ModalComponent } from "../../Shared/modal/modal.component";
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { IssueService } from '../../Core/Services/issue/issue.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -25,6 +25,9 @@ import { ToastrService } from 'ngx-toastr';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ProfileService } from '../../Core/Services/profile.service';
 import { UserProject } from '../../Core/interfaces/notification';
+import { DashboardLoaderComponent } from "../../Shared/dashboard-loader/dashboard-loader.component";
+import { SharedDeleteModalComponent } from '../../Shared/delete-modal/delete-modal.component';
+import { PinnedService } from '../../Core/Services/pinned.service';
 
 
 @Component({
@@ -43,9 +46,9 @@ import { UserProject } from '../../Core/interfaces/notification';
     MatOptionModule,
     MatChipsModule,
     MatButtonToggleModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
     AssignUsersToIssueComponent,
-    MatTooltipModule],
+    MatTooltipModule, DashboardLoaderComponent],
   templateUrl: './issue-view-modal.component.html',
   styleUrl: './issue-view-modal.component.css',
   animations: [
@@ -159,6 +162,8 @@ export class IssueViewModalComponent {
       next: (res) => {
         console.log('Issue fetched:', res);
         this.issue = res.result;
+        this.issueId = this.issue.id;
+        this.checkIfPinned();
         this.sprintId = res.result.sprintId;      
         this.selectedSprintId = this.data.issue?.sprintId ?? null;
         console.log('Sprint Id',this.sprintId);
@@ -209,75 +214,6 @@ export class IssueViewModalComponent {
     this.isEditMode = false;
     // this.issueUpdateForm.reset(this.issue); // Reset to original values
   }
-
-
-//   onSubmit() {
-//     if (this.issueUpdateForm.valid) {
-//       this.issue = this.issueUpdateForm.value;
-//       this.isEditMode = false;
-
-//       const issueId = this.data?.issueId; // Get projectId from modal data
-//       // const issueData = this.issueUpdateForm.value;
-//       const issueData = new FormData();
-//       const values = this.issueUpdateForm.value;
-
-//       // Append fields manually with PascalCase keys
-//       issueData.append("Title", values.title);
-//       issueData.append("Description", values.description ?? "");
-//       issueData.append("StartDate", values.startDate ?? "");
-//       issueData.append("Deadline", values.deadline ?? "");
-//       issueData.append("DeliveredDate", values.deliveredDate ?? "");
-//       issueData.append("Type", values.type ?? "");
-//       issueData.append("Status", values.status ?? "");
-//       issueData.append("Priority", values.priority ?? "");
-
-//       // Append labels
-//       // Clean up labels: trim + remove duplicates + filter out empty
-//       // instead of: values.labels.forEach(...)
-//       const cleanedLabels = (values.labels as string[])
-//         .map(label => label.trim())
-//         .filter(l => !!l)
-//         .filter((l, i, arr) => arr.indexOf(l) === i);
-
-//       issueData.append('Labels', cleanedLabels.join(','));
-
-//       // Append file if selected
-//       if (this.selectedFile) {
-//         issueData.append("Attachment", this.selectedFile);
-//       }
-
-//       // Set sprintId manually based on current issue
-//       // issueData.sprintId = (this.issue.sprintId === 0) ? null : this.issue.sprintId;
-
-
-//       if (!issueId) {
-//         console.error('Issue ID is missing!');
-//         return;
-//       }
-//       // Append SprintId and IsBacklog
-// const isBacklog = this.issue.isBacklog ?? true;  // fallback to true if undefined
-// const sprintId = this.issue.sprintId ?? null;
-
-// issueData.append("IsBacklog", isBacklog.toString());
-// if (sprintId !== null) {
-//   issueData.append("SprintId", sprintId.toString());
-// } else {
-//   issueData.append("SprintId", ""); // or omit this line if your API handles null correctly
-// }
-
-//       this._IssueService.updateIssue(issueId, issueData).subscribe({
-//         next: () => {
-//           console.log('Issue updated successfully:');
-//           this._IssueService.notifyIssueUpdated();
-//           this.dialogRef.close('created'); // Close modal and return status
-//         },
-//         error: (err) => {
-//           console.error('Error creating issue:', err);
-//           // this.showError('Error creating Issue');
-//         },
-//       });
-//     }
-//   }
 
 onSubmit() {
   if (this.issueUpdateForm.valid) {
@@ -530,6 +466,12 @@ onSprintChange() {
 
   const issueData = new FormData();
 
+  const selectedSprint = this.sprintsList.find(s => s.id === this.selectedSprintId);
+  if (selectedSprint?.status === 'Canceled') {
+    this.showError("You can't move the issue to a canceled sprint.");
+    this.selectedSprintId = null;
+    return;
+  }
 
 // 🟢 Issue Data
   issueData.append("Title", this.issue.title ?? '');
@@ -645,5 +587,125 @@ getCurrentUser() {
     error: (err) => console.error('Error fetching profile:', err)
   });
 }
+// ***************Delete Issue ****************
+private dialog = inject(MatDialog);
+private _toaster = inject(ToastrService);
+openDeleteIssueModal(issueId: number, issueTitle: string) {
+  const hideConfirm = localStorage.getItem('hideDeleteConfirm');
+  if (hideConfirm === 'true') {
+    this._IssueService.RemoveIssue(issueId);
+    setTimeout(() => {
+      // this.fetchBacklogIssues(); // ✅ Ensures backlog refreshes after deletion
+    }, 100); // Small delay to ensure delete operation finishes
+    return;
+  }
+
+  const dialogRef = this.dialog.open(SharedDeleteModalComponent, {
+    width: '450px',
+    data: {
+      title: 'Delete Issue',
+      message: `Are you sure you want to delete ${issueTitle}issue? `,
+      confirmText: 'Confirm',
+      cancelText: 'Cancel',
+      itemId: issueId,
+      deleteFunction: (id: number) => this._IssueService.RemoveIssue(id), // Pass function reference
+    },
+  });
+
+  dialogRef.afterClosed().subscribe((result) => {
+    if (result === 'deleted') {
+      // this.dialogService.showDeletionSuccess();  //Want to show toaster
+      this.showSuccessDelete();
+      // this._IssueService.showSuccess();
+      console.log('Issue deleted successfully');
+      // this.fetchBacklogIssues();
+    } else {
+      // this.fetchBacklogIssues();
+      console.log('Deletion canceled');
+    }
+  });
+}
+
+showSuccessDelete() {
+  this._toaster.success(
+    'The Project has been Pinned',
+    'Pinned Successfully',
+    {
+      toastClass: 'toast-pink',
+      timeOut: 10000,
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+    }
+  );
+}
+
+showFailDelete(err: any) {
+  this._toaster.error('err', 'Pinned Failed', {
+    toastClass: 'toast-pink',
+    timeOut: 10000,
+    closeButton: true,
+    progressBar: true,
+    progressAnimation: 'decreasing',
+  });
+}
+
+
+// ***************Pin Issue ****************
+private readonly _PinnedService = inject(PinnedService);
+
+isPinned = false; // current pin status
+
+togglePin() {
+  if (!this.issue?.id) return;
+
+  const itemType = 'issue';
+  const itemId = this.issue.id;
+
+  if (this.isPinned) {
+    this._PinnedService.UnPinItem(itemType, itemId).subscribe({
+      next: () => {
+        this.isPinned = false;
+        this.showSuccess("Issue unpinned successfully");
+      },
+      error: (err) => {
+        this.showError("Failed to unpin issue");
+        console.error(err);
+      }
+    });
+  } else {
+    this._PinnedService.PinItem(itemType, itemId).subscribe({
+      next: () => {
+        this.isPinned = true;
+        this.showSuccess("Issue pinned successfully");
+      },
+      error: (err) => {
+        this.showError("Failed to pin issue");
+        console.error(err);
+      }
+    });
+  }
+}
+
+
+checkIfPinned() {
+  const itemId = this.issue?.id; 
+  if (!itemId) return;
+
+  this._PinnedService.getPinnedIssues().subscribe({
+    next: (res) => {
+      console.log('pinnedItems',res);
+      const pinnedItems = res.result || [];
+      this.isPinned = pinnedItems.some((item: any) => item.id === itemId);
+    },
+    error: (err) => {
+      console.error("Error checking pinned issues:", err);
+    }
+  });
+}
+
+
+
+
 
 }

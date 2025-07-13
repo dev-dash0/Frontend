@@ -3,9 +3,7 @@
         <div class="card-bodyy">
             <!-- Assigned Users List -->
             <div *ngIf="isLoadingAssignedUsers" class="text-center my-3">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
+                <app-dashboard-loader [size]="60"></app-dashboard-loader>
             </div>
             <div class="" *ngIf="!isLoadingAssignedUsers">
                 <div *ngIf="assignedUsers.length; else noUsers" class=" w-100">
@@ -73,9 +71,7 @@
 
                     <div class="list-group text-center" style="max-height: 300px; overflow-y: auto;">
                         <div *ngIf="isLoadingProjectUsers" class="text-center my-3">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
+                            <app-dashboard-loader></app-dashboard-loader>
                         </div>
                         <div *ngIf="!isLoadingProjectUsers">
                             <button type="button" *ngFor="let user of filteredUsers trackBy: trackByUserId"

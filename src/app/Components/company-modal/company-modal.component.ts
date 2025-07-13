@@ -10,6 +10,7 @@ import { FiledropComponent } from '../dragn-drop/dragn-drop.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CompanyService } from '../../Core/Services/company.service';
 import { SidebarService } from '../../Core/Services/sidebar.service';
+import { DashboardService } from '../../Core/Services/dashboard/dashboard.service';
 
 @Component({
   selector: 'app-company-modal',
@@ -26,7 +27,8 @@ export class AddCompanyModalComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _companyService: CompanyService,
     private sidebarService: SidebarService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dashboardService:DashboardService
   ) {
     this.companyForm = this.fb.group({
       name: ['', Validators.required],
@@ -64,6 +66,7 @@ export class AddCompanyModalComponent {
         next: (res) => {
           console.log(res);
           this.sidebarService.notifyCompanyCreated();
+          this.dashboardService.notifyCompanyCreated();
           this.dialogRef.close();
         },
         error: (err) => {

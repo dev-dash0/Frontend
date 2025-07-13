@@ -25,7 +25,7 @@ export class ModalComponent {
   @Input() cancelText: string = 'Cancel';
   @Output() close = new EventEmitter<void>();
   @Input() showSubmit: boolean = true;
-
+@Input() showHeader: boolean = true;
   @Output() submit = new EventEmitter<void>();
 
   @Input() modalContent!: TemplateRef<any>;
@@ -33,6 +33,8 @@ export class ModalComponent {
   ngAfterViewInit() {
     // console.log('modalContent:', this.modalContent);  // ✅ Check if modalContent exists
   }
+
+  isIssueModalOpen = false;
 
   onClose() {
     this.close.emit();

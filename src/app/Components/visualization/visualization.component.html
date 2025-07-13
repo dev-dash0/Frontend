@@ -1,5 +1,5 @@
 <section id="visualization"
-  class="d-flex flex-column justify-content-center align-items-center w-100 mat-tab-body-content "
+  class="d-flex flex-column justify-content-start align-items-center w-100 h-1 mat-tab-body-content "
   style="min-height: 500px; position: relative;">
   <ng-container *ngIf="isLoading; else showTabs">
     <div
@@ -9,9 +9,9 @@
     </div>
   </ng-container>
 
-  <ng-template #showTabs>
+  <ng-template #showTabs class=" h-100">
     <mat-tab-group dynamicHeight mat-stretch-tabs="false" class="w-100">
-      <div class="cont">
+      <div class="cont" *ngIf="lotsOfTabs.length>0">
         @for (tab of lotsOfTabs; track tab) {
         <mat-tab [label]="tab.name" labelClass="mat-tab-label">
           <div class="visualize_content visualize_allProject p-4">
@@ -19,6 +19,16 @@
           </div>
         </mat-tab>
         }
+      </div>
+      <div class="noContent" *ngIf="lotsOfTabs.length==0">>
+        <mat-tab label="Dashboard" labelClass="mat-tab-label">
+          <div
+            class="visualize_content visualize_allProject d-flex justify-content-center align-items-center flex-column p-4">
+            <h3 class="dev-text-muted">Sorry, No Data To visualize Yet </h3>
+            <small class="dev-text-muted">Create your first Company to visualize it's data
+              <span style="color: #cdb0f6;" class="cursor-pointer" (click)="openCompany()">Create </span></small>
+          </div>
+        </mat-tab>
       </div>
     </mat-tab-group>
   </ng-template>

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ProjectService } from '../../Core/Services/project.service';
 import { IssueService } from '../../Core/Services/issue/issue.service';
 import { User } from '../../Core/interfaces/User';
+import { DashboardLoaderComponent } from "../../Shared/dashboard-loader/dashboard-loader.component";
 
 declare var bootstrap: any;
 
@@ -11,7 +12,7 @@ declare var bootstrap: any;
 @Component({
   selector: 'app-assign-users-to-issue',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DashboardLoaderComponent],
   templateUrl: './assign-users-to-issue.component.html',
   styleUrl: './assign-users-to-issue.component.css',
   encapsulation: ViewEncapsulation.None

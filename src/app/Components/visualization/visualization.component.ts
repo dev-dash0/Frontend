@@ -1,7 +1,7 @@
+import { DashboardService } from './../../Core/Services/dashboard/dashboard.service';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AllProjectsDashboardComponent } from "../all-projects-dashboard/all-projects-dashboard.component";
-import { DashboardService } from '../../Core/Services/dashboard/dashboard.service';
 import { CompanyService } from '../../Core/Services/company.service';
 import { ProfileService } from '../../Core/Services/profile.service';
 import { Company } from '../../Core/interfaces/company/company';
@@ -9,6 +9,8 @@ import { ChartLoaderComponent } from "../../Shared/chart-loader/chart-loader.com
 import { DashboardLoaderComponent } from "../../Shared/dashboard-loader/dashboard-loader.component";
 import { CommonModule } from '@angular/common';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { DialogService } from '../../Core/Services/dialog.service';
+import { MatDialog } from '@angular/material/dialog';
 
 
 
@@ -42,11 +44,18 @@ export class VisualizationComponent implements OnInit {
   //services
   private readonly _companyService = inject(CompanyService);
   private readonly _profileService = inject(ProfileService);
+  private readonly dialogService=inject(DialogService);
+  private readonly _DashboardService=inject(DashboardService);
   constructor() { }
 
 
   ngOnInit(): void {
     this.getCompanies();
+
+    this._DashboardService.companyCreated$.subscribe(() => {
+      this.getCompanies();
+    });
+
   }
 
   getCompanies(): void {
@@ -75,6 +84,17 @@ export class VisualizationComponent implements OnInit {
   }
 
 
+    // ! <------- Company Modal ------->
+
+    openCompany() {
+      
+      this.dialogService.openCompanyModal()  
+    }
+
+
+
+
+    
 
 
 }

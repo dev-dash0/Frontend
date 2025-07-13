@@ -169,8 +169,8 @@
 
     <!-- ✅ Issues Grid -->
     <div class="row g-4" *ngIf="!isLoading && filteredIssues().length > 0">
-        <div class="col-md-6 col-lg-4" *ngFor="let issue of filteredIssues()">
-            <div class="glass-card h-100 p-4 d-flex flex-column justify-content-between"
+        <div class="col-md-6 col-lg-4 " *ngFor="let issue of filteredIssues()">
+            <div class="glass-card  h-100 p-4 d-flex flex-column justify-content-between"
                 [ngClass]="{ 'overdue-glow': getDeadlineStatus(issue.deadline) === 'passed' }">
                 <div class="card-top">
                     <div class="d-flex justify-content-between align-items-center">
@@ -185,6 +185,13 @@
                             <div class="status-badge inProgress" [ngClass]="issue.status.toLowerCase()"
                                 *ngIf="issue.status.toLowerCase() == 'in progress'">{{ issue.status
                                 }}</div>
+
+                            <!-- <button class="btn btn-sm pin-btn" (click)="togglePin(issue, $event)">
+                                <i class="fa fa-thumbtack"
+                                    [ngClass]="issue.isPinned ? 'text-warning' : 'text-light'"></i>
+                                {{ issue.isPinned ? 'Unpin' : 'Pin' }}
+                            </button> -->
+
                             <div class="status-badge toDo" [ngClass]="issue.status.toLowerCase()"
                                 *ngIf="issue.status.toLowerCase() == 'to do'">{{ issue.status
                                 }}</div>
@@ -196,17 +203,37 @@
                             </span> -->
 
                         </div>
+
+
                     </div>
 
                     <p class="mt-3 mb-2 dev-text-muted">
                         <i class="fa-solid fa-folder-open  me-1"></i> {{ issue.projectName }}
                     </p>
 
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <img [src]="getPriorityIcon(issue.priority)" width="20" alt="priority icon" />
-                        <span class="priority-label text-capitalize" [ngClass]="getPriorityColor(issue.priority)">
-                            {{ issue.priority }}
-                        </span>
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <div class="d-flex align-items-center gap-2">
+                            <img [src]="getPriorityIcon(issue.priority)" width="20" alt="priority icon" />
+                            <span class="priority-label text-capitalize" [ngClass]="getPriorityColor(issue.priority)">
+                                {{ issue.priority }}
+                            </span>
+                        </div>
+                        <div class="icons">
+                            <div class="icon-shadow">
+                                <div class="pin-icon" (click)="togglePin(issue, $event)">
+                                    <div class="diamond">
+                                        @if(issue.isPinned) {
+                                        <a><i class="fa-solid fa-map-pin active-pin"></i></a>
+                                        } @else {
+                                        <a><i class="fa-solid fa-map-pin pin"></i></a>
+                                        }
+                                        <!-- <i class="fa-solid fa-map-pin"
+                                            [ngClass]="issue.isPinned ? 'pin-icon active' : 'pin-icon tilted'"></i> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 

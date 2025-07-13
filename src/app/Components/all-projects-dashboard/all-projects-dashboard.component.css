@@ -1,92 +1,98 @@
-.visualize_content h5 {
-    min-height: 48px;
-}
+ h4 {
+     color: #DCDFFF;
+     font-family: var(--headerFontFamily);
+     margin: 0;
+ }
 
-.totalProject h3,
-.totalProject h5 {
-    font-weight: 600;
-    background: linear-gradient(180deg, #71A5FF 0%, #1347A3 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-fill-color: transparent;
+ .visualize_content h5 {
+     min-height: 48px;
+ }
 
-
-}
-
-.totalProject h3:hover {
-    background: linear-gradient(180deg, #eaff71 0%, #1347 A3 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-fill-color: transparent;
-    /* color: #000000; */
-}
-
-.Completed {
-    color: #0EEADE;
-    transition: all 1.5s;
-}
-
-.Completed h3:hover {
-    color: #41c3eb;
-}
-
-.inProgress {
-    color: #B926E7;
-    transition: all 1.5s;
-
-}
-
-.inProgress h3:hover {
-    color: #c476d9;
-}
-
-.overdue {
-    color: #FF5154;
-    transition: all 1.5s;
-
-}
-
-.overdue h3:hover {
-    color: #7f83e9;
-}
-
-/* _______________________________________________________________________________ */
-.chart-card {
-    position: relative;
-    width: 90px;
-    height: 90px;
-    text-align: center;
-}
-
-.chart-card canvas {
-    position: relative;
-    z-index: 1;
-}
+ .totalProject h3,
+ .totalProject h5 {
+     font-weight: 600;
+     background: linear-gradient(180deg, #71A5FF 0%, #1347A3 100%);
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+     background-clip: text;
+     text-fill-color: transparent;
 
 
-.chart-label {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-}
+ }
 
-/* __________________________________________________________________________________________ */
-.lineChart-Container,
-.doughnutChart-container {
-    min-height: 250px;
-}
+ .totalProject h3:hover {
+     background: linear-gradient(180deg, #eaff71 0%, #1347 A3 100%);
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+     background-clip: text;
+     text-fill-color: transparent;
+     /* color: #000000; */
+ }
 
-.wavy-chart-wrapper {
-    width: 100%;
-    height: 250px;
-    position: relative;
-}
+ .Completed {
+     color: #0EEADE;
+     transition: all 1.5s;
+ }
+
+ .Completed h3:hover {
+     color: #41c3eb;
+ }
+
+ .inProgress {
+     color: #B926E7;
+     transition: all 1.5s;
+
+ }
+
+ .inProgress h3:hover {
+     color: #c476d9;
+ }
+
+ .overdue {
+     color: #FF5154;
+     transition: all 1.5s;
+
+ }
+
+ .overdue h3:hover {
+     color: #7f83e9;
+ }
+
+ /* _______________________________________________________________________________ */
+ .chart-card {
+     position: relative;
+     width: 90px;
+     height: 90px;
+     text-align: center;
+ }
+
+ .chart-card canvas {
+     position: relative;
+     z-index: 1;
+ }
+
+
+ .chart-label {
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     z-index: 2;
+ }
+
+ /* __________________________________________________________________________________________ */
+ .lineChart-Container,
+ .doughnutChart-container {
+     min-height: 250px;
+ }
+
+ .wavy-chart-wrapper {
+     width: 100%;
+     height: 250px;
+     position: relative;
+ }
 
 
 
 
-/* __________________________________________________________________________________________ */
+ /* __________________________________________________________________________________________ */
