@@ -42,6 +42,13 @@ export class SignupComponent {
   private readonly _FormBuilder = inject(FormBuilder);
   private readonly _Router = inject(Router);
   private readonly toastr = inject(ToastrService);
+  
+  private formatDateOnly(date: Date): string {
+    return `${date.getFullYear()}-${(date.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+  }
+  
 
   registerForm: FormGroup = this._FormBuilder.group(
     {
@@ -56,48 +63,87 @@ export class SignupComponent {
     // { validators: [confirmPassword] }
   );
 
+  // sendData() {
+  //   this.isBtnSubmit = true;
+  //   if (this.registerForm.valid) {
+
+  //     this._AuthService.Register(this.registerForm.value).subscribe({
+  //       next: (res) => {
+  //         console.log(res);
+  //         if (res.message == 'Registration successful') {
+  //           this._Router.navigate(['/signin']);
+  //           this.isBtnSubmit = false;
+  //         }
+  //       },
+  //       error: (err) => {
+  //         console.log(err);
+  //         console.log(this.registerForm.value);
+  //         console.log(err.error.message);
+  //         this.errorMessage = err.error.message;
+  //         this.showError(this.errorMessage);
+
+  //       },
+  //     });
+  //   }
+  //   else if (this.registerForm.get('password')?.invalid && this.registerForm.get('email')?.valid) {
+  //     this.showError('Invalid Password');
+
+  //   }
+  //   else if (this.registerForm.get('password')?.valid && this.registerForm.get('email')?.invalid) {
+  //     this.showError('Invalid email');
+
+  //   }
+  //   else if (this.registerForm.get('birthday')?.invalid) {
+  //     this.showError('Invalid birthday');
+  //   }
+  //   else {
+  //     // console.log(this.registerForm.errors);
+  //     // console.log(this.registerForm.value);
+  //     this.showError('Please fill all the fields');
+  //     // this.register.get('rePassword')?.setValue("")
+  //     this.registerForm.markAllAsTouched()
+  //   }
+  // }
+
   sendData() {
     this.isBtnSubmit = true;
+  
     if (this.registerForm.valid) {
-
-      this._AuthService.Register(this.registerForm.value).subscribe({
+      const formData = { ...this.registerForm.value };
+  
+      // ✅ تأكيد تنسيق تاريخ الميلاد
+      if (formData.birthday instanceof Date && !isNaN(formData.birthday)) {
+        formData.birthday = this.formatDateOnly(formData.birthday);
+      }
+  
+      this._AuthService.Register(formData).subscribe({
         next: (res) => {
-          console.log(res);
-          if (res.message == 'Registration successful') {
+          if (res.message === 'Registration successful') {
             this._Router.navigate(['/signin']);
             this.isBtnSubmit = false;
           }
         },
         error: (err) => {
-          console.log(err);
-          console.log(this.registerForm.value);
-          console.log(err.error.message);
           this.errorMessage = err.error.message;
           this.showError(this.errorMessage);
-
         },
       });
     }
     else if (this.registerForm.get('password')?.invalid && this.registerForm.get('email')?.valid) {
       this.showError('Invalid Password');
-
     }
     else if (this.registerForm.get('password')?.valid && this.registerForm.get('email')?.invalid) {
       this.showError('Invalid email');
-
     }
     else if (this.registerForm.get('birthday')?.invalid) {
       this.showError('Invalid birthday');
     }
     else {
-      // console.log(this.registerForm.errors);
-      // console.log(this.registerForm.value);
       this.showError('Please fill all the fields');
-      // this.register.get('rePassword')?.setValue("")
-      this.registerForm.markAllAsTouched()
+      this.registerForm.markAllAsTouched();
     }
   }
-
+  
   onSubmit(event: Event): void {
     event.preventDefault();
   }
@@ -116,12 +162,23 @@ export class SignupComponent {
     );
   }
 
+  // onDateChange(event: any) {
+  //   if (event.value) {
+  //     const date = new Date(event.value);
+  //     const formattedDate = date.toISOString().split('T')[0]; // Converts to YYYY-MM-DD
+  //     this.registerForm.patchValue({ birthday: formattedDate });
+  //   }
+  // }
   onDateChange(event: any) {
-    if (event.value) {
+    if (event.value instanceof Date && !isNaN(event.value)) {
       const date = new Date(event.value);
-      const formattedDate = date.toISOString().split('T')[0]; // Converts to YYYY-MM-DD
+  
+      const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`; // YYYY-MM-DD
+  
       this.registerForm.patchValue({ birthday: formattedDate });
     }
   }
-
+  
 }
