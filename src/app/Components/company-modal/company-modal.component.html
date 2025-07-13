@@ -11,19 +11,15 @@
           <label for="companyName">Company name*</label>
         </div>
         <div class="col-md-9">
-          <input
-            id="companyName"
-            type="text"
-            placeholder="e.g. Linear"
-            formControlName="name"
-            required
-          />
+          <input id="companyName" type="text" placeholder="e.g. Linear" formControlName="name" required />
         </div>
         @if(companyForm.controls['name'].invalid &&
         (companyForm.controls['name'].touched ||
         companyForm.controls['name'].dirty)) {
         <div class="col-md-3"></div>
-        <div class="col-md-9"><p>Company name should not be empty.</p></div>
+        <div class="col-md-9">
+          <p>Company name should not be empty.</p>
+        </div>
         }
       </div>
     </div>
@@ -33,12 +29,7 @@
           <label for="websiteURL">Website URL</label>
         </div>
         <div class="col-md-9">
-          <input
-            id="websiteURL"
-            type="url"
-            placeholder="https://www.example.com"
-            formControlName="tenantUrl"
-          />
+          <input id="websiteURL" type="url" placeholder="https://www.example.com" formControlName="tenantUrl" />
         </div>
         @if (companyForm.controls['tenantUrl'].invalid &&
         (companyForm.controls['tenantUrl'].touched ||
@@ -60,22 +51,15 @@
           <label>Profile image</label>
         </div>
         <div class="col-md-9">
-          <div
-            class="ProfileImg row d-flex justify-content-between align-items-center gap-4"
-          >
+          <div class="ProfileImg row d-flex justify-content-between align-items-center gap-4">
             <div class="col-2">
               <label for="profileImage">
                 <div class="AddImgOverlay">
                   <img src="assets/images/image-plus.svg" alt="Add image" />
                 </div>
               </label>
-              <input
-                id="profileImage"
-                type="file"
-                placeholder="Click to upload"
-                (change)="onFileSelected($event)"
-                accept="image/*"
-              />
+              <input id="profileImage" type="file" placeholder="Click to upload" (change)="onFileSelected($event)"
+                accept="image/*" />
             </div>
             <div class="col-9">
               <div class="dropndrop w-100 ms-auto">
@@ -95,12 +79,8 @@
           <label for="keywords">Keywords</label>
         </div>
         <div class="col-md-9">
-          <input
-            id="keywords"
-            type="text"
-            formControlName="keywords"
-            placeholder="Add 1-10 keywords that help users find your company"
-          />
+          <input id="keywords" type="text" formControlName="keywords"
+            placeholder="Add 1-10 keywords that help users find your company" />
         </div>
       </div>
     </div>
@@ -110,25 +90,15 @@
           <label for="description">Description</label>
         </div>
         <div class="col-md-9">
-          <textarea
-            id="description"
-            rows="2"
-            formControlName="description"
-            placeholder="Write a few sentences about the company..."
-          ></textarea>
+          <textarea id="description" rows="2" formControlName="description"
+            placeholder="Write a few sentences about the company..."></textarea>
         </div>
       </div>
     </div>
     <div class="divider"></div>
     <div class="modal-footer">
-      <div
-        class="buttons w-100 d-flex justify-content-center align-items-center gap-3"
-      >
-        <button
-          type="button"
-          class="cancel-btn w-50 fw-semibold"
-          (click)="close()"
-        >
+      <div class="buttons w-100 d-flex justify-content-center align-items-center gap-3">
+        <button type="button" class="cancel-btn w-50 fw-semibold" (click)="close()">
           Cancel
         </button>
         <button type="submit" class="confirm-btn w-50 fw-semibold">

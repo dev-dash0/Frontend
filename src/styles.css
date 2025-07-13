@@ -890,6 +890,16 @@ li {
 /* =========================================================================================================== */
 /*********************** Global Modal**************************************************************** */
 /*  */
+.modal-container {
+  min-width: 100% !important;
+  width: fit-content;
+  border-radius: 8px;
+  padding: 25px;
+  color: var(--mainLightBlueColor);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(160deg, rgb(33, 38, 79), rgb(43, 28, 86));
+}
+
 .modal-container .row {
   margin-block: 5px;
 }
@@ -1390,10 +1400,12 @@ li {
 
 }
 
-.status-badge.backlog,
-.planning {
+.status-badge.backlog {
   background-color: rgba(124, 144, 143, 0.2);
+}
 
+.status-badge.planning {
+  background-color: rgba(54, 209, 220, 0.2);
 }
 
 .status-badge.canceled {
@@ -1401,7 +1413,7 @@ li {
 }
 
 .status-badge.reviewing {
-  background-color: rgba(145, 69, 75, 0.2);
+  background-color: rgba(247, 182, 51, 0.2);
 }
 
 .status-badge.toDo {
@@ -1409,7 +1421,7 @@ li {
 }
 
 .status-badge.postponed {
-  background-color: rgba(0, 188, 212, 0.2);
+  background-color: rgba(255, 183, 94, 0.2);
 }
 
 /* ================================================ */

@@ -25,6 +25,98 @@ type IssueStatus =
   | 'Canceled'
   | 'BackLog';
 
+  const statusGradientsMap: Record<IssueStatus, (ctx: CanvasRenderingContext2D) => CanvasGradient> = {
+    'Completed': (ctx) => {
+      const g = ctx.createLinearGradient(0, 0, 150, 150);
+      g.addColorStop(0, '#62efbe');
+      g.addColorStop(1, '#0eeab3');
+      return g;
+    },
+    'In Progress': (ctx) => {
+      const g = ctx.createRadialGradient(150, 150, 0, 150, 150, 150);
+      g.addColorStop(0, '#c120e6');
+      g.addColorStop(1, '#5b6eef');
+      return g;
+    },
+    'Reviewing': (ctx) => {
+      const g = ctx.createLinearGradient(0, 0, 150, 150);
+      g.addColorStop(0, '#f7b733');
+      g.addColorStop(1, '#fc4a1a');
+      return g;
+    },
+    'to do': (ctx) => {
+      const g = ctx.createRadialGradient(150, 150, 0, 150, 150, 150);
+      g.addColorStop(0, '#36d1dc');
+      g.addColorStop(1, '#5b86e5');
+      return g;
+    },
+    'Postponed': (ctx) => {
+      const g = ctx.createLinearGradient(0, 0, 150, 150);
+      g.addColorStop(0, '#ffb75e');
+      g.addColorStop(1, '#ed8f03');
+      return g;
+    },
+    'Canceled': (ctx) => {
+      const g = ctx.createRadialGradient(150, 150, 150, 150, 150, 50);
+      // g.addColorStop(0, '#db83f1');
+      // g.addColorStop(1, '#f9dfff');
+      g.addColorStop(0, '#fd8479');
+      g.addColorStop(1, '#f3999a');
+      return g;
+    },
+    'BackLog': (ctx) => {
+      const g = ctx.createLinearGradient(0, 0, 150, 150);
+      g.addColorStop(0, '#616161');
+      g.addColorStop(1, '#9bc5c3');
+      return g;
+    },
+  };
+  
+
+
+  type ProjectStatus =
+  | 'Completed'
+  | 'Working on'
+  | 'Postponed'
+  | 'Canceled'
+  | 'Planning';
+
+const projectStatusGradientMap: Record<ProjectStatus, (ctx: CanvasRenderingContext2D) => CanvasGradient> = {
+  'Completed': (ctx) => {
+    const g = ctx.createLinearGradient(0, 0, 150, 150);
+    g.addColorStop(0, '#62efbe');
+    g.addColorStop(1, '#0eeab3');
+    return g;
+  },
+  'Working on': (ctx) => {
+    const g = ctx.createRadialGradient(150, 150, 0, 150, 150, 150);
+    g.addColorStop(0, '#c120e6');
+    g.addColorStop(1, '#5b6eef');
+    return g;
+  },
+  'Postponed': (ctx) => {
+    const g = ctx.createLinearGradient(0, 0, 150, 150);
+    g.addColorStop(0, '#ffb75e');
+    g.addColorStop(1, '#ed8f03');
+    return g;
+  },
+  'Canceled': (ctx) => {
+    const g = ctx.createRadialGradient(150, 150, 150, 150, 150, 50);
+    // g.addColorStop(0, '#db83f1');
+    // g.addColorStop(1, '#f9dfff');
+    g.addColorStop(0, '#fd8479');
+    g.addColorStop(1, '#f3999a');
+    return g;
+  },
+  'Planning': (ctx) => {
+    const g = ctx.createLinearGradient(0, 0, 150, 150);
+    g.addColorStop(0, '#36d1dc');
+    g.addColorStop(1, '#5b86e5');
+    return g;
+  },
+};
+
+
 @Component({
   selector: 'app-all-projects-dashboard',
   standalone: true,
@@ -36,7 +128,9 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
   completedProjects: any;
   projectsInProgress: any;
   totalProjects: any;
-  projectsOverdue: any;
+  projectsPostponed: any;
+  projectsCanceled:any;
+  projectPlanning:any;
   isLoading: boolean = true;
   AllIssuesList:any[]=[]
   currentTenantName:string='';
@@ -58,6 +152,8 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
   @ViewChild('totalCompletedProjectsChart') totalCompletedProjectsChart!: ElementRef;
   @ViewChild('projectsInProgressChart') projectsInProgressChart!: ElementRef;
   @ViewChild('projectsOverdueChart') projectsOverdueChart!: ElementRef;
+  @ViewChild('projectsCanceledChart') projectsCanceledChart!: ElementRef;
+  @ViewChild('projectPlanningChart') projectPlanningChart!: ElementRef;
   
 
   ngOnInit(): void {
@@ -87,10 +183,12 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
     this._DashboardService.getDashboardData(tenantId).subscribe({
       next: (res) => {
         console.log('Tenant Dashboard Data',res);
-        this.completedProjects = res.result.completedProjects;
-        this.projectsInProgress = res.result.projectsInProgress;
         this.totalProjects = res.result.totalProjects;
-        this.projectsOverdue = res.result.projectsOverdue;
+        this.completedProjects = res.result.completedProjects;
+        this.projectsInProgress = res.result.projectsInProgress; // or projectWorkingon
+        this.projectsPostponed = res.result.projectsPostponed;
+        this.projectsCanceled = res.result.projectsCanceled;
+        this.projectPlanning=res.result.projectPlanning;
 
         this.isLoading = false;
         // this.initCharts();
@@ -419,14 +517,219 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
     });
   }
   
+  // initCompanyStatusChart() {
+  //   const ctx = this.doughnutChart.nativeElement.getContext('2d');
+  
+  //   if (this.doughnutChartInstance) this.doughnutChartInstance.destroy();
+
+  //   const issues = this.AllIssuesList.filter(issue => issue.tenantName === this.tenantName);
+  
+  //   const statuses: IssueStatus[] = ['Completed', 'In Progress', 'Reviewing', 'to do', 'Postponed', 'Canceled', 'BackLog'];
+  //   const statusCounts: Record<IssueStatus, number> = {
+  //     'Completed': 0,
+  //     'In Progress': 0,
+  //     'Reviewing': 0,
+  //     'to do': 0,
+  //     'Postponed': 0,
+  //     'Canceled': 0,
+  //     'BackLog': 0
+  //   };
+  
+  //   issues.forEach(issue => {
+  //     const status = issue.status;
+    
+  //     if ((statuses as string[]).includes(status)) {
+  //       statusCounts[status as IssueStatus]++;
+  //     }
+  //   });
+    
+  
+  //   const labels = Object.keys(statusCounts) as IssueStatus[];
+  //   const data = Object.values(statusCounts);
+  
+  //   const allZero = data.every(count => count === 0);
+  
+  //   // gradients
+  //   const gradients: Record<IssueStatus, CanvasGradient> = {
+  //     'Completed': (() => {
+  //       const g = ctx!.createLinearGradient(0, 0, 150, 150);
+  //       g.addColorStop(0, 'rgb(98, 239, 190)');
+  //       g.addColorStop(1, 'rgb(14, 234, 179)');
+  //       return g;
+  //     })(),
+  //     'In Progress': (() => {
+  //       // const g = ctx!.createLinearGradient(0, 0, 150, 150);
+  //       // g.addColorStop(0, 'rgba(78, 131, 237, 1)');
+  //       // g.addColorStop(1, 'rgb(181, 94, 236)');
+  //       // return g;
+  //       const g =  ctx!.createRadialGradient(
+  //             100,
+  //             350,
+  //             350,
+  //             150,
+  //             150,
+  //             50
+  //           );
+  //           g.addColorStop(1, 'rgba(193, 32, 230, 1)');
+  //           g.addColorStop(0, 'rgba(91, 110, 239, 1)');
+  //       return g;
+  //     })(),
+  //     'Reviewing': (() => {
+  //       const g = ctx!.createLinearGradient(0, 0, 150, 150);
+  //       g.addColorStop(0, '#f7b733');
+  //       g.addColorStop(1, '#fc4a1a');
+  //       return g;
+  //     })(),
+  //     'to do': (() => {
+  //       // const g = ctx!.createLinearGradient(0, 0, 150, 150);
+  //       // g.addColorStop(0, '#36D1DC');
+  //       // g.addColorStop(1, '#5B86E5');
+  //       // return g;
+  //       const g = ctx!.createRadialGradient(
+  //             150,
+  //             150,
+  //             0,
+  //             150,
+  //             150,
+  //             150
+  //           );
+  //           g.addColorStop(0, 'rgba(78, 131, 237, 1)');
+  //           g.addColorStop(0.1, 'rgba(9, 240, 222, 1)');
+  //           g.addColorStop(0.5, 'rgba(29, 246, 228,1)');
+  //           g.addColorStop(1, 'rgba(78, 131, 237, 1)');
+  //       return g;
+  //     })(),
+  //     'Postponed': (() => {
+  //       const g = ctx!.createLinearGradient(0, 0, 150, 150);
+  //       g.addColorStop(0, '#FFB75E');
+  //       g.addColorStop(1, '#ED8F03');
+  //       return g;
+  //     })(),
+      
+  //     'Canceled': (() => {
+  //       // const g = ctx!.createLinearGradient(0, 0, 150, 150);
+  //       // g.addColorStop(0, '#ff5858');
+  //       // g.addColorStop(1, '#f857a6');
+  //       // return g;
+  //       const g = ctx!.createRadialGradient(
+  //             150,
+  //             150,
+  //             150,
+  //             150,
+  //             150,
+  //             50
+  //           );;
+  //        g.addColorStop(0, 'rgba(219, 131, 241, 1)');
+  //     g.addColorStop(1, 'rgb(249, 223, 255)');
+  //       return g;
+  //     })(),
+  //     'BackLog': (() => {
+  //       const g = ctx!.createLinearGradient(0, 0, 150, 150);
+  //       g.addColorStop(0, '#616161');
+  //       g.addColorStop(1, '#9bc5c3');
+  //       return g;
+  //     })()
+  //   };
+  
+  //       const gradient_purple = ctx!.createRadialGradient(
+  //       100,
+  //       350,
+  //       350,
+  //       150,
+  //       150,
+  //       50
+  //     );
+  //     gradient_purple.addColorStop(1, 'rgba(193, 32, 230, 1)');
+  //     gradient_purple.addColorStop(0, 'rgba(91, 110, 239, 1)');
+  
+  //     const gradient_blueSky = ctx!.createRadialGradient(
+  //       150,
+  //       150,
+  //       0,
+  //       150,
+  //       150,
+  //       150
+  //     );
+  //     gradient_blueSky.addColorStop(0, 'rgba(78, 131, 237, 1)');
+  //     gradient_blueSky.addColorStop(0.1, 'rgba(9, 240, 222, 1)');
+  //     gradient_blueSky.addColorStop(0.5, 'rgba(29, 246, 228,1)');
+  //     gradient_blueSky.addColorStop(1, 'rgba(78, 131, 237, 1)');
+  
+  //     const gradient_pink = ctx!.createRadialGradient(
+  //       150,
+  //       150,
+  //       150,
+  //       150,
+  //       150,
+  //       50
+  //     );
+  //     gradient_pink.addColorStop(0, 'rgba(219, 131, 241, 1)');
+  //     gradient_pink.addColorStop(1, 'rgb(249, 223, 255)');
+  
+    
+  //   const backgroundColors = labels.map(label => gradients[label]);
+  
+  //   this.doughnutChartInstance = new Chart(ctx!, {
+  //     type: 'doughnut',
+  //     data: {
+  //       labels: allZero ? ['No Data'] : labels,
+  //       datasets: [
+  //         {
+  //           label: 'Issue Status Breakdown',
+  //           data: allZero ? [1] : data,
+  //           backgroundColor: allZero ? ['#0C1E3D'] : backgroundColors,
+  //           borderColor: allZero ? [gradient_purple, gradient_blueSky, gradient_pink] : backgroundColors,
+  //           borderWidth: 1,
+  //           borderRadius: 3.5,
+  
+  //         }
+  //       ]
+  //     },
+  //     options: {
+  //       responsive: true,
+  //       maintainAspectRatio: false,
+  //       cutout: '55%',
+  //       plugins: {
+  //         legend: {
+  //           display: true,
+  //           position: 'bottom',
+  //           labels: {
+  //             color: '#7d92ca',
+  //             font: {
+  //               size: 10
+  //             },
+  //             boxWidth: 10
+  //           }
+  //         },
+  //         tooltip: {
+  //           callbacks: {
+  //             label: function (context) {
+  //               return allZero
+  //                 ? 'No Data'
+  //                 : `${context.label +' ' +' Issues'}: ${context.raw }`;
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   });
+  // }
   initCompanyStatusChart() {
     const ctx = this.doughnutChart.nativeElement.getContext('2d');
+
+
   
     if (this.doughnutChartInstance) this.doughnutChartInstance.destroy();
-
+  
     const issues = this.AllIssuesList.filter(issue => issue.tenantName === this.tenantName);
   
     const statuses: IssueStatus[] = ['Completed', 'In Progress', 'Reviewing', 'to do', 'Postponed', 'Canceled', 'BackLog'];
+
+    const gradients: Record<IssueStatus, CanvasGradient> = {} as any;
+    statuses.forEach(status => {
+      gradients[status] = statusGradientsMap[status](ctx!);
+    });
+    
     const statusCounts: Record<IssueStatus, number> = {
       'Completed': 0,
       'In Progress': 0,
@@ -439,137 +742,52 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
   
     issues.forEach(issue => {
       const status = issue.status;
-    
       if ((statuses as string[]).includes(status)) {
         statusCounts[status as IssueStatus]++;
       }
     });
-    
   
     const labels = Object.keys(statusCounts) as IssueStatus[];
     const data = Object.values(statusCounts);
-  
     const allZero = data.every(count => count === 0);
   
-    // gradients
-    const gradients: Record<IssueStatus, CanvasGradient> = {
-      'Completed': (() => {
-        const g = ctx!.createLinearGradient(0, 0, 150, 150);
-        g.addColorStop(0, 'rgb(98, 239, 190)');
-        g.addColorStop(1, 'rgb(14, 234, 179)');
-        return g;
-      })(),
-      'In Progress': (() => {
-        // const g = ctx!.createLinearGradient(0, 0, 150, 150);
-        // g.addColorStop(0, 'rgba(78, 131, 237, 1)');
-        // g.addColorStop(1, 'rgb(181, 94, 236)');
-        // return g;
-        const g =  ctx!.createRadialGradient(
-              100,
-              350,
-              350,
-              150,
-              150,
-              50
-            );
-            g.addColorStop(1, 'rgba(193, 32, 230, 1)');
-            g.addColorStop(0, 'rgba(91, 110, 239, 1)');
-        return g;
-      })(),
-      'Reviewing': (() => {
-        const g = ctx!.createLinearGradient(0, 0, 150, 150);
-        g.addColorStop(0, '#f7b733');
-        g.addColorStop(1, '#fc4a1a');
-        return g;
-      })(),
-      'to do': (() => {
-        // const g = ctx!.createLinearGradient(0, 0, 150, 150);
-        // g.addColorStop(0, '#36D1DC');
-        // g.addColorStop(1, '#5B86E5');
-        // return g;
-        const g = ctx!.createRadialGradient(
-              150,
-              150,
-              0,
-              150,
-              150,
-              150
-            );
-            g.addColorStop(0, 'rgba(78, 131, 237, 1)');
-            g.addColorStop(0.1, 'rgba(9, 240, 222, 1)');
-            g.addColorStop(0.5, 'rgba(29, 246, 228,1)');
-            g.addColorStop(1, 'rgba(78, 131, 237, 1)');
-        return g;
-      })(),
-      'Postponed': (() => {
-        const g = ctx!.createLinearGradient(0, 0, 150, 150);
-        g.addColorStop(0, '#FFB75E');
-        g.addColorStop(1, '#ED8F03');
-        return g;
-      })(),
-      
-      'Canceled': (() => {
-        // const g = ctx!.createLinearGradient(0, 0, 150, 150);
-        // g.addColorStop(0, '#ff5858');
-        // g.addColorStop(1, '#f857a6');
-        // return g;
-        const g = ctx!.createRadialGradient(
-              150,
-              150,
-              150,
-              150,
-              150,
-              50
-            );;
-         g.addColorStop(0, 'rgba(219, 131, 241, 1)');
-      g.addColorStop(1, 'rgb(249, 223, 255)');
-        return g;
-      })(),
-      'BackLog': (() => {
-        const g = ctx!.createLinearGradient(0, 0, 150, 150);
-        g.addColorStop(0, '#616161');
-        g.addColorStop(1, '#9bc5c3');
-        return g;
-      })()
-    };
-  
-        const gradient_purple = ctx!.createRadialGradient(
-        100,
-        350,
-        350,
-        150,
-        150,
-        50
-      );
-      gradient_purple.addColorStop(1, 'rgba(193, 32, 230, 1)');
-      gradient_purple.addColorStop(0, 'rgba(91, 110, 239, 1)');
-  
-      const gradient_blueSky = ctx!.createRadialGradient(
-        150,
-        150,
-        0,
-        150,
-        150,
-        150
-      );
-      gradient_blueSky.addColorStop(0, 'rgba(78, 131, 237, 1)');
-      gradient_blueSky.addColorStop(0.1, 'rgba(9, 240, 222, 1)');
-      gradient_blueSky.addColorStop(0.5, 'rgba(29, 246, 228,1)');
-      gradient_blueSky.addColorStop(1, 'rgba(78, 131, 237, 1)');
-  
-      const gradient_pink = ctx!.createRadialGradient(
-        150,
-        150,
-        150,
-        150,
-        150,
-        50
-      );
-      gradient_pink.addColorStop(0, 'rgba(219, 131, 241, 1)');
-      gradient_pink.addColorStop(1, 'rgb(249, 223, 255)');
-  
-    
     const backgroundColors = labels.map(label => gradients[label]);
+
+    const gradient_purple = ctx!.createRadialGradient(
+            100,
+            350,
+            350,
+            150,
+            150,
+            50
+          );
+          gradient_purple.addColorStop(1, 'rgba(193, 32, 230, 1)');
+          gradient_purple.addColorStop(0, 'rgba(91, 110, 239, 1)');
+      
+          const gradient_blueSky = ctx!.createRadialGradient(
+            150,
+            150,
+            0,
+            150,
+            150,
+            150
+          );
+          gradient_blueSky.addColorStop(0, 'rgba(78, 131, 237, 1)');
+          gradient_blueSky.addColorStop(0.1, 'rgba(9, 240, 222, 1)');
+          gradient_blueSky.addColorStop(0.5, 'rgba(29, 246, 228,1)');
+          gradient_blueSky.addColorStop(1, 'rgba(78, 131, 237, 1)');
+      
+          const gradient_pink = ctx!.createRadialGradient(
+            150,
+            150,
+            150,
+            150,
+            150,
+            50
+          );
+          gradient_pink.addColorStop(0, 'rgba(219, 131, 241, 1)');
+          gradient_pink.addColorStop(1, 'rgb(249, 223, 255)');
+      
   
     this.doughnutChartInstance = new Chart(ctx!, {
       type: 'doughnut',
@@ -580,10 +798,9 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
             label: 'Issue Status Breakdown',
             data: allZero ? [1] : data,
             backgroundColor: allZero ? ['#0C1E3D'] : backgroundColors,
-            borderColor: allZero ? [gradient_purple, gradient_blueSky, gradient_pink] : backgroundColors,
+            borderColor: allZero ?[gradient_purple, gradient_blueSky, gradient_pink]: backgroundColors  ,
             borderWidth: 1,
             borderRadius: 3.5,
-  
           }
         ]
       },
@@ -597,18 +814,14 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
             position: 'bottom',
             labels: {
               color: '#7d92ca',
-              font: {
-                size: 10
-              },
+              font: { size: 10 },
               boxWidth: 10
             }
           },
           tooltip: {
             callbacks: {
               label: function (context) {
-                return allZero
-                  ? 'No Data'
-                  : `${context.label +' ' +' Issues'}: ${context.raw }`;
+                return allZero ? 'No Data' : `${context.label} Issues: ${context.raw}`;
               }
             }
           }
@@ -617,68 +830,352 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
     });
   }
 
+
+  // initSmallCharts() {
+  //   const zeroTotalProjects = this.totalProjects === 0;
+
+  //   // Total Projects Chart
+  //   const totalProjects = zeroTotalProjects ?
+  //     new Chart(this.totalProjectsChart.nativeElement.getContext('2d'), {
+  //       type: 'doughnut',
+  //       data: {
+  //         datasets: [
+  //           {
+  //             data: [0, 0], // Completed vs Remaining
+  //             backgroundColor: function (context) {
+  //               const chart = context.chart;
+  //               const ctx = chart.ctx;
+  //               const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
+  //               gradient.addColorStop(0, 'rgba(113,165,255,1)'); // Start color
+  //               gradient.addColorStop(1, 'rgba(19,71,163,1)'); // End color
+  //               if (context.dataIndex === 0) {
+  //                 return gradient; // Apply gradient to the first slice
+  //               } else {
+  //                 return '#F5F5F5'; // Solid color for the second slice
+  //               }
+  //             },
+  //             borderWidth: 0,
+  //           },
+  //         ],
+  //       },
+  //       options: {
+  //         responsive: true, // Ensures the chart resizes with the window
+  //         maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
+  //         cutout: '80%',
+  //         plugins: {
+  //           tooltip: { enabled: false },
+  //           legend: { display: false },
+  //         },
+  //       },
+  //     })
+  //     : new Chart(this.totalProjectsChart.nativeElement.getContext('2d'), {
+  //       type: 'doughnut',
+  //       data: {
+  //         datasets: [
+  //           {
+  //             data: [10, 0], // Completed vs Remaining
+  //             backgroundColor: function (context) {
+  //               const chart = context.chart;
+  //               const ctx = chart.ctx;
+  //               const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
+  //               gradient.addColorStop(0, 'rgba(113,165,255,1)'); // Start color
+  //               gradient.addColorStop(1, 'rgba(19,71,163,1)'); // End color
+  //               if (context.dataIndex === 0) {
+  //                 return gradient; // Apply gradient to the first slice
+  //               } else {
+  //                 return '#F5F5F5'; // Solid color for the second slice
+  //               }
+  //             },
+  //             borderWidth: 0,
+  //           },
+  //         ],
+  //       },
+  //       options: {
+  //         responsive: true, // Ensures the chart resizes with the window
+  //         maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
+  //         cutout: '80%',
+  //         plugins: {
+  //           tooltip: { enabled: false },
+  //           legend: { display: false },
+  //         },
+  //       },
+  //     });
+
+  //   // Total Completed Issues Chart
+  //   new Chart(this.totalCompletedProjectsChart.nativeElement.getContext('2d'), {
+  //     type: 'doughnut',
+  //     data: {
+  //       datasets: [
+  //         {
+  //           data: [
+  //             this.completedProjects,
+  //             this.totalProjects - this.completedProjects,
+  //           ],
+  //           backgroundColor: function (context) {
+  //             const chart = context.chart;
+  //             const ctx = chart.ctx;
+  //             const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
+  //             gradient.addColorStop(0, 'rgba(88,112,240,1)'); // Start color
+  //             gradient.addColorStop(1, 'rgba(1,254,219,1)'); // End color
+  //             if (context.dataIndex === 0) {
+  //               return gradient; // Apply gradient to the first slice
+  //             } else {
+  //               return '#F5F5F5'; // Solid color for the second slice
+  //             }
+  //           },
+  //           borderWidth: 0,
+  //         },
+  //       ],
+  //     },
+  //     options: {
+  //       responsive: true, // Ensures the chart resizes with the window
+  //       maintainAspectRatio: true, // Maintains the aspect ratio (default: true)
+  //       cutout: '80%',
+  //       plugins: {
+  //         tooltip: { enabled: true },
+  //         legend: { display: false },
+  //       },
+  //     },
+  //   });
+
+  //   // Total Projects in Progress Chart
+  //   new Chart(this.projectsInProgressChart.nativeElement.getContext('2d'), {
+  //     type: 'doughnut',
+  //     data: {
+  //       datasets: [
+  //         {
+  //           data: [
+  //             this.projectsInProgress,
+  //             this.totalProjects - this.projectsInProgress,
+  //           ],
+  //           backgroundColor: function (context) {
+  //             const chart = context.chart;
+  //             const ctx = chart.ctx;
+  //             const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
+  //             gradient.addColorStop(0, 'rgba(193,32,230,1)'); // Start color
+  //             gradient.addColorStop(1, 'rgba(91,110,239,1)'); // End color
+  //             if (context.dataIndex === 0) {
+  //               return gradient; // Apply gradient to the first slice
+  //             } else {
+  //               return '#F5F5F5'; // Solid color for the second slice
+  //             }
+  //           },
+  //           borderWidth: 0,
+  //         },
+  //       ],
+  //     },
+  //     options: {
+  //       responsive: true, // Ensures the chart resizes with the window
+  //       maintainAspectRatio: true, // Maintains the aspect ratio (default: true)
+  //       cutout: '80%',
+  //       plugins: {
+  //         tooltip: { enabled: false },
+  //         legend: { display: false },
+  //       },
+  //     },
+  //   });
+
+  //   // Total Projects Postponed Chart
+  //   new Chart(this.projectsCanceledChart.nativeElement.getContext('2d'), {
+  //     type: 'doughnut',
+  //     data: {
+  //       datasets: [
+  //         {
+  //           data: [
+  //             this.projectsPostponed,
+  //             this.totalProjects - this.projectsPostponed,
+  //           ],
+  //           backgroundColor: function (context) {
+  //             const chart = context.chart;
+  //             const ctx = chart.ctx;
+  //             const gradient = ctx!.createRadialGradient(
+  //               150,
+  //               150,
+  //               150,
+  //               150,
+  //               150,
+  //               50
+  //             );;
+  //             gradient.addColorStop(0, 'rgba(219, 131, 241, 1)');
+  //             gradient.addColorStop(1, 'rgb(249, 223, 255)');
+  //             if (context.dataIndex === 0) {
+  //               return gradient; // Apply gradient to the first slice
+  //             } else {
+  //               return '#F5F5F5'; // Solid color for the second slice
+  //             }
+  //           },
+  //           borderWidth: 0,
+  //         },
+  //       ],
+  //     },
+  //     options: {
+  //       responsive: true, // Ensures the chart resizes with the window
+  //       maintainAspectRatio: true, // Maintains the aspect ratio (default: true)
+  //       cutout: '80%',
+  //       plugins: {
+  //         tooltip: { enabled: false },
+  //         legend: { display: false },
+  //       },
+  //     },
+  //   });
+  //   // Total Projects Canceled Chart
+  //   new Chart(this.projectsOverdueChart.nativeElement.getContext('2d'), {
+  //     type: 'doughnut',
+  //     data: {
+  //       datasets: [
+  //         {
+  //           data: [
+  //             this.projectsPostponed,
+  //             this.totalProjects - this.projectsPostponed,
+  //           ],
+  //           backgroundColor: function (context) {
+  //             const chart = context.chart;
+  //             const ctx = chart.ctx;
+  //             const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
+  //             gradient.addColorStop(0, 'rgba(246,93,63,1)'); // Start color
+  //             gradient.addColorStop(1, 'rgba(91,110,239,1)'); // End color
+  //             if (context.dataIndex === 0) {
+  //               return gradient; // Apply gradient to the first slice
+  //             } else {
+  //               return '#F5F5F5'; // Solid color for the second slice
+  //             }
+  //           },
+  //           borderWidth: 0,
+  //         },
+  //       ],
+  //     },
+  //     options: {
+  //       responsive: true, // Ensures the chart resizes with the window
+  //       maintainAspectRatio: true, // Maintains the aspect ratio (default: true)
+  //       cutout: '80%',
+  //       plugins: {
+  //         tooltip: { enabled: false },
+  //         legend: { display: false },
+  //       },
+  //     },
+  //   });
+  //   // Total Projects Planning Chart
+  //   new Chart(this.projectPlanningChart.nativeElement.getContext('2d'), {
+  //     type: 'doughnut',
+  //     data: {
+  //       datasets: [
+  //         {
+  //           data: [
+  //             this.projectPlanning,
+  //             this.totalProjects - this.projectPlanning,
+  //           ],
+  //           backgroundColor: function (context) {
+  //             const chart = context.chart;
+  //             const ctx = chart.ctx;
+  //             const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
+  //             gradient.addColorStop(0, 'rgba(246,93,63,1)'); // Start color
+  //             gradient.addColorStop(1, 'rgba(91,110,239,1)'); // End color
+  //             if (context.dataIndex === 0) {
+  //               return gradient; // Apply gradient to the first slice
+  //             } else {
+  //               return '#F5F5F5'; // Solid color for the second slice
+  //             }
+  //           },
+  //           borderWidth: 0,
+  //         },
+  //       ],
+  //     },
+  //     options: {
+  //       responsive: true, // Ensures the chart resizes with the window
+  //       maintainAspectRatio: true, // Maintains the aspect ratio (default: true)
+  //       cutout: '80%',
+  //       plugins: {
+  //         tooltip: { enabled: false },
+  //         legend: { display: false },
+  //       },
+  //     },
+  //   });
+  // }
+
+  //////////////////////////////////////////////////////////////////
   initSmallCharts() {
     const zeroTotalProjects = this.totalProjects === 0;
-
-    // Total Projects Chart
-    const totalProjects = zeroTotalProjects ?
-      new Chart(this.totalProjectsChart.nativeElement.getContext('2d'), {
-        type: 'doughnut',
-        data: {
-          datasets: [
-            {
-              data: [0, 0], // Completed vs Remaining
-              backgroundColor: function (context) {
-                const chart = context.chart;
-                const ctx = chart.ctx;
-                const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
-                gradient.addColorStop(0, 'rgba(113,165,255,1)'); // Start color
-                gradient.addColorStop(1, 'rgba(19,71,163,1)'); // End color
-                if (context.dataIndex === 0) {
-                  return gradient; // Apply gradient to the first slice
-                } else {
-                  return '#F5F5F5'; // Solid color for the second slice
-                }
-              },
-              borderWidth: 0,
-            },
-          ],
-        },
-        options: {
-          responsive: true, // Ensures the chart resizes with the window
-          maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
-          cutout: '80%',
-          plugins: {
-            tooltip: { enabled: false },
-            legend: { display: false },
+  
+    const getGradient = (ctx: CanvasRenderingContext2D, status: ProjectStatus) =>
+      projectStatusGradientMap[status](ctx);
+  
+    const charts = [
+      {
+        ref: this.totalCompletedProjectsChart,
+        value: this.completedProjects,
+        status: 'Completed' as ProjectStatus,
+      },
+      {
+        ref: this.projectsInProgressChart,
+        value: this.projectsInProgress,
+        status: 'Working on' as ProjectStatus,
+      },
+      {
+        ref: this.projectsOverdueChart,
+        value: this.projectsPostponed,
+        status: 'Postponed' as ProjectStatus,
+      },
+      {
+        ref: this.projectsCanceledChart,
+        value: this.projectsCanceled,
+        status: 'Canceled' as ProjectStatus,
+      },
+      {
+        ref: this.projectPlanningChart,
+        value: this.projectPlanning,
+        status: 'Planning' as ProjectStatus,
+      }
+    ];
+  
+    // 🟦 Total Projects Chart (unique static gradient)
+    const ctxTotal = this.totalProjectsChart.nativeElement.getContext('2d');
+    const defaultGradient = ctxTotal!.createLinearGradient(0, 0, 0, ctxTotal.canvas.height);
+    defaultGradient.addColorStop(0, 'rgba(113,165,255,1)');
+    defaultGradient.addColorStop(1, 'rgba(19,71,163,1)');
+  
+    new Chart(ctxTotal!, {
+      type: 'doughnut',
+      data: {
+        datasets: [
+          {
+            data: [this.totalProjects, 0],
+            backgroundColor: (context) =>
+              context.dataIndex === 0 ? defaultGradient : '#cfdcffed',
+            borderWidth: 0,
           },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '80%',
+        plugins: {
+          tooltip: { enabled: false },
+          legend: { display: false },
         },
-      })
-      : new Chart(this.totalProjectsChart.nativeElement.getContext('2d'), {
+      },
+    });
+  
+    // 🟩 Other status-based charts
+    charts.forEach(({ ref, value, status }) => {
+      const ctx = ref.nativeElement.getContext('2d');
+      const gradient = getGradient(ctx!, status);
+  
+      new Chart(ctx!, {
         type: 'doughnut',
         data: {
           datasets: [
             {
-              data: [10, 0], // Completed vs Remaining
-              backgroundColor: function (context) {
-                const chart = context.chart;
-                const ctx = chart.ctx;
-                const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
-                gradient.addColorStop(0, 'rgba(113,165,255,1)'); // Start color
-                gradient.addColorStop(1, 'rgba(19,71,163,1)'); // End color
-                if (context.dataIndex === 0) {
-                  return gradient; // Apply gradient to the first slice
-                } else {
-                  return '#F5F5F5'; // Solid color for the second slice
-                }
-              },
+              data: [value, this.totalProjects - value],
+              backgroundColor: (context) =>
+                context.dataIndex === 0 ? gradient : '#cfdcffed',
               borderWidth: 0,
             },
           ],
         },
         options: {
-          responsive: true, // Ensures the chart resizes with the window
-          maintainAspectRatio: false, // Maintains the aspect ratio (default: true)
+          responsive: true,
+          maintainAspectRatio: true,
           cutout: '80%',
           plugins: {
             tooltip: { enabled: false },
@@ -686,121 +1183,9 @@ export class AllProjectsDashboardComponent implements OnInit, OnChanges {
           },
         },
       });
-
-    // Total Completed Issues Chart
-    new Chart(this.totalCompletedProjectsChart.nativeElement.getContext('2d'), {
-      type: 'doughnut',
-      data: {
-        datasets: [
-          {
-            data: [
-              this.completedProjects,
-              this.totalProjects - this.completedProjects,
-            ],
-            backgroundColor: function (context) {
-              const chart = context.chart;
-              const ctx = chart.ctx;
-              const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
-              gradient.addColorStop(0, 'rgba(88,112,240,1)'); // Start color
-              gradient.addColorStop(1, 'rgba(1,254,219,1)'); // End color
-              if (context.dataIndex === 0) {
-                return gradient; // Apply gradient to the first slice
-              } else {
-                return '#F5F5F5'; // Solid color for the second slice
-              }
-            },
-            borderWidth: 0,
-          },
-        ],
-      },
-      options: {
-        responsive: true, // Ensures the chart resizes with the window
-        maintainAspectRatio: true, // Maintains the aspect ratio (default: true)
-        cutout: '80%',
-        plugins: {
-          tooltip: { enabled: true },
-          legend: { display: false },
-        },
-      },
-    });
-
-    // Total Issues in Progress Chart
-    new Chart(this.projectsInProgressChart.nativeElement.getContext('2d'), {
-      type: 'doughnut',
-      data: {
-        datasets: [
-          {
-            data: [
-              this.projectsInProgress,
-              this.totalProjects - this.projectsInProgress,
-            ],
-            backgroundColor: function (context) {
-              const chart = context.chart;
-              const ctx = chart.ctx;
-              const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
-              gradient.addColorStop(0, 'rgba(193,32,230,1)'); // Start color
-              gradient.addColorStop(1, 'rgba(91,110,239,1)'); // End color
-              if (context.dataIndex === 0) {
-                return gradient; // Apply gradient to the first slice
-              } else {
-                return '#F5F5F5'; // Solid color for the second slice
-              }
-            },
-            borderWidth: 0,
-          },
-        ],
-      },
-      options: {
-        responsive: true, // Ensures the chart resizes with the window
-        maintainAspectRatio: true, // Maintains the aspect ratio (default: true)
-        cutout: '80%',
-        plugins: {
-          tooltip: { enabled: false },
-          legend: { display: false },
-        },
-      },
-    });
-
-    // Total Issues Overdue Chart
-    new Chart(this.projectsOverdueChart.nativeElement.getContext('2d'), {
-      type: 'doughnut',
-      data: {
-        datasets: [
-          {
-            data: [
-              this.projectsOverdue,
-              this.totalProjects - this.projectsOverdue,
-            ],
-            backgroundColor: function (context) {
-              const chart = context.chart;
-              const ctx = chart.ctx;
-              const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
-              gradient.addColorStop(0, 'rgba(246,93,63,1)'); // Start color
-              gradient.addColorStop(1, 'rgba(91,110,239,1)'); // End color
-              if (context.dataIndex === 0) {
-                return gradient; // Apply gradient to the first slice
-              } else {
-                return '#F5F5F5'; // Solid color for the second slice
-              }
-            },
-            borderWidth: 0,
-          },
-        ],
-      },
-      options: {
-        responsive: true, // Ensures the chart resizes with the window
-        maintainAspectRatio: true, // Maintains the aspect ratio (default: true)
-        cutout: '80%',
-        plugins: {
-          tooltip: { enabled: false },
-          legend: { display: false },
-        },
-      },
     });
   }
-
-  //////////////////////////////////////////////////////////////////
-
+  
 getMonthlyStatusCounts(tenantName: string) {
   const issues = this.AllIssuesList.filter(issue => issue.tenantName === this.tenantName);
   // console.log('📊 Current Tenant:', this.tenantName);
@@ -858,6 +1243,8 @@ getDashboardAllIssue() {
     }
   });
 }
+
+
 
 
 

@@ -1,7 +1,10 @@
-<h4 class="header mb-4 ">Project Overview</h4>
+<h4 class="header mb-4 ">Company Overview</h4>
 <div class="row text-center mb-3 g-3 ">
-    <div class=" col-sm-6 col-md-3 totalProject d-flex justify-content-center align-items-center flex-column">
-        <h5>Total Projects</h5>
+    <!-- <div class=" col-sm-6 col-md-3 totalProject d-flex justify-content-center align-items-center flex-column">
+        <h5
+            title="All projects created by the company, including planning,working on ,completed, postponed, and canceled.">
+            Total Projects
+        </h5>
         <div class="chart-wrapper d-flex justify-content-center align-items-center">
             <ng-container *ngIf="isLoading; else showTotalProjectsChart">
                 <app-chart-loader [size]="90"></app-chart-loader>
@@ -16,11 +19,12 @@
                 </div>
             </ng-template>
         </div>
-    </div>
+    </div> -->
 
     <!-- Total Completed Projects Chart -->
-    <div class=" col-sm-6  col-md-3 Completed d-flex justify-content-center align-items-center flex-column">
-        <h5>Total Completed Projects</h5>
+    <!-- <div class=" col-sm-6  col-md-3 Completed d-flex justify-content-center align-items-center flex-column">
+        <h5 title="Projects fully delivered and closed">Completed Projects
+        </h5>
         <div class="chart-wrapper d-flex justify-content-center align-items-center">
             <ng-container *ngIf="isLoading; else showTotalCompletedProjectsChart">
                 <app-chart-loader [size]="90"></app-chart-loader>
@@ -35,11 +39,11 @@
             </ng-template>
         </div>
 
-    </div>
+    </div> -->
 
     <!-- Projects in Progress Chart -->
-    <div class=" col-sm-6  col-md-3 inProgress d-flex justify-content-center align-items-center flex-column">
-        <h5>Total Projects in Progress</h5>
+    <!-- <div class=" col-sm-6  col-md-3 inProgress d-flex justify-content-center align-items-center flex-column">
+        <h5 title="Projects currently in execution phase, being actively developed.">Working on Projects </h5>
         <div class="chart-wrapper d-flex justify-content-center align-items-center">
             <ng-container *ngIf="isLoading; else showProjectsInProgressChart">
                 <app-chart-loader [size]="90"></app-chart-loader>
@@ -55,11 +59,11 @@
             </ng-template>
         </div>
 
-    </div>
+    </div> -->
 
     <!-- Projects Overdue Chart -->
-    <div class=" col-sm-6  col-md-3 overdue d-flex justify-content-center align-items-center flex-column">
-        <h5>Total Projects Overdue</h5>
+    <!-- <div class=" col-sm-6  col-md-3 overdue d-flex justify-content-center align-items-center flex-column">
+        <h5 title="Projects that were delayed due to time, resources, or planning decisions."> Postponed Projects </h5>
         <div class="chart-wrapper d-flex justify-content-center align-items-center">
             <ng-container *ngIf="isLoading; else showProjectsOverdueChart">
                 <app-chart-loader [size]="90"></app-chart-loader>
@@ -68,13 +72,184 @@
                 <div class="chart-card d-flex justify-content-center align-items-center">
                     <canvas id="projectsOverdueChart" #projectsOverdueChart></canvas>
                     <div class="chart-label">
-                        <h3>{{projectsOverdue}}</h3>
+                        <h3>{{projectsPostponed}}</h3>
                     </div>
                 </div>
             </ng-template>
         </div>
-    </div>
+    </div> -->
+
+    <!-- Projects Canceled Chart -->
+    <!-- <div class="col-sm-6 col-md-3 canceled d-flex justify-content-center align-items-center flex-column">
+        <h5 title="Projects that were discontinued or terminated before completion.">Canceled Projects</h5>
+        <div class="chart-wrapper d-flex justify-content-center align-items-center">
+            <ng-container *ngIf="isLoading; else showCanceledProjectsChart">
+                <app-chart-loader [size]="90"></app-chart-loader>
+            </ng-container>
+            <ng-template #showCanceledProjectsChart>
+                <div class="chart-card d-flex justify-content-center align-items-center">
+                    <canvas id="projectsCanceledChart" #projectsCanceledChart></canvas>
+                    <div class="chart-label">
+                        <h3>{{ projectsCanceled }}</h3>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </div> -->
+    <!-- Projects PLanning Chart -->
+    <!-- <div class="col-sm-6 col-md-3 canceled d-flex justify-content-center align-items-center flex-column">
+        <h5 title="Projects that were discontinued or terminated before completion.">Planning Projects</h5>
+        <div class="chart-wrapper d-flex justify-content-center align-items-center">
+            <ng-container *ngIf="isLoading; else showPlanningProjectsChart">
+                <app-chart-loader [size]="90"></app-chart-loader>
+            </ng-container>
+            <ng-template #showPlanningProjectsChart>
+                <div class="chart-card d-flex justify-content-center align-items-center">
+                    <canvas id="projectPlanningChart" #projectPlanningChart></canvas>
+                    <div class="chart-label">
+                        <h3>{{ projectPlanning }}</h3>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </div> -->
+
+
 </div>
+
+<div id="chartsCarousel" class="carousel slide" data-bs-touch="true" data-bs-ride="false" data-bs-wrap="false">
+    <div class="carousel-inner">
+        <!-- Slide 1:  -->
+        <div class="carousel-item active">
+            <div class="row text-center mb-3 g-3">
+                <!-- Total Projects -->
+                <div class="col-sm-6 col-md-3 d-flex flex-column align-items-center totalProject">
+                    <h5 title="All projects created by the company.">Total Projects</h5>
+                    <div class="chart-wrapper d-flex justify-content-center align-items-center">
+                        <ng-container *ngIf="isLoading; else showTotalProjectsChart">
+                            <app-chart-loader [size]="90"></app-chart-loader>
+                        </ng-container>
+                        <ng-template #showTotalProjectsChart>
+                            <div class="chart-card d-flex justify-content-center align-items-center">
+
+                                <canvas #totalProjectsChart></canvas>
+                                <div class="chart-label">
+                                    <h3>{{ totalProjects }}</h3>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <!-- Completed Projects -->
+                <div class="col-sm-6 col-md-3 d-flex flex-column align-items-center Completed">
+                    <h5 title="Projects fully delivered and closed">Completed Projects</h5>
+                    <div class="chart-wrapper d-flex justify-content-center align-items-center">
+                        <ng-container *ngIf="isLoading; else showTotalCompletedProjectsChart">
+                            <app-chart-loader [size]="90"></app-chart-loader>
+                        </ng-container>
+                        <ng-template #showTotalCompletedProjectsChart>
+                            <div class="chart-card d-flex justify-content-center align-items-center">
+                                <canvas id="totalCompletedIssuesChart" #totalCompletedProjectsChart></canvas>
+                                <div class="chart-label">
+                                    <h3>{{completedProjects}}</h3>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <!-- In Progress -->
+                <div class="col-sm-6 col-md-3 d-flex flex-column align-items-center inProgress">
+                    <h5 title="Currently active and under development">Working on Projects</h5>
+                    <div class="chart-wrapper d-flex justify-content-center align-items-center">
+                        <ng-container *ngIf="isLoading; else showProjectsInProgressChart">
+                            <app-chart-loader [size]="90"></app-chart-loader>
+                        </ng-container>
+                        <ng-template #showProjectsInProgressChart>
+                            <div class="chart-card d-flex justify-content-center align-items-center">
+
+                                <canvas id="projectsInProgressChart" #projectsInProgressChart></canvas>
+                                <div class="chart-label">
+                                    <h3>{{projectsInProgress}}</h3>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <!-- Postponed -->
+                <div class="col-sm-6 col-md-3 d-flex flex-column align-items-center postponed">
+                    <h5 title="Temporarily paused projects">Postponed Projects</h5>
+                    <div class="chart-wrapper d-flex justify-content-center align-items-center">
+                        <ng-container *ngIf="isLoading; else showProjectsOverdueChart">
+                            <app-chart-loader [size]="90"></app-chart-loader>
+                        </ng-container>
+                        <ng-template #showProjectsOverdueChart>
+                            <div class="chart-card d-flex justify-content-center align-items-center">
+                                <canvas id="projectsOverdueChart" #projectsOverdueChart></canvas>
+                                <div class="chart-label">
+                                    <h3>{{projectsPostponed}}</h3>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2:  -->
+        <div class="carousel-item">
+            <div class="row text-center mb-3 g-3 justify-content-start">
+                <!-- Canceled -->
+                <div class=" col-sm-6 col-md-3 d-flex flex-column align-items-center canceled">
+                    <h5 title="Terminated or discontinued projects">Canceled Projects</h5>
+                    <div class="chart-wrapper d-flex justify-content-center align-items-center">
+                        <ng-container *ngIf="isLoading; else showCanceledProjectsChart">
+                            <app-chart-loader [size]="90"></app-chart-loader>
+                        </ng-container>
+                        <ng-template #showCanceledProjectsChart>
+                            <div class="chart-card d-flex justify-content-center align-items-center">
+                                <canvas id="projectsCanceledChart" #projectsCanceledChart></canvas>
+                                <div class="chart-label">
+                                    <h3>{{ projectsCanceled }}</h3>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <!-- Planning -->
+                <div class="col-sm-6 col-md-3 d-flex flex-column align-items-center planning">
+                    <h5 title="Still in planning phase">Planning Projects</h5>
+                    <div class="chart-wrapper d-flex justify-content-center align-items-center">
+                        <ng-container *ngIf="isLoading; else showPlanningProjectsChart">
+                            <app-chart-loader [size]="90"></app-chart-loader>
+                        </ng-container>
+                        <ng-template #showPlanningProjectsChart>
+                            <div class="chart-card d-flex justify-content-center align-items-center">
+                                <canvas id="projectPlanningChart" #projectPlanningChart></canvas>
+                                <div class="chart-label">
+                                    <h3>{{ projectPlanning }}</h3>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Arrows -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#chartsCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#chartsCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>
+
+
 
 
 <div class="row g-5">

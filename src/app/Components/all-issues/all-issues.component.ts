@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { PinnedService } from '../../Core/Services/pinned.service';
 import { ToastrService } from 'ngx-toastr';
 import { EventEmitter } from '@angular/core';
+import { DashboardLoaderComponent } from "../../Shared/dashboard-loader/dashboard-loader.component";
 
 
 interface IssueWithPin extends Issue {
@@ -19,7 +20,7 @@ interface IssueWithPin extends Issue {
 @Component({
   selector: 'app-all-issues',
   standalone: true,
-  imports: [CommonModule,MatTooltipModule,FormsModule],
+  imports: [CommonModule, MatTooltipModule, FormsModule, DashboardLoaderComponent],
   templateUrl: './all-issues.component.html',
   styleUrl: './all-issues.component.css'
 })
@@ -48,31 +49,16 @@ export class AllIssuesComponent implements OnInit {
     this.getUserIssues();
   }
 
-  // getUserIssues() {
-  //   this.dashboardService.getDashboardAllIssue().subscribe({
-  //     next: (res) => {
-  //       this.myIssues = res.result || [];
-  //       this.isLoading = false;
-  //     },
-  //     error: (err) => {
-  //       console.error(err);
-  //       this.isLoading = false;
-  //     }
-  //   });
-  // }
-
   getUserIssues() {
     this.dashboardService.getDashboardAllIssue().subscribe({
       next: (res) => {
         const issuesFromApi = res.result || [];
   
-        // ➊ نضيف isPinned=false مؤقتًا
-        this.myIssues = issuesFromApi.map((issue: Issue) => ({
+          this.myIssues = issuesFromApi.map((issue: Issue) => ({
           ...issue,
           isPinned: false
         }));
-  
-        // ➋ نجيب pinned issues ونحدد مين منهم pinned فعلاً
+    
         this._PinnedService.getPinnedIssues().subscribe({
           next: (pinnedRes) => {
             const pinnedIds = pinnedRes.result.map((i: any) => i.id);
@@ -105,14 +91,6 @@ export class AllIssuesComponent implements OnInit {
     return deadlineDate < now ? 'passed' : 'upcoming';
   }
   
-
-  getStatusClass(status: string): string {
-    const s = status.toLowerCase();
-    if (s === 'completed') return 'badge-success';
-    if (s === 'in progress') return 'badge-warning';
-    if (s === 'canceled') return 'badge-danger';
-    return 'badge-secondary';
-  }
 
   getPriorityColor(priority: string): string {
     const p = priority.toLowerCase();
@@ -156,7 +134,7 @@ export class AllIssuesComponent implements OnInit {
 
 searchTerm: string = '';
 selectedStatus: string = 'All';
-statusFilters: string[] = ['All', 'Completed', 'In Progress', 'Reviewing', 'Postponed', 'Canceled', 'BackLog'];
+statusFilters: string[] = ['All','to do' ,'Completed', 'In Progress', 'Reviewing', 'Postponed', 'Canceled', 'BackLog'];
 
 filterByStatus(status: string) {
   this.selectedStatus = status;

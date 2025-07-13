@@ -85,85 +85,25 @@
             </div>
         </div>
 
-        <!-- <div class="mt-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
-            <div class="row g-3 align-items-stretch w-100">
-                <div class="col-md-6 col-lg-6">
-                    <input type="text" class="search-input w-100 h-100" placeholder="🔍 Search..."
-                        [(ngModel)]="searchTerm" />
-                </div>
-
-                <div class="col-md-6 col-lg-2">
-                    <div class="custom-select-container w-100 h-100">
-                        <div class="custom-select-trigger h-100" (click)="toggleDropdown('project')">
-                            {{ selectedProject || 'All Projects' }}
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <ul class="custom-options" *ngIf="isProjectDropdownOpen">
-                            <li (click)="selectProject('')">All Projects</li>
-                            <li *ngFor="let project of uniqueProjects" (click)="selectProject(project)">
-                                {{ project }}
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-2">
-                    <div class="custom-select-container w-100 h-100">
-                        <div class="custom-select-trigger h-100" (click)="toggleDropdown('priority')">
-                            {{ selectedPriority || 'All Priorities' }}
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <ul class="custom-options" *ngIf="isPriorityDropdownOpen">
-                            <li (click)="selectPriority('')">All Priorities</li>
-                            <li *ngFor="let p of uniquePriorities" (click)="selectPriority(p)">
-                                {{ p }}
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-2">
-                    <div class="custom-select-container w-100 h-100">
-                        <div class="custom-select-trigger h-100" (click)="toggleDropdown('sort')">
-                            {{ getSortLabel(sortOption) }}
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <ul class="custom-options" *ngIf="isSortDropdownOpen">
-                            <li (click)="selectSort('recent')">Sort by Latest Deadline</li>
-                            <li (click)="selectSort('closest')">Deadline Closest to Today</li>
-                            <li (click)="selectSort('overdue')">Overdue First</li>
-                            <li (click)="selectSort('priority')">Sort by Priority</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="">
-                <button class="btn-clear-filters w-100" (click)="resetFilters()">
-                    <i class="fas fa-rotate-right me-1"></i> Reset
-                </button>
-            </div>
-        </div> -->
     </div>
 
     <!-- 🎯 Status Filter Tabs -->
     <div class="filter-tabs d-flex gap-2 flex-wrap mb-4">
-        <button class="filter-btn" *ngFor="let status of statusFilters" [class.active]="selectedStatus === status"
-            (click)="filterByStatus(status)">
+        <button class="filter-btn text-capitalize" *ngFor="let status of statusFilters"
+            [class.active]="selectedStatus === status" (click)="filterByStatus(status)">
             <i class="fas fa-filter me-1"></i> {{ status }}
             <span class="badge-count">{{ getCountForStatus(status) }}</span>
         </button>
     </div>
 
     <!-- ⏳ Loading / Empty States -->
-    <div *ngIf="isLoading" class="text-center dev-text-muted my-5">
-        <i class="fas fa-spinner fa-spin fa-xl mb-3"></i>
-        <p>Loading your issues...</p>
+    <div *ngIf="isLoading" class="text-center dev-text-muted py-5 mt-5">
+        <app-dashboard-loader [size]="90"></app-dashboard-loader>
+        <small class="dev-text-muted">Loading your issues...</small>
     </div>
 
 
     <div *ngIf="!isLoading && filteredIssues().length === 0" class="text-center mt-5">
-        <!-- <img src="assets/images/empty-state.svg" alt="No Issues" class="empty-illustration mb-3" /> -->
         <p class="dev-text-muted">No issues match your filters.</p>
     </div>
 
@@ -203,7 +143,6 @@
                             </span> -->
 
                         </div>
-
 
                     </div>
 

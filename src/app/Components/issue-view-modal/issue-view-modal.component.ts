@@ -616,8 +616,9 @@ openDeleteIssueModal(issueId: number, issueTitle: string) {
     if (result === 'deleted') {
       // this.dialogService.showDeletionSuccess();  //Want to show toaster
       this.showSuccessDelete();
+      this.dialogRef.close('deleted'); 
       // this._IssueService.showSuccess();
-      console.log('Issue deleted successfully');
+      // console.log('Issue deleted successfully');
       // this.fetchBacklogIssues();
     } else {
       // this.fetchBacklogIssues();
