@@ -1,0 +1,32 @@
+<div class="overlay">
+  <!-- 🔵 Blurred Background Spots -->
+  <div class="blur-spot purple"></div>
+  <div class="blur-spot pink"></div>
+
+  <!-- 🟦 Glass Modal -->
+  <div class="invite-modal">
+    <h2>Invite to team</h2>
+
+    <form (ngSubmit)="sendInvites()">
+      <div *ngFor="let member of members; let i = index" class="invite-row">
+        <input
+          type="email"
+          placeholder="Email address"
+          [(ngModel)]="member.email"
+          name="email{{ i }}"
+          required
+        />
+
+        <select [(ngModel)]="member.role" name="role{{ i }}" required>
+          <option value="ReadOnly">Read Only</option>
+          <option value="ReadEdit">Read & Edit</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </div>
+
+      <div class="add-btn" (click)="addMember()">+ Add more</div>
+
+      <button type="submit" class="send-btn">Send invites</button>
+    </form>
+  </div>
+</div>

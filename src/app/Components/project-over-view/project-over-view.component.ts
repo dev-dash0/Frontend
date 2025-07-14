@@ -29,6 +29,7 @@ import { UpdateProjectComponent } from '../update-project/update-project.compone
 import { ProjectStateService } from '../../Core/Services/project-state.service';
 import { DashboardLoaderComponent } from "../../Shared/dashboard-loader/dashboard-loader.component";
 import { ProjectVisitService } from '../../Core/Services/project-visit.service';
+import { InviteModalComponent } from '../project-invite-modal/project-invite-modal.component';
 
 @Component({
   selector: 'app-project-over-view',
@@ -686,6 +687,16 @@ export class ProjectOverViewComponent {
             };
           });
       },
+    });
+  }
+
+  // -----------------------------------------------------------
+  // invite members into the Project
+  openInviteModal(): void {
+    this.dialog.open(InviteModalComponent, {
+      data: { projectId: this.ProjectId },
+      panelClass: 'invite-dialog-panel',
+      backdropClass: 'blurred-backdrop',
     });
   }
 

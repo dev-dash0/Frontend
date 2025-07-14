@@ -1,0 +1,100 @@
+/* Overlay with backdrop blur and colored circles */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  overflow: hidden;
+}
+
+/* Colorful blurred spots */
+.blur-spot {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.purple {
+  background-color: #a78bfa;
+  top: 10%;
+  left: 10%;
+}
+
+.pink {
+  background-color: #f472b6;
+  bottom: 10%;
+  right: 10%;
+}
+
+/* Modal styling */
+.invite-modal {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 40px;
+  width: 90%;
+  max-width: 500px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  color: white;
+}
+
+.invite-modal h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Row of email and permission */
+.invite-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.invite-row input,
+.invite-row select {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background-color: #ffffff20;
+  color: white;
+  font-size: 14px;
+}
+
+/* Add more button */
+.add-btn {
+  cursor: pointer;
+  color: #9ecfff;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* Submit button */
+.send-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #6366f1;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.send-btn:hover {
+  background-color: #4f46e5;
+}
