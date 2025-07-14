@@ -26,6 +26,7 @@ import { AllCompanyProjectsDashboardComponent } from '../all-company-projects-da
 import { Projectstats } from '../../Core/interfaces/company/projectstats';
 import { DashboardLoaderComponent } from '../../Shared/dashboard-loader/dashboard-loader.component';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { InviteModalComponent } from '../project-invite-modal/project-invite-modal.component';
 
 @Component({
   selector: 'app-company-view',
@@ -514,6 +515,16 @@ export class CompanyViewComponent implements OnInit {
       closeButton: true,
       progressBar: true,
       progressAnimation: 'decreasing',
+    });
+  }
+
+  // ========================================================= //
+  // Invite member to tenant
+  openInviteModal(): void {
+    this.dialog.open(InviteModalComponent, {
+      data: { type: 'tenant', tenantId: this.CompanyId },
+      panelClass: 'invite-dialog-panel',
+      backdropClass: 'blurred-backdrop',
     });
   }
 }
