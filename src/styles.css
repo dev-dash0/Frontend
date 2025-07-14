@@ -1426,6 +1426,39 @@ li {
   background-color: rgba(255, 183, 94, 0.2);
 }
 
+/* ========== PRIORITY BADGES ========== */
+.priority-badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  text-transform: capitalize;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.priority-badge.high {
+  background-color: rgba(255, 193, 7, 0.25); /* Amber */
+  color: #ffc107;
+}
+
+.priority-badge.medium {
+  background-color: rgba(0, 188, 212, 0.25); /* Cyan */
+  color: #00bcd4;
+}
+
+.priority-badge.low {
+  background-color: rgba(76, 175, 80, 0.25); /* Green */
+  color: #4caf50;
+}
+
+.priority-badge.critical {
+  background-color: rgba(244, 67, 54, 0.25); /* Red */
+  color: #f44336;
+}
+
+
 /* ================================================ */
 /* Assigned member avatars */
 .member,

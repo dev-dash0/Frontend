@@ -162,6 +162,9 @@ export class PinnedComponent {
   NavigateTenant(TenantId: number) {
     this._router.navigate(['/MyDashboard/Company', TenantId]);
   }
+  NavigateSprint(SprintId: number) {
+    this._router.navigate(['/MyDashboard/Sprint', SprintId]);
+  }
 
   getPinnedIssues() {
     this._PinnedService.getPinnedIssues().subscribe({
@@ -248,10 +251,16 @@ export class PinnedComponent {
 
   // --------- Projects
   cardColors = [
-    'linear-gradient(145deg,rgb(24, 45, 91),rgb(91, 45, 68))',
-    'linear-gradient(145deg,rgb(32, 62, 121),rgb(34, 59, 105))',
-    'linear-gradient(145deg,rgb(35, 69, 102),rgb(21, 57, 123))',
-  ]; // The Most most
+    'linear-gradient(135deg, rgba(33, 38, 79, 0.95), rgba(79, 49, 131, 0.95))',
+    'linear-gradient(135deg, rgba(40, 51, 103, 0.95), rgba(105, 60, 154, 0.95))',
+    'linear-gradient(135deg, rgba(49, 61, 113, 0.95), rgba(130, 72, 179, 0.95))',
+  ];
+
+  // cardColors = [
+  //   'linear-gradient(145deg,rgb(24, 45, 91),rgb(91, 45, 68))',
+  //   'linear-gradient(145deg,rgb(32, 62, 121),rgb(34, 59, 105))',
+  //   'linear-gradient(145deg,rgb(35, 69, 102),rgb(21, 57, 123))',
+  // ]; // The Most most
   // cardColors = ['#21264F', '#322B4E', '#3F2E4D']; // project colors
   // cardColors = ['#4B5D67', '#38434F', '#2C2F3A']; //
   // cardColors = ['#5A4E7C', '#3D3B4F', '#2A2933']; // lavender
@@ -337,6 +346,25 @@ export class PinnedComponent {
     }, 500);
   }
 
+  UnPinIssue(issue: Issue, event: MouseEvent) {
+    event.stopPropagation(); // يمنع كليك الكارد الأساسي
+
+    const issueId = issue.id;
+    this._PinnedService.UnPinItem('Issue', issueId).subscribe({
+      next: (res) => {
+        console.log('UnPinned Issue successfully:', res);
+        this.showSuccess();
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      },
+      error: (err) => {
+        console.error('UnPinning issue failed:', err);
+        this.showFail();
+      },
+    });
+  }
+
   // --------------- Tenants
   get visibleTenants() {
     const visibleCount = Math.min(3, this.TenantsLists.length);
@@ -369,4 +397,19 @@ export class PinnedComponent {
       this.isAnimating = false;
     }, 500);
   }
+
+  // NavigateToItem(id: number, type: 'project' | 'tenant' | 'sprint') {
+  //   switch (type) {
+  //     case 'project':
+  //       this._router.navigate(['/MyDashboard/Project', id]);
+  //       break;
+  //     case 'tenant':
+  //       this._router.navigate(['/MyDashboard/Company', id]);
+  //       break;
+  //     case 'sprint':
+  //       // Navigate to sprint page if available
+  //       this._router.navigate(['/MyDashboard/Company', id]);
+  //       break;
+  //   }
+  // }
 }

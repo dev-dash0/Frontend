@@ -180,7 +180,7 @@ export class AllProjectsCardComponent {
     pinAction.subscribe({
       next: () => {
         this.isPinned = !this.isPinned;
-        this.isPinned ? this.showSuccessUnPin() : this.showSuccessPin();
+        this.isPinned ? this.showSuccessPin() : this.showSuccessUnPin();
       },
       error: (err) => {
         console.error(this.isPinned ? 'Unpin failed:' : 'Pin failed:', err);

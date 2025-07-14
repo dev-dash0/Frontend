@@ -1,30 +1,30 @@
+/* ========== General Layout ========== */
 .BG {
   transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
   transform: translateX(0px);
 }
-
-/* When Sidebar Collapses, Content Expands Left */
 .BG.expand {
   transform: translateX(-30px);
   width: calc(100% + 100px);
   margin-left: -100px;
 }
 
-.headTitle {
+.main-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.topbar {
+  height: 60px;
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.headTitle h3 {
-  font-family: var(--headerFontFamily);
+  padding: 0 20px;
 }
 
 ul {
   padding-left: 3rem;
   padding-right: 3rem;
 }
-
 li {
   display: flex;
   justify-content: space-between;
@@ -33,150 +33,33 @@ li {
   margin-bottom: 10px;
 }
 
-.main-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.topbar {
-  height: 60px;
+/* ========== Headers & Text ========== */
+.headTitle {
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  gap: 10px;
+}
+.headTitle h3 {
+  font-family: var(--headerFontFamily);
 }
 
-/* -----------  card stack ----------- */
-
- /* .card-container {
-  position: relative;
-  width: 100%;
-  min-height: 300px;
-  height: 200px;
-  perspective: 1000px;
-} */
-/*
-.card {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-  transition: transform 0.5s ease, opacity 0.7s ease;
-  cursor: pointer;
+.text-main-color {
+  color: var(--mainLightBlueColor) !important;
 }
 
-.front {
-  z-index: 3;
-  transform: translateY(0) scale(1);
-}
-
-.front:hover {
-  transform: translate(10px, -5px) scale(1);
-}
-.front:hover&&:active {
-    z-index: 3;
-    transform: translateY(0) scale(1);
-}
-
-.middle {
-  z-index: 2;
-  transform: translateY(30px) scale(0.95);
-  transition: transform 0.6s ease;
-}
-
-.middle:hover {
-  transform: translate(15px, 30px) scale(1);
-}
-
-.back {
-  z-index: 1;
-  transform: translateY(60px) scale(0.9);
-}
-
-.back:hover {
-  transform: translate(20px, 50px) scale(1);
-}
-
-
-.animate-out {
-  transform: translateY(300px) scale(1) rotateZ(-10deg);
-  opacity: 0;
-}
-
-.animate-out {
-  transform: translateY(300px) scale(1) rotateZ(-10deg);
-  opacity: 0;
-} */
-
-.CardOfStack{
-  padding-bottom: 0px !important;
-}
-
-.card-body .info-row {
-  font-size: 0.95rem;
-}
-
-.card .label {
-  font-weight: 600;
-  color: #ffc107;
-  min-width: 70px;
-}
-
-img.rounded-circle {
-  object-fit: cover;
-}
-
-.owner-section img,
-.members-section img {
-  object-fit: cover;
-}
-.card-body {
-  padding: 1rem;
-}
-
-.member-stack {
-  position: relative;
-  height: 40px;
-  width: 160px;
-  margin-top: 4px;
-  display: flex;
-  align-items: center;
-}
-
-.member-avatar {
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid white;
-  object-fit: cover;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.extra-count {
-  margin-left: 140px;
-  font-size: 0.9rem;
-  color: #fff;
-}
-
-
-
+/* ========== Card Stack Container ========== */
 .stack-container {
   position: relative;
-  /* width: 300px; */
   width: 100%;
   height: 400px;
   perspective: 1000px;
   margin: auto;
 }
+.CardOfStack {
+  padding-bottom: 0px !important;
+}
 
+/* ========== Card Core Styles ========== */
 .card {
   position: absolute;
   width: 100%;
@@ -188,7 +71,10 @@ img.rounded-circle {
   padding: 20px;
   box-sizing: border-box;
 }
-
+.card.front,
+.card.TenantFront {
+  cursor: pointer;
+}
 .card.no-data {
   display: flex;
   justify-content: center;
@@ -199,14 +85,7 @@ img.rounded-circle {
   font-weight: bold;
 }
 
-.card.front {
-  cursor: pointer;
-}
-
-.card.TenantFront {
-  cursor: pointer;
-}
-
+/* ========== Card Positioning & Hover Effects ========== */
 .card:nth-child(1) {
   z-index: 3;
   transform: translateY(0) scale(1);
@@ -214,7 +93,6 @@ img.rounded-circle {
 .card:nth-child(1):hover {
   transform: translate(10px, -5px) scale(1);
 }
-
 .card:nth-child(2) {
   z-index: 2;
   transform: translateY(30px) scale(0.95);
@@ -223,7 +101,6 @@ img.rounded-circle {
 .card:nth-child(2):hover {
   transform: translate(15px, 30px) scale(1);
 }
-
 .card:nth-child(3) {
   z-index: 1;
   transform: translateY(60px) scale(0.9);
@@ -232,24 +109,410 @@ img.rounded-circle {
   transform: translate(20px, 50px) scale(1);
 }
 
-/* Animation when the card drops */
-.card.front.drop {
-  transform: translateY(300px) scale(1) rotateZ(-10deg);
-  opacity: 0;
-}
-.card.TenantFront.drop {
-  transform: translateY(300px) scale(1) rotateZ(-10deg);
-  opacity: 0;
-}
-
+/* ========== Card Animation ========== */
+.card.front.drop,
+.card.TenantFront.drop,
 .animate-out {
   transform: translateY(300px) scale(1) rotateZ(-10deg);
   opacity: 0;
 }
- .text-main-color{
+
+/* ========== Card Body & Text ========== */
+.card-body {
+  background: linear-gradient(to bottom right, rgba(33, 38, 79, 0.1), rgba(0, 0, 0, 0.05));
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  font-size: 0.9rem;
+  animation: fadeInUp 0.5s ease;
+}
+.card-body .info-row {
+  font-size: 0.95rem;
+}
+
+/* ========== Card Titles ========== */
+.card-title {
+  font-size: 1.25rem;
+  color: var(--mainLightBlueColor);
+  transition: all 0.3s ease;
+}
+.card-title:hover {
+  color: #72e0ff;
+  text-shadow: 0 0 6px rgba(114, 224, 255, 0.4);
+}
+.card-description {
+  font-size: 0.85rem;
+  color: #ccc;
+}
+
+/* ========== Labels & Buttons ========== */
+.label,
+.card .label {
+  font-weight: 600;
+  color: #ffc107;
+  min-width: 70px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-size: 0.8rem;
+}
+.fancy-label {
+  font-weight: 600;
+  color: #87d7ff;
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+  margin-right: 4px;
+}
+.card-footer .btn {
+  transition: all 0.3s ease;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.card-footer .btn:hover {
+  background-color: var(--mainLightBlueColor);
+  color: #0a0a0a !important;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+  border-color: transparent;
+}
+
+/* ========== Member & Owner Avatars ========== */
+img.rounded-circle,
+.owner-section img,
+.members-section img {
+  object-fit: cover;
+}
+
+/* ========== Member Stack (Project Cards) ========== */
+.member-stack {
+  position: relative;
+  height: 36px;
+  width: 150px;
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+}
+.member-avatar {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid white;
+  object-fit: cover;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.extra-count {
+  position: relative;
+  z-index: 0;
+  font-size: 13px;
+  margin-left: 140px;
+  color: #ccc;
+}
+
+.action-icons {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.action-icons i {
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
+  font-size: 1rem;
+  color: #bbb;
+}
+
+.action-icons i:hover {
+  transform: scale(1.2);
+  color: #00c4ff;
+}
+
+.active-pin {
+  color: #ff4f70;
+}
+
+.pin {
+  color: #00c4ff;
+}
+
+.view-icon,
+.scope-icon {
+  color: #bbb;
+}
+
+.view-icon:hover,
+.scope-icon:hover {/* ========== General Layout ========== */
+.BG {
+  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+  transform: translateX(0px);
+}
+.BG.expand {
+  transform: translateX(-30px);
+  width: calc(100% + 100px);
+  margin-left: -100px;
+}
+
+.main-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.topbar {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+ul {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  margin-bottom: 10px;
+}
+
+/* ========== Headers & Text ========== */
+.headTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.headTitle h3 {
+  font-family: var(--headerFontFamily);
+  font-size: 1.5rem;
+}
+
+.text-main-color {
   color: var(--mainLightBlueColor) !important;
- }
+}
+
+/* ========== Card Stack Container ========== */
+.stack-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  perspective: 1000px;
+  margin: auto;
+}
+.CardOfStack {
+  padding-bottom: 0px !important;
+}
+
+/* ========== Card Core Styles ========== */
+.card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.card.front,
+.card.TenantFront {
+  cursor: pointer;
+}
+.card.no-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #1f1f3b;
+  color: #bbb;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+/* ========== Card Positioning & Hover Effects ========== */
+.card:nth-child(1) {
+  z-index: 3;
+  transform: translateY(0) scale(1);
+}
+.card:nth-child(1):hover {
+  transform: translate(10px, -5px) scale(1);
+}
+.card:nth-child(2) {
+  z-index: 2;
+  transform: translateY(30px) scale(0.95);
+}
+.card:nth-child(2):hover {
+  transform: translate(15px, 30px) scale(1);
+}
+.card:nth-child(3) {
+  z-index: 1;
+  transform: translateY(60px) scale(0.9);
+}
+.card:nth-child(3):hover {
+  transform: translate(20px, 50px) scale(1);
+}
+
+/* ========== Card Animation ========== */
+.card.front.drop,
+.card.TenantFront.drop,
+.animate-out {
+  transform: translateY(300px) scale(1) rotateZ(-10deg);
+  opacity: 0;
+}
+
+/* ========== Card Body & Text ========== */
+.card-body {
+  background: linear-gradient(to bottom right, rgba(33, 38, 79, 0.1), rgba(0, 0, 0, 0.05));
+  border-radius: 12px;
+  padding: 1.2rem 1.4rem;
+  font-size: 1rem;
+  animation: fadeInUp 0.5s ease;
+}
+.card-body .info-row {
+  font-size: 1rem;
+}
+
+/* ========== Card Titles ========== */
+.card-title {
+  font-size: 1.4rem;
+  color: var(--mainLightBlueColor);
+  transition: all 0.3s ease;
+}
+.card-title:hover {
+  color: #72e0ff;
+  text-shadow: 0 0 6px rgba(114, 224, 255, 0.4);
+}
+.card-description {
+  font-size: 1rem;
+  color: #ccc;
+}
+
+/* ========== Labels & Buttons ========== */
+.label,
+.card .label {
+  font-weight: 600;
+  color: #ffc107;
+  min-width: 70px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-size: 0.9rem;
+}
+.fancy-label {
+  font-weight: 600;
+  color: #87d7ff;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+  margin-right: 4px;
+}
+.card-footer .btn {
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.card-footer .btn:hover {
+  background-color: var(--mainLightBlueColor);
+  color: #0a0a0a !important;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+  border-color: transparent;
+}
+
+/* ========== Member Stack (Project Cards) ========== */
+.member-stack {
+  position: relative;
+  height: 40px;
+  width: 180px;
+  display: flex;
+  align-items: center;
+  margin-top: 6px;
+}
+.member-avatar {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid white;
+  object-fit: cover;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.extra-count {
+  position: relative;
+  z-index: 0;
+  font-size: 14px;
+  margin-left: 160px;
+  color: #ccc;
+}
+
+/* ========== Tenant Avatar (Square Style) ========== */
+img.tenant-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px; /* Square with slightly rounded edges */
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+/* ========== Action Icons ========== */
+.action-icons {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.action-icons i {
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
+  font-size: 1.15rem;
+  color: #bbb;
+}
+
+.action-icons i:hover {
+  transform: scale(1.25);
+  color: #00c4ff;
+}
+
+.active-pin {
+  color: #ff4f70;
+}
+
+.pin {
+  color: #00c4ff;
+}
+
+.view-icon,
+.scope-icon {
+  color: #bbb;
+}
+
+.view-icon:hover,
+.scope-icon:hover {
+  color: #00c4ff;
+}
+
+/* ========== Animation ========== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+  color: #00c4ff;
+}
 
 
-
-
+/* ========== Animations ========== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

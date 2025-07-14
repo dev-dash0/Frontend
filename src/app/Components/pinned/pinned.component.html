@@ -1,458 +1,270 @@
-<div
-    class="main-container my-4 BG min-vh-100"
-    [ngClass]="{ expand: isSidebarCollapsed }"
-    >
-
-    <div class="row g-3 mt-2 mb-5">
-        
-        <div class="col-lg-4 Projects">
-            <h1 class="text-main-color p-3">Projects</h1>
-
-            <div class="stack-container">
-                <ng-container *ngIf="visibleProjects.length > 0; else noIssues">
-                    <div
-                    class="card CardOfStack"
-                    *ngFor="let project of visibleProjects; let i = index"
-                    [ngClass]="{ front: i === 0 }"
-                    [style.background]="getColor(i)"
-                    [style.zIndex]="getZIndex(i)"
-                    (click)="i === 0 && onCardClick()"
-                    >
-                    <!-- Header -->
-                    <div class="card-header mb-3">
-                        <h2 class="card-title">{{ project.name }}</h2>
-                        <p class="card-description">{{ project.description }}</p>
-                    </div>
-
-                
-                    <!-- Body Content -->
-                    <div class="card-body d-flex flex-column gap-2">
-
-                        <!-- Tenant Info -->
-                        <div class="info-row d-flex align-items-center gap-5">
-                            <div class="TenantName">
-                                <span class="label me-4">Tenant:</span>
-                                <span>{{ project.tenant?.name }}</span>
-                            </div>
-                            <div class="AdminImg">
-                                <span class="label me-4">Admin:</span>
-                                <img
-                                *ngIf="project.tenant?.owner?.imageUrl"
-                                [src]="project.tenant.owner.imageUrl"
-                                alt="Tenant"
-                                class="rounded-circle"
-                                width="32"
-                                height="32"
-                                />
-                            </div>
-                        </div>
-
-                        <!-- Priority -->
-                        <div class="info-row d-flex gap-2 align-items-center">
-                            <span class="label">Priority:</span>
-                            <mat-chip-set>
-                                <mat-chip [ngClass]="getPriorityClass(project.priority)">
-                                {{ project.priority }}
-                                </mat-chip>
-                            </mat-chip-set>
-                            <!-- Status -->
-                            <div class=" d-flex gap-2 align-items-center">
-                                <span class="label">Status:</span>
-                                <mat-chip-set>
-                                    <mat-chip
-                                    [ngClass]="{
-                                        'planning-status': project.status === 'Planning',
-                                        'reviewing-status': project.status === 'Reviewing',
-                                        'working-on-status': project.status === 'Working on',
-                                        'completed-status': project.status === 'Completed',
-                                        'canceled-status': project.status === 'Canceled',
-                                        'postponed-status': project.status === 'Postponed'
-                                    }"
-                                    class="status-chip"
-                                    >
-                                    {{ project.status }}
-                                    </mat-chip>
-                                </mat-chip-set>
-                            </div>
-                        </div>
-
-                        <!-- Dates -->
-                        <div class="info-row d-flex gap-2">
-                            <div class="start">
-                                <span class="label p-2 me-3">Start:</span>
-                                <span>{{ project.startDate }}</span>
-                            </div>
-                            <div class="end">
-                                <span class="label p-2 me-3">End:</span>
-                                <span>{{ project.endDate }}</span>
-                            </div>
-                        </div>
-
-                        <!-- Project Members -->
-                        <div class="info-row d-flex align-items-center gap-2 mt-2 mb-0 pb-0">
-                            <span class="label">Members:</span>
-                            <span>{{ project.userProjects.length || 0 }}</span>
-                            <div class="d-flex align-items-center gap-1">
-                                <img
-                                *ngFor="let user of project.userProjects?.slice(0, 3)"
-                                [src]="user?.user?.imageUrl || defaultUserImage"
-                                class="rounded-circle border"
-                                width="28"
-                                height="28"
-                                alt="Member"
-                                />
-                                <span *ngIf="project.userProjects?.length ?? 0 > 3" class="text-light">
-                                +{{ project.userProjects.length - 3 }}
-                                </span>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- Footer -->
-                    <div class="card-footer d-flex justify-content-around align-items-end p-0">
-                        <div class="view-project">
-                            <button
-                                class="btn btn-sm btn-outline-light d-flex align-items-center gap-2"
-                                (click)="NavigateProject(project.id)"
-                            >
-                                <span>View Project</span>
-                                <i class="fa-solid fa-location-arrow"></i>
-                            </button>
-                        </div>
-                        <div class="Unpin">
-                            <button
-                            class="btn btn-sm btn-outline-light"
-                            (click)="UnPinProject(project, $event)"
-                            >
-                            📌 UnPin This Project
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </ng-container>
-            <ng-template #noIssues>
-                <div class="card no-data">
-                <h2>No pinned items</h2>
-                </div>
-            </ng-template>
-            </div>
-        </div>
-
-
-    <div class="col-lg-4 Tanents">
-        <h1 class="text-main-color p-3">Tenants</h1>
-
-        <div class="stack-container">
-            <ng-container *ngIf="visibleTenants.length > 0; else noIssues">
-                <div
-                class="card"
-                *ngFor="let Tenant of visibleTenants; let i = index"
-                [ngClass]="{ TenantFront: i === 0 }"
-                [style.background]="getTenantsColor(i)"
-                [style.zIndex]="getZIndex(i)"
-                (click)="i === 0 && onTenantCardClick()"
-                >
-    
-                    <div class="text-center mt-2 d-flex gap-2 align-items-center">
-                        <div class="card-body text-light">
-                            <div class="row justify-content-around align-items-center mb-4">
-                                <!-- Tenant Info -->
-                                <div class="col-md-5">
-                                    <h4 class="mb-1 display-6 fw-semibold">{{ Tenant.name }}</h4>
-                                    <p class="mb-2 text-white-50">{{ Tenant.description }}</p>
-                                </div>
-                                    <!-- Tenant Image -->
-                                <div class="col-md-5">
-                                <img
-                                [src]="
-                                    isValidUrl(Tenant.image)
-                                        ? Tenant?.image
-                                        : 'assets/images/cover.jpg'
-                                    "
-                                alt="Tenant Image"
-                                class="rounded-circle border"
-                                width="150"
-                                height="150"
-                                />
-                                </div>
-                            </div>
-    
-                            <!-- Owner & Members -->
-                                <div class="d-flex justify-content-between align-items-center mt-2">
-                                    <!-- Owner Info -->
-                                    <div class="owner-section text-start text-main-color">
-                                        <p class="fw-bold d-block mb-0 p-0">Admin:</p>
-                                        <div class="Content d-flex align-items-center gap-2">
-                                            <img
-                                                *ngIf="Tenant.owner?.imageUrl"
-                                                [src]="Tenant.owner.imageUrl"
-                                                alt="Owner"
-                                                class="rounded-circle border"
-                                                width="32"
-                                                height="32"
-                                            />
-                                            <div class="small">
-                                                <div class="fw-semibold">{{ Tenant.owner.firstName }} {{ Tenant.owner.lastName }}</div>
-                                                <div class="text-white-50 small">{{ Tenant.owner.email }}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Members -->
-                                    <div class="members-section">
-                                        <div class="d-flex align-items-center gap-2 mb-1">
-                                            <span class="fw-bold">Members:</span>
-                                            <span>{{ Tenant.joinedUsers.length || 0 }}</span>
-                                        </div>
-                                        <div class="member-stack" (mouseenter)="hovering = true" (mouseleave)="hovering = false">
-                                            <ng-container *ngFor="let user of Tenant.joinedUsers?.slice(0, 4); let i = index">
-                                                <img
-                                                    [src]="
-                                                    isValidUrl(user.imageUrl)
-                                                        ? user?.imageUrl
-                                                        : 'assets/images/blank profile.svg'
-                                                    "
-                                                    [ngStyle]="{ left: hovering ? (i * 30) + 'px' : (i * 16) + 'px', zIndex: 10 - i }"
-                                                    class="member-avatar"
-                                                    alt="user"
-                                                />
-                                            </ng-container>
-    
-                                            <span *ngIf="Tenant.joinedUsers?.length ?? 0 > 4" class="extra-count">
-                                                @if (Tenant.joinedUsers.length > 4)
-                                                {
-                                                +{{ Tenant.joinedUsers.length - 4 }}
-                                                }
-                                            </span>
-                                        </div>
-    
-                                    </div>
-                                </div>
-    
-                            <!-- Url & Code  -->
-                                <div class="d-flex justify-content-between align-items-center my-2">
-                                    <div>
-                                        <span class="fw-bold">Code:</span>
-                                        <span>{{ Tenant.tenantCode }}</span>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <span class="fw-bold">URL:</span>
-                                        <span class="text-break small">{{ Tenant.tenantUrl }}</span>
-                                    </div>
-                                </div>
-    
-                            <!-- Footer -->
-                                <div class="card-footer d-flex justify-content-around align-items-end mt-3 p-0">
-                                    <div class="view-project">
-                                        <button
-                                            class="btn btn-sm btn-outline-light d-flex align-items-center gap-2"
-                                            (click)="NavigateTenant(Tenant.id)"
-                                        >
-                                            <span>View</span>
-                                            <i class="fa-solid fa-location-arrow"></i>
-                                        </button>
-                                    </div>
-                                    <div class="Unpin">
-                                        <button
-                                        class="btn btn-sm btn-outline-light"
-                                        (click)="UnPinTenant(Tenant, $event)"
-                                        >
-                                        📌 UnPin
-                                        </button>
-                                    </div>
-                                </div>
-                        </div>
-                    </div>
-                </div>
-            </ng-container>
-            <ng-template #noIssues>
-                <div class="card no-data">
-                <h2>No pinned items</h2>
-                </div>
-            </ng-template>
-        </div>
-    </div>
-
-    <div class="col-lg-4 Issues">
-
-        <h1 class="text-main-color  p-3">Issues</h1>
-
-        <div class="stack-container">
-            <ng-container *ngIf="visibleIssues.length > 0; else noIssues">
-                <div
-                class="card"
-                *ngFor="let Issue of visibleIssues; let i = index"
-                [ngClass]="{ IssueFront: i === 0 }"
-                [style.background]="getIssuesColor(i)"
-                [style.zIndex]="getZIndex(i)"
-                (click)="i === 0 && onIssueCardClick()"
-                >
-                <div class="card-header mb-2">
-                    <h4>{{ Issue.title }}</h4>
-                    <p class="text-light small">{{ Issue.description }}</p>
-                  </div>
-                  
-                  <div class="card-body text-light d-flex flex-column gap-2">
-                    <div class="d-flex gap-2">
-                      <span class="label">Status:</span>
-                      <mat-chip class="status-chip">{{ Issue.status }}</mat-chip>
-                    </div>
-                  
-                    <div class="d-flex gap-2">
-                      <span class="label">Priority:</span>
-                      <mat-chip class="priority-chip">{{ Issue.priority }}</mat-chip>
-                    </div>
-                  
-                    <div class="d-flex gap-4">
-                      <div>
-                        <span class="label">Start:</span>
-                        <span>{{ Issue.startDate | date:'shortDate' }}</span>
-                      </div>
-                      <div>
-                        <span class="label">Deadline:</span>
-                        <span>{{ Issue.deadline | date:'shortDate' }}</span>
-                      </div>
-                    </div>
-                  
-                    <div class="d-flex align-items-center gap-2">
-                      <span class="label">Created By:</span>
-                      <img
-                        [src]="Issue.createdBy?.imageUrl || defaultUserImage"
-                        class="rounded-circle border"
-                        width="28"
-                        height="28"
-                        alt="User"
-                      />
-                      <span>{{ Issue.createdBy?.firstName }} {{ Issue.createdBy?.lastName }}</span>
-                    </div>
-                  
-                    <div class="d-flex align-items-center gap-2">
-                      <span class="label">Assignees:</span>
-                      <img
-                        *ngFor="let user of Issue.assignedUsers?.slice(0,3)"
-                        [src]="user.imageUrl || defaultUserImage"
-                        class="rounded-circle border"
-                        width="28"
-                        height="28"
-                      />
-                      <span *ngIf="Issue.assignedUsers?.length! > 3" class="text-light">
-                        +{{ Issue.assignedUsers.length - 3 }}
-                      </span>
-                    </div>
-                  </div>
-                  
-                </div>
-            </ng-container>
-            <ng-template #noIssues>
-                <div class="card no-data">
-                <h2>No pinned items</h2>
-                </div>
-            </ng-template>
-        </div>
-    </div>
-
-    <div class="col-lg-4 Sprints">
-        <h1 class="text-main-color p-3">Sprints</h1>
-      
-        <div class="stack-container">
-          <ng-container *ngIf="visibleSprints.length > 0; else noSprints">
-            <div
-              class="card"
-              *ngFor="let sprint of visibleSprints; let i = index"
-              [ngClass]="{ SprintFront: i === 0 }"
-              [style.background]="getSprintsColor(i)"
-              [style.zIndex]="getZIndex(i)"
-              (click)="i === 0 && onSprintCardClick()"
-            >
-              <div class="card-header mb-2">
-                <h4>{{ sprint.title }}</h4>
-                <p class="text-light small">{{ sprint.summary }}</p>
+<div class="main-container my-4 BG min-vh-100" [ngClass]="{ expand: isSidebarCollapsed }">
+  <div class="row g-3 my-2 mb-5 gy-5">
+    <!-- ================= PROJECTS ================= -->
+    <div class="col-lg-6 Projects">
+      <h1 class="text-main-color p-3">Projects</h1>
+      <div class="stack-container">
+        <ng-container *ngIf="visibleProjects.length > 0; else noProjects">
+          <div
+            class="card CardOfStack"
+            *ngFor="let project of visibleProjects; let i = index"
+            [ngClass]="{ front: i === 0 }"
+            [style.background]="getColor(i)"
+            [style.zIndex]="getZIndex(i)"
+            (click)="i === 0 && onCardClick()"
+          >
+            <div class="card-header mb-2 pb-2 d-flex justify-content-between align-items-center">
+              <div>
+                <h3 class="project-name mb-0">{{ project.name }}</h3>
+                <p class="project-description text-light-50 small mb-0">{{ project.description }}</p>
               </div>
-      
-              <div class="card-body text-light d-flex flex-column gap-2">
-                <p class="text-white-50 small">{{ sprint.description }}</p>
-      
-                <div class="d-flex gap-2">
-                  <span class="label">Status:</span>
-                  <mat-chip class="status-chip">{{ sprint.status }}</mat-chip>
+              <!-- <div class="text-end">
+                <span class="badge bg-secondary text-white small">#{{ project.projectCode }}</span>
+              </div> -->
+            </div>
+
+            <div class="card-body d-flex flex-column gap-3 text-light px-1">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="fancy-label">Tenant:</span>
+                  <span class="text-white-50">{{ project.tenant?.name }}</span>
                 </div>
-      
-                <div class="d-flex gap-4">
-                  <div>
-                    <span class="label">Start:</span>
-                    <span>{{ sprint.startDate | date:'shortDate' }}</span>
-                  </div>
-                  <div>
-                    <span class="label">End:</span>
-                    <span>{{ sprint.endDate | date:'shortDate' }}</span>
-                  </div>
-                </div>
-      
                 <div class="d-flex align-items-center gap-2">
-                  <span class="label">Created By:</span>
-                  <img
-                    [src]="sprint.createdBy.imageUrl || defaultUserImage"
-                    class="rounded-circle border"
-                    width="28"
-                    height="28"
-                    alt="User"
-                  />
-                  <span>{{ sprint.createdBy.firstName }} {{ sprint.createdBy.lastName }}</span>
+                  <img [src]="project.tenant?.owner?.imageUrl" alt="Admin" width="32" height="32" class="rounded-circle border" />
+                  <span class="text-white-50 small">{{ project.tenant?.owner?.firstName }} {{ project.tenant?.owner?.lastName }}</span>
                 </div>
               </div>
-      
-              <div class="card-footer d-flex justify-content-around align-items-end p-0">
-                <button class="btn btn-sm btn-outline-light">
-                  View Sprint
-                </button>
-                <button
-                  class="btn btn-sm btn-outline-light"
-                  (click)="UnPinSprint(sprint, $event)"
-                >
-                  📌 UnPin Sprint
-                </button>
+
+              <div class="d-flex justify-content-between small text-light-50">
+                <div><span class="fancy-label">Start:</span> {{ project.startDate }}</div>
+                <div><span class="fancy-label">End:</span> {{ project.endDate }}</div>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="fancy-label">Priority:</span>
+                  <span class="priority-badge" [ngClass]="{ high: project.priority === 'High', medium: project.priority === 'Medium', low: project.priority === 'Low', critical: project.priority === 'Critical' }">
+                    {{ project.priority }}
+                  </span>
+                </div>
+                <div>
+                  <span class="fancy-label">Status:</span>
+                  <span class="status-badge" [ngClass]="{
+                    completed: project.status === 'Completed',
+                    inProgress: project.status === 'Working on',
+                    backlog: project.status === 'Backlog',
+                    planning: project.status === 'Planning',
+                    canceled: project.status === 'Canceled',
+                    reviewing: project.status === 'Reviewing',
+                    toDo: project.status === 'To Do',
+                    postponed: project.status === 'Postponed'
+                  }">
+                    {{ project.status }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- <div class="d-flex align-items-center gap-2">
+                <span class="fancy-label">Members:</span>
+                <div class="d-flex align-items-center gap-1 flex-grow-1">
+                  <img *ngFor="let user of project.userProjects?.slice(0, 3)" [src]="user?.user?.imageUrl || defaultUserImage" class="rounded-circle border" width="28" height="28" alt="Member" />
+                  <span *ngIf="project.userProjects?.length ?? 0 > 3" class="text-light small">+{{ project.userProjects.length - 3 }}</span>
+                </div>
+              </div> -->
+
+
+              <div class="text-end text-light-50 small mt-1">
+                Created on: {{ project.creationDate | date: 'mediumDate' }}
               </div>
             </div>
-          </ng-container>
-      
-          <ng-template #noSprints>
-            <div class="card no-data">
-              <h2>No pinned sprints</h2>
+
+            <div class="card-footer d-flex justify-content-between align-items-center border-top pt-3" style="border-color: rgba(255, 255, 255, 0.1);">
+              <button class="btn btn-sm btn-outline-light d-flex align-items-center gap-2" (click)="NavigateProject(project.id)">
+                <i class="fa-solid fa-eye view-icon"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-light d-flex align-items-center gap-2" (click)="UnPinProject(project, $event)">
+                <i class="fa-solid fa-map-pin active-pin"></i>
+                
+              </button>
             </div>
-          </ng-template>
-        </div>
+          </div>
+        </ng-container>
+        <ng-template #noProjects><div class="card no-data"><h2>No pinned items</h2></div></ng-template>
       </div>
-      
-</div>
-
-    <!-- <app-card-stack></app-card-stack> -->
-
-    <!-- <app-flip-card></app-flip-card> -->
-
-
-    <!-- <app-card-stack [cards]="CardsProjectsList">
-        <ng-template #cardContent let-card>
-            <div>{{ card.title }}</div>
-        </ng-template>
-    </app-card-stack> -->
-
-<!-- <app-card-stack [cards]="CardsProjectsList">
-  <ng-template #cardContent let-card>
-    <div class="custom-card-content">
-        @for (card of CardsProjectsList ; track $index) {
-            <h3>{{card.name}}</h3>
-        }
-      <h3>{{ card.title }}</h3>
-      <p>{{ card.description }}</p>
-       <h3>{{card.name}}</h3>
     </div>
-  </ng-template>
-</app-card-stack> -->
 
+    <!-- ================ TENANTS ================== -->
+    <div class="col-lg-6 Tanents">
+      <h1 class="text-main-color p-3">Tenants</h1>
+      <div class="stack-container">
+        <ng-container *ngIf="visibleTenants.length > 0; else noTenants">
+          <div
+            class="card"
+            *ngFor="let Tenant of visibleTenants; let i = index"
+            [ngClass]="{ TenantFront: i === 0 }"
+            [style.background]="getTenantsColor(i)"
+            [style.zIndex]="getZIndex(i)"
+            (click)="i === 0 && onTenantCardClick()"
+          >
+            <div class="card-body text-light px-3 py-2">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="mb-1">{{ Tenant.name }}</h4>
+                  <p class="text-white-50 mb-2">{{ Tenant.description }}</p>
+                </div>
+                <!-- <img [src]="isValidUrl(Tenant.image) ? Tenant.image : defaultTenantImage" alt="Tenant Image" class="rounded-circle border border-light" width="72" height="72" /> -->
+                <img [src]=" isValidUrl(Tenant.image) 
+                            ? Tenant.image
+                            : 'assets/images/cover.jpg'" alt="Tenant Image" class="rounded-circle border border-light" width="72" height="72" />
+              </div>
 
+              <div class="mt-2 d-flex justify-content-between align-items-center">
+                <div>
+                  <p class="mb-1 fw-bold">Admin:</p>
+                  <div class="d-flex align-items-center gap-2">
+                    <img [src]="Tenant.owner.imageUrl" class="rounded-circle border" width="32" height="32" />
+                    <div class="small">
+                      <div>{{ Tenant.owner.firstName }} {{ Tenant.owner.lastName }}</div>
+                      <div class="text-white-50">{{ Tenant.owner.email }}</div>
+                    </div>
+                  </div>
+                </div>
 
+                <div class="members-section">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="fw-bold">Members:</span>
+                    <span>{{ Tenant.joinedUsers.length || 0 }}</span>
+                </div>
 
+                <div class="member-stack" (mouseenter)="hovering = true" (mouseleave)="hovering = false">
+                    <ng-container *ngFor="let user of Tenant.joinedUsers?.slice(0, 4); let i = index">
+                    <img
+                        [src]="
+                        isValidUrl(user.imageUrl)
+                            ? user.imageUrl
+                            : 'assets/images/blank profile.svg'
+                        "
+                        [ngStyle]="{ 
+                        left: hovering ? (i * 30) + 'px' : (i * 16) + 'px', 
+                        zIndex: 10 - i 
+                        }"
+                        class="member-avatar"
+                        alt="user"
+                    />
+                    </ng-container>
+
+                    <span *ngIf="Tenant.joinedUsers?.length ?? 0 > 4" class="extra-count">
+                    +{{ Tenant.joinedUsers.length - 4 }}
+                    </span>
+                </div>
+                </div>
+
+            </div>
+
+              <div class="d-flex justify-content-between mt-3">
+                <div><span class="fw-bold">Code:</span> {{ Tenant.tenantCode }}</div>
+                <div><span class="fw-bold">URL:</span> <span class="text-break small">{{ Tenant.tenantUrl }}</span></div>
+              </div>
+            </div>
+
+            <div class="card-footer d-flex justify-content-between align-items-center border-top pt-2">
+              <button class="btn btn-sm btn-outline-light" (click)="NavigateTenant(Tenant.id)"> <i class="fa-solid fa-eye view-icon"></i></button>
+              <button class="btn btn-sm btn-outline-light" (click)="UnPinTenant(Tenant, $event)"><i class="fa-solid fa-map-pin active-pin"></i></button>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noTenants><div class="card no-data"><h2>No pinned items</h2></div></ng-template>
+      </div>
+    </div>
+
+    <!-- =================== ISSUES =================== -->
+    <div class="col-lg-6 Issues">
+      <h1 class="text-main-color p-3">Issues</h1>
+      <div class="stack-container">
+        <ng-container *ngIf="visibleIssues.length > 0; else noIssues">
+          <div
+            class="card"
+            *ngFor="let Issue of visibleIssues; let i = index"
+            [ngClass]="{ IssueFront: i === 0 }"
+            [style.background]="getIssuesColor(i)"
+            [style.zIndex]="getZIndex(i)"
+            (click)="i === 0 && onIssueCardClick()"
+          >
+            <div class="card-header mb-2">
+              <h4>{{ Issue.title }}</h4>
+              <p class="text-light small">{{ Issue.description }}</p>
+            </div>
+            <div class="card-body text-light d-flex flex-column gap-2">
+              <div><span class="fancy-label">Status:</span> {{ Issue.status }}</div>
+              <div><span class="fancy-label">Priority:</span> {{ Issue.priority }}</div>
+              <div class="d-flex gap-4">
+                <div><span class="fancy-label">Start:</span> {{ Issue.startDate | date: 'shortDate' }}</div>
+                <div><span class="fancy-label">Deadline:</span> {{ Issue.deadline | date: 'shortDate' }}</div>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="fancy-label">Created By:</span>
+                <img [src]="Issue.createdBy?.imageUrl || defaultUserImage" class="rounded-circle border" width="28" height="28" />
+                <span>{{ Issue.createdBy?.firstName }} {{ Issue.createdBy?.lastName }}</span>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="fancy-label">Assignees:</span>
+                <img *ngFor="let user of Issue.assignedUsers?.slice(0,3)" [src]="user.imageUrl || defaultUserImage" class="rounded-circle border" width="28" height="28" />
+                
+                @if (Issue.assignedUsers.length > 3) {
+                    <span class="text-light">+{{ Issue.assignedUsers.length - 3 }}</span>
+                }
+                @else {
+                    <span class="text-light">+{{ Issue.assignedUsers.length }}</span>
+                }
+              </div>
+              <div class="card-footer d-flex justify-content-between align-items-center border-top pt-2">
+              <button class="btn btn-sm btn-outline-light ms-auto" (click)="UnPinIssue(Issue, $event)">  <i class="fa-solid fa-map-pin active-pin"></i></button>
+            </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noIssues><div class="card no-data"><h2>No pinned items</h2></div></ng-template>
+      </div>
+    </div>
+
+    <!-- ==================== SPRINTS ==================== -->
+    <div class="col-lg-6 Sprints">
+      <h1 class="text-main-color p-3">Sprints</h1>
+      <div class="stack-container">
+        <ng-container *ngIf="visibleSprints.length > 0; else noSprints">
+          <div
+            class="card"
+            *ngFor="let sprint of visibleSprints; let i = index"
+            [ngClass]="{ SprintFront: i === 0 }"
+            [style.background]="getSprintsColor(i)"
+            [style.zIndex]="getZIndex(i)"
+            (click)="i === 0 && onSprintCardClick()"
+          >
+            <div class="card-header mb-2">
+              <h4>{{ sprint.title }}</h4>
+              <p class="text-light small">{{ sprint.summary }}</p>
+            </div>
+            <div class="card-body text-light d-flex flex-column gap-2">
+              <p class="text-white-50 small">{{ sprint.description }}</p>
+              <div><span class="fancy-label">Status:</span> {{ sprint.status }}</div>
+              <div class="d-flex gap-4">
+                <div><span class="fancy-label">Start:</span> {{ sprint.startDate | date: 'shortDate' }}</div>
+                <div><span class="fancy-label">End:</span> {{ sprint.endDate | date: 'shortDate' }}</div>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="fancy-label">Created By:</span>
+                <img [src]="sprint.createdBy.imageUrl || defaultUserImage" class="rounded-circle border" width="28" height="28" />
+                <span>{{ sprint.createdBy.firstName }} {{ sprint.createdBy?.lastName }}</span>
+              </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center border-top pt-2">
+              <button class="btn btn-sm btn-outline-light" (click)="NavigateSprint(sprint.id)"><i class="fa-solid fa-eye view-icon"></i></button>
+              <button class="btn btn-sm btn-outline-light" (click)="UnPinSprint(sprint, $event)">  <i class="fa-solid fa-map-pin active-pin"></i></button>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noSprints><div class="card no-data"><h2>No pinned sprints</h2></div></ng-template>
+      </div>
+    </div>
+  </div>
 </div>
-
