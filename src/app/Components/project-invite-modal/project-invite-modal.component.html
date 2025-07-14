@@ -5,28 +5,38 @@
 
   <!-- 🟦 Glass Modal -->
   <div class="invite-modal">
-    <h2>Invite to team</h2>
+    <!-- 🔴 Close Button -->
+    <button class="close-btn" (click)="close()">×</button>
 
-    <form (ngSubmit)="sendInvites()">
-      <div *ngFor="let member of members; let i = index" class="invite-row">
-        <input
-          type="email"
-          placeholder="Email address"
-          [(ngModel)]="member.email"
-          name="email{{ i }}"
-          required
-        />
+    <h2>Invite to {{ data.type === 'project' ? 'Project' : 'Tenant' }}</h2>
 
-        <select [(ngModel)]="member.role" name="role{{ i }}" required>
-          <option value="ReadOnly">Read Only</option>
-          <option value="ReadEdit">Read & Edit</option>
-          <option value="Admin">Admin</option>
-        </select>
+    <form [formGroup]="inviteForm" (ngSubmit)="sendInvites()">
+      <div formArrayName="members">
+        <div
+          *ngFor="let member of members.controls; let i = index"
+          [formGroupName]="i"
+          class="invite-row"
+        >
+          <input
+            type="email"
+            placeholder="Email address"
+            formControlName="email"
+            required
+          />
+
+          <select formControlName="role" required>
+            <option value="Developer">Developer</option>
+            <option value="Project Manager">Project Manager</option>
+            <option value="Admin">Admin</option>
+          </select>
+        </div>
       </div>
 
       <div class="add-btn" (click)="addMember()">+ Add more</div>
 
-      <button type="submit" class="send-btn">Send invites</button>
+      <button type="submit" class="send-btn" [disabled]="inviteForm.invalid">
+        Send invites
+      </button>
     </form>
   </div>
 </div>

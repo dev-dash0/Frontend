@@ -1,4 +1,6 @@
-/* Overlay with backdrop blur and colored circles */
+/* ───────────────────────────────────────
+ 🔲 Overlay with blur and background spots
+──────────────────────────────────────── */
 .overlay {
   position: fixed;
   top: 0;
@@ -13,7 +15,7 @@
   overflow: hidden;
 }
 
-/* Colorful blurred spots */
+/* 🔵 Animated blurred spots */
 .blur-spot {
   position: absolute;
   width: 300px;
@@ -21,22 +23,45 @@
   border-radius: 50%;
   filter: blur(120px);
   opacity: 0.5;
+  animation: float 6s ease-in-out infinite;
+  transform: translate(-50%, -50%);
   z-index: 0;
 }
 
-.purple {
-  background-color: #a78bfa;
-  top: 10%;
-  left: 10%;
+.blur-spot.purple {
+  background-color: #6a0dad;
+  top: 35%;
+  left: 35%;
+  animation-delay: 0s;
 }
 
-.pink {
-  background-color: #f472b6;
-  bottom: 10%;
-  right: 10%;
+.blur-spot.pink {
+  background-color: #ff69b4;
+  width: 250px;
+  height: 250px;
+  bottom: 7%;
+  right: 20%;
+  animation-delay: 2s;
 }
 
-/* Modal styling */
+@keyframes float {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate(-50%, -48%) scale(1.05);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.45;
+  }
+}
+
+/* ────────────────────────────────
+ 🔳 Glass modal styling
+────────────────────────────────── */
 .invite-modal {
   position: relative;
   z-index: 1;
@@ -55,9 +80,10 @@
   margin-bottom: 20px;
 }
 
-/* Row of email and permission */
+/* ✉️ Email + Role Row */
 .invite-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 15px;
 }
@@ -74,7 +100,7 @@
   font-size: 14px;
 }
 
-/* Add more button */
+/* ➕ Add more */
 .add-btn {
   cursor: pointer;
   color: #9ecfff;
@@ -82,19 +108,43 @@
   font-size: 14px;
 }
 
-/* Submit button */
+/* 🚀 Send invites */
 .send-btn {
   width: 100%;
   padding: 12px;
-  background-color: #6366f1;
+    background: radial-gradient(109.99% 253.12% at 76.68% 66.67%,
+      #db83f1 0%,
+      #8051b1 100%);
   color: white;
   border: none;
   border-radius: 12px;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .send-btn:hover {
-  background-color: #4f46e5;
+ background: radial-gradient(109.99% 253.12% at 76.68% 66.67%,
+      #de8ff1 0%,
+      #492e65 100%);
+      transform: scale(1.01);
+}
+
+/* ❌ Close button */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  font-size: 26px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.close-btn:hover {
+  transform: scale(1.2);
+  color: #ffbaba;
 }

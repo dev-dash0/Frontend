@@ -694,7 +694,7 @@ export class ProjectOverViewComponent {
   // invite members into the Project
   openInviteModal(): void {
     this.dialog.open(InviteModalComponent, {
-      data: { projectId: this.ProjectId },
+      data: { type: 'project', projectId: this.ProjectId },
       panelClass: 'invite-dialog-panel',
       backdropClass: 'blurred-backdrop',
     });
