@@ -26,7 +26,7 @@
             [ngStyle]="{ filter: imageBlurStyle, opacity: imageOpacity }"
           >
             <img
-              [src]="ProfileData?.imageUrl"
+              [src]="ProfileData?.imageUrl || 'assets/images/blank profile.svg'"
               class="profile-img-rectangle-img"
               alt="Profile Picture"
             />

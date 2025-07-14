@@ -30,7 +30,7 @@ export class ConfirmModalComponent {
         console.log(res);
         this.close();
         this.showSuccess();
-
+        localStorage.clear();
         this._Router.navigate(['/signin']);
       },
     });
