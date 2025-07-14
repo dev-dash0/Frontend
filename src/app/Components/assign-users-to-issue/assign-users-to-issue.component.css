@@ -1,14 +1,17 @@
 /* ------------------ Assignment Dropdown ------------------ */
 .assignment-dropdown {
-    background: radial-gradient(109.99% 253.12% at 76.68% 66.67%, #3b2341 0%, #2c1d3d 100%);
+    /* background: radial-gradient(109.99% 253.12% at 76.68% 66.67%, #3b2341 0%, #2c1d3d 100%); */
+    background: linear-gradient(135deg, rgba(33, 38, 79, 0.95), rgba(79, 49, 131, 0.95));
     border-radius: 0.5rem;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    z-index: 1060;
+    box-shadow: 0 6px 20px rgba(23, 4, 70, 0.478);
     max-height: 400px;
     animation: fadeIn 0.5s 1;
     transition: all 0.2s ease-in-out;
     color: #f2f2f2;
+    z-index: 1080;
+    position: fixed !important;
 }
+
 
 .assignment-dropdown .card-header span {
     color: #f2f2f2;
@@ -47,7 +50,7 @@
 
 /* ------------------ List Group Item (User Row) ------------------ */
 button.list-group-item {
-    background-color: #1f1b2e !important;
+    background-color: rgba(4, 7, 35, 0.878) !important;
     color: #eee;
     border: none;
 }
