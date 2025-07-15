@@ -282,6 +282,8 @@ export class ProjectOverViewComponent {
           this.showSuccessDelete();
           this._IssueService.notifyIssueDeleted();
           console.log('Issue deleted and backlog refreshed');
+          this._IssueService.notifyIssueDeleted();
+          this.fetchBacklogIssues();
         },
         error: (err) => {
           console.error('Failed to delete issue:', err);
@@ -321,7 +323,7 @@ export class ProjectOverViewComponent {
       }
     });
 
- 
+
     
   }
   

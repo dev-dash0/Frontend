@@ -1,3 +1,4 @@
+import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
 import { SigninComponent } from './Components/signin/signin.component';
 import { SignupComponent } from './Components/signup/signup.component';
@@ -23,6 +24,9 @@ import { AllIssuesDashboardComponent } from './Components/all-issues-dashboard/a
 import { WelcomeComponent } from './Components/welcome/welcome.component';
 import { Welcome2Component } from './Components/welcome2/welcome2.component';
 import { AllIssuesComponent } from './Components/all-issues/all-issues.component';
+import { PricingComponent } from './Components/pricing/pricing.component';
+import { PaymentSuccessComponent } from './Components/payment-success/payment-success.component';
+import { PaymentCancelComponent } from './Components/payment-cancel/payment-cancel.component';
 
 // export const routes: Routes = [
 //   { path: 'welcome', component: Welcome2Component, title: 'Welcome' },
@@ -215,6 +219,13 @@ export const routes: Routes = [
             component: AllIssuesComponent,
             title: 'All Issues',
           },
+          {
+            path:'Pricing',
+            component:PricingComponent,
+            title:'Upgrade to Premium'
+          },
+          { path: 'payment-success', component: PaymentSuccessComponent },
+          { path: 'payment-cancel', component: PaymentCancelComponent },
         ],
       },
     ],
