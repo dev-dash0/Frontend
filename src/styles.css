@@ -1447,8 +1447,8 @@ li {
 /*Invite Modal  Backdrop with blur + color spots */
 ::ng-deep .blurred-backdrop {
   background: radial-gradient(circle at 30% 30%, rgba(255, 0, 255, 0.2), transparent),
-              radial-gradient(circle at 70% 70%, rgba(138, 43, 226, 0.15), transparent),
-              rgba(0, 0, 0, 0.4);
+    radial-gradient(circle at 70% 70%, rgba(138, 43, 226, 0.15), transparent),
+    rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(6px);
 }
 
@@ -1458,4 +1458,44 @@ li {
   backdrop-filter: blur(10px);
   border-radius: 20px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ***************** */
+.payment-container {
+  min-height: 100vh;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-container .success-icon {
+  font-size: 64px;
+  color: #56D7AA;
+}
+
+.payment-container .cancel-icon {
+  font-size: 64px;
+  color: #FC867D;
+}
+
+.payment-container .gradient-text {
+  background: linear-gradient(135deg, #f15bb5, #9b5de5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-gradient-premium {
+  background: linear-gradient(135deg, #9b5de5, #f15bb5);
+  color: white;
+  padding: 10px 24px;
+  font-size: 16px;
+  border-radius: 30px;
+  border: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-gradient-premium:hover {
+  transform: scale(1.05);
 }

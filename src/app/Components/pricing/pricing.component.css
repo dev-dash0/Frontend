@@ -1,0 +1,223 @@
+.card {
+    color: #dcdfff !important;
+}
+
+.selected-plan {
+    border: 2px solid #9b5de5 !important;
+    box-shadow: 0 0 15px #9b5de580;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.5em 0.75em;
+}
+
+.gradient-text {
+    background: linear-gradient(138deg, #f15bb5, #9b5de5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ///////////////////////////////// */
+.plan-card {
+    border-radius: 1rem;
+    background: #1f233e;
+}
+
+.cardBottomLeft,
+.plan-card {
+    transition: transform 0.3s ease-in-out;
+}
+
+.cardBottomLeft:hover,
+.plan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.selected-plan {
+    border: 2px solid #8051b1 !important;
+    box-shadow: 0 0 15px #8051b180;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #f15bb5, #9b5de5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ///////////////////////// */
+.auth-form-container {
+    padding: 8px;
+    border-radius: var(--standardRoundness);
+    border: none !important;
+}
+
+.auth-form-container::before {
+    background: none !important;
+    border: none !important;
+    mask: none !important;
+    -webkit-mask: none !important;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+}
+
+.type.auth-form-container {
+    background-image: linear-gradient(144.86deg,
+            rgba(58, 73, 98, 0.18) 6.8%,
+            #7f51b1a7 29.3%,
+            rgba(91, 177, 230, 0.15) 51.79%,
+            rgba(255, 144, 232, 0.13) 96.78%);
+}
+
+
+.btn-gradient-premium {
+    background: linear-gradient(135deg, #9b5de5 45%, #5886F6);
+    color: #fff;
+    padding: 6px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    /* box-shadow: 0 2px 6px rgba(241, 91, 181, 0.3); */
+    transition: transform 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-gradient-premium:hover {
+    transform: scale(1.001);
+    /* box-shadow: 0 2px 7px rgba(241, 91, 181, 0.5); */
+}
+
+/* ///////////////////////// */
+.premium-icon-animation {
+    width: 30px;
+    animation: pulseGlow 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 6px #290753c6);
+}
+
+@keyframes pulseGlow {
+
+    0%,
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 6px #9b5de5aa);
+    }
+
+    50% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 12px #f15bb5aa);
+    }
+}
+
+
+.btn-gradient-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: skewX(-20deg);
+    animation: shine 2.5s infinite;
+}
+
+@keyframes shine {
+    0% {
+        left: -75%;
+    }
+
+    100% {
+        left: 125%;
+    }
+}
+
+/* ================= RESPONSIVE STYLING ================= */
+@media (max-width: 992px) {
+
+    .cardBottomLeft,
+    .plan-card {
+        padding: 2rem 1.5rem !important;
+    }
+
+    .card h3 {
+        font-size: 1.4rem;
+    }
+
+    .card ul li {
+        font-size: 0.95rem;
+    }
+
+    .btn-gradient-premium {
+        font-size: 0.95rem;
+        padding: 6px 12px;
+    }
+
+    .badge {
+        font-size: 0.65rem;
+        padding: 0.4em 0.6em;
+    }
+}
+
+@media (max-width: 768px) {
+    .gradient-text {
+        font-size: 1.75rem !important;
+    }
+
+    .lead {
+        font-size: 1rem !important;
+    }
+
+    .pricing-header {
+        margin-top: 2rem !important;
+    }
+
+    .premium-icon-animation {
+        width: 24px;
+    }
+
+    .card h3 {
+        font-size: 1.25rem;
+    }
+
+    .card ul li {
+        font-size: 0.9rem;
+    }
+
+    .btn-gradient-premium {
+        font-size: 0.9rem;
+        padding: 6px 10px;
+    }
+
+    .badge {
+        font-size: 0.6rem;
+        padding: 0.3em 0.6em;
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .row.g-4 {
+        gap: 2rem !important;
+    }
+
+    .card {
+        padding: 1.5rem 1.25rem !important;
+    }
+
+    .btn-gradient-premium {
+        width: 100%;
+    }
+
+    .premium-icon-animation {
+        width: 20px;
+    }
+
+    .alert {
+        font-size: 0.85rem;
+    }
+}

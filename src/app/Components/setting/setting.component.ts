@@ -38,6 +38,7 @@ export class SettingComponent implements OnInit, AfterViewInit {
   GetProfile() {
     this._ProfileService.getProfileData().subscribe({
       next: (res) => {
+        console.log(res);
         this.ProfileData = res;
         this.isLoading = false;
       },

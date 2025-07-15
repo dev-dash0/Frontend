@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { baseUrl } from '../environment/environment.local';
 
 @Injectable({
@@ -28,4 +28,13 @@ export class ProfileService {
       headers,
     });
   };
+
+  //For update view after Upgrade to premium plan
+  private profileUpdatedSource = new Subject<void>(); // Emits event when issue is created
+  profileUpdated$ = this.profileUpdatedSource.asObservable();
+
+  notifyProfileUpdated() {
+    this.profileUpdatedSource.next();
+  }
+
 }
