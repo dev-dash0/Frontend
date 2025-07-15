@@ -114,25 +114,13 @@
             </div>
             <div class="sprint-actions gap-2">
               <div class="header-buttons gap-2">
-                <div
-                  class="btn auth-form-container"
-                  (click)="updateSprintModal()"
-                >
-                  <i
-                    class="fa-solid fa-pen edit-icon"
-                    style="color: var(--mainLightBlueColor)"
-                  ></i>
+                <div class="btn auth-form-container" (click)="updateSprintModal()">
+                  <i class="fa-solid fa-pen edit-icon" style="color: var(--mainLightBlueColor)"></i>
                 </div>
-                <div
-                  class="btn auth-form-container"
-                  (click)="
+                <div class="btn auth-form-container" (click)="
                     deleteSprintModal(sprint.id, sprint.title, sprint.projectId)
-                  "
-                >
-                  <i
-                    class="fa-solid fa-trash trash-icon"
-                    style="color: var(--mainLightBlueColor)"
-                  ></i>
+                  ">
+                  <i class="fa-solid fa-trash trash-icon" style="color: var(--mainLightBlueColor)"></i>
                 </div>
               </div>
               <div class="btn auth-form-container">
@@ -152,43 +140,30 @@
                 </h2>
 
                 <span class="add-issues-btn" (click)="openCreateIssue()">
-                  <a class="custom-btn text-center"
-                    ><img
-                      src="assets/images/sidebar icons/Plus.svg"
-                      class="pe-2"
-                      alt=""
-                    />
-                    Add Issues</a
-                  >
-                  <a class="custom-btn text-center"
+                  <a class="custom-btn text-center"><img src="assets/images/sidebar icons/Plus.svg" class="pe-2"
+                      alt="" />
+                    Add Issues</a>
+                  <!-- <a class="custom-btn text-center"
                     ><img
                       src="assets/images/sidebar icons/Plus.svg"
                       class="pe-2"
                       alt=""
                     />
                     Add Issue</a
-                  >
+                  > -->
                 </span>
               </div>
 
               <div class="row flex-nowrap overflow-x-scroll g-4 px-3 pt-3 pb-4">
-                <div
-                  class="d-flex justify-content-center align-items-center w-100"
-                  style="min-height: 300px"
-                  *ngIf="issueLoading"
-                >
+                <div class="d-flex justify-content-center align-items-center w-100" style="min-height: 300px"
+                  *ngIf="issueLoading">
                   <app-dashboard-loader></app-dashboard-loader>
                 </div>
                 @if(!issueLoading) {
-                <div
-                  class="row-cols-md-4 col-lg-4"
-                  *ngFor="let category of issueCategories"
-                >
+                <div class="row-cols-md-4 col-lg-4" *ngFor="let category of issueCategories">
                   <div class="wrapper">
                     <div class="Updates-tag d-flex justify-content-between">
-                      <div
-                        class="tag-name d-flex align-items-center gap-2 mb-3"
-                      >
+                      <div class="tag-name d-flex align-items-center gap-2 mb-3">
                         <img [src]="category.icon" alt="" />
                         <h2 class="m-0">{{ category.name }}</h2>
                       </div>
@@ -196,128 +171,73 @@
                       <span>{{ category.issues.length }}</span>
                     </div>
 
-                    <div
-                      class="wrapper-card-container overflow-y-auto"
-                      cdkDropList
-                      [cdkDropListData]="category.issues"
-                      [id]="category.status"
-                      [cdkDropListConnectedTo]="connectedDropListsIds"
-                      (cdkDropListDropped)="
+                    <div class="wrapper-card-container overflow-y-auto" cdkDropList [cdkDropListData]="category.issues"
+                      [id]="category.status" [cdkDropListConnectedTo]="connectedDropListsIds" (cdkDropListDropped)="
                         onIssueDropped($event, category.status)
-                      "
-                    >
-                      <div
-                        class="no-issues d-flex justify-content-center align-items-center h-100"
-                        *ngIf="category.issues.length === 0"
-                      >
+                      ">
+                      <div class="no-issues d-flex justify-content-center align-items-center h-100"
+                        *ngIf="category.issues.length === 0">
                         <p>No issues found</p>
                       </div>
-                      <div
-                        class="wrapper-card"
-                        *ngFor="let issue of category.issues"
-                        cdkDrag
-                        [cdkDragData]="issue"
-                      >
+                      <div class="wrapper-card" *ngFor="let issue of category.issues" cdkDrag [cdkDragData]="issue">
                         <div class="row">
-                          <div
-                            class="col-md-2 d-flex justify-content-center align-items-center"
-                          >
-                            <div
-                              class="priority-circle-container glass-circle-container"
-                            >
-                              <img
-                                [src]="getPriorityImage(issue.priority)"
-                                alt=""
-                              />
+                          <div class="col-md-2 d-flex justify-content-center align-items-center">
+                            <div class="priority-circle-container glass-circle-container">
+                              <img [src]="getPriorityImage(issue.priority)" alt="" />
                             </div>
                           </div>
                           <div class="col-md-10">
                             <div class="wrapper-card-content">
-                              <div
-                                class="wrapper-card-header d-flex justify-content-between align-items-center"
-                              >
-                                <h3
-                                  (click)="openIssueView(issue.id)"
-                                  style="cursor: pointer"
-                                  class="wrapper-card-title text-truncate"
-                                >
+                              <div class="wrapper-card-header d-flex justify-content-between align-items-center">
+                                <h3 (click)="openIssueView(issue.id)" style="cursor: pointer"
+                                  class="wrapper-card-title text-truncate">
                                   {{ issue.title }}
                                 </h3>
                                 <div class="wrapper-card-date">
                                   {{ issue.startDate }} | {{ issue.deadline }}
                                 </div>
                               </div>
-                              <div
-                                class="wrapper-card-center-body d-flex justify-content-between align-items-center"
-                              >
+                              <div class="wrapper-card-center-body d-flex justify-content-between align-items-center">
                                 <p>Type: {{ issue.type }}</p>
-                                <div
-                                  class="assigned-members d-flex align-items-center justify-content-end"
-                                >
+                                <div class="assigned-members d-flex align-items-center justify-content-end">
                                   <div *ngFor="let user of issue.assignedUsers">
-                                    <img
-                                      [src]="user.imageUrl"
-                                      *ngIf="user.imageUrl"
-                                      alt="{{ user.firstName }} {{
+                                    <img [src]="user.imageUrl" *ngIf="user.imageUrl" alt="{{ user.firstName }} {{
                                         user.lastName
-                                      }}"
-                                      class="assigned-member cursor-pointer rounded-circle"
-                                      style="
+                                      }}" class="assigned-member cursor-pointer rounded-circle" style="
                                         width: 22px;
                                         height: 22px;
                                         margin-right: -5px;
-                                      "
-                                    />
+                                      " />
 
-                                    <img
-                                      src="assets/images/user-img-not-found.jpg"
-                                      *ngIf="!user.imageUrl"
-                                      alt="{{ user.firstName }} {{
+                                    <img src="assets/images/user-img-not-found.jpg" *ngIf="!user.imageUrl" alt="{{ user.firstName }} {{
                                         user.lastName
-                                      }}"
-                                      class="assigned-member cursor-pointer rounded-circle"
-                                      style="width: 22px; height: 22px"
-                                    />
+                                      }}" class="assigned-member cursor-pointer rounded-circle"
+                                      style="width: 22px; height: 22px" />
                                   </div>
                                 </div>
                               </div>
 
-                              <div
-                                class="wrapper-card-footer wrapper-card-meta d-flex justify-content-between mt-2"
-                              >
-                                <div
-                                  class="card-wrapper-labels d-flex align-items-center gap-2"
-                                >
-                                  <span
-                                    class="burble-tag"
-                                    *ngFor="
+                              <div class="wrapper-card-footer wrapper-card-meta d-flex justify-content-between mt-2">
+                                <div class="card-wrapper-labels d-flex align-items-center gap-2">
+                                  <span class="burble-tag" *ngFor="
                                       let label of issue.labels
                                         ?.split(',')
                                         ?.slice(0, 3) || [];
                                       let i = index
-                                    "
-                                    [matTooltip]="
+                                    " [matTooltip]="
                                       label.trim().length > 15
                                         ? label.trim()
                                         : ''
-                                    "
-                                    [matTooltipDisabled]="
+                                    " [matTooltipDisabled]="
                                       label.trim().length <= 15
-                                    "
-                                    matTooltipPosition="above"
-                                  >
+                                    " matTooltipPosition="above">
                                     {{ label.trim() }}
                                   </span>
                                 </div>
 
-                                <span
-                                  class="view-details-btn"
-                                  (click)="openIssueView(issue.id)"
-                                  style="cursor: pointer"
-                                >
-                                  <i
-                                    class="fa-solid fa-arrow-up-right-from-square"
-                                  ></i>
+                                <span class="view-details-btn" (click)="openIssueView(issue.id)"
+                                  style="cursor: pointer">
+                                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                 </span>
                               </div>
                             </div>
