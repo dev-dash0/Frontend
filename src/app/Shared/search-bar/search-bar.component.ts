@@ -12,7 +12,7 @@ import { NotificationService } from '../../Core/Services/notification.service';
 import { Notification, User } from '../../Core/interfaces/notification';
 import { DashboardService } from '../../Core/Services/dashboard/dashboard.service';
 import { ProjectResult } from '../../Core/interfaces/project';
-import { map, switchMap } from 'rxjs';
+import { map, retry, switchMap } from 'rxjs';
 import { DashboardLoaderComponent } from '../dashboard-loader/dashboard-loader.component';
 import { DialogService } from '../../Core/Services/dialog.service';
 import { ProfileService } from '../../Core/Services/profile.service';
@@ -60,6 +60,7 @@ export class SearchBarComponent {
   allUsers: User[] = [];
   NotifyUser: any = {};
   ProfileName: string = '';
+  statePricing!:string;
   // LName: string = '';
   // close: Boolean = false;
 
@@ -70,6 +71,7 @@ export class SearchBarComponent {
   ngOnInit(): void {
     this.getProfileName();
     this.getNotification();
+    this.getProfileType();
   }
 
   togglePanel() {
@@ -360,6 +362,16 @@ export class SearchBarComponent {
       next: (res) => {
         const fullName = `${res.firstName} ${res.lastName}`;
         this.ProfileName = this.nameShortcutPipe.transform(fullName);
+      },
+    });
+  }
+  
+  getProfileType() {
+    this._ProfileService.getProfileData().subscribe({
+      next: (res) => {
+        const profileType = res.statepricing;
+        this.statePricing = profileType;
+        console.log('statePricing',this.statePricing);  
       },
     });
   }

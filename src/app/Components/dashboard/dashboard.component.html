@@ -76,7 +76,7 @@
             </ul>
             <div class="d-flex justify-content-center align-items-center dev-text-muted h-100"
               *ngIf="UrgentIssues.length ==0">
-              <p>No Issues found yet.</p>
+              <p class="dev-text-muted">No Issues found yet.</p>
             </div>
           </div>
         </div>
@@ -150,13 +150,13 @@
                 </ul>
                 <div class="d-flex justify-content-center align-items-center dev-text-muted h-100"
                   *ngIf="mostVisitedProjects.length ==0">
-                  <p>No Projects visited yet.</p>
+                  <p class="dev-text-muted">No Projects visited yet.</p>
                 </div>
               </div>
             </div>
             <div class="d-flex justify-content-center align-items-center dev-text-muted h-100"
               *ngIf="recentProjects.length== 0 &&mostVisitedProjects.length==0">
-              <p>No Projects found yet.</p>
+              <p class="dev-text-muted">No Projects found yet.</p>
             </div>
           </div>
           <!-- Tabs -->
@@ -180,18 +180,22 @@
 
 
 
-      <div class="col-lg-6">
-        <div class="card cardTopRight">
-          <div class="card-body">
+      <div class="col-lg-6 ">
+        <div class="card cardTopRight pinned-card">
+          <div class="card-body ">
             <div class="headTitle mb-4">
               <img src="assets/images/dashboard icons/Pin.svg" alt="Pin icon" />
               <h3 class="m-0"> Pinned</h3>
             </div>
-            <div class="Pinnedcard-sub-title">
-              <app-tree [nodes]="treeNodes" class="fs-5"></app-tree>
+            <div class="Pinnedcard-sub-title ">
+              <app-tree [nodes]="treeNodes" h-100 *ngIf="treeNodes.length>0" class="fs-5"></app-tree>
+              <div class="pt-5">
+                <div class="h-100 my-5 py-5 d-flex justify-content-center align-items-center"
+                  *ngIf="treeNodes.length==0">
+                  <p class=" dev-text-muted">No pinned projects found yet.</p>
+                </div>
+              </div>
             </div>
-
-
 
             <!-- Pinned Tenants -->
             <!-- <div (click)="toggleDropdown('tenants')" class="dropdown-header">
