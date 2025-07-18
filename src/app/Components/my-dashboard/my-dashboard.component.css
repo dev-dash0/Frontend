@@ -24,7 +24,8 @@
   position: fixed;
   width: 800px;
   height: 800px;
-  top: 250px;
+  bottom: -350px;
+  /* top: 250px; */
   right: -300px;
   z-index: 0;
   transform: scale(0.25);
@@ -68,7 +69,8 @@
 /* Trigger Button */
 .chat-trigger {
   position: fixed;
-  top: 550px;
+  bottom: 100px;
+  /* top: 550px; */
   right: 60px;
   font-size: 20px;
   z-index: 100;

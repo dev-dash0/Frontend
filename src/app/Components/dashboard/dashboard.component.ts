@@ -111,6 +111,7 @@ get displayedProjects() {
   getDashboardAllIProject() {
     this._DashboardService.getDashboardAllProject().subscribe({
       next: (res) => {
+        console.log(res)
         this.AllProjectList = res.result;
         this.recentProjects = [...this.AllProjectList]
           .sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime())
