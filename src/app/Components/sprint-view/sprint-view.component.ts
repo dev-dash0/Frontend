@@ -19,8 +19,10 @@ import {
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { SharedDeleteModalComponent } from '../../Shared/delete-modal/delete-modal.component';
-import { Observable } from 'rxjs';
 import { UpdateSprintComponent } from '../update-sprint/update-sprint.component';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { PinnedService } from '../../Core/Services/pinned.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-sprint-view',
@@ -33,6 +35,17 @@ import { UpdateSprintComponent } from '../update-sprint/update-sprint.component'
   ],
   templateUrl: './sprint-view.component.html',
   styleUrl: './sprint-view.component.css',
+  animations: [
+    trigger('slideInUp', [
+      transition(':enter', [
+        style({ transform: 'translateY(20px)', opacity: 0 }),
+        animate(
+          '700ms ease-out',
+          style({ transform: 'translateY(0)', opacity: 1 })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class SprintViewComponent {
   isSidebarCollapsed = true;
@@ -41,11 +54,15 @@ export class SprintViewComponent {
   private sidebarService = inject(SidebarService);
   private _sprintService = inject(SprintService);
   private _IssueService = inject(IssueService);
+  private _PinnedService = inject(PinnedService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private _toastr = inject(ToastrService);
 
   sprintId = Number(this.route.snapshot.paramMap.get('id'));
   sprintDetails: Sprint[] = [];
+  loading = true;
+  showSprint = false;
   issueLoading = true;
   issueCategories: IssueCategory[] = [];
 
@@ -137,7 +154,7 @@ export class SprintViewComponent {
             createdBy: issue.createdBy,
           })),
         }));
-        console.log('Sprint Details:', res);
+        // console.log('Sprint Details:', res);
 
         const issues = rawSprint[0].issues || [];
 
@@ -250,7 +267,8 @@ export class SprintViewComponent {
         this.connectedDropListsIds = this.issueCategories.map(
           (category) => category.status
         );
-
+        this.loading = false;
+        this.showSprint = true;
         console.log('Mapped Issues by Status:', this.issueCategories);
       },
       error: (err) => {
@@ -258,6 +276,7 @@ export class SprintViewComponent {
       },
     });
   }
+
   getPriorityIcon(priority: string): string {
     switch (priority.toLowerCase()) {
       case 'low':
@@ -451,16 +470,39 @@ export class SprintViewComponent {
     return status.toLowerCase().replace(/\s/g, '-');
   }
 
-  // getBackendStatusFromWrapper(wrapperId: string): string {
-  //   switch (wrapperId) {
-  //     case 'to do': return 'to do';
-  //     case 'Completed': return 'completed';
-  //     case 'reviewing': return 'Reviewing';
-  //     case 'canceled': return 'Canceled';
-  //     case 'postponed': return 'Postponed';
-  //     case 'In Progress': return 'in progress';
-  //     case 'backlog': return 'Backlog';
-  //     default: return 'To Do';
-  //   }
-  // }
+    // pin sprint
+  onPinSprint(event: MouseEvent) {
+    event.stopPropagation(); // prevent triggering card animation click
+    this._PinnedService.PinItem('Sprint', this.sprintId).subscribe({
+      next: (res) => {
+        console.log('Pinned successfully:', res);
+        this.showSuccess();
+      },
+      error: (err) => {
+        console.error('Pinning failed:', err);
+        this.showFail(err.error.message);
+      },
+    });
+  }
+
+  // show successful and failed pinned toastr
+  showSuccess() {
+    this._toastr.success('The Sprint has been Pinned', 'Pinned Successfully', {
+      toastClass: 'toast-pink',
+      timeOut: 10000,
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+    });
+  }
+
+  showFail(err: any) {
+    this._toastr.error(err, 'Pinned Failed', {
+      toastClass: 'toast-pink',
+      timeOut: 10000,
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+    });
+  }
 }

@@ -13,6 +13,7 @@ import { JoinCompanyComponent } from '../join-company/join-company.component';
 import { transition, trigger, style, animate } from '@angular/animations';
 import { DashboardLoaderComponent } from '../../Shared/dashboard-loader/dashboard-loader.component';
 import { PinnedService } from '../../Core/Services/pinned.service';
+import { DialogService } from '../../Core/Services/dialog.service';
 
 @Component({
   selector: 'app-allcompanies',
@@ -45,7 +46,8 @@ export class AllcompaniesComponent {
     private _profileService: ProfileService,
     private dialog: MatDialog,
     private _router: Router,
-    private _pinService: PinnedService
+    private _pinService: PinnedService,
+    private dialogService: DialogService
   ) {}
 
   //---------------------------------
@@ -65,7 +67,7 @@ export class AllcompaniesComponent {
       this.isSidebarCollapsed = collapsed;
     });
     this.sidebarService.companyCreated$.subscribe(() => {
-      console.log('company is being created...');
+      // console.log('company is being created...');
       this.getCompanies();
     });
     this.getPinnedCompanies();
@@ -125,13 +127,6 @@ export class AllcompaniesComponent {
     this._router.navigate(['/MyDashboard/Company', companyId]);
   }
 
-  //get all companies ids
-  // getCompaniesids() {
-  //   this._companyService.getAllCompanyIds().subscribe((companyId) => {
-  //     console.log('Company IDs:', companyId);
-  //   });
-  // }
-
   join() {
     const dialogRef = this.dialog.open(JoinCompanyComponent, {
       width: 'auto',
@@ -141,5 +136,9 @@ export class AllcompaniesComponent {
       maxHeight: '50vh',
       disableClose: true,
     });
+  }
+
+  openCompany() {
+    this.dialogService.openCompanyModal();
   }
 }

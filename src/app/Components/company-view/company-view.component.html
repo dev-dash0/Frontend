@@ -287,7 +287,11 @@
                   />
                   Company Members
                 </h2>
-                <a href="#" class="custom-btn text-center" (click)="openInviteModal(); $event.preventDefault()">Add Members</a>
+                <a
+                  class="custom-btn text-center add-members-btn"
+                  (click)="openInviteModal(); $event.preventDefault()"
+                  >Add Members</a
+                >
               </div>
               <hr />
               <div class="members-class">
@@ -295,20 +299,25 @@
                   *ngFor="let member of company.joinedUsers; let last = last"
                 >
                   <div class="gap-3 company-member">
-                    <img
-                      [src]="
-                        isValidUrl(member.imageUrl)
-                          ? member?.imageUrl
-                          : 'assets/images/blank profile.svg'
-                      "
-                      alt=""
-                    />
-                    <div class="d-flex flex-column">
-                      <p class="m-0 p-0 text-capitalize name">
-                        {{ member?.firstName }} {{ member?.lastName }}
-                      </p>
-                      <p class="m-0 p-0 username">{{ member?.userName }}</p>
+                    <div class="member-data">
+                      <img
+                        [src]="
+                          isValidUrl(member.imageUrl)
+                            ? member?.imageUrl
+                            : 'assets/images/blank profile.svg'
+                        "
+                        alt=""
+                      />
+                      <div class="d-flex flex-column">
+                        <p class="m-0 p-0 text-capitalize name">
+                          {{ member?.firstName }} {{ member?.lastName }}
+                        </p>
+                        <p class="m-0 p-0 username">{{ member?.userName }}</p>
+                      </div>
                     </div>
+                    <!-- <div class="member-role">
+                      <span class="dev-text-muted">{{ member?.role }}</span>
+                    </div> -->
                   </div>
                   <hr *ngIf="!last" />
                 </ng-container>
@@ -343,6 +352,20 @@
                   />
                   <span>Projects</span>
                 </h2>
+                <span
+                  (click)="openProj()"
+                  class="add-project-btn"
+                  *ngIf="company.owner.id === userId"
+                >
+                  <a class="custom-btn text-center btn"
+                    ><img
+                      src="assets/images/sidebar icons/Plus.svg"
+                      class="pe-2"
+                      alt=""
+                    />
+                    Add Project</a
+                  >
+                </span>
               </div>
               <div class="row flex-nowrap overflow-x-scroll g-3 my-3">
                 <div
@@ -352,14 +375,14 @@
                 >
                   <app-dashboard-loader></app-dashboard-loader>
                 </div>
-                <div
+                <!-- <div
                   class="d-flex justify-content-center align-items-center w-100"
                   style="min-height: 300px"
                   *ngIf="projectsGlobalCounter === 0 && !projectLoading"
                 >
                   <p>No projects available for this company.</p>
-                </div>
-                @if(!projectLoading && ProjectCategories.length > 0) {
+                </div> -->
+                @if(!projectLoading) {
                 <div
                   class="col-md-4"
                   *ngFor="let category of ProjectCategories"
@@ -389,11 +412,11 @@
                       >
                         <div class="card p-1">
                           <div class="card-body">
-                            <div
-                              class="priority-tag mb-2"
-                              [ngClass]="getPriorityClass(project.priority)"
-                            >
-                              <p class="p-0 m-0 gap-1">
+                            <div class="priority-tag mb-2">
+                              <p
+                                class="p-0 mb-2 gap-1"
+                                [ngClass]="getPriorityClass(project.priority)"
+                              >
                                 <img
                                   [src]="getPriorityImage(project.priority)"
                                   alt=""
@@ -405,26 +428,44 @@
                               <h3>{{ project.title }}</h3>
                             </div>
                             <div class="project-description">
-                              <p>{{ project.description }}</p>
+                              <p>
+                                {{
+                                  project.description
+                                    ? project.description
+                                    : "No Description Available"
+                                }}
+                              </p>
                             </div>
+                            <!-- <div class="project-progress mb-3">
+                              <div
+                                class="progress-bar"
+                                [style.width.%]="
+                                  projectSprintProgress[project.id]
+                                "
+                              ></div>
+                            </div> -->
+                            <!-- <p class="mt-2 progress-percent">Progress 65%</p> -->
                             <div class="project-date">
                               <p class="p-0 m-0">
                                 <i class="fa-solid fa-calendar-days pe-2"></i
                                 >Start
-                                {{ project.startDate | date : "d MMM YYYY"
-                                }}<br />
+                                <span class="ps-1">{{
+                                  project.startDate
+                                    ? (project.startDate | date : "d MMM YYYY")
+                                    : "&#8212; | &#8212;"
+                                }}</span>
+                                <br />
                               </p>
                               <p class="p-0 m-0">
                                 <i class="fa-solid fa-calendar-days pe-2"></i
                                 >Due
-                                {{ project.dueDate | date : "d MMM YYYY" }}
+                                <span class="ps-2">{{
+                                  project.dueDate
+                                    ? (project.dueDate | date : "d MMM YYYY")
+                                    : "&#8212; | &#8212;"
+                                }}</span>
                               </p>
                             </div>
-                            <a
-                              class="custom-btn text-center btn mt-3"
-                              (click)="selectProject(project.id)"
-                              >View Details</a
-                            >
                             <div class="button-options mt-3">
                               <div class="project-members">
                                 <div
@@ -466,7 +507,7 @@
                                   </span>
                                 </div>
                               </div>
-                              <div class="options-imgs gap-2">
+                              <!-- <div class="options-imgs gap-2">
                                 <img
                                   src="assets/images/issue view/Add File.svg"
                                   alt=""
@@ -475,17 +516,17 @@
                                   src="assets/images/issue view/Edit Chat History.svg"
                                   alt=""
                                 />
-                              </div>
+                              </div> -->
                             </div>
-                            <div class="project-progress">
-                              <div
-                                class="progress-bar"
-                                style="width: 65%"
-                              ></div>
+                            <div
+                              class="project-details d-flex justify-content-end"
+                            >
+                              <a
+                                class="custom-btn text-center btn mt-3"
+                                (click)="selectProject(project.id)"
+                                >View Details</a
+                              >
                             </div>
-                            <p class="p-0 mt-2 m-0 progress-percent">
-                              Progress 65%
-                            </p>
                           </div>
                           <div class="shine"></div>
                         </div>
