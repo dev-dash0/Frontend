@@ -5,21 +5,57 @@
         <img src="assets/images/sidebar icons/Company.svg" alt="" />
         <h2>Your Companies</h2>
       </div>
-      <span class="btn join-btn" (click)="join()">
-        <a class="custom-btn text-center btn"><img src="assets/images/sidebar icons/Plus.svg" class="pe-2" alt="" />
-          Join Company</a>
-      </span>
+      <div class="company-buttons">
+        <span class="btn join-btn" (click)="join()">
+          <a class="custom-btn text-center btn"
+            ><img
+              src="assets/images/sidebar icons/Plus.svg"
+              class="pe-2"
+              alt=""
+            />
+            Join Company</a
+          >
+        </span>
+        <span (click)="openCompany()" class="add-company-btn">
+          <a class="custom-btn text-center btn"
+            ><img
+              src="assets/images/sidebar icons/Plus.svg"
+              class="pe-2"
+              alt=""
+            />
+            Add Company</a
+          >
+        </span>
+      </div>
     </header>
     <mat-tab-group>
       <mat-tab label="Owned Companies">
         <div class="card1">
-          <app-dashboard-loader [ngStyle]="{ 'align-self': 'center', padding: '200px' }"
-            *ngIf="loading"></app-dashboard-loader>
-          <div class="container" [@slideInUp] *ngIf="showCompanies && !loading">
+          <app-dashboard-loader
+            [ngStyle]="{ 'align-self': 'center', padding: '200px' }"
+            *ngIf="loading"
+          ></app-dashboard-loader>
+          <div
+            *ngIf="!ownedCompanies.length && !loading"
+            [ngStyle]="{ 'align-self': 'center', padding: '200px' }"
+          >
+            <p class="dev-text-muted p-0 m-0">
+              You Don't Own Any Companies Yet.
+            </p>
+          </div>
+          <div
+            class="container"
+            [@slideInUp]
+            *ngIf="showCompanies && !loading && ownedCompanies.length"
+          >
             <div class="row g-3">
               <div class="col-md-6" *ngFor="let company of ownedCompanies">
-                <app-allcompaniescard [company]="company" [isPinned]="pinnedTenantIds.has(company.id)"
-                  (pinChanged)="onPinChanged($event)" (companySelected)="viewCompany($event)"></app-allcompaniescard>
+                <app-allcompaniescard
+                  [company]="company"
+                  [isPinned]="pinnedTenantIds.has(company.id)"
+                  (pinChanged)="onPinChanged($event)"
+                  (companySelected)="viewCompany($event)"
+                ></app-allcompaniescard>
               </div>
             </div>
           </div>
@@ -28,13 +64,31 @@
 
       <mat-tab label="Joined Companies">
         <div class="card1">
-          <app-dashboard-loader [ngStyle]="{ 'align-self': 'center', padding: '200px' }"
-            *ngIf="loading"></app-dashboard-loader>
-          <div class="container" [@slideInUp] *ngIf="showCompanies && !loading">
+          <app-dashboard-loader
+            [ngStyle]="{ 'align-self': 'center', padding: '200px' }"
+            *ngIf="loading"
+          ></app-dashboard-loader>
+          <div
+            *ngIf="!joinedCompanies.length && !joinedCompanies.length"
+            [ngStyle]="{ 'align-self': 'center', padding: '200px' }"
+          >
+            <p class="dev-text-muted p-0 m-0">
+              You Haven't Joined Any Companies Yet.
+            </p>
+          </div>
+          <div
+            class="container"
+            [@slideInUp]
+            *ngIf="showCompanies && !loading && joinedCompanies.length"
+          >
             <div class="row g-3">
               <div class="col-md-6" *ngFor="let company of joinedCompanies">
-                <app-allcompaniescard [company]="company" [isPinned]="pinnedTenantIds.has(company.id)"
-                  (pinChanged)="onPinChanged($event)" (companySelected)="viewCompany($event)"></app-allcompaniescard>
+                <app-allcompaniescard
+                  [company]="company"
+                  [isPinned]="pinnedTenantIds.has(company.id)"
+                  (pinChanged)="onPinChanged($event)"
+                  (companySelected)="viewCompany($event)"
+                ></app-allcompaniescard>
               </div>
             </div>
           </div>

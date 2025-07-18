@@ -68,7 +68,7 @@
 
               <div class="drop-menus mt-2">
                 <span class="loader" *ngIf="loadedCompanies"></span>
-                @if(!loadedCompanies) {
+                @if(!loadedCompanies) { @if (companyData.length > 0) {
                 <div
                   *ngFor="let company of companyData; let companyIndex = index"
                   class="company d-flex flex-column"
@@ -177,8 +177,9 @@
                     </div>
                   </div>
                 </div>
-                }
-
+                } @else {
+                <p class="dev-text-muted h1 py-4">No Companies Yet.</p>
+                } }
                 <div (click)="openCompany()" class="add-company">
                   <span><i class="fa-solid fa-plus fa-xs"></i></span>
                   <p class="ps-2 m-0">Add Company</p>
