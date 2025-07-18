@@ -1,7 +1,16 @@
-import { ChangeDetectorRef, Component, ElementRef, inject, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { SideMenuComponent } from "../../Shared/side-menu/side-menu.component";
-import { SearchBarComponent } from "../../Shared/search-bar/search-bar.component";
-import { AllIssuesDashboardComponent } from "../all-issues-dashboard/all-issues-dashboard.component";
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  inject,
+  Input,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
+import { SideMenuComponent } from '../../Shared/side-menu/side-menu.component';
+import { SearchBarComponent } from '../../Shared/search-bar/search-bar.component';
+import { AllIssuesDashboardComponent } from '../all-issues-dashboard/all-issues-dashboard.component';
 import { CommonModule } from '@angular/common';
 import { SidebarService } from './../../Core/Services/sidebar.service';
 import { ProjectService } from '../../Core/Services/project.service';
@@ -15,7 +24,11 @@ import { ProfileService } from '../../Core/Services/profile.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogService } from '../../Core/Services/dialog.service';
 import { IssueService } from '../../Core/Services/issue/issue.service';
-import { IndividualConfig, ProgressAnimationType, ToastrService } from 'ngx-toastr';
+import {
+  IndividualConfig,
+  ProgressAnimationType,
+  ToastrService,
+} from 'ngx-toastr';
 import { SprintService } from '../../Core/Services/sprint.service';
 import { IssueModalComponent } from '../issue-modal/issue-modal.component';
 import { SprintModalComponent } from '../sprint-modal/sprint-modal.component';
@@ -27,9 +40,10 @@ import { AssignUsersToIssueComponent } from '../assign-users-to-issue/assign-use
 import { SigninSignupNavbarComponent } from '../../Shared/signin-signup-navbar/signin-signup-navbar.component';
 import { UpdateProjectComponent } from '../update-project/update-project.component';
 import { ProjectStateService } from '../../Core/Services/project-state.service';
-import { DashboardLoaderComponent } from "../../Shared/dashboard-loader/dashboard-loader.component";
+import { DashboardLoaderComponent } from '../../Shared/dashboard-loader/dashboard-loader.component';
 import { ProjectVisitService } from '../../Core/Services/project-visit.service';
 import { InviteModalComponent } from '../project-invite-modal/project-invite-modal.component';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-project-over-view',
@@ -43,6 +57,17 @@ import { InviteModalComponent } from '../project-invite-modal/project-invite-mod
   ],
   templateUrl: './project-over-view.component.html',
   styleUrl: './project-over-view.component.css',
+  animations: [
+    trigger('slideInUp', [
+      transition(':enter', [
+        style({ transform: 'translateY(20px)', opacity: 0 }),
+        animate(
+          '700ms ease-out',
+          style({ transform: 'translateY(0)', opacity: 1 })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class ProjectOverViewComponent {
   // variables
@@ -95,8 +120,6 @@ export class ProjectOverViewComponent {
   private readonly state = inject(ProjectStateService);
   private cdr = inject(ChangeDetectorRef);
 
-  
-
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
@@ -129,7 +152,6 @@ export class ProjectOverViewComponent {
     this._IssueService.issueDeleted$.subscribe(() => {
       this.fetchBacklogIssues(); //for refreshing after issue deleted
     });
-
 
     this._IssueService.assignedUsersUpdated$.subscribe(() => {
       this.fetchBacklogIssues();
@@ -275,7 +297,7 @@ export class ProjectOverViewComponent {
 
   openDeleteIssueModal(issueId: number, issueTitle: string) {
     const hideConfirm = localStorage.getItem('hideDeleteConfirm');
-  
+
     const deleteAndRefresh = () => {
       this._IssueService.deleteIssue(issueId).subscribe({
         next: () => {
@@ -288,15 +310,15 @@ export class ProjectOverViewComponent {
         error: (err) => {
           console.error('Failed to delete issue:', err);
           this.showFailDelete(err.error?.message || 'Failed to delete issue');
-        }
+        },
       });
     };
-  
+
     if (hideConfirm === 'true') {
       deleteAndRefresh();
       return;
     }
-  
+
     const dialogRef = this.dialog.open(SharedDeleteModalComponent, {
       width: '450px',
       data: {
@@ -306,13 +328,11 @@ export class ProjectOverViewComponent {
         cancelText: 'Cancel',
         itemId: issueId,
         deleteFunction: (id: number) => {
-          return this._IssueService.deleteIssue(id); 
-        }
-        
+          return this._IssueService.deleteIssue(id);
+        },
       },
     });
-    
-  
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'deleted') {
         this.showSuccessDelete();
@@ -322,11 +342,7 @@ export class ProjectOverViewComponent {
         this.showFailDelete('Deletion canceled or failed');
       }
     });
-
-
-    
   }
-  
 
   showSuccessDelete() {
     this._toaster.success(
@@ -483,7 +499,7 @@ export class ProjectOverViewComponent {
         if (res.isSuccess) {
           // console.log('backlog issues', res);
           this.backlogIssues = [...res.result];
-          this.cdr.detectChanges(); 
+          this.cdr.detectChanges();
         }
       },
       error: (err) => {
@@ -635,7 +651,7 @@ export class ProjectOverViewComponent {
       borderLeft: `6px solid ${color}`,
     };
   }
- //--------// -----------------------------------------------------------
+  //--------// -----------------------------------------------------------
   // pin & unpin
 
   //------------ Pinned Part --------------------

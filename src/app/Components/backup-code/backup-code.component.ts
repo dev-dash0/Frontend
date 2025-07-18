@@ -5,31 +5,24 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './backup-code.component.html',
-  styleUrl: './backup-code.component.css'
+  styleUrl: './backup-code.component.css',
 })
-export class BackupCodeComponent { 
+export class BackupCodeComponent {
   // ! /////////------------ Drag and drop ----------/////////
   // export class FiledropComponent implements OnInit {
-  
   // constructor() { }
-  
-      
   // @Input('label') label: string = '';
   // @Input('allowedExtensions') allowedExtensions: string[] = [];
   // @Input('allowMultipleFiles') allowMultipleFiles: boolean = false;
-  
   // @Output('onFilesDropped') onFilesDropped: EventEmitter<FileList> = new EventEmitter<FileList>();
-  
   //     ngOnInit() {
   //         this.allowedList = this.allowedExtensions.length > 0 ?
   //         this.allowedExtensions.join(', ') : 'any';
   //     }
-  
   //     allowedList: string | null = 'null';
   //     incorrectInput: boolean = false;
   //     errorMessage: string = '';
   //     files: File[] = [];
-  
   // onFiledrop(e: any) {
   //         e.preventDefault();
   //         e.stopPropagation();
@@ -48,13 +41,11 @@ export class BackupCodeComponent {
   //             this.errorMessage = 'Only one file can be specified';
   //             return;
   //         }
-          
   //         this.incorrectInput = !this.validateExtensions(files);
   //         if(this.incorrectInput) {
   //             this.errorMessage = 'Incorrect extension noticed';
   //             return;
   //         }
-          
   //         this.files = Array.from(files);
   //         this.onFilesDropped.emit(files);
   //     }
@@ -64,8 +55,7 @@ export class BackupCodeComponent {
   //         }
   //         let extensions: string[] = [];
   //         const extensionPattern = /\.([0-9a-z]+)(?=[?#])|(\.)(?:[\w]+)$/gmi;
-          
-  //         Array.from(files).map(x => 
+  //         Array.from(files).map(x =>
   //             x.name.toLowerCase().match(extensionPattern)!
   //                 .map(ext => extensions.push(ext)));
   //         const forbidden = extensions.filter((x) => !this.allowedExtensions.includes(x));
@@ -73,6 +63,4 @@ export class BackupCodeComponent {
   //         return valid;
   //     }
   // }
-  
-
 }

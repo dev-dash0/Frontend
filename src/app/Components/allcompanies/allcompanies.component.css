@@ -72,7 +72,15 @@ header {
   margin: 0;
 }
 
-.join-btn {
+.company-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.join-btn,
+.add-company-btn {
   display: flex;
   justify-content: center;
   align-items: center;

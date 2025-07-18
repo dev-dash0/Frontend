@@ -165,16 +165,6 @@ export class SideMenuComponent {
     this.dropdownStates[id] = !this.dropdownStates[id];
   }
 
-  // toggleCollapse(): void {
-  //   if (this.isTransitioning) return;
-  //   this.isTransitioning = true;
-  //   this.collapsed = !this.collapsed;
-  //   this.sidebarService.setSidebarState(this.collapsed);
-  //   this.cdRef.markForCheck();
-  //   setTimeout(() => {
-  //     this.isTransitioning = false;
-  //   }, 300);
-  // }
   // ----------- dropdown optimization ------------
 
   workspaceIssues = ['Issue 1', 'Issue 2'];
@@ -230,16 +220,6 @@ export class SideMenuComponent {
         },
       ],
     },
-    // {
-    //   id: 1,
-    //   name: 'Company B',
-    //   projects: [
-    //     {
-    //       id: 0,
-    //       name: 'Project 1',
-    //     },
-    //   ],
-    // },
   ];
 
   ngOnInit() {
@@ -294,78 +274,6 @@ export class SideMenuComponent {
     });
   }
 
-  // ! getCompanies(): void {
-  //   this._companyService.getAllCompanies(null).subscribe({
-  //     next: (res) => {
-  //       console.log(res);
-  //       if (res?.result && res.result.length > 0) {
-  //         this.companyNames = res.result.map(
-  //           (company: { id: string; name: string }) => ({
-  //             id: company.id,
-  //             name: company.name,
-  //           })
-  //         );
-  //         this.companyData = res.result;
-
-  //         // this.companies = [
-  //         //   {
-  //         //     // id: this.companyData.id,
-  //         //     id: 0,
-  //         //     name: 'Company A',
-  //         //     projects: [
-  //         //       {
-  //         //         name: 'Project 1',
-  //         //         sprints: [{ name: 'Sprint 1' }, { name: 'Sprint 2' }],
-  //         //       },
-  //         //     ],
-  //         //   },
-  //         // ]
-
-  //         const companyIndex = this.companies.findIndex(
-  //           (c) => c.id === this.SelectedCompanyId
-  //         );
-
-  //         // Call getProjectData only if SelectedCompanyId is defined
-  //         if (this.SelectedCompanyId) {
-  //           this.getProjectData();
-  //         }
-  //       }
-  //     },
-  //     error: (err) => console.error(err),
-  //   });
-  // }
-
-  // getCompanies(): void {
-  //   this._companyService.getAllCompanies(null).subscribe({
-  //     next: (res) => {
-  //       console.log('Companies API response:', res);
-  //       if (res?.result && res.result.length > 0) {
-  //         this.companyNames = res.result.map((company: any) => ({
-  //           id: company.id,
-  //           name: company.name,
-  //         }));
-  //         this.companyData = res.result;
-
-  //         // Store companies and initialize projects as empty
-  //         this.companies = this.companyData.map((company) => ({
-  //           id: company.id,
-  //           name: company.name,
-  //           projects: [],
-  //         }));
-
-  //         // Automatically select the first company (Optional)
-  //         this.SelectedCompanyId = this.companyData[0]?.id || 0;
-  //         console.log('Selected Company ID:', this.SelectedCompanyId);
-
-  //         if (this.SelectedCompanyId) {
-  //           this.getProjectData(); // Fetch projects after setting company
-  //         }
-  //       }
-  //     },
-  //     error: (err) => console.error('Error fetching companies:', err),
-  //   });
-  // }
-
   // companies API
   getCompanies(): void {
     this.profileService.getProfileData().subscribe({
@@ -380,15 +288,6 @@ export class SideMenuComponent {
               }));
               this.companyData = res.result;
               this.loadedCompanies = false;
-              // Store companies and initialize projects as empty
-              // this.companies = this.companyData.map((company) => ({
-              //   id: company.id,
-              //   name: company.name,
-              //   projects: [],
-              // }));
-              // console.log('Companies after processing:', this.companies);
-              // // Fetch projects for each company
-              // this.fetchProjectsForAllCompanies();
             }
           },
           error: (err) => console.error('Error fetching companies:', err),
@@ -416,29 +315,6 @@ export class SideMenuComponent {
     console.log(this.SelectedSprintId);
   }
 
-  // fetchProjectsForAllCompanies() {
-  //   this.companies.forEach((company, index) => {
-  //     this._ProjectService.getProjectData(company.id).subscribe({
-  //       next: (res) => {
-  //         console.log(`Project API response for company ${company.id}:`, res);
-  //         if (res && res.result && res.result.length > 0) {
-  //           this.companies[index].projects = res.result.map((project: any) => ({
-  //             id: project.id,
-  //             name: project.name,
-  //           }));
-  //         } else {
-  //           console.warn(`No projects found for company ID: ${company.id}`);
-  //         }
-  //       },
-  //       error: (err) =>
-  //         console.error(
-  //           `Error fetching project data for company ${company.id}:`,
-  //           err
-  //         ),
-  //     });
-  //   });
-  // }
-
   //Project API
   getProjects() {
     this.companyService.getAllCompanyIds().subscribe({
@@ -446,10 +322,6 @@ export class SideMenuComponent {
         companyIds.forEach((companyId) => {
           this.projectService.getProjectData(companyId).subscribe({
             next: (response) => {
-              // console.log(
-              //   `Project API response for company ${companyId}:`,
-              //   response
-              // );
               const projects = response.result.map((project: any) => ({
                 id: project.id,
                 name: project.name,
@@ -520,45 +392,4 @@ export class SideMenuComponent {
       };
     });
   }
-
-  // getProjectData() {
-  //   if (!this.SelectedCompanyId) {
-  //     console.error(
-  //       'SelectedCompanyId is undefined, skipping project data fetch.'
-  //     );
-  //     return;
-  //   }
-
-  //   this._ProjectService.getProjectData(this.SelectedCompanyId).subscribe({
-  //     next: (res) => {
-  //       if (res.isSuccess && res.result.length > 0) {
-  //         console.log('Project data received:', res.result);
-  //         this.projects = res.result;
-
-  //         // Find the selected company in the array
-  //         const companyIndex = this.companies.findIndex(
-  //           (c) => c.id === this.SelectedCompanyId
-  //         );
-
-  //         if (companyIndex !== -1) {
-  //           // Assign projects with static sprints
-  //           this.companies[companyIndex].projects = this.projects.map(
-  //             (project) => ({
-  //               name: project.name,
-  //               sprints: [{ name: 'Sprint 1' }, { name: 'Sprint 2' }],
-  //             })
-  //           );
-  //         } else {
-  //           console.warn('Company not found in companies array.');
-  //         }
-  //       } else {
-  //         console.warn(
-  //           'No projects found or API response error:',
-  //           res.errorMessages
-  //         );
-  //       }
-  //     },
-  //     error: (err) => console.error('Error fetching project data:', err),
-  //   });
-  // }
 }

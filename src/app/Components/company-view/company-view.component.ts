@@ -27,6 +27,8 @@ import { Projectstats } from '../../Core/interfaces/company/projectstats';
 import { DashboardLoaderComponent } from '../../Shared/dashboard-loader/dashboard-loader.component';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { InviteModalComponent } from '../project-invite-modal/project-invite-modal.component';
+import { SprintWithProgress } from '../../Core/interfaces/sprint';
+import { DialogService } from '../../Core/Services/dialog.service';
 
 @Component({
   selector: 'app-company-view',
@@ -69,6 +71,7 @@ export class CompanyViewComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private profileService: ProfileService,
+    private dialogService: DialogService,
     private _PinnedService: PinnedService,
     private _toastr: ToastrService
   ) {}
@@ -81,6 +84,9 @@ export class CompanyViewComponent implements OnInit {
   projectStats: Projectstats[] = [];
   ProjectCategories: ProjectCategory[] = [];
   projectsGlobalCounter: number = 0;
+  sprintDetails: SprintWithProgress[] = [];
+  projectSprintProgress: { [projectId: number]: number } = {};
+  // ----------------------------------------
   loading = true;
   projectLoading = true;
   isPinned = false;
@@ -91,6 +97,13 @@ export class CompanyViewComponent implements OnInit {
     });
     this.sidebarService.companyUpdated$.subscribe(() => {
       this.getCompany();
+    });
+    this.projectService.projectCreated$.subscribe(() => {
+      this.getProjectData();
+    });
+
+    this.projectService.projectUpdated$.subscribe(() => {
+      this.getProjectData();
     });
     this.route.paramMap.subscribe(() => {
       this.getCompany();
@@ -257,7 +270,7 @@ export class CompanyViewComponent implements OnInit {
       case 'low':
         return 'assets/images/Issue Priorities/low.svg';
       default:
-        return 'assets/images/Issue Status/backlog.svg';
+        return 'assets/images/Issue Priorities/critical.svg';
     }
   }
   getSpanStatus(status: string): string {
@@ -317,6 +330,10 @@ export class CompanyViewComponent implements OnInit {
         console.log('Company updated successfully');
       }
     });
+  }
+
+  openProj() {
+    this.dialogService.openProjModal();
   }
 
   // get project data
@@ -421,8 +438,8 @@ export class CompanyViewComponent implements OnInit {
             })),
           },
           {
-            name: 'Overdue',
-            icon: 'assets/images/Issue Status/Important Time.svg',
+            name: 'Postponed',
+            icon: 'assets/images/Issue Status/postponed.svg',
             class: 'overdue-tag',
             status: 'overdue',
             projects: overdueProjects.map((project) => ({
@@ -437,7 +454,7 @@ export class CompanyViewComponent implements OnInit {
           },
           {
             name: 'Planning',
-            icon: 'assets/images/Issue Status/Important Time.svg',
+            icon: 'assets/images/list-ol-solid.svg',
             class: 'planning-tag',
             status: 'planning',
             projects: planningProjects.map((project) => ({
@@ -452,7 +469,7 @@ export class CompanyViewComponent implements OnInit {
           },
           {
             name: 'Canceled',
-            icon: 'assets/images/Issue Status/Important Time.svg',
+            icon: 'assets/images/Issue Status/canceled.svg',
             class: 'canceled-tag',
             status: 'canceled',
             projects: canceledProjects.map((project) => ({
@@ -499,7 +516,7 @@ export class CompanyViewComponent implements OnInit {
 
   // show successful and failed pinned toastr
   showSuccess() {
-    this._toastr.success('The Project has been Pinned', 'Pinned Successfully', {
+    this._toastr.success('The Company has been Pinned', 'Pinned Successfully', {
       toastClass: 'toast-pink',
       timeOut: 10000,
       closeButton: true,
