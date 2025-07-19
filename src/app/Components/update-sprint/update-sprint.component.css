@@ -1,14 +1,4 @@
 /*********************** Global Modal************************** */
-.modal-container {
-  color: #fff;
-  min-width: 100% !important;
-  width: fit-content;
-  border-radius: 8px;
-  padding: 25px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  background-image: linear-gradient(134deg, #292f65 8%, #0b1a34 54%);
-}
-
 ::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
   background-color: transparent !important;
 }
@@ -21,13 +11,11 @@
   height: 1px;
   width: 100%;
   margin-block: 10px;
-  background: linear-gradient(
-    144.98deg,
-    rgba(58, 73, 98, 0.5) 1.37%,
-    rgba(255, 144, 232, 0.5) 43.67%,
-    rgba(116, 202, 255, 0.5) 70.8%,
-    rgba(41, 47, 101, 0.5) 91.44%
-  );
+  background: linear-gradient(144.98deg,
+      rgba(58, 73, 98, 0.5) 1.37%,
+      rgba(255, 144, 232, 0.5) 43.67%,
+      rgba(116, 202, 255, 0.5) 70.8%,
+      rgba(41, 47, 101, 0.5) 91.44%);
 }
 
 /* ======================================================================== */
@@ -118,9 +106,7 @@ mat-form-field input:focus {
   border-color: #d076be7a !important;
 }
 
-::ng-deep
-  .mat-mdc-text-field-wrapper.mdc-text-field--outlined
-  .mat-mdc-form-field-infix {
+::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
   padding: 0 !important;
 }
 
@@ -128,7 +114,7 @@ mat-form-field input:focus {
   display: none !important;
 }
 
-::ng-deep .mat-mdc-form-field-icon-prefix > .mat-icon {
+::ng-deep .mat-mdc-form-field-icon-prefix>.mat-icon {
   padding: 0 0 0 10px !important;
 }
 
