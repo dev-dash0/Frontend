@@ -36,7 +36,10 @@
                     style="color: var(--mainLightBlueColor)"
                   ></i>
                 </div>
-                <div class="btn auth-form-container" (click)="delete()">
+                <div
+                  class="btn auth-form-container"
+                  (click)="delete(company.id, company.name)"
+                >
                   <i
                     class="fa-solid fa-trash trash-icon"
                     style="color: var(--mainLightBlueColor)"
@@ -299,21 +302,19 @@
                   *ngFor="let member of company.joinedUsers; let last = last"
                 >
                   <div class="gap-3 company-member">
-                    <div class="member-data">
-                      <img
-                        [src]="
-                          isValidUrl(member.imageUrl)
-                            ? member?.imageUrl
-                            : 'assets/images/blank profile.svg'
-                        "
-                        alt=""
-                      />
-                      <div class="d-flex flex-column">
-                        <p class="m-0 p-0 text-capitalize name">
-                          {{ member?.firstName }} {{ member?.lastName }}
-                        </p>
-                        <p class="m-0 p-0 username">{{ member?.userName }}</p>
-                      </div>
+                    <img
+                      [src]="
+                        isValidUrl(member.imageUrl)
+                          ? member?.imageUrl
+                          : 'assets/images/blank profile.svg'
+                      "
+                      alt=""
+                    />
+                    <div class="d-flex flex-column">
+                      <p class="m-0 p-0 text-capitalize name">
+                        {{ member?.firstName }} {{ member?.lastName }}
+                      </p>
+                      <p class="m-0 p-0 username">{{ member?.userName }}</p>
                     </div>
                     <!-- <div class="member-role">
                       <span class="dev-text-muted">{{ member?.role }}</span>

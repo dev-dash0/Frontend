@@ -29,6 +29,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { InviteModalComponent } from '../project-invite-modal/project-invite-modal.component';
 import { SprintWithProgress } from '../../Core/interfaces/sprint';
 import { DialogService } from '../../Core/Services/dialog.service';
+import { SharedDeleteModalComponent } from '../../Shared/delete-modal/delete-modal.component';
 
 @Component({
   selector: 'app-company-view',
@@ -292,28 +293,55 @@ export class CompanyViewComponent implements OnInit {
 
   // url validation
   isValidUrl(url: any): boolean {
-    return !!(url && url !== 'string' && url.trim() !== '');
+    return !!(url && url !== 'string' && url !== 'null' && url.trim() !== '');
   }
 
   // modals
-  delete() {
-    const dialogRef = this.dialog.open(DeleteModalComponent, {
-      width: 'auto',
-      minWidth: '40vw',
-      maxWidth: '50vw',
-      minHeight: '40vh',
-      maxHeight: '50vh',
-      disableClose: true,
-      data: { companyId: this.company.id }, // ✅ Pass company id to modal
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'deleted') {
-        console.log('Company deleted successfully');
+  // delete() {
+  //   const dialogRef = this.dialog.open(DeleteModalComponent, {
+  //     width: 'auto',
+  //     minWidth: '40vw',
+  //     maxWidth: '50vw',
+  //     minHeight: '40vh',
+  //     maxHeight: '50vh',
+  //     disableClose: true,
+  //     data: { companyId: this.company.id }, // ✅ Pass company id to modal
+  //   });
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result === 'deleted') {
+  //       console.log('Company deleted successfully');
+  //       this.sidebarService.notifyCompanyDeleted();
+  //       this.router.navigate(['/MyDashboard/allcompanies']);
+  //     }
+  //   });
+  // }
+
+  deleteCompany() {
+    this.companyService.deleteCompany(this.company.id).subscribe({
+      next: () => {
         this.sidebarService.notifyCompanyDeleted();
         this.router.navigate(['/MyDashboard/allcompanies']);
-      }
+      },
+      error: (err) => {
+        console.error('Error deleting company:', err);
+      },
     });
   }
+
+  delete(companyId: number, companyTitle: string) {
+    const dialogRef = this.dialog.open(SharedDeleteModalComponent, {
+      width: '450px',
+      data: {
+        title: 'Delete company',
+        message: `Are you sure you want to delete ${companyTitle} company? `,
+        confirmText: 'Confirm',
+        cancelText: 'Cancel',
+        itemId: companyId,
+        deleteFunction: () => this.deleteCompany(),
+      },
+    });
+  }
+
   update() {
     const dialogRef = this.dialog.open(UpdateCompanyComponent, {
       width: 'auto',
