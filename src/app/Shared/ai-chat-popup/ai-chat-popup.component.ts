@@ -27,6 +27,7 @@ export class AiChatPopupComponent {
   messages: string[] = [];
   isLoading = false;
   userId: undefined;
+  hasSentInitRequest = false;
   private deferCloseUntilNavigation = false;
 
   @Output() loadingState = new EventEmitter<boolean>();
@@ -44,9 +45,6 @@ export class AiChatPopupComponent {
   ngOnInit(): void {
     this.messages.push('🤖 Ask me what do u want ?');
     this.getOwnedCompanies();
-    if (!this.chatId) {
-      this.sendInitialEmptyMessage();
-    }
   }
 
   selectedTenantId: string = '';
@@ -90,9 +88,10 @@ export class AiChatPopupComponent {
         this._companyService.getAllCompanies(null).subscribe({
           next: (res) => {
             const allCompanies = res.result || [];
-            this.ownedCompanies = allCompanies.filter(
-              (company: any) => company.owner.id === this.userId
-            );
+            this.ownedCompanies = allCompanies;
+            // this.ownedCompanies = allCompanies.filter(
+            //   (company: any) => company.owner.id === this.userId
+            // );
           },
           error: (err) => {
             console.error(err);
@@ -105,29 +104,68 @@ export class AiChatPopupComponent {
   selectCompany(id: string, name: string) {
     this.selectedTenantId = id;
     this.selectedTenantName = name;
-    if (!this.chatId) {
-      const payload = {
-        text: '',
-        tenant_id: this.selectedTenantId,
-        chat_id: '',
-      };
 
-      console.log('🚀 First-time empty message to get chat_id');
-
-      this.aiService.interactWithAgent(payload).subscribe({
-        next: (event) => {
-          if (event.type === 'start' && event.chat_id) {
-            this.chatId = event.chat_id;
-            localStorage.setItem('booty_chat_id', this.chatId!);
-            console.log(
-              '✅ Got and saved chat_id from first message:',
-              this.chatId
-            );
-          }
-        },
-      });
-    }
+    // ❌ احذفي أي interactWithAgent() من هنا
+    // ❌ وامسحي any flag related to chat_id
   }
+
+  // selectCompany(id: string, name: string) {
+  //   this.selectedTenantId = id;
+  //   this.selectedTenantName = name;
+
+  //   // ✅ امنعي التكرار: ابعتيها مرة واحدة بس
+  //   if (!this.chatId && !this.hasSentInitRequest) {
+  //     this.hasSentInitRequest = true;
+
+  //     const payload = {
+  //       text: '',
+  //       tenant_id: this.selectedTenantId,
+  //       chat_id: '',
+  //     };
+
+  //     console.log('🚀 First-time empty message to get chat_id');
+
+  //     this.aiService.interactWithAgent(payload).subscribe({
+  //       next: (event) => {
+  //         if (event.type === 'start' && event.chat_id) {
+  //           this.chatId = event.chat_id;
+  //           localStorage.setItem('booty_chat_id', this.chatId!);
+  //           console.log(
+  //             '✅ Got and saved chat_id from first message:',
+  //             this.chatId
+  //           );
+  //         }
+  //       },
+  //     });
+  //   }
+  // }
+
+  // selectCompany(id: string, name: string) {
+  //   this.selectedTenantId = id;
+  //   this.selectedTenantName = name;
+  //   if (!this.chatId) {
+  //     const payload = {
+  //       text: '',
+  //       tenant_id: this.selectedTenantId,
+  //       chat_id: '',
+  //     };
+
+  //     console.log('🚀 First-time empty message to get chat_id');
+
+  //     this.aiService.interactWithAgent(payload).subscribe({
+  //       next: (event) => {
+  //         if (event.type === 'start' && event.chat_id) {
+  //           this.chatId = event.chat_id;
+  //           localStorage.setItem('booty_chat_id', this.chatId!);
+  //           console.log(
+  //             '✅ Got and saved chat_id from first message:',
+  //             this.chatId
+  //           );
+  //         }
+  //       },
+  //     });
+  //   }
+  // }
 
   resetCompany() {
     this.selectedTenantId = '';
@@ -140,13 +178,86 @@ export class AiChatPopupComponent {
     return index;
   }
 
+  private handleAgentEvent(event: any) {
+    switch (event.type) {
+      case 'start':
+        this.isLoading = true;
+
+        if (event.chat_id && !this.chatId) {
+          this.chatId = event.chat_id;
+          localStorage.setItem('booty_chat_id', this.chatId!);
+          console.log('✅ Stored chat_id from first message:', this.chatId);
+        }
+        break;
+
+      case 'token':
+        this.appendToLastMessage(event.content);
+        this.showBootyThought(event.content);
+        break;
+
+      case 'tool_output':
+        if (event.tool_name === 'create_project') {
+          const createdId = event.output?.id || event.output?.project?.id;
+          const projectName = event.output?.project?.name || 'New Project';
+
+          if (createdId && createdId !== 0) {
+            this.agentAction.emit({
+              type: 'project_created',
+              projectId: createdId,
+              projectName,
+            });
+          }
+        }
+        break;
+
+      case 'end':
+        this.isLoading = false;
+        this.agentAction.emit({ type: 'agent_done' });
+        break;
+
+      case 'error':
+        this.messages.push(`⚠️ Error: ${event.content}`);
+        this.isLoading = false;
+        break;
+    }
+  }
+
+  private handleAgentError(err: any) {
+    this.messages.push(`❌ Connection Error`);
+    this.isLoading = false;
+    console.error(err);
+  }
+
   sendMessage() {
     if (!this.userInput.trim()) return;
 
+    // ✅ في أول مرة بس: مفيش chat_id => هبعت الرسالة وأخزن chat_id بعدها
+    if (!this.chatId && !this.hasSentInitRequest) {
+      this.hasSentInitRequest = true;
+
+      const payload = {
+        text: this.userInput,
+        tenant_id: this.selectedTenantId,
+        chat_id: '',
+      };
+
+      this.messages.push(`🧑‍💻 You: ${this.userInput}`);
+      this.userInput = '';
+      this.isLoading = true;
+
+      this.aiService.interactWithAgent(payload).subscribe({
+        next: (event) => this.handleAgentEvent(event),
+        error: (err) => this.handleAgentError(err),
+      });
+
+      return; // ✅ متكملش هنا
+    }
+
+    // ✅ لو عندي chat_id بالفعل
     const payload = {
       text: this.userInput,
       tenant_id: this.selectedTenantId,
-      chat_id: this.chatId || '', // استخدم الـ chat_id القديم لو موجود
+      chat_id: this.chatId!,
     };
 
     this.messages.push(`🧑‍💻 You: ${this.userInput}`);
@@ -154,62 +265,81 @@ export class AiChatPopupComponent {
     this.isLoading = true;
 
     this.aiService.interactWithAgent(payload).subscribe({
-      next: (event) => {
-        switch (event.type) {
-          case 'start':
-            this.isLoading = true;
-
-            // ✅ خزّن chat_id لأول مرة فقط
-            if (event.chat_id && !this.chatId) {
-              this.chatId = event.chat_id;
-              localStorage.setItem('booty_chat_id', this.chatId!);
-              console.log('🔥 Stored new chat_id:', this.chatId);
-            }
-            break;
-
-          case 'token':
-            this.appendToLastMessage(event.content);
-            this.showBootyThought(event.content); // ✅ أظهر الكلام فوق بوتي
-            break;
-
-          case 'tool_output':
-            if (event.tool_name === 'create_project') {
-              const createdId = event.output?.id || event.output?.project?.id;
-              const projectName = event.output?.project?.name || 'New Project';
-
-              if (createdId && createdId !== 0) {
-                // ✅ Send the project_created event only
-                this.agentAction.emit({
-                  type: 'project_created',
-                  projectId: createdId,
-                  projectName,
-                });
-
-                // ❌ ما تبعتش agent_done هنا، هنبعته من MyDashboard بعد التنقل
-              }
-            }
-
-            // ❌ احذف أي agent_done هنا!
-            break;
-
-          case 'end':
-            this.isLoading = false;
-            this.agentAction.emit({ type: 'agent_done' });
-            break;
-
-          case 'error':
-            this.messages.push(`⚠️ Error: ${event.content}`);
-            this.isLoading = false;
-            break;
-        }
-      },
-      error: (err) => {
-        this.messages.push(`❌ Connection Error`);
-        this.isLoading = false;
-        console.error(err);
-      },
+      next: (event) => this.handleAgentEvent(event),
+      error: (err) => this.handleAgentError(err),
     });
   }
+
+  // sendMessage() {
+  //   if (!this.userInput.trim()) return;
+
+  //   const payload = {
+  //     text: this.userInput,
+  //     tenant_id: this.selectedTenantId,
+  //     chat_id: this.chatId || '', // استخدم الـ chat_id القديم لو موجود
+  //   };
+
+  //   this.messages.push(`🧑‍💻 You: ${this.userInput}`);
+  //   this.userInput = '';
+  //   this.isLoading = true;
+
+  //   this.aiService.interactWithAgent(payload).subscribe({
+  //     next: (event) => {
+  //       switch (event.type) {
+  //         case 'start':
+  //           this.isLoading = true;
+
+  //           // ✅ خزّن chat_id لأول مرة فقط
+  //           if (event.chat_id && !this.chatId) {
+  //             this.chatId = event.chat_id;
+  //             localStorage.setItem('booty_chat_id', this.chatId!);
+  //             console.log('🔥 Stored new chat_id:', this.chatId);
+  //           }
+  //           break;
+
+  //         case 'token':
+  //           this.appendToLastMessage(event.content);
+  //           this.showBootyThought(event.content); // ✅ أظهر الكلام فوق بوتي
+  //           break;
+
+  //         case 'tool_output':
+  //           if (event.tool_name === 'create_project') {
+  //             const createdId = event.output?.id || event.output?.project?.id;
+  //             const projectName = event.output?.project?.name || 'New Project';
+
+  //             if (createdId && createdId !== 0) {
+  //               // ✅ Send the project_created event only
+  //               this.agentAction.emit({
+  //                 type: 'project_created',
+  //                 projectId: createdId,
+  //                 projectName,
+  //               });
+
+  //               // ❌ ما تبعتش agent_done هنا، هنبعته من MyDashboard بعد التنقل
+  //             }
+  //           }
+
+  //           // ❌ احذف أي agent_done هنا!
+  //           break;
+
+  //         case 'end':
+  //           this.isLoading = false;
+  //           this.agentAction.emit({ type: 'agent_done' });
+  //           break;
+
+  //         case 'error':
+  //           this.messages.push(`⚠️ Error: ${event.content}`);
+  //           this.isLoading = false;
+  //           break;
+  //       }
+  //     },
+  //     error: (err) => {
+  //       this.messages.push(`❌ Connection Error`);
+  //       this.isLoading = false;
+  //       console.error(err);
+  //     },
+  //   });
+  // }
 
   //  دا فيه نافيجيشين للسبرينت كمان
   // sendMessage() {
