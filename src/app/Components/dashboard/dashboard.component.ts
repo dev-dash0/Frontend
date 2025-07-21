@@ -202,7 +202,7 @@ get displayedProjects() {
         this.treeData.next([
           {
             id: 'tenants',
-            name: 'Tenants',
+            name: 'Companies',
             type: 'tenant',
             expanded: false,
             children: this.pinnedTenants.map(t => ({

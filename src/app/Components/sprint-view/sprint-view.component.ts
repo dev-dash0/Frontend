@@ -58,6 +58,8 @@ export class SprintViewComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private _toastr = inject(ToastrService);
+  private refreshIntervalId: any;
+
 
   sprintId = Number(this.route.snapshot.paramMap.get('id'));
   sprintDetails: Sprint[] = [];
@@ -104,6 +106,11 @@ export class SprintViewComponent {
     });
     this.getSprintDetails();
 
+    this.refreshIntervalId = setInterval(() => {
+      this.getSprintDetails();
+    }, 60000); // 1 minute (60,000 milliseconds)
+  
+      
     this.route.paramMap.subscribe(() => {
       this.getSprintDetails();
     });
@@ -505,4 +512,11 @@ export class SprintViewComponent {
       progressAnimation: 'decreasing',
     });
   }
+
+  ngOnDestroy(): void {
+    if (this.refreshIntervalId) {
+      clearInterval(this.refreshIntervalId);
+    }
+  }
+  
 }

@@ -719,7 +719,7 @@ openDeleteIssueModal(issueId: number, issueTitle: string) {
 
 showSuccessDelete() {
   this._toaster.success(
-    'The Project has been Pinned',
+    'The issue deleted successfully',
     'Pinned Successfully',
     {
       toastClass: 'toast-pink',
@@ -732,7 +732,7 @@ showSuccessDelete() {
 }
 
 showFailDelete(err: any) {
-  this._toaster.error('err', 'Pinned Failed', {
+  this._toaster.error('err', 'Deletion Failed', {
     toastClass: 'toast-pink',
     timeOut: 10000,
     closeButton: true,
